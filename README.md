@@ -8,12 +8,14 @@ the real repository up to date. The purpose of this repository is to provide
 the missing changelog of bugfixes, new features, and potential breaking API
 changes that other 4chan extension/userscript developers will care about.
 
+`core.js` and `catalog.js` are also tracked in addition to extension itself.
+
 Unfortunately, 4chan's production JS is stripped of comments and
 whitespace-minified. Thus, the code is run through [jsbeautifier][1] before
 commiting to restore at least a semblance of human readability.
 
 [0]: https://github.com/4chan/4chan-JS
-[1]: https://github.com/einars/js-beautify 
+[1]: https://github.com/einars/js-beautify
 
 ## About 4chan JS (from canonical repository) ##
 

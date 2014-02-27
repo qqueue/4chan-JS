@@ -6,19 +6,33 @@ set -o pipefail
 git checkout master
 git pull origin master
 
-JS=$(curl \
+EXTENSION=$(curl \
   --fail \
   --user-agent "4chan-JS-auto-updater/1.0.0" \
   "http://s.4cdn.org/js/extension.js")
 
-js-beautify --indent-size=2 - <<< "$JS" > extension.js
+js-beautify --indent-size=2 - <<< "$EXTENSION" > extension.js
+
+CORE=$(curl \
+  --fail \
+  --user-agent "4chan-JS-auto-updater/1.0.0" \
+  "http://s.4cdn.org/js/core.js")
+
+js-beautify --indent-size=2 - <<< "$CORE" > core.js
+
+CATALOG=$(curl \
+  --fail \
+  --user-agent "4chan-JS-auto-updater/1.0.0" \
+  "http://s.4cdn.org/js/catalog.js")
+
+js-beautify --indent-size=2 - <<< "$CATALOG" > catalog.js
 
 if [[ -n $(git status --porcelain) ]]; then
-  git add extension.js
+  git add *.js
   git commit \
-    --message "Update extension.js" \
+    --message "Update scripts" \
     --message "(update detected by update.sh)" \
-    --author "Anonymous ## Developer <sage@4chan.org>"	
+    --author "Anonymous ## Developer <sage@4chan.org>"
   git push origin master
 fi
 
