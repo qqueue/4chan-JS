@@ -183,7 +183,7 @@ Parser.buildHTMLFromJSON = function(data, board, standalone, fromQuote) {
     emailStart = '',
     emailEnd = '',
     name, subject, noLink, quoteLink, replySpan = '',
-    noFilename, mobileLink = '',
+    noFilename, decodedFilename, mobileLink = '',
     postType = 'reply',
     summary = '',
     postCountStr, resto, capcode_replies = '',
@@ -659,12 +659,20 @@ Parser.parseBacklinks = function(pid, tid) {
     }
     linklist[ids[1]] = true;
     bl = document.createElement('span');
-    bl.innerHTML = '<a href="#p' + pid + '" class="quotelink">&gt;&gt;' + pid + '</a> ';
+    if (!Main.hasMobileLayout) {
+      bl.innerHTML = '<a href="#p' + pid + '" class="quotelink">&gt;&gt;' + pid + '</a> ';
+    } else {
+      bl.innerHTML = '<a href="#p' + pid + '" class="quotelink">&gt;&gt;' + pid + '</a><a href="#p' + pid + '" class="quoteLink"> #</a> ';
+    }
     if (!(el = document.getElementById('bl_' + ids[1]))) {
       el = document.createElement('div');
       el.id = 'bl_' + ids[1];
       el.className = 'backlink';
       el.innerHTML = 'Replies: ';
+      if (Main.hasMobileLayout) {
+        el.className = 'backlink mobile';
+        target = document.getElementById('p' + ids[1]);
+      }
       target.appendChild(el);
     }
     el.appendChild(bl);
@@ -1402,6 +1410,7 @@ QR.init = function() {
   this.comField = null;
   this.comLength = window.comlen;
   this.lenCheckTimeout = null;
+  this.preuploadSizeLimit = Main.hasMobileLayout ? 0 : 204800;
   this.cdElapsed = 0;
   this.activeDelay = 0;
   this.cooldowns = {};
@@ -1415,7 +1424,20 @@ QR.init = function() {
   this.fileDisabled = !! window.imagelimit;
   this.tracked = {};
   this.lastTid = localStorage.getItem('4chan-cd-' + Main.board + '-tid');
+  if (Main.tid && !Main.hasMobileLayout) {
+    QR.addReplyLink();
+  }
   window.addEventListener('storage', this.syncStorage, false);
+};
+QR.addReplyLink = function() {
+  var th, hr, el;
+  th = $.id('t' + Main.tid);
+  el = document.createElement('div');
+  el.className = 'open-qr-wrap';
+  el.innerHTML = '[<a href="#" class="open-qr-link" data-cmd="open-qr">Reply to Thread</a>]';
+  hr = document.createElement('hr');
+  th.parentNode.insertBefore(hr, th.nextElementSibling);
+  th.parentNode.insertBefore(el, hr.nextElementSibling);
 };
 QR.lock = function() {
   QR.showPostError('This thread is closed.', 'closed', true);
@@ -1631,13 +1653,19 @@ QR.onCaptchaReady = function() {
   QR.captchaInterval = setInterval(QR.cloneCaptcha, QR.captchaDelay);
 };
 QR.onFileChange = function(e) {
+  var fsize;
+  QR.needPreuploadCaptcha = false;
   if (this.value) {
+    fsize = this.files ? this.files[0].size : 0;
     if (QR.fileDisabled) {
       QR.showPostError('Image limit reached.', 'imagelimit', true);
-    } else if (this.files && this.files[0].size > window.maxFilesize) {
+    } else if (fsize > window.maxFilesize) {
       QR.showPostError('Error: Maximum file size allowed is ' + Math.floor(window.maxFilesize / 1048576) + ' MB', 'filesize', true);
     } else {
       QR.hidePostError();
+    }
+    if (fsize >= QR.preuploadSizeLimit) {
+      QR.needPreuploadCaptcha = true;
     }
   } else {
     QR.hidePostError();
@@ -1700,7 +1728,7 @@ QR.cloneCaptcha = function() {
   if (!row) {
     return false;
   }
-  row.innerHTML = '<img id="qrCaptcha" title="Reload" width="300" height="57" src="' + $.id('recaptcha_image').firstChild.src + '" alt="reCAPTCHA challenge image">' + '<input id="qrCapField" name="recaptcha_response_field" ' + 'placeholder="Type the text (Required)" ' + 'type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">' + '<input id="qrChallenge" name="recaptcha_challenge_field" type="hidden" value="' + $.id('recaptcha_challenge_field').value + '">';
+  row.innerHTML = '<img id="qrCaptcha" title="Reload" width="300" height="57" src="' + $.id('recaptcha_image').firstChild.src + '" alt="reCAPTCHA challenge image">' + (window.preupload_captcha ? '<input id="qrCapToken" type="hidden" name="captcha_token" disabled>' : '') + '<input id="qrCapField" name="recaptcha_response_field" ' + 'placeholder="Type the text (Required)" ' + 'type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">' + '<input id="qrChallenge" name="recaptcha_challenge_field" type="hidden" value="' + $.id('recaptcha_challenge_field').value + '">';
   return true;
 };
 QR.reloadCaptcha = function(focus) {
@@ -1758,6 +1786,15 @@ QR.onClick = function(e) {
     }
   }
 };
+QR.submit = function(force) {
+  if (force) {
+    QR.submitDirect(true);
+  } else if (!QR.noCaptcha && window.preupload_captcha && QR.needPreuploadCaptcha) {
+    QR.submitPreupload();
+  } else {
+    QR.submitDirect();
+  }
+};
 QR.showPostError = function(msg, type, silent) {
   var qrError;
   qrError = $.id('qrError');
@@ -1792,24 +1829,67 @@ QR.resetFile = function() {
   file.removeEventListener('change', QR.onFileChange, false);
   file.parentNode.replaceChild(el, file);
   QR.hidePostError('imagelimit');
+  QR.needPreuploadCaptcha = false;
   QR.startCooldown();
 };
-QR.submit = function(force) {
-  var field, formdata, file;
-  QR.hidePostError();
-  if (QR.xhr) {
-    QR.xhr.abort();
-    QR.xhr = null;
-    QR.showPostError('Aborted.');
-    QR.btn.value = 'Submit';
+QR.submitPreupload = function() {
+  var token, challenge, response, data;
+  if (!QR.presubmitChecks()) {
     return;
   }
-  if (!force && QR.cooldown) {
-    if (QR.auto = !QR.auto) {
-      QR.btn.value = QR.cooldown + 's (auto)';
-    } else {
-      QR.btn.value = QR.cooldown + 's';
+  challenge = $.id('qrChallenge');
+  response = $.id('qrCapField');
+  if (response.value == '') {
+    QR.showPostError('You forgot to type in the CAPTCHA.');
+    response.focus();
+    return;
+  }
+  data = new FormData();
+  data.append('mode', 'checkcaptcha');
+  data.append('challenge', challenge.value);
+  data.append('response', response.value);
+  QR.xhr = new XMLHttpRequest();
+  QR.xhr.open('POST', document.forms.post.action, true);
+  QR.xhr.onerror = function() {
+    QR.xhr = null;
+    QR.submitDirect();
+  };
+  QR.xhr.onload = function() {
+    var el, resp;
+    QR.xhr = null;
+    try {
+      resp = JSON.parse(this.responseText);
+    } catch (e) {
+      console.log("Couldn't verify captcha.");
+      QR.submitDirect();
+      return;
     }
+    if (resp.token) {
+      el = $.id('qrCapToken');
+      el.value = resp.token;
+      el.removeAttribute('disabled');
+      QR.submitDirect();
+    } else if (resp.error) {
+      QR.reloadCaptcha();
+      QR.btn.value = 'Submit';
+      QR.showPostError(resp.error);
+    } else {
+      if (resp.fail) {
+        console.log(resp.fail);
+      }
+      QR.submitDirect();
+    }
+  };
+  token = $.id('qrCapToken');
+  token.value = '';
+  token.setAttribute('disabled', '1');
+  QR.btn.value = 'Sending';
+  QR.xhr.send(data);
+};
+QR.submitDirect = function(force) {
+  var field, formdata, file;
+  QR.hidePostError();
+  if (!QR.presubmitChecks(force)) {
     return;
   }
   QR.auto = false;
@@ -1892,6 +1972,24 @@ QR.submit = function(force) {
   clearInterval(QR.pulse);
   QR.btn.value = 'Sending';
   QR.xhr.send(formdata);
+};
+QR.presubmitChecks = function(force) {
+  if (QR.xhr) {
+    QR.xhr.abort();
+    QR.xhr = null;
+    QR.showPostError('Aborted.');
+    QR.btn.value = 'Submit';
+    return false;
+  }
+  if (!force && QR.cooldown) {
+    if (QR.auto = !QR.auto) {
+      QR.btn.value = QR.cooldown + 's (auto)';
+    } else {
+      QR.btn.value = QR.cooldown + 's';
+    }
+    return false;
+  }
+  return true;
 };
 QR.getCooldown = function(type) {
   if (QR.currentTid != QR.lastTid) {
@@ -2892,7 +2990,7 @@ ThreadUpdater.markDeletedReplies = function(newposts) {
   }
 };
 ThreadUpdater.onload = function() {
-  var i, el, state, self, nodes, thread, newposts, frag, lastrep, lastid, spoiler, op, doc, autoscroll, count, fromQR;
+  var i, el, state, self, nodes, thread, newposts, frag, lastrep, lastid, spoiler, op, doc, autoscroll, count, fromQR, lastRepPos;
   self = ThreadUpdater;
   nodes = [];
   self.setStatus('');
@@ -2946,9 +3044,13 @@ ThreadUpdater.onload = function() {
         frag.appendChild(Parser.buildHTMLFromJSON(nodes[i], Main.board));
       }
       thread.appendChild(frag);
+      lastRepPos = lastrep.offsetTop;
       Parser.hasYouMarkers = false;
       Parser.hasHighlightedPosts = false;
       Parser.parseThread(thread.id.slice(1), -nodes.length);
+      if (lastRepPos != lastrep.offsetTop) {
+        window.scrollBy(0, lastrep.offsetTop - lastRepPos);
+      }
       if (!fromQR) {
         if (!self.force && doc.scrollHeight > window.innerHeight) {
           if (!self.lastReply && lastid != Main.tid) {
@@ -3273,7 +3375,6 @@ Filter.load = function() {
           }
           pattern = new RegExp('^' + pattern, 'im');
         }
-        console.log('Resulting pattern: ' + pattern);
         this.activeFilters.push({
           type: f.type,
           pattern: pattern,
@@ -3561,11 +3662,6 @@ Filter.setCustomColor = function() {
 };
 var IDColor = {
   css: 'padding: 0 5px; border-radius: 6px; font-size: 0.8em;',
-  boards: {
-    q: true,
-    b: true,
-    soc: true
-  },
   ids: {}
 };
 IDColor.init = function() {
@@ -4140,7 +4236,7 @@ CustomMenu.showEditor = function() {
   cnt.className = 'UIPanel';
   cnt.setAttribute('data-close', '1');
   cnt.innerHTML = '\
-<div class="extPanel reply"><div class="panelHeader">Custom Menu\
+<div class="extPanel reply"><div class="panelHeader">Custom Board List\
 <span><img alt="Close" title="Close" class="pointer" data-close="1" src="' + Main.icons.cross + '"></a></span></div>\
 <input placeholder="Example: jp tg mu" id="customMenuBox" type="text" value="' + (Config.customMenuList || '') + '">\
 <div class="center"><button data-save="1">Save</button></div></div>';
@@ -4270,9 +4366,8 @@ var Config = {
   threadUpdater: true,
   threadHiding: true,
   pageTitle: true,
-  hideGlobalMsg: true,
   alwaysAutoUpdate: false,
-  topPageNav: false,
+  topPageNav: true,
   threadWatcher: false,
   imageExpansion: false,
   fitToScreenExpansion: false,
@@ -4319,7 +4414,6 @@ Config.loadFromURL = function() {
   if (/#cfg$/.test(cmd[0])) {
     try {
       data = JSON.parse(decodeURIComponent(cmd[1]));
-      console.log(data);
       history.replaceState(null, '', location.href.split('#', 1)[0]);
       $.extend(Config, JSON.parse(data.settings));
       Config.save();
@@ -4364,127 +4458,57 @@ Config.save = function() {
 };
 var SettingsMenu = {};
 SettingsMenu.options = {
-  'Quotes': {
-    quotePreview: ['Quote preview', 'Enable inline quote previews', true],
-    backlinks: ['Backlinks', 'Show who has replied to a post'],
-    inlineQuotes: ['Inline quote links', 'Clicking quote links will inline expand the quoted post, shift-clicking bypasses the inlining']
-  },
-  'Posting': {
-    quickReply: ['Quick reply', 'Enable inline reply box', true],
-    persistentQR: ['Persistent quick reply', 'Keep quick reply window open after posting']
+  'Quotes &amp; Replying': {
+    quotePreview: ['Quote preview', 'Show post when mousing over post links', true],
+    backlinks: ['Backlinks', 'Show who has replied to a post', true],
+    inlineQuotes: ['Inline quote links', 'Clicking quote links will inline expand the quoted post, Shift-click to bypass inlining'],
+    quickReply: ['Quick Reply', 'Quickly respond to a post by clicking its post number', true],
+    persistentQR: ['Persistent Quick Reply', 'Keep Quick Reply window open after posting']
   },
   'Monitoring': {
-    threadUpdater: ['Thread updater', 'Enable inline thread updating', true],
+    threadUpdater: ['Thread updater', 'Append new posts to bottom of thread without refreshing the page', true],
     alwaysAutoUpdate: ['Auto-update by default', 'Always auto-update threads', true],
+    threadWatcher: ['Thread Watcher', 'Keep track of threads you\'re watching and see when they receive new posts'],
     autoScroll: ['Auto-scroll with auto-updated posts', 'Automatically scroll the page as new posts are added'],
-    updaterSound: ['Sound notification', 'Play a sound when somebody replies to your posts'],
-    threadWatcher: ['Thread watcher', 'Enable thread watcher'],
-    fixedThreadWatcher: ['Pin thread watcher', 'Pin the thread watcher to the page'],
-    threadStats: ['Thread statistics', 'Display post and image counts at the top and bottom right of the page'],
-    pageTitle: ['Excerpts in page title', 'Show post subjects or comment excerpts in page title']
+    updaterSound: ['Sound notification', 'Play a sound when somebody replies to your post(s)'],
+    fixedThreadWatcher: ['Pin Thread Watcher to the page', 'Thread Watcher will scroll with you'],
+    threadStats: ['Thread statistics', 'Display post and image counts on the right of the page, <em>italics</em> signify bump/image limit as been met'],
+    pageTitle: ['Snippets in page title', 'Show post subjects or comment snippets in page (tab) title']
   },
-  'Filtering': {
-    filter: ['Filters &amp; Highlights [<a href="javascript:;" data-cmd="filters-open">Edit</a>]', 'Enable pattern-based filters'],
-    threadHiding: ['Thread hiding [<a href="javascript:;" data-cmd="thread-hiding-clear">Clear</a>]', 'Enable thread hiding', true],
-    replyHiding: ['Reply hiding', 'Enable reply hiding'],
+  'Filters &amp; Post Hiding': {
+    filter: ['Filter and highlight specific threads/posts [<a href="javascript:;" data-cmd="filters-open">Edit</a>]', 'Enable pattern-based filters'],
+    threadHiding: ['Thread hiding [<a href="javascript:;" data-cmd="thread-hiding-clear">Clear History</a>]', 'Hide entire threads by clicking the minus button', true],
+    replyHiding: ['Reply hiding', 'Hide individual replies'],
     hideStubs: ['Hide thread stubs', "Don't display stubs of hidden threads"]
   },
-  'Images': {
-    imageExpansion: ['Image expansion', 'Enable inline image expansion, limited to browser width', true],
-    fitToScreenExpansion: ['Fit expanded images to screen', 'Limit expanded images to both browser width and height'],
-    imageHover: ['Image hover', 'Expand images on hover, limited to browser size'],
-    imageSearch: ['Image search', 'Add Google and iqdb image search buttons next to image posts'],
-    downloadFile: ['Download original', 'Adds a button to download image with original filename (Chrome only)'],
-    revealSpoilers: ["Don't spoiler images", 'Don\'t replace spoiler images with a placeholder and show filenames'],
-    noPictures: ['Hide thumbnails', 'Don\'t display thumbnails while browsing', true]
-  },
   'Navigation': {
-    threadExpansion: ['Thread expansion', 'Enable inline thread expansion', true],
+    threadExpansion: ['Thread expansion', 'Expand threads inline on board indexes', true],
     alwaysDepage: ['Always use infinite scroll', 'Enable infinite scroll by default, so reaching the bottom of the board index will load subsequent pages'],
     topPageNav: ['Page navigation at top of page', 'Show the page switcher at the top of the page, hold Shift and drag to move'],
-    dropDownNav: ['Use drop-down navigation', 'Use persistent drop-down navigation bar instead of traditional links'],
+    dropDownNav: ['Use drop-down navigation', 'Use persistent drop-down navigation instead of traditional board list'],
     stickyNav: ['Navigation arrows', 'Show top and bottom navigation arrows, hold Shift and drag to move'],
-    customMenu: ['Custom menu [<a href="javascript:;" data-cmd="custom-menu-edit">Edit</a>]', 'Only show selected boards in top and bottom board lists'],
+    customMenu: ['Custom board list [<a href="javascript:;" data-cmd="custom-menu-edit">Edit</a>]', 'Only show selected boards in top and bottom board lists'],
     keyBinds: ['Use keyboard shortcuts [<a href="javascript:;" data-cmd="keybinds-open">Show</a>]', 'Enable handy keyboard shortcuts for common actions']
   },
-  'Media': {
+  'Images &amp; Media': {
+    imageExpansion: ['Image expansion', 'Enable inline image expansion, limited to browser width', true],
+    fitToScreenExpansion: ['Fit expanded images to screen', 'Limit expanded images to both browser width and height'],
+    imageHover: ['Image hover', 'Mouse over images to view full size, limited to browser size'],
+    imageSearch: ['Image search', 'Add Google and iqdb image search buttons next to image posts'],
+    downloadFile: ['Save original filename', 'Adds a button to download image with its original filename (Chrome only)'],
+    revealSpoilers: ["Don't spoiler images", 'Show image thumbnail and original filename instead of spoiler placeholders'],
+    noPictures: ['Hide thumbnails', 'Don\'t display thumbnails while browsing', true],
     embedYouTube: ['Embed YouTube links', 'Embed YouTube player into replies'],
     embedSoundCloud: ['Embed SoundCloud links', 'Embed SoundCloud player into replies'],
     embedVocaroo: ['Embed Vocaroo links', 'Embed Vocaroo player into replies']
   },
-  'Other': {
-    customCSS: ['Custom CSS [<a href="javascript:;" data-cmd="css-open">Edit</a>]', 'Embed your own CSS rules', true],
-    hideGlobalMsg: ['Enable announcement hiding', 'Enable announcement hiding (will reset on new or updated announcements)'],
+  'Miscellaneous': {
+    customCSS: ['Custom CSS [<a href="javascript:;" data-cmd="css-open">Edit</a>]', 'Include your own CSS rules', true],
     IDColor: ['Color user IDs', 'Assign unique colors to user IDs on boards that use them'],
-    compactThreads: ['Force long posts to wrap', 'Long posts will wrap at 75% screen width'],
+    compactThreads: ['Force long posts to wrap', 'Long posts will wrap at 75% browser width'],
     reportButton: ['Report button', 'Add a report button next to posts for easy reporting', 1],
     inlineReport: ['Inline report panel', 'Open report panel in browser window, instead of a popup'],
     localTime: ['Convert dates to local time', 'Convert 4chan server time (US Eastern Time) to your local time']
-  }
-};
-SettingsMenu.presets = {
-  'Essential': {
-    quotePreview: 1,
-    backlinks: 1,
-    quickReply: 1,
-    threadUpdater: 1,
-    threadStats: 1,
-    threadHiding: 1,
-    threadExpansion: 1,
-    pageTitle: 1,
-    hideGlobalMsg: 1,
-    embedYouTube: 1,
-    localTime: 1
-  },
-  'Recommended': {
-    quotePreview: 1,
-    backlinks: 1,
-    quickReply: 1,
-    threadUpdater: 1,
-    threadHiding: 1,
-    pageTitle: 1,
-    hideGlobalMsg: 1,
-    topPageNav: 1,
-    threadWatcher: 1,
-    imageExpansion: 1,
-    threadExpansion: 1,
-    imageSearch: 1,
-    reportButton: 1,
-    localTime: 1,
-    stickyNav: 1,
-    keyBinds: 1,
-    embedYouTube: 1
-  },
-  'Advanced': {
-    topPageNav: 1,
-    quotePreview: 1,
-    backlinks: 1,
-    quickReply: 1,
-    threadUpdater: 1,
-    threadHiding: 1,
-    pageTitle: 1,
-    hideGlobalMsg: 1,
-    threadWatcher: 1,
-    imageExpansion: 1,
-    threadExpansion: 1,
-    alwaysDepage: 1,
-    imageSearch: 1,
-    reportButton: 1,
-    localTime: 1,
-    stickyNav: 1,
-    keyBinds: 1,
-    filter: 1,
-    revealSpoilers: 1,
-    replyHiding: 1,
-    inlineQuotes: 1,
-    imageHover: 1,
-    threadStats: 1,
-    IDColor: 1,
-    downloadFile: 1,
-    inlineReport: 1,
-    embedYouTube: 1,
-    embedSoundCloud: 1,
-    embedVocaroo: 1
   }
 };
 SettingsMenu.save = function() {
@@ -4520,6 +4544,7 @@ SettingsMenu.open = function() {
   cnt.id = 'settingsMenu';
   cnt.className = 'UIPanel';
   html = '<div class="extPanel reply"><div class="panelHeader">Settings' + '<span><img alt="Close" title="Close" class="pointer" data-cmd="settings-toggle" src="' + Main.icons.cross + '"></a>' + '</span></div><ul>';
+  html += '<ul><li id="settings-exp-all">[<a href="#" data-cmd="settings-exp-all">Expand All Settings</a>]</li></ul>';
   if (Main.hasMobileLayout) {
     categories = {};
     for (cat in SettingsMenu.options) {
@@ -4536,62 +4561,22 @@ SettingsMenu.open = function() {
       }
     }
   } else {
-    html += '<ul><li class="settings-cat">Presets <select id="settings-presets" size="1">';
-    categories = SettingsMenu.presets;
-    for (cat in categories) {
-      html += '<option value="' + cat + '">' + cat + '</option>';
-    }
-    html += '</select></li></ul>';
     categories = SettingsMenu.options;
   }
   for (cat in categories) {
     opts = categories[cat];
-    html += '<ul><li class="settings-cat">' + cat + '</li>';
+    html += '<ul><li class="settings-cat-lbl">' + '<img alt="" class="settings-expand" src="' + Main.icons.plus + '">' + cat + '</li><ul class="settings-cat">';
     for (key in opts) {
-      html += '<li><label' + (opts[key][1] ? ' title="' + opts[key][1] + '">' : '>') + '<input type="checkbox" class="menuOption" data-option="' + key + '"' + (Config[key] ? ' checked="checked">' : '>') + opts[key][0] + '</label></li>';
+      html += '<li><label><input type="checkbox" class="menuOption" data-option="' + key + '"' + (Config[key] ? ' checked="checked">' : '>') + opts[key][0] + '</label>' + (opts[key][1] ? '</li><li class="settings-tip">' + opts[key][1] : '') + '</li>';
     }
-    html += '</ul>';
+    html += '</ul></ul>';
   }
-  html += '</ul><ul><li>' + '<label title="Completely disable the extension (overrides any checked boxes)">' + '<input type="checkbox" class="menuOption" data-option="disableAll"' + (Config.disableAll ? ' checked="checked">' : '>') + 'Disable the extension</label></li></ul>' + '<div class="center"><button data-cmd="settings-export">Export</button>' + '<button data-cmd="settings-save">Save</button></div>';
+  html += '</ul><ul><li class="settings-off">' + '<label title="Completely disable the native extension (overrides any checked boxes)">' + '<input type="checkbox" class="menuOption" data-option="disableAll"' + (Config.disableAll ? ' checked="checked">' : '>') + 'Disable the native extension</label></li></ul>' + '<div class="center"><button data-cmd="settings-export">Export Settings</button>' + '<button data-cmd="settings-save">Save Settings</button></div>';
   cnt.innerHTML = html;
   cnt.addEventListener('click', SettingsMenu.onClick, false);
   document.body.appendChild(cnt);
-  SettingsMenu.matchPreset();
-  $.id('settings-presets').addEventListener('change', SettingsMenu.onPresetChange, false);
+  SettingsMenu.toggleCat($.cls('settings-expand')[0]);
   (el = $.cls('menuOption', cnt)[0]) && el.focus();
-};
-SettingsMenu.matchPreset = function() {
-  var i, id, el, opts, cat, nodes, preset, skip, select;
-  nodes = $.cls('menuOption', $.id('settingsMenu'));
-  preset = id = -1;
-  for (cat in this.presets) {
-    ++id;
-    skip = false;
-    opts = this.presets[cat];
-    for (i = 0; el = nodes[i]; ++i) {
-      if ( !! opts[el.getAttribute('data-option')] != el.checked) {
-        skip = true;
-        break;
-      }
-    }
-    if (!skip) {
-      preset = id;
-    }
-  }
-  select = $.id('settings-presets');
-  if (el = $.id('custom-set')) {
-    select.removeChild(el);
-  }
-  if (preset == -1) {
-    el = document.createElement('option');
-    el.id = 'custom-set';
-    el.textContent = 'Custom';
-    select.appendChild(el);
-    select.selectedIndex = select.options.length - 1;
-  } else {
-    select.selectedIndex = preset;
-  }
-  return preset;
 };
 SettingsMenu.showExport = function() {
   var cnt, str, el;
@@ -4634,35 +4619,41 @@ SettingsMenu.onExportClick = function(e) {
     SettingsMenu.closeExport();
   }
 };
-SettingsMenu.onPresetChange = function() {
-  var i, j, el, preset, opts, cb, checked;
-  if (el = $.id('custom-set')) {
-    el.parentNode.removeChild(el);
+SettingsMenu.expandAll = function() {
+  var i, el, nodes = $.cls('settings-expand');
+  for (i = 0; el = nodes[i]; ++i) {
+    el.src = Main.icons.minus;
+    el.parentNode.nextElementSibling.style.display = 'block';
   }
-  el = $.id('settings-presets');
-  preset = el.options[el.selectedIndex].value;
-  opts = $.cls('menuOption');
-  for (i = 0; cb = opts[i]; ++i) {
-    cb.checked = !! SettingsMenu.presets[preset][cb.getAttribute('data-option')];
+};
+SettingsMenu.toggleCat = function(t) {
+  var icon, disp, el = t.parentNode.nextElementSibling;
+  if (!el.style.display) {
+    disp = 'block';
+    icon = 'minus';
+  } else {
+    disp = '';
+    icon = 'plus';
   }
+  el.style.display = disp;
+  t.src = Main.icons[icon];
 };
 SettingsMenu.onClick = function(e) {
   var el, t, i, j;
   t = e.target;
-  if ($.hasClass(t, 'menuOption')) {
-    SettingsMenu.matchPreset();
+  if ($.hasClass(t, 'settings-expand')) {
+    SettingsMenu.toggleCat(t);
+  } else if (t.getAttribute('data-cmd') == 'settings-exp-all') {
+    e.preventDefault();
+    SettingsMenu.expandAll();
   } else if (t.id == 'settingsMenu' && (el = $.id('settingsMenu'))) {
     e.preventDefault();
-    e.stopPropagation();
     SettingsMenu.close(el);
   }
 };
 SettingsMenu.close = function(el) {
   if (el = (el || $.id('settingsMenu'))) {
     el.removeEventListener('click', SettingsMenu.onClick, false);
-    if (!Main.hasMobileLayout) {
-      $.id('settings-presets').removeEventListener('change', SettingsMenu.onPresetChange, false);
-    }
     document.body.removeChild(el);
   }
 };
@@ -4750,7 +4741,7 @@ Main.run = function() {
     thread.addEventListener('mouseover', Main.onThreadMouseOver, false);
     thread.addEventListener('mouseout', Main.onThreadMouseOut, false);
   }
-  if (Config.hideGlobalMsg) {
+  if (!Main.hasMobileLayout) {
     Main.initGlobalMessage();
   }
   if (Config.stickyNav) {
@@ -5068,6 +5059,10 @@ Main.onclick = function(e) {
       case 'expand':
         ThreadExpansion.toggle(id);
         break;
+      case 'open-qr':
+        e.preventDefault();
+        QR.show(Main.tid);
+        break;
       case 'depage':
         e.preventDefault();
         Depager.toggle();
@@ -5125,7 +5120,7 @@ Main.onclick = function(e) {
         QuoteInline.toggle(t, e);
       } else {
         e.preventDefault();
-        location = t.href;
+        window.location = t.href;
       }
     } else if (Config.threadExpansion && t.parentNode && $.hasClass(t.parentNode, 'abbr')) {
       e.preventDefault();
@@ -5468,6 +5463,19 @@ div.backlink {\
   padding: 0;\
   padding-left: 5px;\
 }\
+.backlink.mobile {\
+  padding: 3px 5px;\
+  display: block;\
+  clear: both;\
+  line-height: 2;\
+}\
+.op .backlink.mobile,\
+#quote-preview .backlink.mobile {\
+  display: none !important;\
+}\
+.backlink.mobile .quoteLink {\
+  padding-right: 2px;\
+}\
 .backlink span {\
   padding: 0;\
 }\
@@ -5563,6 +5571,11 @@ div.backlink {\
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);\
   vertical-align: middle;\
 }\
+#settingsMenu > div {\
+  top: 25px;;\
+  vertical-align: top;\
+  max-height: 85%;\
+}\
 .extPanel input[type="text"],\
 .extPanel textarea {\
   border: 1px solid #AAA;\
@@ -5595,10 +5608,33 @@ div.backlink {\
 .tomorrow #settingsMenu ul {\
   border-bottom: 1px solid #282a2e;\
 }\
-.settings-cat {\
+.settings-off {\
+  padding-left: 3px;\
+}\
+.settings-cat-lbl {\
   font-weight: bold;\
   margin: 10px 0 5px;\
   padding-left: 5px;\
+}\
+.settings-cat-lbl img {\
+  vertical-align: text-bottom;\
+  margin-right: 5px;\
+  cursor: pointer;\
+  width: 18px;\
+  height: 18px;\
+}\
+.settings-tip {\
+  font-size: 0.85em;\
+  margin: 2px 0 5px 0;\
+  padding-left: 23px;\
+}\
+#settings-exp-all {\
+  padding-left: 7px;\
+  text-align: center;\
+}\
+#settingsMenu .settings-cat {\
+  display: none;\
+  margin-left: 3px;\
 }\
 #customCSSMenu textarea {\
   display: block;\
@@ -5932,6 +5968,11 @@ kbd {\
   position: absolute;\
   right: 0;\
   top: 1px;\
+}\
+.open-qr-wrap {\
+  text-align: center;\
+  font-size: 24px;\
+  font-weight: bold;\
 }\
 \
 @media only screen and (max-width: 480px) {\
