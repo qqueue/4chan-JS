@@ -142,7 +142,7 @@ function onStyleSheetChange(e) {
 
 function onPageSwitch(e) {
   e.preventDefault();
-  location = this.action;
+  window.location = this.action;
 }
 
 function onMobileFormClick(e) {
@@ -429,7 +429,7 @@ function onCaptchaReady() {
     el.setAttribute('autocapitalize', 'off');
     el.removeAttribute('style');
     window.captchaReady = true;
-    QR && QR.onCaptchaReady();
+    window.QR && QR.onCaptchaReady();
   }
 }
 
@@ -504,7 +504,7 @@ function handleFileSelect(evt) {
   var fileSize = evt.target.files[0].size;
   document.getElementById('fileError').innerHTML = '';
   if (fileSize > maxFilesize) {
-    document.getElementById('fileError').innerHTML = '<span style="font-weight:bold;padding:5px;color:red;">' + file_too_big + '</span>';
+    document.getElementById('fileError').innerHTML = window.file_too_big;
   }
 }
 
@@ -609,6 +609,80 @@ function onCoreClick(e) {
   }
 }
 
+function onPostSubmit(e) {
+  var fsize, limit, file = document.forms.post.upfile;
+  if (file && file.value && file.files) {
+    fsize = file.files[0].size || 0;
+  } else {
+    fsize = 0;
+  }
+  limit = (window.Main && Main.hasMobileLayout) ? 0 : 204800;
+  if (!e.shiftKey && fsize > limit) {
+    try {
+      submitPreupload();
+      e.preventDefault();
+    } catch (e) {}
+  }
+}
+
+function submitDirect() {
+  var el = document.forms.post;
+  el.removeEventListener('submit', onPostSubmit, false);
+  el.submit();
+}
+
+function submitPreupload() {
+  var xhr, token, challenge, response, data, errCnt;
+  if (token = document.getElementById('captchaToken')) {
+    token.parentNode.removeChild(token);
+  }
+  challenge = document.getElementById('recaptcha_challenge_field');
+  response = document.getElementById('recaptcha_response_field');
+  errCnt = document.getElementById('fileError');
+  if (!response || response.value == '') {
+    errCnt.textContent = 'You forgot to type in the CAPTCHA.';
+    response && response.focus();
+    return;
+  }
+  data = new FormData();
+  data.append('mode', 'checkcaptcha');
+  data.append('challenge', challenge.value);
+  data.append('response', response.value);
+  xhr = new XMLHttpRequest();
+  xhr.open('POST', document.forms.post.action, true);
+  xhr.onerror = function() {
+    submitDirect();
+  };
+  xhr.onload = function() {
+    var resp;
+    try {
+      resp = JSON.parse(this.responseText);
+    } catch (e) {
+      console.log("Couldn't verify captcha.");
+      submitDirect();
+      return;
+    }
+    if (resp.token) {
+      token = document.createElement('input');
+      token.name = 'captcha_token';
+      token.id = 'captchaToken';
+      token.type = 'hidden';
+      token.value = resp.token;
+      document.forms.post.appendChild(token);
+      submitDirect();
+    } else if (resp.error) {
+      onCaptchaClick();
+      errCnt.innerHTML = resp.error;
+    } else {
+      if (resp.fail) {
+        console.log(resp.fail);
+      }
+      submitDirect();
+    }
+  };
+  xhr.send(data);
+};
+
 function contentLoaded() {
   var i, el, el2, nodes, len, mobileSelect, params, board, val;
   document.removeEventListener('DOMContentLoaded', contentLoaded, true);
@@ -628,6 +702,11 @@ function contentLoaded() {
     el = document.getElementById('delform');
     el.addEventListener('click', onCoreClick, false);
   }
+  if (!window.passEnabled && window.preupload_captcha && 'FormData' in window) {
+    if (el = document.forms.post) {
+      el.addEventListener('submit', onPostSubmit, false);
+    }
+  }
   if (el = document.forms.post.flag) {
     if ((val = readCookie('4chan_flag')) && (el2 = el.querySelector('option[value="' + val + '"]'))) {
       el2.setAttribute('selected', 'selected');
@@ -638,12 +717,13 @@ function contentLoaded() {
     for (i = 0; el = nodes[i]; ++i) {
       el.addEventListener('submit', onPageSwitch, false);
     }
-    el = document.getElementById('search-btn');
-    el.addEventListener('click', toggleSearch, false);
-    el = document.getElementById('search-ok');
-    el.addEventListener('click', applySearch, false);
-    el = document.getElementById('search-box');
-    el.addEventListener('keydown', onKeyDownSearch, false);
+    if (el = document.getElementById('search-btn')) {
+      el.addEventListener('click', toggleSearch, false);
+      el = document.getElementById('search-ok');
+      el.addEventListener('click', applySearch, false);
+      el = document.getElementById('search-box');
+      el.addEventListener('keydown', onKeyDownSearch, false);
+    }
   }
   buildMobileNav();
   nodes = document.getElementsByClassName('mobilePostFormToggle');
