@@ -4472,7 +4472,7 @@ SettingsMenu.options = {
     autoScroll: ['Auto-scroll with auto-updated posts', 'Automatically scroll the page as new posts are added'],
     updaterSound: ['Sound notification', 'Play a sound when somebody replies to your post(s)'],
     fixedThreadWatcher: ['Pin Thread Watcher to the page', 'Thread Watcher will scroll with you'],
-    threadStats: ['Thread statistics', 'Display post and image counts on the right of the page, <em>italics</em> signify bump/image limit as been met'],
+    threadStats: ['Thread statistics', 'Display post and image counts on the right of the page, <em>italics</em> signify bump/image limit has been met'],
     pageTitle: ['Snippets in page title', 'Show post subjects or comment snippets in page (tab) title']
   },
   'Filters &amp; Post Hiding': {
