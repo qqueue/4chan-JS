@@ -4565,7 +4565,7 @@ SettingsMenu.open = function() {
   }
   for (cat in categories) {
     opts = categories[cat];
-    html += '<ul><li class="settings-cat-lbl">' + '<img alt="" class="settings-expand" src="' + Main.icons.plus + '">' + cat + '</li><ul class="settings-cat">';
+    html += '<ul><li class="settings-cat-lbl">' + '<img alt="" class="settings-expand" src="' + Main.icons.plus + '">' + '<span class="settings-expand pointer">' + cat + '</span></li><ul class="settings-cat">';
     for (key in opts) {
       html += '<li><label><input type="checkbox" class="menuOption" data-option="' + key + '"' + (Config[key] ? ' checked="checked">' : '>') + opts[key][0] + '</label>' + (opts[key][1] ? '</li><li class="settings-tip">' + opts[key][1] : '') + '</li>';
     }
@@ -4636,7 +4636,7 @@ SettingsMenu.toggleCat = function(t) {
     icon = 'plus';
   }
   el.style.display = disp;
-  t.src = Main.icons[icon];
+  t.parentNode.firstElementChild.src = Main.icons[icon];
 };
 SettingsMenu.onClick = function(e) {
   var el, t, i, j;
