@@ -5062,6 +5062,7 @@ Main.onclick = function(e) {
       case 'open-qr':
         e.preventDefault();
         QR.show(Main.tid);
+        $.tag('textarea', document.forms.qrPost)[0].focus();
         break;
       case 'depage':
         e.preventDefault();
