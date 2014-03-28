@@ -39,8 +39,12 @@ function initRecaptcha() {
 }
 
 function loadRecaptcha() {
+  var el;
   if (document.getElementById('recaptcha_area')) {
     return;
+  }
+  if (el = document.getElementById('captchaContainer')) {
+    el.setAttribute('data-placeholder', el.textContent);
   }
   Recaptcha.create(window.recaptchaKey, 'captchaContainer' + window.recaptchaId, {
     theme: "clean",

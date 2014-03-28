@@ -1721,6 +1721,13 @@ QR.close = function() {
   (el = $.id('qrEmail')) && el.removeEventListener('change', QR.startCooldown, false);
   $.tag('textarea', cnt)[0].removeEventListener('keydown', QR.onKeyDown, false);
   Draggable.unset($.id('qrHeader'));
+  if (window.RecaptchaState) {
+    Recaptcha.destroy();
+    window.captchaReady = false;
+    if (el = $.id('captchaContainer')) {
+      el.innerHTML = '<div class="placeholder">' + el.getAttribute('data-placeholder') + '</div>';
+    }
+  }
   document.body.removeChild(cnt);
 };
 QR.cloneCaptcha = function() {
@@ -1941,7 +1948,6 @@ QR.submitDirect = function(force) {
           }
           QR.startCooldown();
         } else {
-          window.RecaptchaState && Recaptcha.reload('t');
           QR.close();
         }
         if (Main.tid) {
