@@ -288,9 +288,6 @@ Parser.buildHTMLFromJSON = function(data, board, standalone, fromQuote) {
     fileDims = data.ext == '.pdf' ? 'PDF' : data.w + 'x' + data.h;
     if (board != 'f') {
       filePath = imgDir + '/' + data.tim + data.ext;
-      if (data.ext == '.webm') {
-        fileClass += ' fileWebm';
-      }
       imgSrc = '<a class="fileThumb' + fileClass + '" href="' + filePath + '" target="_blank"><img src="' + fileThumb + '" alt="' + fileSize + 'B" data-md5="' + data.md5 + '" style="height: ' + data.tn_h + 'px; width: ' + data.tn_w + 'px;">' + '<div class="mFileInfo mobile">' + size + 'B ' + data.ext.slice(1).toUpperCase() + '</div></a>';
       fileInfo = '<div class="fileText" id="fT' + data.no + (data.spoiler ? ('" title="' + longFile + '"') : '"') + '>File: <a href="' + filePath + '" target="_blank">' + data.tim + data.ext + '</a>-(' + fileSize + 'B, ' + fileDims + (noFilename ? '' : (', <span' + (needFileTip ? (' title="' + longFile + '"') : '') + '>' + shortFile + '</span>')) + ')</div>';
     } else {
