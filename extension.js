@@ -1758,7 +1758,8 @@ QR.reloadCaptcha = function(focus) {
     }
   };
   clearInterval(QR.captchaInterval);
-  Recaptcha.reload('t');
+  Recaptcha.destroy();
+  window.loadRecaptcha();
   pulse = setTimeout(poll, 100);
 };
 QR.onClick = function(e) {
