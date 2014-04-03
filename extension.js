@@ -288,6 +288,9 @@ Parser.buildHTMLFromJSON = function(data, board, standalone, fromQuote) {
     fileDims = data.ext == '.pdf' ? 'PDF' : data.w + 'x' + data.h;
     if (board != 'f') {
       filePath = imgDir + '/' + data.tim + data.ext;
+      if (data.ext == '.webm') {
+        fileClass += ' fileWebm';
+      }
       imgSrc = '<a class="fileThumb' + fileClass + '" href="' + filePath + '" target="_blank"><img src="' + fileThumb + '" alt="' + fileSize + 'B" data-md5="' + data.md5 + '" style="height: ' + data.tn_h + 'px; width: ' + data.tn_w + 'px;">' + '<div class="mFileInfo mobile">' + size + 'B ' + data.ext.slice(1).toUpperCase() + '</div></a>';
       fileInfo = '<div class="fileText" id="fT' + data.no + (data.spoiler ? ('" title="' + longFile + '"') : '"') + '>File: <a href="' + filePath + '" target="_blank">' + data.tim + data.ext + '</a>-(' + fileSize + 'B, ' + fileDims + (noFilename ? '' : (', <span' + (needFileTip ? (' title="' + longFile + '"') : '') + '>' + shortFile + '</span>')) + ')</div>';
     } else {
@@ -1263,12 +1266,15 @@ QuotePreview.remove = function(el) {
 };
 var ImageExpansion = {};
 ImageExpansion.expand = function(thumb) {
-  var img, el, href;
+  var img, el, href, ext;
   if (Config.imageHover && (el = $.id('image-hover'))) {
     document.body.removeChild(el);
   }
   href = thumb.parentNode.getAttribute('href');
-  if (href.slice(-3) == 'pdf') {
+  if (ext = href.match(/\.(?:webm|pdf)$/)) {
+    if (!Main.hasMobileLayout && ext[0] == '.webm') {
+      ImageExpansion.expandWebm(thumb);
+    }
     return;
   }
   thumb.setAttribute('data-expanding', '1');
@@ -1310,6 +1316,41 @@ ImageExpansion.toggle = function(t) {
     ImageExpansion.contract(t);
   }
 };
+ImageExpansion.expandWebm = function(thumb) {
+  var el, link, fileText, left, width, href, maxWidth;
+  if (el = document.getElementById('image-hover')) {
+    document.body.removeChild(el);
+  }
+  link = thumb.parentNode;
+  href = link.getAttribute('href');
+  left = link.getBoundingClientRect().left;
+  maxWidth = document.documentElement.clientWidth - left - 25;
+  el = document.createElement('video');
+  el.muted = true;
+  el.controls = true;
+  el.loop = true;
+  el.className = 'expandedWebm';
+  el.src = href;
+  el.style.maxWidth = maxWidth + 'px';
+  link.style.display = 'none';
+  link.parentNode.appendChild(el);
+  fileText = thumb.parentNode.previousElementSibling;
+  el = document.createElement('span');
+  el.className = 'collapseWebm';
+  el.innerHTML = '-[<a href="#">Collapse</a>]';
+  el.firstElementChild.addEventListener('click', ImageExpansion.collapseWebm, false);
+  fileText.appendChild(el);
+};
+ImageExpansion.collapseWebm = function(e) {
+  var cnt, el;
+  e.preventDefault();
+  this.removeEventListener('click', ImageExpansion.collapseWebm, false);
+  cnt = this.parentNode;
+  el = cnt.parentNode.parentNode.getElementsByClassName('expandedWebm')[0];
+  el.previousElementSibling.style.display = '';
+  el.parentNode.removeChild(el);
+  cnt.parentNode.removeChild(cnt);
+};
 ImageExpansion.onError = function(e) {
   var thumb, img;
   img = e.target;
@@ -1322,7 +1363,7 @@ ImageExpansion.onLoadStart = function(img, thumb) {
   var imgWidth, imgHeight, maxWidth, maxHeight, ratio, left;
   thumb.removeAttribute('data-expanding');
   left = thumb.getBoundingClientRect().left;
-  maxWidth = document.documentElement.clientWidth - left * 2;
+  maxWidth = document.documentElement.clientWidth - left - 25;
   maxHeight = document.documentElement.clientHeight;
   imgWidth = img.naturalWidth;
   imgHeight = img.naturalHeight;
@@ -1355,21 +1396,24 @@ ImageExpansion.checkLoadStart = function(img, thumb) {
 };
 var ImageHover = {};
 ImageHover.show = function(thumb) {
-  var img, href;
+  var el, href, ext;
   href = thumb.parentNode.getAttribute('href');
-  if (href.slice(-3) == 'pdf') {
+  if (ext = href.match(/\.(?:webm|pdf)$/)) {
+    if (ext[0] == '.webm') {
+      ImageHover.showWebm(thumb);
+    }
     return;
   }
-  img = document.createElement('img');
-  img.id = 'image-hover';
-  img.alt = 'Image';
-  img.setAttribute('src', href);
-  document.body.appendChild(img);
+  el = document.createElement('img');
+  el.id = 'image-hover';
+  el.alt = 'Image';
+  el.setAttribute('src', href);
+  document.body.appendChild(el);
   if (UA.hasCORS) {
-    img.style.display = 'none';
-    this.timeout = ImageHover.checkLoadStart(img, thumb);
+    el.style.display = 'none';
+    this.timeout = ImageHover.checkLoadStart(el, thumb);
   } else {
-    img.style.left = thumb.getBoundingClientRect().right + 10 + 'px';
+    el.style.left = thumb.getBoundingClientRect().right + 10 + 'px';
   }
 };
 ImageHover.hide = function() {
@@ -1378,6 +1422,23 @@ ImageHover.hide = function() {
   if (img = $.id('image-hover')) {
     document.body.removeChild(img);
   }
+};
+ImageHover.showWebm = function(thumb) {
+  var dims, el, bounds, limit, width;
+  dims = thumb.parentNode.previousElementSibling.textContent.match(/, ([0-9]+)x[0-9]+/);
+  width = +dims[1];
+  el = document.createElement('video');
+  el.id = 'image-hover';
+  el.src = thumb.parentNode.getAttribute('href');
+  el.loop = true;
+  bounds = thumb.getBoundingClientRect();
+  limit = window.innerWidth - bounds.right;
+  if (width > limit) {
+    el.style.maxWidth = limit - 20 + 'px';
+  }
+  document.body.appendChild(el);
+  el.play();
+  el.muted = true;
 };
 ImageHover.onLoadStart = function(img, thumb) {
   var bounds, limit;
