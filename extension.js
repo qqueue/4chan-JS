@@ -566,7 +566,12 @@ Parser.parsePost = function(pid, tid) {
         html += '<a href="' + file.firstElementChild.href + '" download="' + txt + '" title="Download file"><img class="extButton" src="' + Main.icons.download + '" alt="D"></a>';
       }
       if (Config.imageSearch) {
-        href = file.firstElementChild.href;
+        href = file.nextElementSibling;
+        if (/imgspoiler/.test(href.className)) {
+          href = 'http://t.4cdn.org/' + Main.board + '/thumb/' + href.href.match(/\/([0-9]+)\..+$/)[1] + 's.jpg';
+        } else {
+          href = href.firstElementChild.src;
+        }
         html += '<a href="//www.google.com/searchbyimage?image_url=' + href + '" target="_blank" title="Google Image Search"><img class="extButton" src="' + Main.icons.gis + '" alt="G"></a><a href="http://iqdb.org/?url=' + href + '" target="_blank" title="iqdb"><img class="extButton" src="' + Main.icons.iqdb + '" alt="I"></a>';
       }
       if (html) {
