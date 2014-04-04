@@ -562,8 +562,7 @@ Parser.parsePost = function(pid, tid) {
         txt = file.lastElementChild.title || file.title || file.lastElementChild.textContent;
         html += '<a href="' + file.firstElementChild.href + '" download="' + txt + '" title="Download file"><img class="extButton" src="' + Main.icons.download + '" alt="D"></a>';
       }
-      if (Config.imageSearch) {
-        href = file.nextElementSibling;
+      if (Config.imageSearch && (href = file.nextElementSibling)) {
         if (/imgspoiler/.test(href.className)) {
           href = 'http://t.4cdn.org/' + Main.board + '/thumb/' + href.href.match(/\/([0-9]+)\..+$/)[1] + 's.jpg';
         } else {
@@ -1821,8 +1820,7 @@ QR.reloadCaptcha = function(focus) {
     }
   };
   clearInterval(QR.captchaInterval);
-  Recaptcha.destroy();
-  window.loadRecaptcha();
+  Recaptcha.reload('t');
   pulse = setTimeout(poll, 100);
 };
 QR.onClick = function(e) {
