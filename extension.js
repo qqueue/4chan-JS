@@ -1338,7 +1338,7 @@ ImageExpansion.expandWebm = function(thumb) {
   fileText = thumb.parentNode.previousElementSibling;
   el = document.createElement('span');
   el.className = 'collapseWebm';
-  el.innerHTML = '-[<a href="#">Collapse</a>]';
+  el.innerHTML = '-[<a href="#">Close</a>]';
   el.firstElementChild.addEventListener('click', ImageExpansion.collapseWebm, false);
   fileText.appendChild(el);
 };
