@@ -504,11 +504,20 @@ function idClick(evt) {
   }
 }
 
-function handleFileSelect(evt) {
-  var fileSize = evt.target.files[0].size;
-  document.getElementById('fileError').innerHTML = '';
-  if (fileSize > maxFilesize) {
-    document.getElementById('fileError').innerHTML = window.file_too_big;
+function handleFileSelect() {
+  var el, fsize, maxFilesize;
+  if (this.files) {
+    maxFilesize = window.maxFilesize;
+    el = document.getElementById('fileError');
+    fsize = this.files[0].size;
+    if (this.files[0].type == 'video/webm' && window.maxWebmFilesize) {
+      maxFilesize = window.maxWebmFilesize;
+    }
+    if (fsize > maxFilesize) {
+      el.textContent = 'Error: Maximum file size allowed is ' + Math.floor(maxFilesize / 1048576) + ' MB';
+    } else {
+      el.textContent = '';
+    }
   }
 }
 

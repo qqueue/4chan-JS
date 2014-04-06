@@ -64,6 +64,12 @@ $.hash = function(str) {
   }
   return msg;
 };
+$.prettySeconds = function(fs) {
+  var m, s;
+  m = Math.floor(fs / 60);
+  s = Math.round(fs - m * 60);
+  return [m, s];
+};
 $.cache = {};
 var Parser = {};
 Parser.init = function() {
@@ -1432,6 +1438,9 @@ ImageHover.showWebm = function(thumb) {
   el.id = 'image-hover';
   el.src = thumb.parentNode.getAttribute('href');
   el.loop = true;
+  el.onloadedmetadata = function() {
+    ImageHover.showWebMDuration(this, thumb);
+  };
   bounds = thumb.getBoundingClientRect();
   limit = window.innerWidth - bounds.right;
   if (width > limit) {
@@ -1440,6 +1449,10 @@ ImageHover.showWebm = function(thumb) {
   document.body.appendChild(el);
   el.play();
   el.muted = true;
+};
+ImageHover.showWebMDuration = function(el, thumb) {
+  var ms = $.prettySeconds(el.duration);
+  thumb.title = ms[0] + ':' + ('0' + ms[1]).slice(-2);
 };
 ImageHover.onLoadStart = function(img, thumb) {
   var bounds, limit;
@@ -1715,14 +1728,22 @@ QR.onCaptchaReady = function() {
   QR.captchaInterval = setInterval(QR.cloneCaptcha, QR.captchaDelay);
 };
 QR.onFileChange = function(e) {
-  var fsize;
+  var fsize, maxFilesize;
   QR.needPreuploadCaptcha = false;
   if (this.value) {
-    fsize = this.files ? this.files[0].size : 0;
+    maxFilesize = window.maxFilesize;
+    if (this.files) {
+      fsize = this.files[0].size;
+      if (this.files[0].type == 'video/webm' && window.maxWebmFilesize) {
+        maxFilesize = window.maxWebmFilesize;
+      }
+    } else {
+      fsize = 0;
+    }
     if (QR.fileDisabled) {
       QR.showPostError('Image limit reached.', 'imagelimit', true);
-    } else if (fsize > window.maxFilesize) {
-      QR.showPostError('Error: Maximum file size allowed is ' + Math.floor(window.maxFilesize / 1048576) + ' MB', 'filesize', true);
+    } else if (fsize > maxFilesize) {
+      QR.showPostError('Error: Maximum file size allowed is ' + Math.floor(maxFilesize / 1048576) + ' MB', 'filesize', true);
     } else {
       QR.hidePostError();
     }
