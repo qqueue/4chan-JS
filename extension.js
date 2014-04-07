@@ -1280,9 +1280,9 @@ ImageExpansion.expand = function(thumb) {
   href = thumb.parentNode.getAttribute('href');
   if (ext = href.match(/\.(?:webm|pdf)$/)) {
     if (!Main.hasMobileLayout && ext[0] == '.webm') {
-      ImageExpansion.expandWebm(thumb);
+      return ImageExpansion.expandWebm(thumb);
     }
-    return;
+    return false;
   }
   thumb.setAttribute('data-expanding', '1');
   img = document.createElement('img');
@@ -1298,6 +1298,7 @@ ImageExpansion.expand = function(thumb) {
   } else {
     this.onLoadStart(img, thumb);
   }
+  return true;
 };
 ImageExpansion.contract = function(img) {
   var cnt, p;
@@ -1317,11 +1318,12 @@ ImageExpansion.contract = function(img) {
 ImageExpansion.toggle = function(t) {
   if (t.hasAttribute('data-md5')) {
     if (!t.hasAttribute('data-expanding')) {
-      ImageExpansion.expand(t);
+      return ImageExpansion.expand(t);
     }
   } else {
     ImageExpansion.contract(t);
   }
+  return true;
 };
 ImageExpansion.expandWebm = function(thumb) {
   var el, link, fileText, left, width, href, maxWidth;
@@ -1336,6 +1338,7 @@ ImageExpansion.expandWebm = function(thumb) {
   el.muted = true;
   el.controls = true;
   el.loop = true;
+  el.autoplay = true;
   el.className = 'expandedWebm';
   el.src = href;
   el.style.maxWidth = maxWidth + 'px';
@@ -1347,6 +1350,7 @@ ImageExpansion.expandWebm = function(thumb) {
   el.innerHTML = '-[<a href="#">Close</a>]';
   el.firstElementChild.addEventListener('click', ImageExpansion.collapseWebm, false);
   fileText.appendChild(el);
+  return true;
 };
 ImageExpansion.collapseWebm = function(e) {
   var cnt, el;
@@ -1438,17 +1442,17 @@ ImageHover.showWebm = function(thumb) {
   el.id = 'image-hover';
   el.src = thumb.parentNode.getAttribute('href');
   el.loop = true;
+  el.muted = true;
+  el.autoplay = true;
   el.onloadedmetadata = function() {
     ImageHover.showWebMDuration(this, thumb);
   };
   bounds = thumb.getBoundingClientRect();
-  limit = window.innerWidth - bounds.right;
+  limit = window.innerWidth - bounds.right - 20;
   if (width > limit) {
-    el.style.maxWidth = limit - 20 + 'px';
+    el.style.maxWidth = limit + 'px';
   }
   document.body.appendChild(el);
-  el.play();
-  el.muted = true;
 };
 ImageHover.showWebMDuration = function(el, thumb) {
   var ms = $.prettySeconds(el.duration);
@@ -1457,9 +1461,9 @@ ImageHover.showWebMDuration = function(el, thumb) {
 ImageHover.onLoadStart = function(img, thumb) {
   var bounds, limit;
   bounds = thumb.getBoundingClientRect();
-  limit = window.innerWidth - bounds.right;
+  limit = window.innerWidth - bounds.right - 20;
   if (img.naturalWidth > limit) {
-    img.style.maxWidth = limit - 20 + 'px';
+    img.style.maxWidth = limit + 'px';
   }
   img.style.display = '';
 };
@@ -4458,7 +4462,7 @@ var Config = {
   alwaysAutoUpdate: false,
   topPageNav: true,
   threadWatcher: false,
-  imageExpansion: false,
+  imageExpansion: true,
   fitToScreenExpansion: false,
   threadExpansion: true,
   alwaysDepage: false,
@@ -4488,6 +4492,10 @@ var Config = {
   fixedThreadWatcher: false,
   persistentQR: false,
   disableAll: false
+};
+var ConfigMobile = {
+  embedYouTube: false,
+  imageExpansion: false
 };
 Config.load = function() {
   if (storage = localStorage.getItem('4chan-settings')) {
@@ -4580,7 +4588,7 @@ SettingsMenu.options = {
     keyBinds: ['Use keyboard shortcuts [<a href="javascript:;" data-cmd="keybinds-open">Show</a>]', 'Enable handy keyboard shortcuts for common actions']
   },
   'Images &amp; Media': {
-    imageExpansion: ['Image expansion', 'Enable inline image expansion, limited to browser width', true],
+    imageExpansion: ['Image expansion', 'Enable inline image expansion, limited to browser width'],
     fitToScreenExpansion: ['Fit expanded images to screen', 'Limit expanded images to both browser width and height'],
     imageHover: ['Image hover', 'Mouse over images to view full size, limited to browser size'],
     imageSearch: ['Image search', 'Add Google and iqdb image search buttons next to image posts'],
@@ -4802,6 +4810,9 @@ Main.run = function() {
   }
   Main.hasMobileLayout = Main.checkMobileLayout();
   Main.isMobileDevice = /Mobile|Android|Dolfin|Opera Mobi|PlayStation Vita|Nintendo DS/.test(navigator.userAgent);
+  if (Main.hasMobileLayout) {
+    $.extend(Config, ConfigMobile);
+  }
   if (Main.firstRun && Main.isMobileDevice) {
     Config.topPageNav = false;
     Config.dropDownNav = true;
@@ -5203,8 +5214,9 @@ Main.onclick = function(e) {
       tid = Main.tid || t.previousElementSibling.getAttribute('href').split('#')[0].slice(4);
       QR.quotePost(tid, !e.ctrlKey && t.textContent);
     } else if (Config.imageExpansion && e.which == 1 && t.parentNode && $.hasClass(t.parentNode, 'fileThumb') && t.parentNode.nodeName == 'A' && !$.hasClass(t.parentNode, 'deleted')) {
-      e.preventDefault();
-      ImageExpansion.toggle(t);
+      if (ImageExpansion.toggle(t)) {
+        e.preventDefault();
+      }
     } else if (Config.inlineQuotes && e.which == 1 && $.hasClass(t, 'quotelink')) {
       if (!e.shiftKey) {
         QuoteInline.toggle(t, e);
