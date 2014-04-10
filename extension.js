@@ -1274,8 +1274,8 @@ QuotePreview.remove = function(el) {
 var ImageExpansion = {};
 ImageExpansion.expand = function(thumb) {
   var img, el, href, ext;
-  if (Config.imageHover && (el = $.id('image-hover'))) {
-    document.body.removeChild(el);
+  if (Config.imageHover) {
+    ImageHover.hide();
   }
   href = thumb.parentNode.getAttribute('href');
   if (ext = href.match(/\.(?:webm|pdf)$/)) {
@@ -1431,6 +1431,9 @@ ImageHover.hide = function() {
   var img;
   clearTimeout(this.timeout);
   if (img = $.id('image-hover')) {
+    if (img.play) {
+      Tip.hide();
+    }
     document.body.removeChild(img);
   }
 };
@@ -1455,8 +1458,11 @@ ImageHover.showWebm = function(thumb) {
   document.body.appendChild(el);
 };
 ImageHover.showWebMDuration = function(el, thumb) {
+  if (!el.parentNode) {
+    return;
+  }
   var ms = $.prettySeconds(el.duration);
-  thumb.title = ms[0] + ':' + ('0' + ms[1]).slice(-2);
+  Tip.show(thumb, ms[0] + ':' + ('0' + ms[1]).slice(-2));
 };
 ImageHover.onLoadStart = function(img, thumb) {
   var bounds, limit;
