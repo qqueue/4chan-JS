@@ -5936,7 +5936,7 @@ div.post-hidden:not(#quote-preview) blockquote.postMessage {\
   max-height: 100%;\
   top: 0px;\
   right: 0px;\
-  z-index: 3;\
+  z-index: 9002;\
 }\
 .thread-stats {\
   float: right;\
