@@ -41,3 +41,4 @@ poll core
 poll core-compiled
 poll catalog
 
+git push
