@@ -70,15 +70,13 @@ $.prettySeconds = function(fs) {
   s = Math.round(fs - m * 60);
   return [m, s];
 };
+$.docEl = document.documentElement;
 $.cache = {};
 var Parser = {};
 Parser.init = function() {
   var o, a, h, m, tail, staticPath, tracked, el;
   if (Config.filter || Config.embedSoundCloud || Config.embedYouTube || Config.embedVocaroo) {
     this.needMsg = true;
-  }
-  if (Config.imageSearch || Config.downloadFile) {
-    this.needFile = true;
   }
   staticPath = '//s.4cdn.org/image/';
   tail = window.devicePixelRatio >= 2 ? '@2x.gif' : '.gif';
@@ -96,9 +94,9 @@ Parser.init = function() {
     if (o = (new Date).getTimezoneOffset()) {
       a = Math.abs(o);
       h = (0 | (a / 60));
-      this.utcOffset = ' UTC' + (o < 0 ? '+' : '-') + h + ((m = a - h * 60) ? (':' + m) : '');
+      this.utcOffset = 'UTC' + (o < 0 ? '+' : '-') + h + ((m = a - h * 60) ? (':' + m) : '');
     } else {
-      this.utcOffset = ' UTC';
+      this.utcOffset = 'UTC';
     }
     this.weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   }
@@ -176,7 +174,7 @@ Parser.buildHTMLFromJSON = function(data, board, standalone, fromQuote) {
     imgSrc = '',
     fileInfo = '',
     fileHtml = '',
-    fileThumb, filePath, fileSize = '',
+    fileThumb, filePath, fileName, fileSpoilerTip = '"',
     size = '',
     fileClass = '',
     shortFile = '',
@@ -195,13 +193,13 @@ Parser.buildHTMLFromJSON = function(data, board, standalone, fromQuote) {
     postCountStr, resto, capcode_replies = '',
     threadIcons = '',
     needFileTip = false,
-    i, q, href, quotes, imgDir = '//i.4cdn.org/' + board + '/src';
+    i, q, href, quotes, imgDir = '//i.4cdn.org/' + board;
   if (data.resto == 0) {
     isOP = true;
     if (standalone) {
-      mobileLink = '<div class="postLink mobile"><span class="info"></span><a href="' + 'res/' + data.no + '" class="button">View Thread</a></div>';
+      mobileLink = '<div class="postLink mobile"><span class="info"></span><a href="' + 'thread/' + data.no + '" class="button">View Thread</a></div>';
       postType = 'op';
-      replySpan = '&nbsp; <span>[<a href="' + 'res/' + data.no + '" class="replylink">Reply</a>]</span>'
+      replySpan = '&nbsp; <span>[<a href="' + 'thread/' + data.no + (data.semantic_url ? ('/' + data.semantic_url) : '') + '" class="replylink" rel="canonical">Reply</a>]</span>'
     }
     resto = data.no;
   } else {
@@ -209,8 +207,8 @@ Parser.buildHTMLFromJSON = function(data, board, standalone, fromQuote) {
   }
   noLink = resto + '#p' + data.no;
   if (!Main.tid || board != Main.board) {
-    noLink = 'res/' + noLink;
-    quoteLink = 'res/' + resto + '#q' + data.no;
+    noLink = 'thread/' + noLink;
+    quoteLink = 'thread/' + resto + '#q' + data.no;
   } else {
     quoteLink = 'javascript:quote(\'' + data.no + '\')';
   }
@@ -277,29 +275,32 @@ Parser.buildHTMLFromJSON = function(data, board, standalone, fromQuote) {
       size = data.fsize + ' ';
     }
     if (data.spoiler) {
-      fileSize = 'Spoiler Image, ' + size;
       if (!Config.revealSpoilers) {
+        fileName = 'Spoiler Image';
+        fileSpoilerTip = '" title="' + longFile + '"';
         fileClass = ' imgspoiler';
         fileThumb = '//s.4cdn.org/image/spoiler' + (Parser.customSpoiler[board] || '') + '.png';
         data.tn_w = 100;
         data.tn_h = 100;
         noFilename = true;
+      } else {
+        fileName = shortFile;
       }
     } else {
-      fileSize = size;
+      fileName = shortFile;
     }
     if (!fileThumb) {
-      fileThumb = '//t.4cdn.org/' + board + '/thumb/' + data.tim + 's.jpg';
+      fileThumb = '//t.4cdn.org/' + board + '/' + data.tim + 's.jpg';
     }
     fileDims = data.ext == '.pdf' ? 'PDF' : data.w + 'x' + data.h;
     if (board != 'f') {
       filePath = imgDir + '/' + data.tim + data.ext;
-      imgSrc = '<a class="fileThumb' + fileClass + '" href="' + filePath + '" target="_blank"><img src="' + fileThumb + '" alt="' + fileSize + 'B" data-md5="' + data.md5 + '" style="height: ' + data.tn_h + 'px; width: ' + data.tn_w + 'px;">' + '<div class="mFileInfo mobile">' + size + 'B ' + data.ext.slice(1).toUpperCase() + '</div></a>';
-      fileInfo = '<div class="fileText" id="fT' + data.no + (data.spoiler ? ('" title="' + longFile + '"') : '"') + '>File: <a href="' + filePath + '" target="_blank">' + data.tim + data.ext + '</a>-(' + fileSize + 'B, ' + fileDims + (noFilename ? '' : (', <span' + (needFileTip ? (' title="' + longFile + '"') : '') + '>' + shortFile + '</span>')) + ')</div>';
+      imgSrc = '<a class="fileThumb' + fileClass + '" href="' + filePath + '" target="_blank"><img src="' + fileThumb + '" alt="' + size + 'B" data-md5="' + data.md5 + '" style="height: ' + data.tn_h + 'px; width: ' + data.tn_w + 'px;">' + '<div class="mFileInfo mobile">' + size + 'B ' + data.ext.slice(1).toUpperCase() + '</div></a>';
+      fileInfo = '<div class="fileText" id="fT' + data.no + fileSpoilerTip + '>File: <a' + (needFileTip ? (' title="' + longFile + '"') : '') + ' href="' + filePath + '" target="_blank">' + fileName + '</a> (' + size + 'B, ' + fileDims + ')</div>';
     } else {
       filePath = imgDir + '/' + data.filename + data.ext;
       fileDims += ', ' + data.tag;
-      fileInfo = '<div class="fileText" id="fT' + data.no + '"' + '>File: <a href="' + filePath + '" target="_blank">' + data.filename + '.swf</a>-(' + fileSize + 'B, ' + fileDims + ')</div>';
+      fileInfo = '<div class="fileText" id="fT' + data.no + '"' + '>File: <a href="' + filePath + '" target="_blank">' + data.filename + '.swf</a> (' + size + 'B, ' + fileDims + ')</div>';
     }
     fileHtml = '<div id="f' + data.no + '" class="file">' + fileInfo + imgSrc + '</div>';
   }
@@ -342,7 +343,7 @@ Parser.buildHTMLFromJSON = function(data, board, standalone, fromQuote) {
     for (i = 0; q = quotes[i]; ++i) {
       href = q.getAttribute('href');
       if (href.charAt(0) != '/') {
-        q.href = '/' + board + '/res/' + href;
+        q.href = '/' + board + '/thread/' + resto + href;
       }
     }
   }
@@ -357,7 +358,7 @@ Parser.buildCapcodeReplies = function(replies, board, tid) {
     manager: 'Manager'
   };
   if (board != Main.board) {
-    prelink = '/' + board + '/res/';
+    prelink = '/' + board + '/thread/';
     pretext = '&gt;&gt;&gt;/' + board + '/';
   } else {
     prelink = '';
@@ -428,28 +429,6 @@ Parser.parseThread = function(tid, offset, limit) {
         el.textContent = 'Showing all replies.'
         frag.appendChild(el);
         summary.appendChild(frag);
-      }
-    }
-    if (Config.threadWatcher) {
-      el = document.createElement('img');
-      if (ThreadWatcher.watched[key = tid + '-' + Main.board]) {
-        el.src = Main.icons.watched;
-        el.setAttribute('data-active', '1');
-      } else {
-        el.src = Main.icons.notwatched;
-      }
-      el.className = 'extButton wbtn wbtn-' + key;
-      el.setAttribute('data-cmd', 'watch');
-      el.setAttribute('data-id', tid);
-      el.alt = 'W';
-      el.title = 'Add to watch list';
-      pi.insertBefore(el, pi.firstChild);
-      if (Main.tid && (cnt = $.cls('navLinksBot')[0])) {
-        frag = document.createDocumentFragment();
-        frag.appendChild(document.createTextNode('['));
-        frag.appendChild(el.cloneNode(true));
-        frag.appendChild(document.createTextNode('] '));
-        cnt.insertBefore(frag, cnt.firstChild);
       }
     }
   }
@@ -543,57 +522,20 @@ Parser.parsePost = function(pid, tid) {
     if (Parser.needMsg) {
       msg = document.getElementById('m' + pid);
     }
-    html = '';
-    if (Config.reportButton) {
-      if (Main.hasMobileLayout) {
-        el = document.createElement('span');
-        el.className = 'mobile mobile-report';
-        el.setAttribute('data-cmd', 'report');
-        el.setAttribute('data-id', pid);
-        el.textContent = 'Report';
-        pi.parentNode.appendChild(el);
-      } else {
-        html += '<img class="extButton" alt="!" data-cmd="report" data-id="' + pid + '" src="' + Main.icons.report + '" title="Report">'
-      }
-    }
-    if (html) {
-      cnt = document.createElement('div');
-      cnt.className = 'extControls';
-      cnt.innerHTML = html;
-      pi.appendChild(cnt);
-    }
-    if (Parser.needFile && (file = document.getElementById('fT' + pid))) {
-      html = '';
-      if (Config.downloadFile) {
-        txt = file.lastElementChild.title || file.title || file.lastElementChild.textContent;
-        html += '<a href="' + file.firstElementChild.href + '" download="' + txt + '" title="Download file"><img class="extButton" src="' + Main.icons.download + '" alt="D"></a>';
-      }
-      if (Config.imageSearch && (href = file.nextElementSibling)) {
-        if (/imgspoiler/.test(href.className)) {
-          href = 'http://t.4cdn.org/' + Main.board + '/thumb/' + href.href.match(/\/([0-9]+)\..+$/)[1] + 's.jpg';
-        } else {
-          href = href.firstElementChild.src;
-        }
-        html += '<a href="//www.google.com/searchbyimage?image_url=' + href + '" target="_blank" title="Google Image Search"><img class="extButton" src="' + Main.icons.gis + '" alt="G"></a><a href="http://iqdb.org/?url=' + href + '" target="_blank" title="iqdb"><img class="extButton" src="' + Main.icons.iqdb + '" alt="I"></a>';
-      }
-      if (html) {
-        cnt = document.createElement('div');
-        cnt.className = 'extControls';
-        cnt.innerHTML = html;
-        file.appendChild(cnt);
-      }
-    }
+    el = document.createElement('a');
+    el.href = '#';
+    el.className = 'postMenuBtn';
+    el.title = 'Menu';
+    el.setAttribute('data-cmd', 'post-menu');
+    el.textContent = '▶';
+    pi.appendChild(el);
     if (pid != tid) {
       if (Config.filter) {
         filtered = Filter.exec(pi.parentNode, pi, msg);
       }
-      if (Config.replyHiding && !filtered) {
-        el = document.getElementById('sa' + pid);
-        el.innerHTML = '<img class="extButton replyHideButton" ' + 'data-cmd="hide-r" data-id="' + pid + '" src="' + Main.icons.minus + '" title="Toggle reply">';
-        if (ReplyHiding.hidden[pid]) {
-          ReplyHiding.hidden[pid] = Main.now;
-          ReplyHiding.hide(pid);
-        }
+      if (!filtered && ReplyHiding.hidden[pid]) {
+        ReplyHiding.hidden[pid] = Main.now;
+        ReplyHiding.hide(pid);
       }
       if (Config.backlinks) {
         Parser.parseBacklinks(pid, tid);
@@ -622,22 +564,23 @@ Parser.parsePost = function(pid, tid) {
       img.removeAttribute('style');
       isOP = $.hasClass(pi.parentNode, 'op');
       img.style.maxWidth = img.style.maxHeight = isOP ? '250px' : '125px';
-      img.src = '//t.4cdn.org' + (file.pathname.replace(/src(\/[0-9]+).+$/, 'thumb$1s.jpg'))
+      img.src = '//t.4cdn.org' + (file.pathname.replace(/([0-9]+).+$/, '/$1s.jpg'));
       filename = file.previousElementSibling;
       finfo = filename.title.split('.');
       if (finfo[0].length > (isOP ? 40 : 30)) {
         txt = finfo[0].slice(0, isOP ? 35 : 25) + '(...)' + finfo[1];
       } else {
         txt = filename.title;
+        filename.removeAttribute('title');
       }
-      filename = filename.childNodes[2];
-      filename.nodeValue = filename.nodeValue.slice(0, -1) + ', ' + txt + ')';
+      filename.firstElementChild.innerHTML = txt;
       file.insertBefore(img, file.firstElementChild);
     }
   }
   if (Config.localTime) {
     el = pi.getElementsByClassName('dateTime')[0];
-    el.textContent = Parser.getLocaleDate(new Date(el.getAttribute('data-utc') * 1000)) + this.utcOffset;
+    el.title = this.utcOffset;
+    el.textContent = Parser.getLocaleDate(new Date(el.getAttribute('data-utc') * 1000));
   }
 };
 Parser.getLocaleDate = function(date) {
@@ -678,7 +621,6 @@ Parser.parseBacklinks = function(pid, tid) {
       el = document.createElement('div');
       el.id = 'bl_' + ids[1];
       el.className = 'backlink';
-      el.innerHTML = 'Replies: ';
       if (Main.hasMobileLayout) {
         el.className = 'backlink mobile';
         target = document.getElementById('p' + ids[1]);
@@ -701,8 +643,83 @@ Parser.buildSummary = function(tid, oRep, oImg) {
   }
   el = document.createElement('span');
   el.className = 'summary desktop';
-  el.innerHTML = oRep + oImg + ' omitted. Click <a href="res/' + tid + '" class="replylink">here</a> to view.';
+  el.innerHTML = oRep + oImg + ' omitted. Click <a href="thread/' + tid + '" class="replylink">here</a> to view.';
   return el;
+};
+var PostMenu = {
+  activeBtn: null
+};
+PostMenu.open = function(btn) {
+  var div, html, pid, btnPos, txt, el, href, left, limit, isOP;
+  PostMenu.close();
+  pid = btn.parentNode.id.split('pi')[1];
+  isOP = !! $.id('t' + pid);
+  html = '<ul><li data-cmd="report" data-id="' + pid + '">Report post</li>';
+  if (isOP) {
+    if (!Main.tid) {
+      html += '<li data-cmd="hide" data-id="' + pid + '">' + ($.hasClass($.id('t' + pid), 'post-hidden') ? 'Unhide' : 'Hide') + ' thread</li>';
+    }
+    if (Config.threadWatcher) {
+      html += '<li data-cmd="watch" data-id="' + pid + '">' + (ThreadWatcher.watched[pid + '-' + Main.board] ? 'Remove from' : 'Add to') + ' watch list</li>';
+    }
+  } else {
+    html += '<li data-cmd="hide-r" data-id="' + pid + '">' + ($.hasClass($.id('pc' + pid), 'post-hidden') ? 'Unhide' : 'Hide') + ' post</li>';
+  }
+  if (file = $.id('fT' + pid)) {
+    el = $.cls('fileThumb', file.parentNode)[0];
+    if (el) {
+      if (/imgspoiler/.test(el.className)) {
+        href = 'http://t.4cdn.org/' + Main.board + '/' + el.href.match(/\/([0-9]+)\..+$/)[1] + 's.jpg';
+      } else {
+        href = el.firstElementChild.src;
+      }
+      html += '<li><ul>' + '<li><a href="//www.google.com/searchbyimage?image_url=' + href + '" target="_blank">Google</a></li>' + '<li><a href="http://iqdb.org/?url=' + href + '" target="_blank">iqdb</a></li></ul>Image search &raquo</li>';
+    }
+    if (UA.canDownloadOriginal) {
+      if (file.hasAttribute('title')) {
+        txt = file.getAttribute('title');
+      } else {
+        txt = file.firstElementChild.title || file.firstElementChild.textContent;
+      }
+      html += '<li><a download="' + txt + '" href="' + file.firstElementChild.href + '">Download file</a></li>';
+    }
+  }
+  if (Config.filter) {
+    html += '<li><a href="#" data-cmd="filter-sel">Filter selected text</a></li>';
+  }
+  div = document.createElement('div');
+  div.id = 'post-menu';
+  div.className = 'dd-menu';
+  div.innerHTML = html + '</ul>';
+  btnPos = btn.getBoundingClientRect();
+  div.style.top = btnPos.bottom + 3 + window.pageYOffset + 'px';
+  document.addEventListener('click', PostMenu.close, false);
+  $.addClass(btn, 'menuOpen');
+  PostMenu.activeBtn = btn;
+  UA.dispatchEvent('4chanPostMenuReady', {
+    postId: pid,
+    isOP: isOP,
+    node: div.firstElementChild
+  });
+  document.body.appendChild(div);
+  left = btnPos.left + window.pageXOffset;
+  limit = $.docEl.clientWidth - div.offsetWidth;
+  if (left > (limit - 75)) {
+    div.className += ' dd-menu-left';
+  }
+  if (left > limit) {
+    left = limit;
+  }
+  div.style.left = left + 'px';
+};
+PostMenu.close = function() {
+  var el;
+  if (el = $.id('post-menu')) {
+    el.parentNode.removeChild(el);
+    document.removeEventListener('click', PostMenu.close, false);
+    $.removeClass(PostMenu.activeBtn, 'menuOpen');
+    PostMenu.activeBtn = null;
+  }
 };
 var Depager = {};
 Depager.init = function() {
@@ -734,7 +751,7 @@ Depager.init = function() {
     if (cnt = $.cls('board')[0]) {
       el2 = document.createElement('span');
       el2.className = 'depageNumber';
-      el2.textContent = '[Page 0]';
+      el2.textContent = 'Page 1';
       cnt.insertBefore(el2, cnt.firstElementChild);
     }
   } else {
@@ -783,7 +800,7 @@ Depager.insertAd = function(pageId, frag, zone, isLastPage) {
   } else {
     wrap = document.createElement('div');
     wrap.className = 'bottomad center';
-    if (pageId == 1) {
+    if (pageId == 2) {
       cnt = $.id(Depager.adId);
     } else {
       cnt = document.createElement('div');
@@ -795,7 +812,7 @@ Depager.insertAd = function(pageId, frag, zone, isLastPage) {
       frag.appendChild(Depager.adPlea.cloneNode(true));
     }
     frag.appendChild(document.createElement('hr'));
-    if (pageId != 1) {
+    if (pageId != 2) {
       window.ados_add_placement(3536, 18130, cnt.id, 4).setZone(zone);
     }
   }
@@ -821,7 +838,7 @@ Depager.renderNext = function() {
   Depager.insertAd(pageId, frag, data.adZone, isLastPage);
   el = document.createElement('span');
   el.className = 'depageNumber';
-  el.textContent = '[Page ' + pageId + ']';
+  el.textContent = 'Page ' + pageId;
   frag.appendChild(el);
   for (j = 0; op = threads[j]; ++j) {
     if ($.id('t' + op.no)) {
@@ -976,7 +993,7 @@ QuoteInline.isSelfQuote = function(node, pid, board) {
 };
 QuoteInline.toggle = function(link, e) {
   var t, pfx, src, el, count;
-  t = link.getAttribute('href').match(/^(?:\/([^\/]+)\/)?(?:res\/)?([0-9]+)?#p([0-9]+)$/);
+  t = link.getAttribute('href').match(/^(?:\/([^\/]+)\/)?(?:thread\/)?([0-9]+)?#p([0-9]+)$/);
   if (!t || t[1] == 'rs' || QuoteInline.isSelfQuote(link, t[3], t[1])) {
     return;
   }
@@ -1048,7 +1065,7 @@ QuoteInline.inlineRemote = function(link, board, tid, pid) {
     link.removeAttribute('data-loading');
   };
   link.setAttribute('data-loading', '1');
-  $.get('//a.4cdn.org/' + board + '/res/' + tid + '.json', {
+  $.get('//a.4cdn.org/' + board + '/thread/' + tid + '.json', {
     onload: onload,
     onerror: onerror
   });
@@ -1118,20 +1135,21 @@ QuoteInline.inline = function(link, src, id) {
 var QuotePreview = {};
 QuotePreview.init = function() {
   var thread;
-  this.regex = /^(?:\/([^\/]+)\/)?(?:res\/)?([0-9]+)?#p([0-9]+)$/;
+  this.regex = /^(?:\/([^\/]+)\/)?(?:thread\/)?([0-9]+)?#p([0-9]+)$/;
   this.highlight = null;
   this.highlightAnti = null;
   this.out = true;
 };
 QuotePreview.resolve = function(link) {
-  var self, t, post, ids, offset;
+  var self, t, post, ids, offset, pfx;
   self = QuotePreview;
   self.out = false;
   t = link.getAttribute('href').match(self.regex);
-  if (!t || t[1] == 'rs') {
+  if (!t) {
     return;
   }
-  if (post = document.getElementById('p' + t[3])) {
+  pfx = link.getAttribute('data-pfx') || '';
+  if (post = document.getElementById(pfx + 'p' + t[3])) {
     offset = post.getBoundingClientRect();
     if (offset.top > 0 && offset.bottom < document.documentElement.clientHeight && !$.hasClass(post.parentNode, 'post-hidden')) {
       if (!$.hasClass(post, 'highlight') && location.hash.slice(1) != post.id) {
@@ -1184,7 +1202,7 @@ QuotePreview.showRemote = function(link, board, tid, pid) {
   onerror = function() {
     link.style.cursor = '';
   };
-  $.get('//a.4cdn.org/' + board + '/res/' + tid + '.json', {
+  $.get('//a.4cdn.org/' + board + '/thread/' + tid + '.json', {
     onload: onload,
     onerror: onerror
   });
@@ -1271,7 +1289,10 @@ QuotePreview.remove = function(el) {
     document.body.removeChild(cnt);
   }
 };
-var ImageExpansion = {};
+var ImageExpansion = {
+  activeVideos: [],
+  timeout: null
+};
 ImageExpansion.expand = function(thumb) {
   var img, el, href, ext;
   if (Config.imageHover) {
@@ -1326,7 +1347,8 @@ ImageExpansion.toggle = function(t) {
   return true;
 };
 ImageExpansion.expandWebm = function(thumb) {
-  var el, link, fileText, left, width, href, maxWidth;
+  var el, link, fileText, left, width, href, maxWidth, self;
+  self = ImageExpansion;
   if (el = document.getElementById('image-hover')) {
     document.body.removeChild(el);
   }
@@ -1342,15 +1364,23 @@ ImageExpansion.expandWebm = function(thumb) {
   el.className = 'expandedWebm';
   el.src = href;
   el.style.maxWidth = maxWidth + 'px';
+  el.onplay = ImageExpansion.onWebmPlay;
   link.style.display = 'none';
   link.parentNode.appendChild(el);
   fileText = thumb.parentNode.previousElementSibling;
   el = document.createElement('span');
   el.className = 'collapseWebm';
   el.innerHTML = '-[<a href="#">Close</a>]';
-  el.firstElementChild.addEventListener('click', ImageExpansion.collapseWebm, false);
+  el.firstElementChild.addEventListener('click', self.collapseWebm, false);
   fileText.appendChild(el);
   return true;
+};
+ImageExpansion.onWebmPlay = function(e) {
+  var self = ImageExpansion;
+  if (!self.activeVideos.length) {
+    document.addEventListener('scroll', self.onScroll, false);
+  }
+  self.activeVideos.push(this);
 };
 ImageExpansion.collapseWebm = function(e) {
   var cnt, el;
@@ -1361,6 +1391,29 @@ ImageExpansion.collapseWebm = function(e) {
   el.previousElementSibling.style.display = '';
   el.parentNode.removeChild(el);
   cnt.parentNode.removeChild(cnt);
+};
+ImageExpansion.onScroll = function(e) {
+  clearTimeout(ImageExpansion.timeout);
+  ImageExpansion.timeout = setTimeout(ImageExpansion.pauseVideos, 500);
+};
+ImageExpansion.pauseVideos = function() {
+  var self, i, el, pos, min, max, nodes;
+  self = ImageExpansion;
+  nodes = [];
+  min = window.pageYOffset;
+  max = window.pageYOffset + $.docEl.clientHeight;
+  for (i = 0; el = self.activeVideos[i]; ++i) {
+    pos = el.getBoundingClientRect();
+    if (pos.top + window.pageYOffset > max || pos.bottom + window.pageYOffset < min) {
+      el.pause();
+    } else if (!el.paused) {
+      nodes.push(el);
+    }
+  }
+  if (!nodes.length) {
+    document.removeEventListener('scroll', self.onScroll, false);
+  }
+  self.activeVideos = nodes;
 };
 ImageExpansion.onError = function(e) {
   var thumb, img;
@@ -1515,14 +1568,12 @@ QR.init = function() {
   window.addEventListener('storage', this.syncStorage, false);
 };
 QR.addReplyLink = function() {
-  var th, hr, el;
-  th = $.id('t' + Main.tid);
+  var cnt, el;
+  cnt = $.cls('navLinks')[2];
   el = document.createElement('div');
   el.className = 'open-qr-wrap';
   el.innerHTML = '[<a href="#" class="open-qr-link" data-cmd="open-qr">Reply to Thread</a>]';
-  hr = document.createElement('hr');
-  th.parentNode.insertBefore(hr, th.nextElementSibling);
-  th.parentNode.insertBefore(el, hr.nextElementSibling);
+  cnt.insertBefore(el, cnt.firstChild);
 };
 QR.lock = function() {
   QR.showPostError('This thread is closed.', 'closed', true);
@@ -1629,6 +1680,7 @@ QR.show = function(tid) {
         continue;
       } else if (placeholder == 'File') {
         file = fields[i].children[1].firstChild.cloneNode(false);
+        file.tabIndex += 20;
         file.id = 'qrFile';
         file.size = '19';
         file.addEventListener('change', QR.onFileChange, false);
@@ -1656,22 +1708,20 @@ QR.show = function(tid) {
         } else {
           el = row.firstChild;
         }
+        if (el.tabIndex > 0) {
+          el.tabIndex += 20;
+        }
         if (el.nodeName == 'INPUT' || el.nodeName == 'TEXTAREA') {
           if (el.name == 'name') {
-            QR.noCaptcha && (el.tabIndex = 1);
             if (cookie = Main.getCookie('4chan_name')) {
               el.value = cookie;
             }
           } else if (el.name == 'email') {
-            QR.noCaptcha && (el.tabIndex = 2);
             el.id = 'qrEmail';
             if (cookie = Main.getCookie('4chan_email')) {
               el.value = cookie;
             }
-          } else if (el.name == 'sub') {
-            QR.noCaptcha && (el.tabIndex = 3);
           } else if (el.name == 'com') {
-            QR.noCaptcha && (el.tabIndex = 4);
             QR.comField = el;
             el.addEventListener('keydown', QR.onKeyDown, false);
             el.addEventListener('paste', QR.onKeyDown, false);
@@ -1697,11 +1747,11 @@ QR.show = function(tid) {
   }
   this.btn = qrForm.querySelector('input[type="submit"]');
   this.btn.previousSibling.className = 'presubmit';
-  QR.noCaptcha && (this.btn.tabIndex = 5) && file && (file.tabIndex = 5);
-  if (spoiler = postForm.querySelector('input[name="spoiler"]')) {
+  this.btn.tabIndex += 20;
+  if (el = postForm.querySelector('.desktop > label > input[name="spoiler"]')) {
     spoiler = document.createElement('span');
     spoiler.id = 'qrSpoiler';
-    spoiler.innerHTML = '<label>[<input type="checkbox" value="on" name="spoiler">Spoiler?]</label>';
+    spoiler.innerHTML = '<label>[<input type="checkbox" tabindex="' + (el.tabIndex + 20) + '" value="on" name="spoiler">Spoiler?]</label>';
     file.parentNode.insertBefore(spoiler, file.nextSibling);
   }
   form.appendChild(qrForm);
@@ -1828,7 +1878,7 @@ QR.cloneCaptcha = function() {
   if (!row) {
     return false;
   }
-  row.innerHTML = '<img id="qrCaptcha" title="Reload" width="300" height="57" src="' + $.id('recaptcha_image').firstChild.src + '" alt="reCAPTCHA challenge image">' + (window.preupload_captcha ? '<input id="qrCapToken" type="hidden" name="captcha_token" disabled>' : '') + '<input id="qrCapField" name="recaptcha_response_field" ' + 'placeholder="Type the text (Required)" ' + 'type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">' + '<input id="qrChallenge" name="recaptcha_challenge_field" type="hidden" value="' + $.id('recaptcha_challenge_field').value + '">';
+  row.innerHTML = '<img id="qrCaptcha" title="Reload" width="300" height="57" src="' + $.id('recaptcha_image').firstChild.src + '" alt="reCAPTCHA challenge image">' + (window.preupload_captcha ? '<input id="qrCapToken" type="hidden" name="captcha_token" disabled>' : '') + '<input id="qrCapField" tabindex="25" name="recaptcha_response_field" ' + 'placeholder="Type the text (Required)" ' + 'type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">' + '<input id="qrChallenge" name="recaptcha_challenge_field" type="hidden" value="' + $.id('recaptcha_challenge_field').value + '">';
   return true;
 };
 QR.reloadCaptcha = function(focus) {
@@ -1971,7 +2021,7 @@ QR.submitPreupload = function() {
       QR.submitDirect();
     } else if (resp.error) {
       QR.reloadCaptcha();
-      QR.btn.value = 'Submit';
+      QR.btn.value = 'Post';
       QR.showPostError(resp.error);
     } else {
       if (resp.fail) {
@@ -2015,7 +2065,7 @@ QR.submitDirect = function(force) {
   QR.xhr.onload = function() {
     var resp, el, hasFile, ids, tid, pid, tracked;
     QR.xhr = null;
-    QR.btn.value = 'Submit';
+    QR.btn.value = 'Post';
     if (this.status == 200) {
       if (resp = this.responseText.match(/"errmsg"[^>]*>(.*?)<\/span/)) {
         QR.reloadCaptcha();
@@ -2077,7 +2127,7 @@ QR.presubmitChecks = function(force) {
     QR.xhr.abort();
     QR.xhr = null;
     QR.showPostError('Aborted.');
-    QR.btn.value = 'Submit';
+    QR.btn.value = 'Post';
     return false;
   }
   if (!force && QR.cooldown) {
@@ -2115,7 +2165,7 @@ QR.startCooldown = function() {
   type = ((el = $.id('qrFile')) && el.value) ? 'image' : 'reply';
   time = QR.getPostTime(type);
   if (!time) {
-    QR.btn.value = 'Submit';
+    QR.btn.value = 'Post';
     return;
   }
   QR.timestamp = parseInt(time, 10);
@@ -2135,7 +2185,7 @@ QR.onPulse = function() {
   QR.cooldown = Math.floor((QR.activeDelay - QR.cdElapsed) / 1000);
   if (QR.cooldown <= 0) {
     clearInterval(QR.pulse);
-    QR.btn.value = 'Submit';
+    QR.btn.value = 'Post';
     QR.cooldown = false;
     if (QR.auto) {
       QR.submit();
@@ -2451,15 +2501,10 @@ ThreadWatcher.onClick = function(e) {
   }
 };
 ThreadWatcher.toggle = function(tid, board, synced) {
-  var i, key, label, nodes, btn, lastReply, thread;
+  var i, key, label, lastReply, thread;
   key = tid + '-' + (board || Main.board);
-  nodes = $.cls('wbtn-' + key);
   if (this.watched[key]) {
     delete this.watched[key];
-    for (i = 0; btn = nodes[i]; ++i) {
-      btn.src = Main.icons.notwatched;
-      btn.removeAttribute('data-active');
-    }
   } else {
     if (label = $.cls('subject', $.id('pi' + tid))[0].textContent) {
       label = label.slice(0, this.charLimit);
@@ -2474,10 +2519,6 @@ ThreadWatcher.toggle = function(tid, board, synced) {
       lastReply = tid;
     }
     this.watched[key] = [label, lastReply, 0];
-    for (i = 0; btn = nodes[i]; ++i) {
-      btn.src = Main.icons.watched;
-      btn.setAttribute('data-active', '1');
-    }
   }
   this.save();
   this.load();
@@ -2608,7 +2649,7 @@ ThreadWatcher.fetch = function(key, img) {
   if (img) {
     xhr.onerror = xhr.onload;
   }
-  xhr.open('GET', '//a.4cdn.org/' + tuid[1] + '/res/' + tuid[0] + '.json');
+  xhr.open('GET', '//a.4cdn.org/' + tuid[1] + '/thread/' + tuid[0] + '.json');
   xhr.send(null);
 };
 var ThreadExpansion = {};
@@ -2624,7 +2665,7 @@ ThreadExpansion.expandComment = function(link) {
   pid = ids[2];
   abbr = link.parentNode;
   abbr.textContent = 'Loading...';
-  $.get('//a.4cdn.org/' + Main.board + '/res/' + tid + '.json', {
+  $.get('//a.4cdn.org/' + Main.board + '/thread/' + tid + '.json', {
     onload: function() {
       var i, msg, com, post, posts;
       if (this.status == 200) {
@@ -2699,7 +2740,7 @@ ThreadExpansion.toggle = function(tid) {
   }
 };
 ThreadExpansion.fetch = function(tid) {
-  $.get('//a.4cdn.org/' + Main.board + '/res/' + tid + '.json', {
+  $.get('//a.4cdn.org/' + Main.board + '/thread/' + tid + '.json', {
     onload: function() {
       var i, p, n, frag, thread, tail, posts, count, msg, metacap, expmsg, summary, abbr;
       thread = $.id('t' + tid);
@@ -2887,7 +2928,12 @@ ThreadUpdater.buildDesktopControl = function(bottom) {
     frag.appendChild(document.createTextNode('] '));
   }
   frag.appendChild(this['statusNode' + bottom] = document.createElement('span'));
-  if (navlinks = $.cls('navLinks' + bottom)[0]) {
+  if (bottom) {
+    navlinks = $.cls('navLinks' + bottom)[0];
+  } else {
+    navlinks = $.cls('navLinks')[1];
+  }
+  if (navlinks) {
     navlinks.appendChild(frag);
   }
 };
@@ -3003,7 +3049,7 @@ ThreadUpdater.update = function() {
   clearTimeout(self.interval);
   self.updating = true;
   self.setStatus('Updating...');
-  $.get('//a.4cdn.org/' + Main.board + '/res/' + Main.tid + '.json', {
+  $.get('//a.4cdn.org/' + Main.board + '/thread/' + Main.tid + '.json', {
     onload: self.onload,
     onerror: self.onerror
   }, {
@@ -3247,41 +3293,38 @@ ThreadStats.init = function() {
   this.nodeTop.className = 'thread-stats';
   this.nodeBot = this.nodeTop.cloneNode(false);
   cnt = $.cls('navLinks');
-  cnt[0] && cnt[0].appendChild(this.nodeTop);
-  cnt[3] && cnt[3].appendChild(this.nodeBot);
+  cnt[1] && cnt[1].appendChild(this.nodeTop);
+  cnt[2] && cnt[2].appendChild(this.nodeBot);
   this.pageNumber = null;
+  this.update(null, null, window.bumplimit, window.imagelimit);
   this.updatePageNumber();
   this.pageInterval = setInterval(this.updatePageNumber, 3 * 60000);
-  this.update(null, null, window.bumplimit, window.imagelimit);
 };
 ThreadStats.update = function(replies, images, isBumpFull, isImageFull) {
-  var repStr, imgStr, pageStr, stateStr;
+  var stats, repStr, imgStr, pageStr, stateStr;
   if (replies === null) {
     replies = $.cls('replyContainer').length;
     images = $.cls('fileText').length - ($.id('fT' + Main.tid) ? 1 : 0);
   }
-  repStr = replies + ' repl' + ((replies > 1 || !replies) ? 'ies' : 'y');
-  imgStr = images + ' image' + ((images > 1 || !images) ? 's' : '');
-  if (isBumpFull) {
-    repStr = '<em title="Bump limit reached">' + repStr + '</em>';
-  }
-  if (isImageFull) {
-    imgStr = '<em title="Image limit reached">' + imgStr + '</em>';
-  }
+  stats = [];
   if (Main.threadSticky) {
-    stateStr = ' [Sticky]';
-  } else {
-    stateStr = '';
+    stats.push('Sticky');
   }
   if (Main.threadClosed) {
-    stateStr += ' [Closed]';
+    stats.push('Closed');
   }
-  if (this.pageNumber !== null) {
-    pageStr = '<span class="ts-page"> [Page ' + this.pageNumber + ']</span>';
+  if (isBumpFull) {
+    stats.push('<em data-tip="Bump limit reached">' + replies + '</em>');
   } else {
-    pageStr = '';
+    stats.push('<span data-tip="Replies">' + replies + '</span>');
   }
-  this.nodeTop.innerHTML = this.nodeBot.innerHTML = '[' + repStr + '] ' + '[' + imgStr + ']' + stateStr + pageStr;
+  if (isImageFull) {
+    stats.push('<em data-tip="Image limit reached">' + images + '</em>');
+  } else {
+    stats.push('<span data-tip="Images">' + images + '</span>');
+  }
+  stats.push('<span data-tip="Page" class="ts-page">' + (this.pageNumber || '?') + '</span>');
+  this.nodeTop.innerHTML = this.nodeBot.innerHTML = stats.join(' / ');
 };
 ThreadStats.updatePageNumber = function() {
   $.get('//a.4cdn.org/' + Main.board + '/threads.json', {
@@ -3299,13 +3342,9 @@ ThreadStats.onCatalogLoad = function() {
       threads = page.threads;
       for (j = 0; post = threads[j]; ++j) {
         if (post.no == tid) {
-          if (self.pageNumber === null) {
-            self.nodeTop.innerHTML = self.nodeBot.innerHTML += '<span class="ts-page"> [Page ' + i + ']</span>';
-          } else {
-            nodes = $.cls('ts-page');
-            nodes[0].textContent = nodes[1].textContent = ' [Page ' + i + ']'
-          }
-          self.pageNumber = i;
+          nodes = $.cls('ts-page');
+          nodes[0].textContent = nodes[1].textContent = page.page
+          self.pageNumber = page.page;
           return;
         }
       }
@@ -3429,7 +3468,7 @@ Filter.exec = function(cnt, pi, msg, tid) {
         el.textContent = '[View]';
         el.setAttribute('data-filtered', '1');
       } else {
-        el.innerHTML = '[<a data-filtered="1" href="res/' + tid + '">View</a>]';
+        el.innerHTML = '[<a data-filtered="1" href="thread/' + tid + '">View</a>]';
       }
       el.className = 'filter-preview';
       pi.appendChild(el);
@@ -4197,13 +4236,14 @@ Keybinds.onClick = function(e) {
     Keybinds.close();
   }
 };
-var Report = {};
-Report.onDone = function(e) {
+var Report = {
+  init: function() {
+    window.addEventListener('message', Report.onMessage, false);
+  }
+};
+Report.onMessage = function(e) {
   var id;
   if (e.origin === 'https://sys.4chan.org' && /^done-report/.test(e.data)) {
-    if (Report.cnt) {
-      Report.close();
-    }
     id = e.data.split('-')[2];
     if (Config.threadHiding && $.id('t' + id)) {
       if (!ThreadHiding.isHidden(id)) {
@@ -4212,7 +4252,7 @@ Report.onDone = function(e) {
       }
       return;
     }
-    if (Config.replyHiding && $.id('p' + id)) {
+    if ($.id('p' + id)) {
       if (!ReplyHiding.isHidden(id)) {
         ReplyHiding.hide(id);
         ReplyHiding.save();
@@ -4222,48 +4262,7 @@ Report.onDone = function(e) {
   }
 };
 Report.open = function(pid) {
-  if (Config.inlineReport) {
-    this.openInline(pid);
-  } else {
-    this.openPopup(pid);
-  }
-};
-Report.openPopup = function(pid) {
   window.open('https://sys.4chan.org/' + Main.board + '/imgboard.php?mode=report&no=' + pid, Date.now(), "toolbar=0,scrollbars=0,location=0,status=1,menubar=0,resizable=1,width=600,height=170");
-};
-Report.openInline = function(pid) {
-  if (this.cnt) {
-    this.close();
-  }
-  this.cnt = document.createElement('div');
-  this.cnt.id = 'quickReport';
-  this.cnt.className = 'extPanel reply';
-  this.cnt.setAttribute('data-trackpos', 'QRep-position');
-  if (Config['QRep-position']) {
-    this.cnt.style.cssText = Config['QRep-position'];
-  } else {
-    this.cnt.style.right = '0px';
-    this.cnt.style.top = '50px';
-  }
-  this.cnt.innerHTML = '<div id="qrepHeader" class="drag postblock">Report Post No.' + pid + '<img alt="X" src="' + Main.icons.cross + '" id="qrepClose" ' + 'class="extButton" title="Close Window"></div>' + '<iframe src="https://sys.4chan.org/' + Main.board + '/imgboard.php?mode=report&no=' + pid + '" width="610" height="170" frameborder="0"></iframe>';
-  document.body.appendChild(this.cnt);
-  window.addEventListener('message', Report.onDone, false);
-  document.addEventListener('keydown', Report.onKeyDown, false);
-  $.id('qrepClose').addEventListener('click', Report.close, false);
-  Draggable.set($.id('qrepHeader'));
-};
-Report.close = function() {
-  window.removeEventListener('message', Report.onDone, false);
-  document.removeEventListener('keydown', Report.onKeyDown, false);
-  Draggable.unset($.id('qrepHeader'));
-  $.id('qrepClose').removeEventListener('click', Report.close, false);
-  document.body.removeChild(Report.cnt);
-  Report.cnt = null;
-};
-Report.onKeyDown = function(e) {
-  if (e.keyCode == 27 && !e.ctrlKey && !e.altKey && !e.shiftKey && !e.metaKey) {
-    Report.close();
-  }
 };
 var CustomMenu = {};
 CustomMenu.reset = function() {
@@ -4435,7 +4434,7 @@ var UA = {};
 UA.init = function() {
   document.head = document.head || $.tag('head')[0];
   this.isOpera = Object.prototype.toString.call(window.opera) == '[object Opera]';
-  this.isWebKit = /WebKit/.test(navigator.userAgent);
+  this.canDownloadOriginal = /chrome/i.test(navigator.userAgent);
   this.hasCORS = 'withCredentials' in new XMLHttpRequest;
   this.hasFormData = 'FormData' in window;
   this.hasDragAndDrop = false;
@@ -4472,20 +4471,15 @@ var Config = {
   fitToScreenExpansion: false,
   threadExpansion: true,
   alwaysDepage: false,
-  imageSearch: false,
-  reportButton: false,
   localTime: true,
   stickyNav: false,
   keyBinds: false,
   inlineQuotes: false,
   filter: false,
   revealSpoilers: false,
-  replyHiding: false,
   imageHover: false,
   threadStats: true,
-  IDColor: false,
-  downloadFile: false,
-  inlineReport: false,
+  IDColor: true,
   noPictures: false,
   embedYouTube: true,
   embedSoundCloud: false,
@@ -4493,15 +4487,15 @@ var Config = {
   customCSS: false,
   autoScroll: false,
   hideStubs: false,
-  compactThreads: false,
+  compactThreads: true,
   dropDownNav: false,
+  classicNav: false,
   fixedThreadWatcher: false,
   persistentQR: false,
   disableAll: false
 };
 var ConfigMobile = {
-  embedYouTube: false,
-  imageExpansion: false
+  embedYouTube: false
 };
 Config.load = function() {
   if (storage = localStorage.getItem('4chan-settings')) {
@@ -4581,24 +4575,22 @@ SettingsMenu.options = {
   'Filters &amp; Post Hiding': {
     filter: ['Filter and highlight specific threads/posts [<a href="javascript:;" data-cmd="filters-open">Edit</a>]', 'Enable pattern-based filters'],
     threadHiding: ['Thread hiding [<a href="javascript:;" data-cmd="thread-hiding-clear">Clear History</a>]', 'Hide entire threads by clicking the minus button', true],
-    replyHiding: ['Reply hiding', 'Hide individual replies'],
     hideStubs: ['Hide thread stubs', "Don't display stubs of hidden threads"]
   },
   'Navigation': {
     threadExpansion: ['Thread expansion', 'Expand threads inline on board indexes', true],
+    dropDownNav: ['Use persistent drop-down navigation bar', ''],
+    classicNav: ['Use traditional board list', '', false, true],
+    customMenu: ['Custom board list [<a href="javascript:;" data-cmd="custom-menu-edit">Edit</a>]', 'Only show selected boards in top and bottom board lists'],
     alwaysDepage: ['Always use infinite scroll', 'Enable infinite scroll by default, so reaching the bottom of the board index will load subsequent pages'],
     topPageNav: ['Page navigation at top of page', 'Show the page switcher at the top of the page, hold Shift and drag to move'],
-    dropDownNav: ['Use drop-down navigation', 'Use persistent drop-down navigation instead of traditional board list'],
     stickyNav: ['Navigation arrows', 'Show top and bottom navigation arrows, hold Shift and drag to move'],
-    customMenu: ['Custom board list [<a href="javascript:;" data-cmd="custom-menu-edit">Edit</a>]', 'Only show selected boards in top and bottom board lists'],
     keyBinds: ['Use keyboard shortcuts [<a href="javascript:;" data-cmd="keybinds-open">Show</a>]', 'Enable handy keyboard shortcuts for common actions']
   },
   'Images &amp; Media': {
-    imageExpansion: ['Image expansion', 'Enable inline image expansion, limited to browser width'],
+    imageExpansion: ['Image expansion', 'Enable inline image expansion, limited to browser width', true],
     fitToScreenExpansion: ['Fit expanded images to screen', 'Limit expanded images to both browser width and height'],
     imageHover: ['Image hover', 'Mouse over images to view full size, limited to browser size'],
-    imageSearch: ['Image search', 'Add Google and iqdb image search buttons next to image posts'],
-    downloadFile: ['Save original filename', 'Adds a button to download image with its original filename (Chrome only)'],
     revealSpoilers: ["Don't spoiler images", 'Show image thumbnail and original filename instead of spoiler placeholders'],
     noPictures: ['Hide thumbnails', 'Don\'t display thumbnails while browsing', true],
     embedYouTube: ['Embed YouTube links', 'Embed YouTube player into replies'],
@@ -4609,8 +4601,6 @@ SettingsMenu.options = {
     customCSS: ['Custom CSS [<a href="javascript:;" data-cmd="css-open">Edit</a>]', 'Include your own CSS rules', true],
     IDColor: ['Color user IDs', 'Assign unique colors to user IDs on boards that use them'],
     compactThreads: ['Force long posts to wrap', 'Long posts will wrap at 75% browser width'],
-    reportButton: ['Report button', 'Add a report button next to posts for easy reporting', 1],
-    inlineReport: ['Inline report panel', 'Open report panel in browser window, instead of a popup'],
     localTime: ['Convert dates to local time', 'Convert 4chan server time (US Eastern Time) to your local time']
   }
 };
@@ -4670,7 +4660,7 @@ SettingsMenu.open = function() {
     opts = categories[cat];
     html += '<ul><li class="settings-cat-lbl">' + '<img alt="" class="settings-expand" src="' + Main.icons.plus + '">' + '<span class="settings-expand pointer">' + cat + '</span></li><ul class="settings-cat">';
     for (key in opts) {
-      html += '<li><label><input type="checkbox" class="menuOption" data-option="' + key + '"' + (Config[key] ? ' checked="checked">' : '>') + opts[key][0] + '</label>' + (opts[key][1] ? '</li><li class="settings-tip">' + opts[key][1] : '') + '</li>';
+      html += '<li' + (opts[key][3] ? ' class="settings-sub">' : '>') + '<label><input type="checkbox" class="menuOption" data-option="' + key + '"' + (Config[key] ? ' checked="checked">' : '>') + opts[key][0] + '</label>' + (opts[key][1] !== false ? '</li><li class="settings-tip' + (opts[key][3] ? ' settings-sub">' : '">') + opts[key][1] : '') + '</li>';
     }
     html += '</ul></ul>';
   }
@@ -4761,6 +4751,19 @@ SettingsMenu.close = function(el) {
   }
 };
 var Main = {};
+Main.addTooltip = function(link, message, id) {
+  var el, pos;
+  el = document.createElement('div');
+  el.className = 'click-me';
+  if (id) {
+    el.id = id;
+  }
+  el.innerHTML = message || 'Change your settings';
+  link.parentNode.appendChild(el);
+  pos = (link.offsetWidth - el.offsetWidth + link.offsetLeft - el.offsetLeft) / 2;
+  el.style.marginLeft = pos + 'px';
+  return el;
+};
 Main.init = function() {
   var params;
   document.addEventListener('DOMContentLoaded', Main.run, false);
@@ -4784,6 +4787,7 @@ Main.init = function() {
   Main.board = params[1];
   Main.page = params[2];
   Main.tid = params[3];
+  Report.init();
   if (Config.IDColor) {
     IDColor.init();
   }
@@ -4794,6 +4798,24 @@ Main.init = function() {
     Keybinds.init();
   }
   UA.dispatchEvent('4chanMainInit');
+};
+Main.initPersistentNav = function() {
+  var el, top, bottom;
+  top = $.id('boardNavDesktop');
+  bottom = $.id('boardNavDesktopFoot');
+  if (Config.classicNav) {
+    el = document.createElement('div');
+    el.className = 'pageJump';
+    el.innerHTML = '<a href="#bottom">&#9660;</a>' + '<a href="javascript:void(0);" id="settingsWindowLinkClassic">Settings</a>' + '<a href="//www.4chan.org" target="_top">Home</a></div>';
+    top.appendChild(el);
+    $.id('settingsWindowLinkClassic').addEventListener('click', SettingsMenu.toggle, false);
+    $.addClass(top, 'persistentNav');
+  } else {
+    top.style.display = 'none';
+    $.removeClass($.id('boardNavMobile'), 'mobile');
+  }
+  bottom.style.display = 'none';
+  $.addClass(document.body, 'hasDropDownNav');
 };
 Main.checkMobileLayout = function() {
   var mobile, desktop;
@@ -4818,18 +4840,18 @@ Main.run = function() {
   Main.isMobileDevice = /Mobile|Android|Dolfin|Opera Mobi|PlayStation Vita|Nintendo DS/.test(navigator.userAgent);
   if (Main.hasMobileLayout) {
     $.extend(Config, ConfigMobile);
+  } else {
+    $.id('bottomReportBtn').style.display = 'none';
+    if (Main.isMobileDevice) {
+      $.addClass(document.body, 'isMobileDevice');
+    }
   }
   if (Main.firstRun && Main.isMobileDevice) {
     Config.topPageNav = false;
     Config.dropDownNav = true;
   }
   if (Config.dropDownNav && !Main.hasMobileLayout) {
-    $.id('boardNavDesktop').style.display = 'none';
-    $.id('boardNavDesktopFoot').style.display = 'none';
-    $.removeClass($.id('boardNavMobile'), 'mobile');
-    $.addClass(document.body, 'hasDropDownNav');
-  } else if (Main.firstRun) {
-    Main.onFirstRun();
+    Main.initPersistentNav();
   }
   $.addClass(document.body, Main.stylesheet);
   $.addClass(document.body, Main.type);
@@ -4865,9 +4887,7 @@ Main.run = function() {
   if (Config.embedSoundCloud || Config.embedYouTube || Config.embedVocaroo) {
     Media.init();
   }
-  if (Config.replyHiding) {
-    ReplyHiding.init();
-  }
+  ReplyHiding.init();
   if (Config.quotePreview) {
     QuotePreview.init();
   }
@@ -4889,7 +4909,6 @@ Main.run = function() {
     if (!Main.page) {
       Depager.init();
     }
-    Main.addCatalogTooltip();
     if (Config.topPageNav) {
       Main.setPageNav();
     }
@@ -4906,50 +4925,7 @@ Main.run = function() {
   if (Config.quickReply) {
     QR.init();
   }
-  if (Config.replyHiding) {
-    ReplyHiding.purge();
-  }
-};
-Main.onFirstRun = function() {
-  var link, el;
-  if (link = $.id('settingsWindowLink')) {
-    this.addTooltip(link, null, 'settingsTip');
-  }
-  if (link = $.id('settingsWindowLinkBot')) {
-    this.addTooltip(link, null, 'settingsTipBottom');
-  }
-}
-Main.onCatalogClick = function() {
-  var el = this.nextElementSibling;
-  if (el && el.className == 'click-me') {
-    el.parentNode.removeChild(el);
-    this.removeEventListener('mousedown', Main.onCatalogClick, false);
-    localStorage.setItem('catalog-visited', '1');
-  }
-};
-Main.addCatalogTooltip = function() {
-  var i, links, el;
-  if (!localStorage.getItem('catalog-visited')) {
-    links = $.cls('cataloglink');
-    for (i = 0; el = links[i]; ++i) {
-      el = el.firstElementChild;
-      this.addTooltip(el, 'Try the catalog!');
-      el.addEventListener('mousedown', Main.onCatalogClick, false);
-    }
-  }
-};
-Main.addTooltip = function(link, message, id) {
-  var el, pos;
-  el = document.createElement('div');
-  el.className = 'click-me';
-  if (id) {
-    el.id = id;
-  }
-  el.innerHTML = message || 'Change your settings';
-  link.parentNode.appendChild(el);
-  pos = (link.offsetWidth - el.offsetWidth + link.offsetLeft - el.offsetLeft) / 2;
-  el.style.marginLeft = pos + 'px';
-  return el;
+  ReplyHiding.purge();
 };
 Main.isThreadClosed = function(tid) {
   return (el = $.id('pi' + tid)) && $.cls('closedIcon', el)[0];
@@ -4980,6 +4956,7 @@ Main.setThreadState = function(state, mode) {
 Main.icons = {
   up: 'arrow_up.png',
   down: 'arrow_down.png',
+  right: 'arrow_right.png',
   download: 'arrow_down2.png',
   refresh: 'refresh.png',
   cross: 'cross.png',
@@ -5144,6 +5121,10 @@ Main.onclick = function(e) {
         e.preventDefault();
         ThreadUpdater.forceUpdate();
         break;
+      case 'post-menu':
+        e.preventDefault();
+        PostMenu.open(t);
+        break;
       case 'auto':
         ThreadUpdater.toggleAuto();
         break;
@@ -5176,6 +5157,10 @@ Main.onclick = function(e) {
         break;
       case 'report':
         Report.open(id);
+        break;
+      case 'filter-sel':
+        e.preventDefault();
+        Filter.addSelection();
         break;
       case 'embed':
         Media.toggleEmbed(t);
@@ -5217,7 +5202,7 @@ Main.onclick = function(e) {
   } else if (!Config.disableAll) {
     if (QR.enabled && t.title == 'Quote this post') {
       e.preventDefault();
-      tid = Main.tid || t.previousElementSibling.getAttribute('href').split('#')[0].slice(4);
+      tid = Main.tid || t.previousElementSibling.getAttribute('href').split('#')[0].split('/')[1];
       QR.quotePost(tid, !e.ctrlKey && t.textContent);
     } else if (Config.imageExpansion && e.which == 1 && t.parentNode && $.hasClass(t.parentNode, 'fileThumb') && t.parentNode.nodeName == 'A' && !$.hasClass(t.parentNode, 'deleted')) {
       if (ImageExpansion.toggle(t)) {
@@ -5238,20 +5223,6 @@ Main.onclick = function(e) {
         e.preventDefault();
       }
     }
-  }
-};
-Main.onTouchStart = function(e) {
-  var tid;
-  if (Config.disableAll) {
-    return;
-  }
-  if ((t = e.target) == document) {
-    return;
-  }
-  if (QR.enabled && t.title == 'Quote this post') {
-    e.preventDefault();
-    tid = Main.tid || t.previousElementSibling.getAttribute('href').split('#')[0].slice(4);
-    QR.quotePost(tid, t.textContent);
   }
 };
 Main.onThreadMouseOver = function(e) {
@@ -5275,12 +5246,12 @@ Main.onThreadMouseOut = function(e) {
   }
 };
 Main.linkToThread = function(tid, board, post) {
-  return '//' + location.host + '/' + (board || Main.board) + '/res/' + tid + (post > 0 ? ('#p' + post) : '');
+  return '//' + location.host + '/' + (board || Main.board) + '/thread/' + tid + (post > 0 ? ('#p' + post) : '');
 };
 Main.addCSS = function() {
   var style, css = '\
 body.hasDropDownNav {\
-  margin-top: 50px;\
+  margin-top: 45px;\
 }\
 .extButton.threadHideButton {\
   float: left;\
@@ -5555,6 +5526,7 @@ div.op div.file .image-expanded-anti {\
   display: block;\
 }\
 #quote-preview .inlined,\
+#quote-preview .postMenuBtn,\
 #quote-preview .extButton,\
 #quote-preview .extControls {\
   display: none;\
@@ -5590,6 +5562,10 @@ div.backlink {\
 .burichan_new .backlink a,\
 .yotsuba_b_new .backlink a {\
   color: #34345C !important;\
+}\
+.burichan_new .backlink a:hover,\
+.yotsuba_b_new .backlink a:hover {\
+  color: #dd0000 !important;\
 }\
 .expbtn {\
   margin-right: 3px;\
@@ -5940,6 +5916,8 @@ div.post-hidden:not(#quote-preview) blockquote.postMessage {\
 }\
 .thread-stats {\
   float: right;\
+  margin-right: 5px;\
+  cursor: default;\
 }\
 .compact .thread {\
   max-width: 75%;\
@@ -6079,8 +6057,60 @@ kbd {\
 }\
 .open-qr-wrap {\
   text-align: center;\
-  font-size: 24px;\
-  font-weight: bold;\
+  width: 200px;\
+  position: absolute;\
+  margin-left: 50%;\
+  left: -100px;\
+}\
+.postMenuBtn {\
+  margin-left: 5px;\
+  text-decoration: none;\
+  line-height: 1em;\
+  display: inline-block;\
+  -webkit-transition: -webkit-transform 0.1s;\
+  -moz-transition: -moz-transform 0.1s;\
+  transition: transform 0.1s;\
+  width: 1em;\
+  height: 1em;\
+  text-align: center;\
+  outline: none;\
+}\
+.yotsuba_new .postMenuBtn,\
+.futaba_new .postMenuBtn {\
+  color: #000080;\
+}\
+.tomorrow .postMenuBtn {\
+  color: #5F89AC !important;\
+}\
+.tomorrow .postMenuBtn:hover {\
+  color: #81a2be !important;\
+}\
+.photon .postMenuBtn {\
+  color: #FF6600 !important;\
+}\
+.photon .postMenuBtn:hover {\
+  color: #FF3300 !important;\
+}\
+.menuOpen {\
+  -webkit-transform: rotate(90deg);\
+  -moz-transform: rotate(90deg);\
+  -ms-transform: rotate(90deg);\
+  transform: rotate(90deg);\
+}\
+.settings-sub label:before {\
+  border-bottom: 1px solid;\
+  border-left: 1px solid;\
+  content: " ";\
+  display: inline-block;\
+  height: 8px;\
+  margin-bottom: 5px;\
+  width: 8px;\
+}\
+.settings-sub {\
+  margin-left: 25px;\
+}\
+.settings-tip.settings-sub {\
+  padding-left: 32px;\
 }\
 \
 @media only screen and (max-width: 480px) {\
