@@ -633,8 +633,8 @@ var UA = {
       if (0 != l.count) {
         w = l.custom_spoiler ? n.imgspoiler + "-" + l.slug + l.custom_spoiler + ".png" : n.imgspoiler + ".png";
         t.hasChildNodes() && ((a = document.getElementById("th-tip")) && document.body.removeChild(a), t.textContent = "");
-        q = "//boards.4chan.org/" + l.slug + "/res/";
-        C = ".t.4cdn.org/" + l.slug + "/thumb/";
+        q = "//boards.4chan.org/" + l.slug + "/thread/";
+        C = ".t.4cdn.org/" + l.slug + "/";
         x = 0;
         for (c in H) H[c].hits = 0;
         F = !n.large;
