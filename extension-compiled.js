@@ -2248,7 +2248,7 @@ var Parser = {
     threadHiding: !0,
     pageTitle: !0,
     alwaysAutoUpdate: !1,
-    topPageNav: !0,
+    topPageNav: !1,
     threadWatcher: !1,
     imageExpansion: !0,
     fitToScreenExpansion: !1,
