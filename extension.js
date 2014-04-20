@@ -4466,7 +4466,7 @@ var Config = {
   threadHiding: true,
   pageTitle: true,
   alwaysAutoUpdate: false,
-  topPageNav: true,
+  topPageNav: false,
   threadWatcher: false,
   imageExpansion: true,
   fitToScreenExpansion: false,
