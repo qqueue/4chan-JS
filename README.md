@@ -14,8 +14,23 @@ Unfortunately, 4chan's production JS is stripped of comments and
 whitespace-minified. Thus, the code is run through [jsbeautifier][1] before
 commiting to restore at least a semblance of human readability.
 
+Even more unfortunately, the minified versions of the scripts and the
+"compiled" (variable-mangled) versions are not perfectly in sync, so despite
+their near-unreadability, the compiled versions of the scripts are tracked as
+well. 
+
+If anybody knows a better way to decompile variable-mangled JS, please
+open an issue/PR. [beautify-with-words][2] looks promising, but its generated
+names aren't consistent due to RNG seeding.
+
+The cron job for `update.sh` is run on the hour. The automatic commits it
+makes are dated with the value of the `Last-Modified` HTTP header, as returned
+from 4chan/cloudflare. I get an alert if the cron job doesn't run, so this
+repo should be at most an hour out of date at any given time.
+
 [0]: https://github.com/4chan/4chan-JS
 [1]: https://github.com/einars/js-beautify
+[2]: https://github.com/zertosh/beautify-with-words 
 
 ## About 4chan JS (from canonical repository) ##
 

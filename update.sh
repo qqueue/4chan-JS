@@ -6,33 +6,38 @@ set -o pipefail
 git checkout master
 git pull origin master
 
-EXTENSION=$(curl \
-  --fail \
-  --user-agent "4chan-JS-auto-updater/1.0.0" \
-  "http://s.4cdn.org/js/extension.$(date +%s).js")
+# download file and commit if changed
+function poll {
+  file=$1
 
-js-beautify --indent-size=2 - <<< "$EXTENSION" > extension.js
+  echo "polling $file ..."
 
-CORE=$(curl \
-  --fail \
-  --user-agent "4chan-JS-auto-updater/1.0.0" \
-  "http://s.4cdn.org/js/core.$(date +%s).js")
+  CODE=$(curl \
+    --fail \
+    --dump-header /tmp/headers \
+    --user-agent "4chan-JS-auto-updater/1.0.0" \
+    "http://s.4cdn.org/js/$file.$(date +%s).js")
 
-js-beautify --indent-size=2 - <<< "$CORE" > core.js
+  js-beautify --indent-size=2 - <<< "$CODE" > $file.js
 
-CATALOG=$(curl \
-  --fail \
-  --user-agent "4chan-JS-auto-updater/1.0.0" \
-  "http://s.4cdn.org/js/catalog.$(date +%s).js")
+  if [[ -n $(git status --porcelain $file.js) ]]; then
+    modified=$(grep 'Last-Modified' /tmp/headers |\
+      awk -F ': ' '{print $2}')
 
-js-beautify --indent-size=2 - <<< "$CATALOG" > catalog.js
+    echo "update of $file detected, last modified: $modified"
 
-if [[ -n $(git status --porcelain) ]]; then
-  git add *.js
-  git commit \
-    --message "Update scripts" \
-    --message "(update detected by update.sh)" \
-    --author "Anonymous ## Developer <sage@4chan.org>"
-  git push origin master
-fi
+    git add $file.js
+    git commit \
+      --message "Update $file.js" \
+      --message "(update detected by update.sh)" \
+      --author "Anonymous ## Developer <sage@4chan.org>" \
+      --date "$modified"
+  fi
+}
+
+poll extension 
+poll extension-compiled
+poll core
+poll core-compiled
+poll catalog
 
