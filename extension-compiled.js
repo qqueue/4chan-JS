@@ -179,8 +179,8 @@ var Parser = {
     e.className = "postContainer " + A + "Container";
     e.id = "pc" + a.no;
     e.innerHTML = (f ? "" : '<div class="sideArrows" id="sa' + a.no + '">&gt;&gt;</div>') + '<div id="p' + a.no + '" class="post ' + A + C + '"><div class="postInfoM mobile" id="pim' + a.no + '"><span class="nameBlock' + s + '"><span class="name">' + k + "</span>" + r + q + t + g + y + '<br><span class="subject">' + m + '</span></span><span class="dateTime postNum" data-utc="' +
-      a.time + '">' + a.now + ' <a href="' + a.no + "#p" + a.no + '">No.</a><a href="javascript:quote(\'' + a.no + '\');" title="Quote this post">' + a.no + "</a></span></div>" + (f ? h : "") + '<div class="postInfo desktop" id="pi' + a.no + '"><input type="checkbox" name="' + a.no + '" value="delete"> <span class="subject">' + m + '</span> <span class="nameBlock' + s + '">' + D + '<span class="name">' + k + "</span>" + r + q + E + t + g + y + ' </span> <span class="dateTime" data-utc="' + a.time + '">' + a.now + '</span> <span class="postNum desktop"><a href="' + w + '" title="Highlight this post">No.</a><a href="' +
-      z + '" title="Quote this post">' + a.no + "</a> " + v + F + "</span></div>" + (f ? "" : h) + '<blockquote class="postMessage" id="m' + a.no + '">' + (a.com || "") + I + H + "</blockquote> </div>" + G;
+      a.time + '">' + a.now + ' <a href="' + a.no + "#p" + a.no + '">No.</a><a href="javascript:quote(\'' + a.no + '\');" title="Quote this post">' + a.no + "</a></span></div>" + (f ? h : "") + '<div class="postInfo desktop" id="pi' + a.no + '"' + (b != Main.board ? ' data-board="' + b + '"' : "") + '><input type="checkbox" name="' + a.no + '" value="delete"> <span class="subject">' + m + '</span> <span class="nameBlock' + s + '">' + D + '<span class="name">' + k + "</span>" + r + q + E + t + g + y + ' </span> <span class="dateTime" data-utc="' + a.time + '">' + a.now + '</span> <span class="postNum desktop"><a href="' +
+      w + '" title="Highlight this post">No.</a><a href="' + z + '" title="Quote this post">' + a.no + "</a> " + v + F + "</span></div>" + (f ? "" : h) + '<blockquote class="postMessage" id="m' + a.no + '">' + (a.com || "") + I + H + "</blockquote> </div>" + G;
     if (!Main.tid || b != Main.board)
       for (q = e.getElementsByClassName("quotelink"), a = 0; f = q[a]; ++a) r = f.getAttribute("href"), "/" != r.charAt(0) && (f.href = "/" + b + "/thread/" + c + r);
     return e
@@ -207,7 +207,8 @@ var Parser = {
     var d, e, f, g, h;
     e = $.id("t" + a);
     f = e.getElementsByClassName("post");
-    b || (g = document.getElementById("pi" + a), Main.tid || (Config.filter && (h = Filter.exec(e, g, document.getElementById("m" + a), a)), Config.threadHiding && !h && (Main.hasMobileLayout ? (g = document.createElement("a"), g.href = "javascript:;", g.setAttribute("data-cmd", "hide"), g.setAttribute("data-id", a), g.className = "mobileHideButton button", g.textContent = "Hide", f[0].nextElementSibling.appendChild(g)) : (g = document.createElement("span"), g.innerHTML = '<img alt="H" class="extButton threadHideButton"data-cmd="hide" data-id="' + a + '" src="' + Main.icons.minus + '" title="Toggle thread">', f[0].insertBefore(g, f[0].firstChild)), g.id = "sa" + a, ThreadHiding.hidden[a] && (ThreadHiding.hidden[a] = Main.now, ThreadHiding.hide(a))), ThreadExpansion.enabled && (d = $.cls("summary", e)[0]) && (e = document.createDocumentFragment(), h = d.cloneNode(!0), h.className = "", d.textContent = "", g = document.createElement("img"), g.className = "extButton expbtn", g.title = "Expand thread", g.alt = "+", g.setAttribute("data-cmd", "expand"), g.setAttribute("data-id", a), g.src = Main.icons.plus, e.appendChild(g), e.appendChild(h), g = document.createElement("span"), g.style.display = "none", g.textContent = "Showing all replies.", e.appendChild(g), d.appendChild(e))));
+    b || (g = document.getElementById("pi" + a), Main.tid || (Config.filter && (h = Filter.exec(e, g, document.getElementById("m" + a), a)), Config.threadHiding && !h && (Main.hasMobileLayout ? (g = document.createElement("a"), g.href = "javascript:;", g.setAttribute("data-cmd", "hide"), g.setAttribute("data-id", a), g.className = "mobileHideButton button", g.textContent = "Hide", f[0].nextElementSibling.appendChild(g)) : (g = document.createElement("span"), g.innerHTML = '<img alt="H" class="extButton threadHideButton"data-cmd="hide" data-id="' +
+      a + '" src="' + Main.icons.minus + '" title="Toggle thread">', f[0].insertBefore(g, f[0].firstChild)), g.id = "sa" + a, ThreadHiding.hidden[a] && (ThreadHiding.hidden[a] = Main.now, ThreadHiding.hide(a))), ThreadExpansion.enabled && (d = $.cls("summary", e)[0]) && (e = document.createDocumentFragment(), h = d.cloneNode(!0), h.className = "", d.textContent = "", g = document.createElement("img"), g.className = "extButton expbtn", g.title = "Expand thread", g.alt = "+", g.setAttribute("data-cmd", "expand"), g.setAttribute("data-id", a), g.src = Main.icons.plus, e.appendChild(g), e.appendChild(h), g = document.createElement("span"), g.style.display = "none", g.textContent = "Showing all replies.", e.appendChild(g), d.appendChild(e))));
     e = b ? 0 > b ? f.length + b : b : 0;
     c = c ? e + c : f.length;
     if (Main.isMobileDevice && Config.quotePreview)
@@ -244,7 +245,7 @@ var Parser = {
     var b, c, d;
     c = $.cls("quotelink", a);
     for (a = 0; b = c[a]; ++a)
-      if (d = b.getAttribute("href").match(/^(?:\/([^\/]+)\/)?(?:res\/)?([0-9]+)?#p([0-9]+)$/)) d = document.createElement("a"), d.href = b.href, d.textContent = " #", d.className = "quoteLink", b.parentNode.insertBefore(d, b.nextSibling)
+      if (d = b.getAttribute("href").match(/^(?:\/([^\/]+)\/)?(?:thread\/)?([0-9]+)?#p([0-9]+)$/)) d = document.createElement("a"), d.href = b.href, d.textContent = " #", d.className = "quoteLink", b.parentNode.insertBefore(d, b.nextSibling)
   },
   parseMarkup: function(a) {
     var b, c;
@@ -253,7 +254,20 @@ var Parser = {
   },
   parsePost: function(a, b) {
     var c, d, e, f, g, h;
-    b ? (d = document.getElementById("pi" + a), Parser.needMsg && (f = document.getElementById("m" + a)), c = document.createElement("a"), c.href = "#", c.className = "postMenuBtn", c.title = "Menu", c.setAttribute("data-cmd", "post-menu"), c.textContent = "\u25b6", d.appendChild(c), a != b && (Config.filter && (g = Filter.exec(d.parentNode, d, f)), !g && ReplyHiding.hidden[a] && (ReplyHiding.hidden[a] = Main.now, ReplyHiding.hide(a)), Config.backlinks && Parser.parseBacklinks(a, b)), IDColor.enabled && (h = $.cls("posteruid", d)[0]) && IDColor.apply(h.firstElementChild), Config.embedSoundCloud && Media.parseSoundCloud(f), Config.embedYouTube && Media.parseYouTube(f), Config.embedVocaroo && Media.parseVocaroo(f)) : (d = a.getElementsByClassName("postInfo")[0], a = d.id.slice(2));
+    b ? d = document.getElementById("pi" + a) : (d = a.getElementsByClassName("postInfo")[0], a = d.id.slice(2));
+    Parser.needMsg && (f = document.getElementById("m" + a));
+    c = document.createElement("a");
+    c.href = "#";
+    c.className = "postMenuBtn";
+    c.title = "Menu";
+    c.setAttribute("data-cmd", "post-menu");
+    c.textContent = "\u25b6";
+    d.appendChild(c);
+    b && a != b && (Config.filter && (g = Filter.exec(d.parentNode, d, f)), !g && ReplyHiding.hidden[a] && (ReplyHiding.hidden[a] = Main.now, ReplyHiding.hide(a)), Config.backlinks && Parser.parseBacklinks(a, b));
+    IDColor.enabled && (h = $.cls("posteruid", d)[0]) && IDColor.apply(h.firstElementChild);
+    Config.embedSoundCloud && Media.parseSoundCloud(f);
+    Config.embedYouTube && Media.parseYouTube(f);
+    Config.embedVocaroo && Media.parseVocaroo(f);
     Config.revealSpoilers && (e = document.getElementById("f" + a)) && (e = e.children[1]) && $.hasClass(e, "imgspoiler") && (c = e.firstChild, e.removeChild(c), c.removeAttribute("style"), h = $.hasClass(d.parentNode, "op"), c.style.maxWidth = c.style.maxHeight = h ? "250px" : "125px", c.src = "//t.4cdn.org" + e.pathname.replace(/([0-9]+).+$/, "/$1s.jpg"), f = e.previousElementSibling, g = f.title.split("."), g[0].length > (h ? 40 : 30) ? g = g[0].slice(0, h ? 35 : 25) + "(...)" + g[1] : (g = f.title, f.removeAttribute("title")), f.firstElementChild.innerHTML = g, e.insertBefore(c, e.firstElementChild));
     Config.localTime && (c = d.getElementsByClassName("dateTime")[0], c.title = this.utcOffset, c.textContent = Parser.getLocaleDate(new Date(1E3 * c.getAttribute("data-utc"))))
   },
@@ -281,10 +295,11 @@ var Parser = {
       var b, c, d, e;
       PostMenu.close();
       d = a.parentNode.id.split("pi")[1];
-      e = !! $.id("t" + d);
-      c = '<ul><li data-cmd="report" data-id="' + d + '">Report post</li>';
-      e ? (Main.tid || (c += '<li data-cmd="hide" data-id="' + d + '">' + ($.hasClass($.id("t" +
-        d), "post-hidden") ? "Unhide" : "Hide") + " thread</li>"), Config.threadWatcher && (c += '<li data-cmd="watch" data-id="' + d + '">' + (ThreadWatcher.watched[d + "-" + Main.board] ? "Remove from" : "Add to") + " watch list</li>")) : c += '<li data-cmd="hide-r" data-id="' + d + '">' + ($.hasClass($.id("pc" + d), "post-hidden") ? "Unhide" : "Hide") + " post</li>";
+      b = a.parentNode.getAttribute("data-board");
+      e = !b && !! $.id("t" + d);
+      c = '<ul><li data-cmd="report" data-id="' + d + (b ? '" data-board="' + b + '"' : '"') + '">Report post</li>';
+      if (e) Main.tid || (c += '<li data-cmd="hide" data-id="' + d + '">' + ($.hasClass($.id("t" + d), "post-hidden") ? "Unhide" : "Hide") + " thread</li>"), Config.threadWatcher && (c += '<li data-cmd="watch" data-id="' + d + '">' + (ThreadWatcher.watched[d + "-" + Main.board] ? "Remove from" : "Add to") + " watch list</li>");
+      else if (b = $.id("pc" + d)) c += '<li data-cmd="hide-r" data-id="' + d + '">' + ($.hasClass(b, "post-hidden") ? "Unhide" : "Hide") + " post</li>";
       if (file = $.id("fT" + d)) {
         if (b = $.cls("fileThumb", file.parentNode)[0]) b = /imgspoiler/.test(b.className) ? "http://t.4cdn.org/" + Main.board + "/" + b.href.match(/\/([0-9]+)\..+$/)[1] + "s.jpg" : b.firstElementChild.src, c += '<li><ul><li><a href="//www.google.com/searchbyimage?image_url=' + b + '" target="_blank">Google</a></li><li><a href="http://iqdb.org/?url=' + b + '" target="_blank">iqdb</a></li></ul>Image search &raquo</li>';
         UA.canDownloadOriginal && (b = file.hasAttribute("title") ? file.getAttribute("title") : file.firstElementChild.title || file.firstElementChild.textContent, c += '<li><a download="' + b + '" href="' + file.firstElementChild.href + '">Download file</a></li>')
@@ -305,7 +320,8 @@ var Parser = {
         node: b.firstElementChild
       });
       document.body.appendChild(b);
-      a = c.left + window.pageXOffset;
+      a = c.left +
+        window.pageXOffset;
       d = $.docEl.clientWidth - b.offsetWidth;
       a > d - 75 && (b.className += " dd-menu-left");
       a > d && (a = d);
@@ -345,8 +361,7 @@ var Parser = {
     },
     insertAd: function(a, b, c, d) {
       var e;
-      Depager.boardHasAds && window.ados_add_placement && (d ? (b = $.cls("bottomad"), d = b[b.length -
-        1], e = document.createElement("div"), e.id = "azkDepage" + a, d.appendChild(e), window.ados_add_placement(3536, 18130, e.id, 4).setZone(c)) : (d = document.createElement("div"), d.className = "bottomad center", 2 == a ? e = $.id(Depager.adId) : (e = document.createElement("div"), e.id = "azkDepage" + a), d.appendChild(e), b.appendChild(d), Depager.adPlea && b.appendChild(Depager.adPlea.cloneNode(!0)), b.appendChild(document.createElement("hr")), 2 != a && window.ados_add_placement(3536, 18130, e.id, 4).setZone(c)))
+      Depager.boardHasAds && window.ados_add_placement && (d ? (b = $.cls("bottomad"), d = b[b.length - 1], e = document.createElement("div"), e.id = "azkDepage" + a, d.appendChild(e), window.ados_add_placement(3536, 18130, e.id, 4).setZone(c)) : (d = document.createElement("div"), d.className = "bottomad center", 2 == a ? e = $.id(Depager.adId) : (e = document.createElement("div"), e.id = "azkDepage" + a), d.appendChild(e), b.appendChild(d), Depager.adPlea && b.appendChild(Depager.adPlea.cloneNode(!0)), b.appendChild(document.createElement("hr")), 2 != a && window.ados_add_placement(3536, 18130, e.id, 4).setZone(c)))
     },
     loadAds: function() {
       Depager.boardHasAds && window.ados_load && window.ados_load()
@@ -455,15 +470,14 @@ var Parser = {
     },
     toggle: function(a, b) {
       var c, d, e;
-      (c = a.getAttribute("href").match(/^(?:\/([^\/]+)\/)?(?:thread\/)?([0-9]+)?#p([0-9]+)$/)) && "rs" != c[1] && !QuoteInline.isSelfQuote(a, c[3], c[1]) && (b && b.preventDefault(), (d = a.getAttribute("data-pfx")) ? (a.removeAttribute("data-pfx"), $.removeClass(a, "linkfade"), d = $.id(d + "p" + c[3]), d.parentNode.removeChild(d), "backlink" == a.parentNode.parentNode.className && (d = $.id("pc" +
-        c[3]), c = +d.getAttribute("data-inline-count") - 1, 0 == c ? (d.style.display = "", d.removeAttribute("data-inline-count")) : d.setAttribute("data-inline-count", c))) : (e = $.id("p" + c[3])) ? QuoteInline.inline(a, e, c[3]) : QuoteInline.inlineRemote(a, c[1] || Main.board, c[2], c[3]))
+      (c = a.getAttribute("href").match(/^(?:\/([^\/]+)\/)?(?:thread\/)?([0-9]+)?#p([0-9]+)$/)) && "rs" != c[1] && !QuoteInline.isSelfQuote(a, c[3], c[1]) && (b && b.preventDefault(), (d = a.getAttribute("data-pfx")) ? (a.removeAttribute("data-pfx"), $.removeClass(a, "linkfade"), d = $.id(d + "p" + c[3]), d.parentNode.removeChild(d), "backlink" == a.parentNode.parentNode.className && (d = $.id("pc" + c[3]), c = +d.getAttribute("data-inline-count") - 1, 0 == c ? (d.style.display = "", d.removeAttribute("data-inline-count")) : d.setAttribute("data-inline-count", c))) : (e = $.id("p" + c[3])) ? QuoteInline.inline(a, e, c[3]) : QuoteInline.inlineRemote(a, c[1] || Main.board, c[2], c[3]))
     },
     inlineRemote: function(a, b, c, d) {
       var e, f, g, h;
-      a.hasAttribute("data-loading") || (g = b + "-" + c, (e = $.cache[g]) && (f = Parser.buildPost(e, b, d)) ? QuoteInline.inline(a, f) : (h = a.nextElementSibling) && $.hasClass(h, "spinner") ? h.parentNode.removeChild(h) : (h = document.createElement("div"), h.className = "preview spinner inlined", h.textContent = "Loading...", a.parentNode.insertBefore(h, a.nextSibling), e = function() {
+      a.hasAttribute("data-loading") || (g = b + "-" + c, (e = $.cache[g]) && (f = Parser.buildPost(e, b, d)) ? (Parser.parsePost(f), QuoteInline.inline(a, f)) : (h = a.nextElementSibling) && $.hasClass(h, "spinner") ? h.parentNode.removeChild(h) : (h = document.createElement("div"), h.className = "preview spinner inlined", h.textContent = "Loading...", a.parentNode.insertBefore(h, a.nextSibling), e = function() {
         var c;
         a.removeAttribute("data-loading");
-        if (200 == this.status || 304 == this.status || 0 == this.status) c = Parser.parseThreadJSON(this.responseText), $.cache[g] = c, (c = Parser.buildPost(c, b, d)) ? (h.parentNode && h.parentNode.removeChild(h), QuoteInline.inline(a, c)) : ($.addClass(a, "deadlink"), h.textContent = "This post doesn't exist anymore");
+        if (200 == this.status || 304 == this.status || 0 == this.status) c = Parser.parseThreadJSON(this.responseText), $.cache[g] = c, (c = Parser.buildPost(c, b, d)) ? (h.parentNode && h.parentNode.removeChild(h), Parser.parsePost(c), QuoteInline.inline(a, c)) : ($.addClass(a, "deadlink"), h.textContent = "This post doesn't exist anymore");
         else if (404 == this.status) $.addClass(a, "deadlink"), h.textContent = "This thread doesn't exist anymore";
         else this.onerror()
       }, f = function() {
@@ -787,8 +801,7 @@ var Parser = {
         d.innerHTML = '<div id="qrHeader" class="drag postblock">Quick Reply - Thread No.<span id="qrTid">' + a + '</span><img alt="X" src="' + Main.icons.cross + '" id="qrClose" class="extButton" title="Close Window"></div>';
         f = e.parentNode.cloneNode(!1);
         f.setAttribute("name", "qrPost");
-        f.innerHTML = '<input type="hidden" value="' + $.byName("MAX_FILE_SIZE")[0].value + '" name="MAX_FILE_SIZE"><input type="hidden" value="regist" name="mode"><input id="qrResto" type="hidden" value="' +
-          a + '" name="resto">';
+        f.innerHTML = '<input type="hidden" value="' + $.byName("MAX_FILE_SIZE")[0].value + '" name="MAX_FILE_SIZE"><input type="hidden" value="regist" name="mode"><input id="qrResto" type="hidden" value="' + a + '" name="resto">';
         a = document.createElement("div");
         a.id = "qrForm";
         g = e.firstElementChild.children;
@@ -848,7 +861,8 @@ var Parser = {
         a = a.target;
         b = a.selectionStart;
         c = a.selectionEnd;
-        a.value ? (d = "[spoiler]" + a.value.slice(b, c) + "[/spoiler]", a.value = a.value.slice(0, b) + d + a.value.slice(c), a.setSelectionRange(c + 19, c + 19)) : (a.value = "[spoiler][/spoiler]", a.setSelectionRange(9, 9))
+        a.value ? (d = "[spoiler]" + a.value.slice(b, c) + "[/spoiler]", a.value = a.value.slice(0, b) + d + a.value.slice(c), a.setSelectionRange(c +
+          19, c + 19)) : (a.value = "[spoiler][/spoiler]", a.setSelectionRange(9, 9))
       } else if (27 == a.keyCode && !(a.ctrlKey || a.altKey || a.shiftKey || a.metaKey)) {
         QR.close();
         return
@@ -2130,8 +2144,8 @@ var Parser = {
     onMessage: function(a) {
       "https://sys.4chan.org" === a.origin && /^done-report/.test(a.data) && (a = a.data.split("-")[2], Config.threadHiding && $.id("t" + a) ? ThreadHiding.isHidden(a) || (ThreadHiding.hide(a), ThreadHiding.save()) : $.id("p" + a) && !ReplyHiding.isHidden(a) && (ReplyHiding.hide(a), ReplyHiding.save()))
     },
-    open: function(a) {
-      window.open("https://sys.4chan.org/" + Main.board + "/imgboard.php?mode=report&no=" + a, Date.now(), "toolbar=0,scrollbars=0,location=0,status=1,menubar=0,resizable=1,width=600,height=170")
+    open: function(a, b) {
+      window.open("https://sys.4chan.org/" + (b || Main.board) + "/imgboard.php?mode=report&no=" + a, Date.now(), "toolbar=0,scrollbars=0,location=0,status=1,menubar=0,resizable=1,width=600,height=170")
     }
   }, CustomMenu = {
     reset: function() {
@@ -2650,7 +2664,7 @@ var SettingsMenu = {
             Depager.toggle();
             break;
           case "report":
-            Report.open(id);
+            Report.open(id, b.getAttribute("data-board"));
             break;
           case "filter-sel":
             a.preventDefault();
@@ -2695,7 +2709,7 @@ var SettingsMenu = {
     },
     onThreadMouseOver: function(a) {
       var b = a.target;
-      Config.quotePreview && $.hasClass(b, "quotelink") && !$.hasClass(b, "deadlink") ? QuotePreview.resolve(a.target) : Config.imageHover && b.hasAttribute("data-md5") && !$.hasClass(b.parentNode, "deleted") ? ImageHover.show(b) : Config.filter && b.hasAttribute("data-filtered") && QuotePreview.show(b, b.href ? b.parentNode.parentNode.parentNode : b.parentNode.parentNode)
+      Config.quotePreview && $.hasClass(b, "quotelink") && !$.hasClass(b, "deadlink") && !$.hasClass(b, "linkfade") ? QuotePreview.resolve(a.target) : Config.imageHover && b.hasAttribute("data-md5") && !$.hasClass(b.parentNode, "deleted") ? ImageHover.show(b) : Config.filter && b.hasAttribute("data-filtered") && QuotePreview.show(b, b.href ? b.parentNode.parentNode.parentNode : b.parentNode.parentNode)
     },
     onThreadMouseOut: function(a) {
       a = a.target;
