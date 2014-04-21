@@ -2291,7 +2291,8 @@ var Parser = {
     persistentQR: !1,
     disableAll: !1
   }, ConfigMobile = {
-    embedYouTube: !1
+    embedYouTube: !1,
+    compactThreads: !1
   };
 Config.load = function() {
   (storage = localStorage.getItem("4chan-settings")) ? (storage = JSON.parse(storage), $.extend(Config, storage)) : Main.firstRun = !0
