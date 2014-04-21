@@ -2284,7 +2284,7 @@ var Parser = {
     customCSS: !1,
     autoScroll: !1,
     hideStubs: !1,
-    compactThreads: !0,
+    compactThreads: !1,
     dropDownNav: !1,
     classicNav: !1,
     fixedThreadWatcher: !1,
