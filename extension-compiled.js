@@ -2409,7 +2409,7 @@ var SettingsMenu = {
     f.innerHTML = e;
     f.addEventListener("click", SettingsMenu.onClick, !1);
     document.body.appendChild(f);
-    SettingsMenu.toggleCat($.cls("settings-expand")[0]);
+    Main.firstRun && SettingsMenu.expandAll();
     (k = $.cls("menuOption", f)[0]) && k.focus()
   },
   showExport: function() {
