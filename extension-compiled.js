@@ -749,7 +749,7 @@ var Parser = {
         this.fileDisabled = !! window.imagelimit;
         this.tracked = {};
         this.lastTid = localStorage.getItem("4chan-cd-" + Main.board + "-tid");
-        Main.tid && !Main.hasMobileLayout && QR.addReplyLink();
+        !Main.tid || Main.hasMobileLayout || Main.threadClosed || QR.addReplyLink();
         window.addEventListener("storage", this.syncStorage, !1)
       }
     },
