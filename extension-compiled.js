@@ -1281,7 +1281,7 @@ var Parser = {
     },
     expandComment: function(a) {
       var b, c, d, e;
-      if (b = a.getAttribute("href").match(/^(?:res\/)([0-9]+)#p([0-9]+)$/)) c = b[1], d = b[2], e = a.parentNode, e.textContent = "Loading...", $.get("//a.4cdn.org/" + Main.board + "/thread/" + c + ".json", {
+      if (b = a.getAttribute("href").match(/^(?:thread\/)([0-9]+)#p([0-9]+)$/)) c = b[1], d = b[2], e = a.parentNode, e.textContent = "Loading...", $.get("//a.4cdn.org/" + Main.board + "/thread/" + c + ".json", {
         onload: function() {
           var a, b, h, k;
           if (200 == this.status) {
