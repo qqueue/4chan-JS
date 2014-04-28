@@ -913,7 +913,7 @@ var Parser = {
     },
     pollCaptcha: function() {
       clearTimeout(QR.captchaPollTimeout);
-      $.id("recaptcha_challenge_image") ? (QR.captchaInterval = setInterval(QR.cloneCaptcha, QR.captchaDelay), QR.cloneCaptcha(), $.id("qrCapField").focus()) : QR.captchaPollTimeout = setTimeout(QR.pollCaptcha, 100)
+      $.id("recaptcha_challenge_image") ? (QR.captchaInterval = setInterval(QR.cloneCaptcha, QR.captchaDelay), QR.cloneCaptcha()) : QR.captchaPollTimeout = setTimeout(QR.pollCaptcha, 100)
     },
     onClick: function(a) {
       var b = a.target;
@@ -1016,8 +1016,7 @@ var Parser = {
               })
             }
             ThreadUpdater.enabled && setTimeout(ThreadUpdater.forceUpdate, 500)
-          } else QR.showPostError("Error: " +
-          this.status + " " + this.statusText)
+          } else QR.showPostError("Error: " + this.status + " " + this.statusText)
       }, a = new FormData(document.forms.qrPost), clearInterval(QR.pulse), QR.btn.value = "Sending", QR.xhr.send(a)))
     },
     presubmitChecks: function(a) {
@@ -1027,8 +1026,7 @@ var Parser = {
       return QR.currentTid != QR.lastTid ? QR.cooldowns[a] : QR.cooldowns[a + "_intra"]
     },
     setPostTime: function() {
-      return localStorage.setItem("4chan-cd-" +
-        Main.board, Date.now())
+      return localStorage.setItem("4chan-cd-" + Main.board, Date.now())
     },
     getPostTime: function() {
       return localStorage.getItem("4chan-cd-" + Main.board)
@@ -1071,9 +1069,9 @@ var Parser = {
     },
     show: function(a) {
       var b, c;
-      c = $.id("t" +
+      c = $.id("t" + a);
+      b = $.id("sa" +
         a);
-      b = $.id("sa" + a);
       b.removeAttribute("data-hidden");
       Main.hasMobileLayout ? (b.textContent = "Hide", $.removeClass(b, "mobile-tu-show"), $.cls("postLink", c)[0].appendChild(b), c.style.display = null, $.removeClass(c.nextElementSibling, "mobile-hr-hidden")) : (b.firstChild.src = Main.icons.minus, $.removeClass(c, "post-hidden"));
       delete this.hidden[a]
