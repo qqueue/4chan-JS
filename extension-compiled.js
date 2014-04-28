@@ -118,10 +118,10 @@ var Parser = {
     buildHTMLFromJSON: function(a, b, c, d) {
       var e = document.createElement("div"),
         f = !1,
-        g, h = "",
+        h, g = "",
         k = "",
         l = "",
-        h = "",
+        g = "",
         m, n, p, l = '"',
         u = "",
         B = "",
@@ -145,7 +145,7 @@ var Parser = {
         a.no + (a.semantic_url ? "/" + a.semantic_url : "") + '" class="replylink" rel="canonical">Reply</a>]</span>'), c = a.no) : c = a.resto;
       w = c + "#p" + a.no;
       Main.tid && b == Main.board ? z = "javascript:quote('" + a.no + "')" : (w = "thread/" + w, z = "thread/" + c + "#q" + a.no);
-      g = !a.capcode && a.id ? ' <span class="posteruid id_' + a.id + '">(ID: <span class="hand" title="Highlight posts by this ID">' + a.id + "</span>)</span> " : "";
+      h = !a.capcode && a.id ? ' <span class="posteruid id_' + a.id + '">(ID: <span class="hand" title="Highlight posts by this ID">' + a.id + "</span>)</span> " : "";
       switch (a.capcode) {
         case "admin_highlight":
           C = " highlightPost";
@@ -169,8 +169,8 @@ var Parser = {
       }
       a.email && (D = '<a href="mailto:' + a.email.replace(/ /g, "%20") + '" class="useremail">', E = "</a>");
       y = a.country ? "pol" == b ? ' <img src="//s.4cdn.org/image/country/troll/' + a.country.toLowerCase() + '.gif" alt="' + a.country + '" title="' + a.country_name + '" class="countryFlag">' : ' <span title="' + a.country_name + '" class="flag flag-' + a.country.toLowerCase() + '"></span>' : "";
-      a.filedeleted ? h = '<div id="f' + a.no + '" class="file"><span class="fileThumb"><img src="' + Parser.icons.del + '" class="fileDeletedRes" alt="File deleted."></span></div>' : a.ext && (h = Parser.decodeSpecialChars(a.filename), p = x = a.filename + a.ext, h.length > (f ? 40 : 30) && (p = Parser.encodeSpecialChars(h.slice(0, f ? 35 : 25)) + "(...)" + a.ext, J = !0), a.tn_w || a.tn_h || ".gif" != a.ext || (a.tn_w = a.w, a.tn_h = a.h), u = 1048576 <= a.fsize ? (0 | a.fsize / 1048576 * 100 + 0.5) / 100 + " M" : 1024 < a.fsize ? (0 | a.fsize / 1024 + 0.5) + " K" : a.fsize + " ", a.spoiler && !Config.revealSpoilers && (p = "Spoiler Image", l = '" title="' + x + '"', B = " imgspoiler", m = "//s.4cdn.org/image/spoiler" + (Parser.customSpoiler[b] || "") + ".png", a.tn_w = 100, a.tn_h = 100), m || (m = "//t.4cdn.org/" + b + "/" + a.tim + "s.jpg"), h = ".pdf" == a.ext ? "PDF" : a.w + "x" + a.h, "f" != b ? (n = n + "/" + a.tim + a.ext, k = '<a class="fileThumb' + B + '" href="' + n + '" target="_blank"><img src="' + m + '" alt="' + u + 'B" data-md5="' + a.md5 + '" style="height: ' + a.tn_h + "px; width: " + a.tn_w + 'px;"><div class="mFileInfo mobile">' + u + "B " + a.ext.slice(1).toUpperCase() + "</div></a>", l = '<div class="fileText" id="fT' + a.no + l + ">File: <a" + (J ? ' title="' + x + '"' : "") + ' href="' + n + '" target="_blank">' + p + "</a> (" + u + "B, " + h + ")</div>") : (n = n + "/" + a.filename + a.ext, h += ", " + a.tag, l = '<div class="fileText" id="fT' + a.no + '">File: <a href="' +
-        n + '" target="_blank">' + a.filename + ".swf</a> (" + u + "B, " + h + ")</div>"), h = '<div id="f' + a.no + '" class="file">' + l + k + "</div>");
+      a.filedeleted ? g = '<div id="f' + a.no + '" class="file"><span class="fileThumb"><img src="' + Parser.icons.del + '" class="fileDeletedRes" alt="File deleted."></span></div>' : a.ext && (g = Parser.decodeSpecialChars(a.filename), p = x = a.filename + a.ext, g.length > (f ? 40 : 30) && (p = Parser.encodeSpecialChars(g.slice(0, f ? 35 : 25)) + "(...)" + a.ext, J = !0), a.tn_w || a.tn_h || ".gif" != a.ext || (a.tn_w = a.w, a.tn_h = a.h), u = 1048576 <= a.fsize ? (0 | a.fsize / 1048576 * 100 + 0.5) / 100 + " M" : 1024 < a.fsize ? (0 | a.fsize / 1024 + 0.5) + " K" : a.fsize + " ", a.spoiler && !Config.revealSpoilers && (p = "Spoiler Image", l = '" title="' + x + '"', B = " imgspoiler", m = "//s.4cdn.org/image/spoiler" + (Parser.customSpoiler[b] || "") + ".png", a.tn_w = 100, a.tn_h = 100), m || (m = "//t.4cdn.org/" + b + "/" + a.tim + "s.jpg"), g = ".pdf" == a.ext ? "PDF" : a.w + "x" + a.h, "f" != b ? (n = n + "/" + a.tim + a.ext, k = '<a class="fileThumb' + B + '" href="' + n + '" target="_blank"><img src="' + m + '" alt="' + u + 'B" data-md5="' + a.md5 + '" style="height: ' + a.tn_h + "px; width: " + a.tn_w + 'px;"><div class="mFileInfo mobile">' + u + "B " + a.ext.slice(1).toUpperCase() + "</div></a>", l = '<div class="fileText" id="fT' + a.no + l + ">File: <a" + (J ? ' title="' + x + '"' : "") + ' href="' + n + '" target="_blank">' + p + "</a> (" + u + "B, " + g + ")</div>") : (n = n + "/" + a.filename + a.ext, g += ", " + a.tag, l = '<div class="fileText" id="fT' + a.no + '">File: <a href="' +
+        n + '" target="_blank">' + a.filename + ".swf</a> (" + u + "B, " + g + ")</div>"), g = '<div id="f' + a.no + '" class="file">' + l + k + "</div>");
       a.trip && (r = ' <span class="postertrip">' + a.trip + "</span>");
       k = a.name || "";
       m = a.sub || "";
@@ -178,16 +178,16 @@ var Parser = {
         Main.icons2.sticky + '"> '), a.closed && (v += '<img class="closedIcon retina" title="Closed" alt="Closed" src="' + Main.icons2.closed + '"> '));
       e.className = "postContainer " + A + "Container";
       e.id = "pc" + a.no;
-      e.innerHTML = (f ? "" : '<div class="sideArrows" id="sa' + a.no + '">&gt;&gt;</div>') + '<div id="p' + a.no + '" class="post ' + A + C + '"><div class="postInfoM mobile" id="pim' + a.no + '"><span class="nameBlock' + s + '"><span class="name">' + k + "</span>" + r + q + t + g + y + '<br><span class="subject">' + m + '</span></span><span class="dateTime postNum" data-utc="' +
-        a.time + '">' + a.now + ' <a href="' + a.no + "#p" + a.no + '">No.</a><a href="javascript:quote(\'' + a.no + '\');" title="Quote this post">' + a.no + "</a></span></div>" + (f ? h : "") + '<div class="postInfo desktop" id="pi' + a.no + '"' + (b != Main.board ? ' data-board="' + b + '"' : "") + '><input type="checkbox" name="' + a.no + '" value="delete"> <span class="subject">' + m + '</span> <span class="nameBlock' + s + '">' + D + '<span class="name">' + k + "</span>" + r + q + E + t + g + y + ' </span> <span class="dateTime" data-utc="' + a.time + '">' + a.now + '</span> <span class="postNum desktop"><a href="' +
-        w + '" title="Highlight this post">No.</a><a href="' + z + '" title="Quote this post">' + a.no + "</a> " + v + F + "</span></div>" + (f ? "" : h) + '<blockquote class="postMessage" id="m' + a.no + '">' + (a.com || "") + I + H + "</blockquote> </div>" + G;
+      e.innerHTML = (f ? "" : '<div class="sideArrows" id="sa' + a.no + '">&gt;&gt;</div>') + '<div id="p' + a.no + '" class="post ' + A + C + '"><div class="postInfoM mobile" id="pim' + a.no + '"><span class="nameBlock' + s + '"><span class="name">' + k + "</span>" + r + q + t + h + y + '<br><span class="subject">' + m + '</span></span><span class="dateTime postNum" data-utc="' +
+        a.time + '">' + a.now + ' <a href="' + a.no + "#p" + a.no + '">No.</a><a href="javascript:quote(\'' + a.no + '\');" title="Quote this post">' + a.no + "</a></span></div>" + (f ? g : "") + '<div class="postInfo desktop" id="pi' + a.no + '"' + (b != Main.board ? ' data-board="' + b + '"' : "") + '><input type="checkbox" name="' + a.no + '" value="delete"> <span class="subject">' + m + '</span> <span class="nameBlock' + s + '">' + D + '<span class="name">' + k + "</span>" + r + q + E + t + h + y + ' </span> <span class="dateTime" data-utc="' + a.time + '">' + a.now + '</span> <span class="postNum desktop"><a href="' +
+        w + '" title="Highlight this post">No.</a><a href="' + z + '" title="Quote this post">' + a.no + "</a> " + v + F + "</span></div>" + (f ? "" : g) + '<blockquote class="postMessage" id="m' + a.no + '">' + (a.com || "") + I + H + "</blockquote> </div>" + G;
       if (!Main.tid || b != Main.board)
         for (q = e.getElementsByClassName("quotelink"), a = 0; f = q[a]; ++a) r = f.getAttribute("href"), "/" != r.charAt(0) && (f.href = "/" + b + "/thread/" + c + r);
       return e
     },
     buildCapcodeReplies: function(a, b, c) {
-      var d, e, f, g, h, k, l;
-      g = {
+      var d, e, f, h, g, k, l;
+      h = {
         admin: "Administrator",
         mod: "Moderator",
         developer: "Developer",
@@ -196,7 +196,7 @@ var Parser = {
       b != Main.board ? (k = "/" + b + "/thread/", l = "&gt;&gt;&gt;/" + b + "/") : (k = "", l = "&gt;&gt;");
       f = '<br><br><span class="capcodeReplies"><span class="smaller">';
       for (d in a)
-        for (f += '<span class="bold">' + g[d] + " Replies:</span> ", h = a[d], b = 0; e = h[b]; ++b) f += '<a class="quotelink" href="' + k + c + "#p" + e + '">' + l + e + "</a> ";
+        for (f += '<span class="bold">' + h[d] + " Replies:</span> ", g = a[d], b = 0; e = g[b]; ++b) f += '<a class="quotelink" href="' + k + c + "#p" + e + '">' + l + e + "</a> ";
       return f + "</span></span>"
     },
     parseBoard: function() {
@@ -204,24 +204,24 @@ var Parser = {
       for (a = 0; b[a]; ++a) Parser.parseThread(b[a].id.slice(1))
     },
     parseThread: function(a, b, c) {
-      var d, e, f, g, h;
-      e = $.id("t" + a);
-      f = e.getElementsByClassName("post");
-      b || (g = document.getElementById("pi" + a), Main.tid || (Config.filter && (h = Filter.exec(e, g, document.getElementById("m" + a), a)), Config.threadHiding && !h && (Main.hasMobileLayout ? (g = document.createElement("a"), g.href = "javascript:;", g.setAttribute("data-cmd", "hide"), g.setAttribute("data-id", a), g.className = "mobileHideButton button", g.textContent = "Hide", f[0].nextElementSibling.appendChild(g)) : (g = document.createElement("span"), g.innerHTML = '<img alt="H" class="extButton threadHideButton"data-cmd="hide" data-id="' +
-        a + '" src="' + Main.icons.minus + '" title="Toggle thread">', f[0].insertBefore(g, f[0].firstChild)), g.id = "sa" + a, ThreadHiding.hidden[a] && (ThreadHiding.hidden[a] = Main.now, ThreadHiding.hide(a))), ThreadExpansion.enabled && (d = $.cls("summary", e)[0]) && (e = document.createDocumentFragment(), h = d.cloneNode(!0), h.className = "", d.textContent = "", g = document.createElement("img"), g.className = "extButton expbtn", g.title = "Expand thread", g.alt = "+", g.setAttribute("data-cmd", "expand"), g.setAttribute("data-id", a), g.src = Main.icons.plus, e.appendChild(g), e.appendChild(h), g = document.createElement("span"), g.style.display = "none", g.textContent = "Showing all replies.", e.appendChild(g), d.appendChild(e))));
-      e = b ? 0 > b ? f.length + b : b : 0;
-      c = c ? e + c : f.length;
+      var d, e, f, h, g, k;
+      f = $.id("t" + a);
+      h = f.getElementsByClassName("post");
+      b || (g = document.getElementById("pi" + a), Main.tid || (Config.filter && (k = Filter.exec(f, g, document.getElementById("m" + a), a)), Config.threadHiding && !k && (Main.hasMobileLayout ? (g = document.createElement("a"), g.href = "javascript:;", g.setAttribute("data-cmd", "hide"), g.setAttribute("data-id", a), g.className = "mobileHideButton button", g.textContent = "Hide", h[0].nextElementSibling.appendChild(g)) : (g = document.createElement("span"), g.innerHTML = '<img alt="H" class="extButton threadHideButton"data-cmd="hide" data-id="' +
+        a + '" src="' + Main.icons.minus + '" title="Toggle thread">', h[0].insertBefore(g, h[0].firstChild)), g.id = "sa" + a, ThreadHiding.hidden[a] && (ThreadHiding.hidden[a] = Main.now, ThreadHiding.hide(a))), ThreadExpansion.enabled && (e = $.cls("summary", f)[0]) && (f = document.createDocumentFragment(), k = e.cloneNode(!0), k.className = "", e.textContent = "", g = document.createElement("img"), g.className = "extButton expbtn", g.title = "Expand thread", g.alt = "+", g.setAttribute("data-cmd", "expand"), g.setAttribute("data-id", a), g.src = Main.icons.plus, f.appendChild(g), f.appendChild(k), g = document.createElement("span"), g.style.display = "none", g.textContent = "Showing all replies.", f.appendChild(g), e.appendChild(f))), Main.tid && Config.threadWatcher && (d = $.cls("navLinksBot")[0]) && (g = document.createElement("img"), ThreadWatcher.watched[e = a + "-" + Main.board] ? (g.src = Main.icons.watched, g.setAttribute("data-active", "1")) : g.src = Main.icons.notwatched, g.className = "extButton wbtn wbtn-" + e, g.setAttribute("data-cmd", "watch"), g.setAttribute("data-id", a), g.alt = "W", g.title = "Add to watch list", f = document.createDocumentFragment(), f.appendChild(document.createTextNode("[")), f.appendChild(g.cloneNode(!0)), f.appendChild(document.createTextNode("] ")), d.insertBefore(f, d.firstChild)));
+      e = b ? 0 > b ? h.length + b : b : 0;
+      c = c ? e + c : h.length;
       if (Main.isMobileDevice && Config.quotePreview)
-        for (d = e; d < c; ++d) Parser.parseMobileQuotelinks(f[d]);
+        for (d = e; d < c; ++d) Parser.parseMobileQuotelinks(h[d]);
       if (Parser.trackedReplies)
-        for (d = e; d < c; ++d) Parser.parseTrackedReplies(f[d]);
-      for (d = e; d < c; ++d) Parser.parsePost(f[d].id.slice(1), a);
+        for (d = e; d < c; ++d) Parser.parseTrackedReplies(h[d]);
+      for (d = e; d < c; ++d) Parser.parsePost(h[d].id.slice(1), a);
       if (b) {
         if (Parser.prettify)
-          for (d = e; d < c; ++d) Parser.parseMarkup(f[d]);
+          for (d = e; d < c; ++d) Parser.parseMarkup(h[d]);
         if (window.jsMath)
           if (window.jsMath.loaded)
-            for (d = e; d < c; ++d) window.jsMath.ProcessBeforeShowing(f[d]);
+            for (d = e; d < c; ++d) window.jsMath.ProcessBeforeShowing(h[d]);
           else Parser.loadJSMath()
       }
       UA.dispatchEvent("4chanParsingDone", {
@@ -253,7 +253,7 @@ var Parser = {
         for (a = 0; c = b[a]; ++a) c.innerHTML = prettyPrintOne(c.innerHTML)
     },
     parsePost: function(a, b) {
-      var c, d, e, f, g, h;
+      var c, d, e, f, h, g;
       b ? d = document.getElementById("pi" + a) : (d = a.getElementsByClassName("postInfo")[0], a = d.id.slice(2));
       Parser.needMsg && (f = document.getElementById("m" + a));
       c = document.createElement("a");
@@ -263,22 +263,24 @@ var Parser = {
       c.setAttribute("data-cmd", "post-menu");
       c.textContent = "\u25b6";
       d.appendChild(c);
-      b && a != b && (Config.filter && (g = Filter.exec(d.parentNode, d, f)), !g && ReplyHiding.hidden[a] && (ReplyHiding.hidden[a] = Main.now, ReplyHiding.hide(a)), Config.backlinks && Parser.parseBacklinks(a, b));
-      IDColor.enabled && (h = $.cls("posteruid", d)[0]) && IDColor.apply(h.firstElementChild);
+      b && a != b && (Config.filter && (h = Filter.exec(d.parentNode, d, f)), !h && ReplyHiding.hidden[a] && (ReplyHiding.hidden[a] = Main.now, ReplyHiding.hide(a)), Config.backlinks && Parser.parseBacklinks(a, b));
+      IDColor.enabled && (g = $.cls("posteruid", d)[0]) && IDColor.apply(g.firstElementChild);
       Config.embedSoundCloud && Media.parseSoundCloud(f);
       Config.embedYouTube && Media.parseYouTube(f);
       Config.embedVocaroo && Media.parseVocaroo(f);
-      Config.revealSpoilers && (e = document.getElementById("f" + a)) && (e = e.children[1]) && $.hasClass(e, "imgspoiler") && (c = e.firstChild, e.removeChild(c), c.removeAttribute("style"), h = $.hasClass(d.parentNode, "op"), c.style.maxWidth = c.style.maxHeight = h ? "250px" : "125px", c.src = "//t.4cdn.org" + e.pathname.replace(/([0-9]+).+$/, "/$1s.jpg"), f = e.previousElementSibling, g = f.title.split("."), g[0].length > (h ? 40 : 30) ? g = g[0].slice(0, h ? 35 : 25) + "(...)" + g[1] : (g = f.title, f.removeAttribute("title")), f.firstElementChild.innerHTML = g, e.insertBefore(c, e.firstElementChild));
+      Config.revealSpoilers && (e = document.getElementById("f" + a)) && (e = e.children[1]) && $.hasClass(e, "imgspoiler") && (c = e.firstChild, e.removeChild(c), c.removeAttribute("style"), g = $.hasClass(d.parentNode, "op"), c.style.maxWidth = c.style.maxHeight = g ? "250px" : "125px", c.src = "//t.4cdn.org" + e.pathname.replace(/([0-9]+).+$/, "/$1s.jpg"), f = e.previousElementSibling, h = f.title.split("."), h[0].length > (g ? 40 : 30) ? h = h[0].slice(0, g ? 35 : 25) + "(...)" + h[1] : (h = f.title, f.removeAttribute("title")), f.firstElementChild.innerHTML = h, e.insertBefore(c, e.firstElementChild));
       Config.localTime && (c = d.getElementsByClassName("dateTime")[0], c.title = this.utcOffset, c.textContent = Parser.getLocaleDate(new Date(1E3 * c.getAttribute("data-utc"))))
     },
     getLocaleDate: function(a) {
-      return ("0" + (1 + a.getMonth())).slice(-2) + "/" + ("0" + a.getDate()).slice(-2) + "/" + ("0" + a.getFullYear()).slice(-2) + "(" + this.weekdays[a.getDay()] + ")" + ("0" + a.getHours()).slice(-2) + ":" + ("0" + a.getMinutes()).slice(-2) + (this.hasSeconds ? ":" + ("0" + a.getSeconds()).slice(-2) : "")
+      return ("0" +
+        (1 + a.getMonth())).slice(-2) + "/" + ("0" + a.getDate()).slice(-2) + "/" + ("0" + a.getFullYear()).slice(-2) + "(" + this.weekdays[a.getDay()] + ")" + ("0" + a.getHours()).slice(-2) + ":" + ("0" + a.getMinutes()).slice(-2) + (this.hasSeconds ? ":" + ("0" + a.getSeconds()).slice(-2) : "")
     },
     parseBacklinks: function(a, b) {
-      var c, d, e, f, g, h, k;
+      var c, d, e, f, h, g, k;
       if (e = document.getElementById("m" + a).getElementsByClassName("quotelink"))
         for (f = {}, c = 0; d = e[c]; ++c)
-          if (g = d.getAttribute("href").split("#p"), g[1])(g[1] == b && (d.textContent += " (OP)"), h = document.getElementById("pi" + g[1])) ? f[g[1]] || (f[g[1]] = !0, d = document.createElement("span"), d.innerHTML = Main.hasMobileLayout ? '<a href="#p' + a + '" class="quotelink">&gt;&gt;' + a + '</a><a href="#p' + a + '" class="quoteLink"> #</a> ' : '<a href="#p' + a + '" class="quotelink">&gt;&gt;' + a + "</a> ", (k = document.getElementById("bl_" + g[1])) || (k = document.createElement("div"), k.id = "bl_" + g[1], k.className = "backlink", Main.hasMobileLayout && (k.className = "backlink mobile", h = document.getElementById("p" + g[1])), h.appendChild(k)), k.appendChild(d)) : Main.tid && ">" != d.textContent.charAt(2) && (d.textContent += " \u2192")
+          if (h = d.getAttribute("href").split("#p"), h[1])(h[1] == b && (d.textContent += " (OP)"), g = document.getElementById("pi" +
+            h[1])) ? f[h[1]] || (f[h[1]] = !0, d = document.createElement("span"), d.innerHTML = Main.hasMobileLayout ? '<a href="#p' + a + '" class="quotelink">&gt;&gt;' + a + '</a><a href="#p' + a + '" class="quoteLink"> #</a> ' : '<a href="#p' + a + '" class="quotelink">&gt;&gt;' + a + "</a> ", (k = document.getElementById("bl_" + h[1])) || (k = document.createElement("div"), k.id = "bl_" + h[1], k.className = "backlink", Main.hasMobileLayout && (k.className = "backlink mobile", g = document.getElementById("p" + h[1])), g.appendChild(k)), k.appendChild(d)) : Main.tid && ">" != d.textContent.charAt(2) && (d.textContent += " \u2192")
     },
     buildSummary: function(a, b, c) {
       if (b) b = b + " post" + (1 < b ? "s" : "");
@@ -297,12 +299,13 @@ var Parser = {
       PostMenu.close();
       d = a.parentNode.id.split("pi")[1];
       b = a.parentNode.getAttribute("data-board");
-      e = !b && !!$.id("t" + d);
+      e = !b && !!$.id("t" +
+        d);
       c = '<ul><li data-cmd="report" data-id="' + d + (b ? '" data-board="' + b + '"' : '"') + '">Report post</li>';
       if (e) Main.tid || (c += '<li data-cmd="hide" data-id="' + d + '">' + ($.hasClass($.id("t" + d), "post-hidden") ? "Unhide" : "Hide") + " thread</li>"), Config.threadWatcher && (c += '<li data-cmd="watch" data-id="' + d + '">' + (ThreadWatcher.watched[d + "-" + Main.board] ? "Remove from" : "Add to") + " watch list</li>");
       else if (b = $.id("pc" + d)) c += '<li data-cmd="hide-r" data-id="' + d + '">' + ($.hasClass(b, "post-hidden") ? "Unhide" : "Hide") + " post</li>";
       if (file = $.id("fT" + d)) {
-        if (b = $.cls("fileThumb", file.parentNode)[0]) b = /imgspoiler/.test(b.className) ? "http://t.4cdn.org/" + Main.board + "/" + b.href.match(/\/([0-9]+)\..+$/)[1] + "s.jpg" : b.firstElementChild.src, c += '<li><ul><li><a href="//www.google.com/searchbyimage?image_url=' + b + '" target="_blank">Google</a></li><li><a href="http://iqdb.org/?url=' + b + '" target="_blank">iqdb</a></li></ul>Image search &raquo</li>';
+        if (b = $.cls("fileThumb", file.parentNode)[0]) b = /\.(png|jpg)$/.test(b.href) ? b.href : "http://t.4cdn.org/" + Main.board + "/" + b.href.match(/\/([0-9]+)\..+$/)[1] + "s.jpg", c += '<li><ul><li><a href="//www.google.com/searchbyimage?image_url=' + b + '" target="_blank">Google</a></li><li><a href="http://iqdb.org/?url=' + b + '" target="_blank">iqdb</a></li></ul>Image search &raquo</li>';
         UA.canDownloadOriginal && (b = file.hasAttribute("title") ? file.getAttribute("title") : file.firstElementChild.title || file.firstElementChild.textContent, c += '<li><a download="' + b + '" href="' + file.firstElementChild.href + '">Download file</a></li>')
       }
       Config.filter && (c += '<li><a href="#" data-cmd="filter-sel">Filter selected text</a></li>');
@@ -321,8 +324,7 @@ var Parser = {
         node: b.firstElementChild
       });
       document.body.appendChild(b);
-      a = c.left +
-        window.pageXOffset;
+      a = c.left + window.pageXOffset;
       d = $.docEl.clientWidth - b.offsetWidth;
       a > d - 75 && (b.className += " dd-menu-left");
       a > d && (a = d);
@@ -369,7 +371,7 @@ var Parser = {
       Depager.boardHasAds && window.ados_load && window.ados_load()
     },
     renderNext: function() {
-      var a, b, c, d, e, f, g, h, k, l, m, n;
+      var a, b, c, d, e, f, h, g, k, l, m, n;
       k = [];
       l = window.pageYOffset;
       b = document.createDocumentFragment();
@@ -384,14 +386,14 @@ var Parser = {
         b.appendChild(a);
         for (c = 0; a = e[c]; ++c)
           if (!$.id("t" + a.no)) {
-            g = document.createElement("div");
-            g.id = "t" + a.no;
-            g.className = "thread";
-            g.appendChild(Parser.buildHTMLFromJSON(a, Main.board, !0));
-            (f = Parser.buildSummary(a.no, a.omitted_posts, a.omitted_images)) && g.appendChild(f);
+            h = document.createElement("div");
+            h.id = "t" + a.no;
+            h.className = "thread";
+            h.appendChild(Parser.buildHTMLFromJSON(a, Main.board, !0));
+            (f = Parser.buildSummary(a.no, a.omitted_posts, a.omitted_images)) && h.appendChild(f);
             if (a.replies)
-              for (last_replies = a.last_replies, d = 0; h = last_replies[d]; ++d) g.appendChild(Parser.buildHTMLFromJSON(h, Main.board));
-            b.appendChild(g);
+              for (last_replies = a.last_replies, d = 0; g = last_replies[d]; ++d) h.appendChild(Parser.buildHTMLFromJSON(g, Main.board));
+            b.appendChild(h);
             b.appendChild(document.createElement("hr"));
             k.push(a.no)
           }
@@ -475,15 +477,15 @@ var Parser = {
       (c = a.getAttribute("href").match(/^(?:\/([^\/]+)\/)?(?:thread\/)?([0-9]+)?#p([0-9]+)$/)) && "rs" != c[1] && !QuoteInline.isSelfQuote(a, c[3], c[1]) && (b && b.preventDefault(), (d = a.getAttribute("data-pfx")) ? (a.removeAttribute("data-pfx"), $.removeClass(a, "linkfade"), d = $.id(d + "p" + c[3]), d.parentNode.removeChild(d), "backlink" == a.parentNode.parentNode.className && (d = $.id("pc" + c[3]), c = +d.getAttribute("data-inline-count") - 1, 0 == c ? (d.style.display = "", d.removeAttribute("data-inline-count")) : d.setAttribute("data-inline-count", c))) : (e = $.id("p" + c[3])) ? QuoteInline.inline(a, e, c[3]) : QuoteInline.inlineRemote(a, c[1] || Main.board, c[2], c[3]))
     },
     inlineRemote: function(a, b, c, d) {
-      var e, f, g, h;
-      a.hasAttribute("data-loading") || (g = b + "-" + c, (e = $.cache[g]) && (f = Parser.buildPost(e, b, d)) ? (Parser.parsePost(f), QuoteInline.inline(a, f)) : (h = a.nextElementSibling) && $.hasClass(h, "spinner") ? h.parentNode.removeChild(h) : (h = document.createElement("div"), h.className = "preview spinner inlined", h.textContent = "Loading...", a.parentNode.insertBefore(h, a.nextSibling), e = function() {
+      var e, f, h, g;
+      a.hasAttribute("data-loading") || (h = b + "-" + c, (e = $.cache[h]) && (f = Parser.buildPost(e, b, d)) ? (Parser.parsePost(f), QuoteInline.inline(a, f)) : (g = a.nextElementSibling) && $.hasClass(g, "spinner") ? g.parentNode.removeChild(g) : (g = document.createElement("div"), g.className = "preview spinner inlined", g.textContent = "Loading...", a.parentNode.insertBefore(g, a.nextSibling), e = function() {
         var c;
         a.removeAttribute("data-loading");
-        if (200 == this.status || 304 == this.status || 0 == this.status) c = Parser.parseThreadJSON(this.responseText), $.cache[g] = c, (c = Parser.buildPost(c, b, d)) ? (h.parentNode && h.parentNode.removeChild(h), Parser.parsePost(c), QuoteInline.inline(a, c)) : ($.addClass(a, "deadlink"), h.textContent = "This post doesn't exist anymore");
-        else if (404 == this.status) $.addClass(a, "deadlink"), h.textContent = "This thread doesn't exist anymore";
+        if (200 == this.status || 304 == this.status || 0 == this.status) c = Parser.parseThreadJSON(this.responseText), $.cache[h] = c, (c = Parser.buildPost(c, b, d)) ? (g.parentNode && g.parentNode.removeChild(g), Parser.parsePost(c), QuoteInline.inline(a, c)) : ($.addClass(a, "deadlink"), g.textContent = "This post doesn't exist anymore");
+        else if (404 == this.status) $.addClass(a, "deadlink"), g.textContent = "This thread doesn't exist anymore";
         else this.onerror()
       }, f = function() {
-        h.textContent = "Error: " + this.statusText + " (" + this.status + ")";
+        g.textContent = "Error: " + this.statusText + " (" + this.status + ")";
         a.removeAttribute("data-loading")
       }, a.setAttribute("data-loading", "1"), $.get("//a.4cdn.org/" + b + "/thread/" + c + ".json", {
         onload: e,
@@ -491,10 +493,10 @@ var Parser = {
       })))
     },
     inline: function(a, b, c) {
-      var d, e, f, g, h, k;
+      var d, e, f, h, g, k;
       e = Date.now();
       if (c)
-        for ("backlink" == (g = a.parentNode.parentNode).className ? (f = g.parentNode.parentNode.parentNode, h = !0) : f = g.parentNode; f.parentNode !== document;) {
+        for ("backlink" == (h = a.parentNode.parentNode).className ? (f = h.parentNode.parentNode.parentNode, g = !0) : f = h.parentNode; f.parentNode !== document;) {
           if (f.id.split("m")[1] == c) return;
           f = f.parentNode
         }
@@ -513,7 +515,7 @@ var Parser = {
       }
       for (c = 0; d = f.children[c]; ++c) d.id = e + d.id;
       if (c = $.cls("backlink", f)[0]) c.id = e + c.id;
-      h ? (a = g.parentNode.parentNode.getAttribute("data-pfx") || "", a = $.id(a + "m" + g.id.split("_")[1]), a.insertBefore(f, a.firstChild), (f = b.parentNode.getAttribute("data-inline-count")) ? f = +f + 1 : (f = 1, b.parentNode.style.display = "none"), b.parentNode.setAttribute("data-inline-count", f)) : ($.hasClass(a.parentNode, "quote") && (a = a.parentNode), b = a.parentNode, b.insertBefore(f, a.nextSibling))
+      g ? (a = h.parentNode.parentNode.getAttribute("data-pfx") || "", a = $.id(a + "m" + h.id.split("_")[1]), a.insertBefore(f, a.firstChild), (f = b.parentNode.getAttribute("data-inline-count")) ? f = +f + 1 : (f = 1, b.parentNode.style.display = "none"), b.parentNode.setAttribute("data-inline-count", f)) : ($.hasClass(a.parentNode, "quote") && (a = a.parentNode), b = a.parentNode, b.insertBefore(f, a.nextSibling))
     }
   },
   QuotePreview = {
@@ -529,13 +531,13 @@ var Parser = {
       if (c = a.getAttribute("href").match(b.regex))(d = a.getAttribute("data-pfx") || "", d = document.getElementById(d + "p" + c[3])) ? (c = d.getBoundingClientRect(), 0 < c.top && c.bottom < document.documentElement.clientHeight && !$.hasClass(d.parentNode, "post-hidden")) ? $.hasClass(d, "highlight") || location.hash.slice(1) == d.id ? $.hasClass(d, "op") || (b.highlightAnti = d, $.addClass(d, "highlight-anti")) : (b.highlight = d, $.addClass(d, "highlight")) : b.show(a, d) : UA.hasCORS && b.showRemote(a, c[1] || Main.board, c[2], c[3])
     },
     showRemote: function(a, b, c, d) {
-      var e, f, g;
-      g = b + "-" + c;
-      (f = $.cache[g]) && (e = Parser.buildPost(f, b, d)) ? QuotePreview.show(a, e) : (a.style.cursor = "wait", $.get("//a.4cdn.org/" + b + "/thread/" + c + ".json", {
+      var e, f, h;
+      h = b + "-" + c;
+      (f = $.cache[h]) && (e = Parser.buildPost(f, b, d)) ? QuotePreview.show(a, e) : (a.style.cursor = "wait", $.get("//a.4cdn.org/" + b + "/thread/" + c + ".json", {
         onload: function() {
           var c;
           a.style.cursor = "";
-          200 == this.status || 304 == this.status || 0 == this.status ? (c = Parser.parseThreadJSON(this.responseText), $.cache[g] = c, $.id("quote-preview") || QuotePreview.out || ((c = Parser.buildPost(c, b, d)) ? (c.className = "post preview", c.style.display = "none", c.id = "quote-preview", document.body.appendChild(c), QuotePreview.show(a, c, !0)) : $.addClass(a, "deadlink"))) : 404 == this.status && $.addClass(a, "deadlink")
+          200 == this.status || 304 == this.status || 0 == this.status ? (c = Parser.parseThreadJSON(this.responseText), $.cache[h] = c, $.id("quote-preview") || QuotePreview.out || ((c = Parser.buildPost(c, b, d)) ? (c.className = "post preview", c.style.display = "none", c.id = "quote-preview", document.body.appendChild(c), QuotePreview.show(a, c, !0)) : $.addClass(a, "deadlink"))) : 404 == this.status && $.addClass(a, "deadlink")
         },
         onerror: function() {
           a.style.cursor = ""
@@ -651,14 +653,14 @@ var Parser = {
       ImageExpansion.timeout = setTimeout(ImageExpansion.pauseVideos, 500)
     },
     pauseVideos: function() {
-      var a, b, c, d, e, f, g;
+      var a, b, c, d, e, f, h;
       a = ImageExpansion;
-      g = [];
+      h = [];
       e = window.pageYOffset;
       f = window.pageYOffset + $.docEl.clientHeight;
-      for (b = 0; c = a.activeVideos[b]; ++b) d = c.getBoundingClientRect(), d.top + window.pageYOffset > f || d.bottom + window.pageYOffset < e ? c.pause() : c.paused || g.push(c);
-      g.length || document.removeEventListener("scroll", a.onScroll, !1);
-      a.activeVideos = g
+      for (b = 0; c = a.activeVideos[b]; ++b) d = c.getBoundingClientRect(), d.top + window.pageYOffset > f || d.bottom + window.pageYOffset < e ? c.pause() : c.paused || h.push(c);
+      h.length || document.removeEventListener("scroll", a.onScroll, !1);
+      a.activeVideos = h
     },
     onError: function(a) {
       var b;
@@ -669,15 +671,15 @@ var Parser = {
       a.removeAttribute("data-expanding")
     },
     onLoadStart: function(a, b) {
-      var c, d, e, f, g;
+      var c, d, e, f, h;
       b.removeAttribute("data-expanding");
       c = b.getBoundingClientRect().left;
       e = document.documentElement.clientWidth - c - 25;
       f = document.documentElement.clientHeight;
       c = a.naturalWidth;
       d = a.naturalHeight;
-      c > e && (g = e / c, c = e, d *= g);
-      Config.fitToScreenExpansion && d > f && (g = f / d, d = f, c *= g);
+      c > e && (h = e / c, c = e, d *= h);
+      Config.fitToScreenExpansion && d > f && (h = f / d, d = f, c *= h);
       a.style.maxWidth = c + "px";
       a.style.maxHeight = d + "px";
       $.addClass(b.parentNode.parentNode, "image-expanded");
@@ -794,7 +796,7 @@ var Parser = {
       d.focus()
     },
     show: function(a) {
-      var b, c, d, e, f, g, h, k, l, m, n, p;
+      var b, c, d, e, f, h, g, k, l, m, n, p;
       if (QR.currentTid) Main.tid || QR.currentTid == a || ($.id("qrTid").textContent = $.id("qrResto").value = QR.currentTid = a, $.byName("com")[1].value = "", QR.startCooldown()), Main.hasMobileLayout && ($.id("quickReply").style.top = window.pageYOffset + 25 + "px");
       else {
         QR.currentTid = a;
@@ -804,30 +806,31 @@ var Parser = {
         d.className = "extPanel reply";
         d.setAttribute("data-trackpos", "QR-position");
         Main.hasMobileLayout ? d.style.top = window.pageYOffset + 28 + "px" : Config["QR-position"] ? d.style.cssText = Config["QR-position"] : (d.style.right = "0px", d.style.top = "10%");
-        d.innerHTML = '<div id="qrHeader" class="drag postblock">Quick Reply - Thread No.<span id="qrTid">' + a + '</span><img alt="X" src="' + Main.icons.cross + '" id="qrClose" class="extButton" title="Close Window"></div>';
+        d.innerHTML = '<div id="qrHeader" class="drag postblock">Quick Reply - Thread No.<span id="qrTid">' + a + '</span><img alt="X" src="' +
+          Main.icons.cross + '" id="qrClose" class="extButton" title="Close Window"></div>';
         f = e.parentNode.cloneNode(!1);
         f.setAttribute("name", "qrPost");
         f.innerHTML = '<input type="hidden" value="' + $.byName("MAX_FILE_SIZE")[0].value + '" name="MAX_FILE_SIZE"><input type="hidden" value="regist" name="mode"><input id="qrResto" type="hidden" value="' + a + '" name="resto">';
         a = document.createElement("div");
         a.id = "qrForm";
-        g = e.firstElementChild.children;
+        h = e.firstElementChild.children;
         b = 0;
-        for (c = g.length - 1; b < c; ++b) {
-          h = document.createElement("div");
-          if ("captchaFormPart" == g[b].id) {
+        for (c = h.length - 1; b < c; ++b) {
+          g = document.createElement("div");
+          if ("captchaFormPart" == h[b].id) {
             if (QR.noCaptcha) continue;
-            h.id = "qrCaptchaContainer"
-          } else if (n = g[b].getAttribute("data-type"), "Password" == n || "Spoilers" == n) continue;
-          else if ("File" == n) k = g[b].children[1].firstChild.cloneNode(!1), k.tabIndex += 20, k.id = "qrFile", k.size = "19", k.addEventListener("change", QR.onFileChange, !1), h.appendChild(k), UA.hasDragAndDrop && ($.addClass(k, "qrRealFile"), k = document.createElement("div"), k.id = "qrDummyFile", l = document.createElement("button"), l.id = "qrDummyFileButton", l.type = "button", l.textContent = "Browse\u2026", k.appendChild(l), l = document.createElement("span"), l.id = "qrDummyFileLabel", l.textContent = "No file selected.", k.appendChild(l), h.appendChild(k)), k.title = "Shift + Click to remove the file";
-          else if (h.innerHTML = g[b].children[1].innerHTML, l = "hidden" == h.firstChild.type ? h.lastChild.previousSibling : h.firstChild, 0 < l.tabIndex && (l.tabIndex += 20), "INPUT" == l.nodeName || "TEXTAREA" == l.nodeName) {
+            g.id = "qrCaptchaContainer"
+          } else if (n = h[b].getAttribute("data-type"), "Password" == n || "Spoilers" == n) continue;
+          else if ("File" == n) k = h[b].children[1].firstChild.cloneNode(!1), k.tabIndex += 20, k.id = "qrFile", k.size = "19", k.addEventListener("change", QR.onFileChange, !1), g.appendChild(k), UA.hasDragAndDrop && ($.addClass(k, "qrRealFile"), k = document.createElement("div"), k.id = "qrDummyFile", l = document.createElement("button"), l.id = "qrDummyFileButton", l.type = "button", l.textContent = "Browse\u2026", k.appendChild(l), l = document.createElement("span"), l.id = "qrDummyFileLabel", l.textContent = "No file selected.", k.appendChild(l), g.appendChild(k)), k.title = "Shift + Click to remove the file";
+          else if (g.innerHTML = h[b].children[1].innerHTML, l = "hidden" == g.firstChild.type ? g.lastChild.previousSibling : g.firstChild, 0 < l.tabIndex && (l.tabIndex += 20), "INPUT" == l.nodeName || "TEXTAREA" == l.nodeName) {
             if ("name" == l.name) {
               if (p = Main.getCookie("4chan_name")) l.value = p
             } else if ("email" == l.name) {
               if (l.id = "qrEmail", p = Main.getCookie("4chan_email")) l.value = p
-            } else "com" == l.name && (QR.comField = l, l.addEventListener("keydown", QR.onKeyDown, !1), l.addEventListener("paste", QR.onKeyDown, !1), l.addEventListener("cut", QR.onKeyDown, !1), h.children[1] && h.removeChild(l.nextSibling));
+            } else "com" == l.name && (QR.comField = l, l.addEventListener("keydown", QR.onKeyDown, !1), l.addEventListener("paste", QR.onKeyDown, !1), l.addEventListener("cut", QR.onKeyDown, !1), g.children[1] && g.removeChild(l.nextSibling));
             null !== n && l.setAttribute("placeholder", n)
           } else "flag" == l.name && ((m = l.querySelector("option[selected]")) && m.removeAttribute("selected"), (p = Main.getCookie("4chan_flag")) && (m = l.querySelector('option[value="' + p + '"]')) && m.setAttribute("selected", "selected"));
-          a.appendChild(h)
+          a.appendChild(g)
         }
         this.btn = a.querySelector('input[type="submit"]');
         this.btn.previousSibling.className = "presubmit";
@@ -851,7 +854,7 @@ var Parser = {
       }
     },
     onCaptchaReady: function() {
-      QR.cloneCaptcha() ? QR.captchaInterval = setInterval(QR.cloneCaptcha, QR.captchaDelay) : QR.captchaInterval = 1
+      $.id("qrCaptchaContainer") ? QR.pollCaptcha() : QR.captchaInterval = 1
     },
     onFileChange: function(a) {
       var b;
@@ -867,8 +870,7 @@ var Parser = {
         a = a.target;
         b = a.selectionStart;
         c = a.selectionEnd;
-        a.value ? (d = "[spoiler]" + a.value.slice(b, c) + "[/spoiler]", a.value = a.value.slice(0, b) + d + a.value.slice(c), a.setSelectionRange(c +
-          19, c + 19)) : (a.value = "[spoiler][/spoiler]", a.setSelectionRange(9, 9))
+        a.value ? (d = "[spoiler]" + a.value.slice(b, c) + "[/spoiler]", a.value = a.value.slice(0, b) + d + a.value.slice(c), a.setSelectionRange(c + 19, c + 19)) : (a.value = "[spoiler][/spoiler]", a.setSelectionRange(9, 9))
       } else if (27 == a.keyCode && !(a.ctrlKey || a.altKey || a.shiftKey || a.metaKey)) {
         QR.close();
         return
@@ -878,7 +880,8 @@ var Parser = {
     },
     checkComLength: function() {
       var a;
-      QR.comLength && (a = encodeURIComponent(QR.comField.value).split(/%..|./).length - 1, a > QR.comLength ? QR.showPostError("Error: Comment too long (" + a + "/" + QR.comLength + ").", "length", !0) : QR.hidePostError("length"))
+      QR.comLength && (a = encodeURIComponent(QR.comField.value).split(/%..|./).length - 1, a > QR.comLength ? QR.showPostError("Error: Comment too long (" +
+        a + "/" + QR.comLength + ").", "length", !0) : QR.hidePostError("length"))
     },
     close: function() {
       var a, b = $.id("quickReply");
@@ -898,16 +901,19 @@ var Parser = {
     cloneCaptcha: function() {
       var a = $.id("qrCaptchaContainer");
       if (!a) return !1;
-      a.innerHTML = '<img id="qrCaptcha" title="Reload" width="300" height="57" src="' + $.id("recaptcha_image").firstChild.src + '" alt="reCAPTCHA challenge image">' + (window.preupload_captcha ? '<input id="qrCapToken" type="hidden" name="captcha_token" disabled>' : "") + '<input id="qrCapField" tabindex="25" name="recaptcha_response_field" placeholder="Type the text (Required)" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"><input id="qrChallenge" name="recaptcha_challenge_field" type="hidden" value="' +
-        $.id("recaptcha_challenge_field").value + '">';
+      a.innerHTML = '<img id="qrCaptcha" title="Reload" width="300" height="57" src="' + $.id("recaptcha_challenge_image").src + '" alt="reCAPTCHA challenge image">' + (window.preupload_captcha ? '<input id="qrCapToken" type="hidden" name="captcha_token" disabled>' : "") + '<input id="qrCapField" tabindex="25" name="recaptcha_response_field" placeholder="Type the text (Required)" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"><input id="qrChallenge" name="recaptcha_challenge_field" type="hidden" value="' + $.id("recaptcha_challenge_field").value + '">';
       return !0
     },
     reloadCaptcha: function(a) {
-      var b, c, d;
-      !QR.noCaptcha && (d = $.id("recaptcha_image")) && window.RecaptchaState && (d.firstChild.setAttribute("data-loading", "1"), c = function() {
+      var b, c;
+      !QR.noCaptcha && $.id("recaptcha_image") && window.RecaptchaState && (c = function() {
         clearTimeout(b);
-        d.firstChild.hasAttribute("data-loading") ? b = setTimeout(c, 100) : (d.firstChild.setAttribute("data-loading", "1"), QR.captchaInterval = setInterval(QR.cloneCaptcha, QR.captchaDelay), QR.cloneCaptcha(), a && $.id("qrCapField").focus())
-      }, clearInterval(QR.captchaInterval), Recaptcha.reload("t"), b = setTimeout(c, 100))
+        $.id("recaptcha_challenge_image") ? (QR.captchaInterval = setInterval(QR.cloneCaptcha, QR.captchaDelay), QR.cloneCaptcha(), a && $.id("qrCapField").focus()) : b = setTimeout(c, 100)
+      }, clearInterval(QR.captchaInterval), Recaptcha.destroy(), window.loadRecaptcha(), b = setTimeout(c, 100))
+    },
+    pollCaptcha: function() {
+      clearTimeout(QR.captchaPollTimeout);
+      $.id("recaptcha_challenge_image") ? (QR.captchaInterval = setInterval(QR.cloneCaptcha, QR.captchaDelay), QR.cloneCaptcha(), $.id("qrCapField").focus()) : QR.captchaPollTimeout = setTimeout(QR.pollCaptcha, 100)
     },
     onClick: function(a) {
       var b = a.target;
@@ -1010,7 +1016,8 @@ var Parser = {
               })
             }
             ThreadUpdater.enabled && setTimeout(ThreadUpdater.forceUpdate, 500)
-          } else QR.showPostError("Error: " + this.status + " " + this.statusText)
+          } else QR.showPostError("Error: " +
+          this.status + " " + this.statusText)
       }, a = new FormData(document.forms.qrPost), clearInterval(QR.pulse), QR.btn.value = "Sending", QR.xhr.send(a)))
     },
     presubmitChecks: function(a) {
@@ -1020,7 +1027,8 @@ var Parser = {
       return QR.currentTid != QR.lastTid ? QR.cooldowns[a] : QR.cooldowns[a + "_intra"]
     },
     setPostTime: function() {
-      return localStorage.setItem("4chan-cd-" + Main.board, Date.now())
+      return localStorage.setItem("4chan-cd-" +
+        Main.board, Date.now())
     },
     getPostTime: function() {
       return localStorage.getItem("4chan-cd-" + Main.board)
@@ -1035,8 +1043,7 @@ var Parser = {
     onPulse: function() {
       QR.cdElapsed = Date.now() - QR.timestamp;
       QR.cooldown = Math.floor((QR.activeDelay - QR.cdElapsed) / 1E3);
-      0 >= QR.cooldown ? (clearInterval(QR.pulse), QR.btn.value = "Post", QR.cooldown = !1, QR.auto && QR.submit()) : QR.btn.value = QR.cooldown +
-        (QR.auto ? "s (auto)" : "s")
+      0 >= QR.cooldown ? (clearInterval(QR.pulse), QR.btn.value = "Post", QR.cooldown = !1, QR.auto && QR.submit()) : QR.btn.value = QR.cooldown + (QR.auto ? "s (auto)" : "s")
     }
   },
   ThreadHiding = {
@@ -1064,7 +1071,8 @@ var Parser = {
     },
     show: function(a) {
       var b, c;
-      c = $.id("t" + a);
+      c = $.id("t" +
+        a);
       b = $.id("sa" + a);
       b.removeAttribute("data-hidden");
       Main.hasMobileLayout ? (b.textContent = "Hide", $.removeClass(b, "mobile-tu-show"), $.cls("postLink", c)[0].appendChild(b), c.style.display = null, $.removeClass(c.nextElementSibling, "mobile-hr-hidden")) : (b.firstChild.src = Main.icons.minus, $.removeClass(c, "post-hidden"));
@@ -1090,11 +1098,11 @@ var Parser = {
       }
       b && (!c || c < Date.now() - this.threshold) && $.get("//a.4cdn.org/" + Main.board + "/threads.json", {
         onload: function() {
-          var a, b, c, h, k, l;
+          var a, b, c, g, k, l;
           if (200 == this.status) {
             l = {};
-            h = JSON.parse(this.responseText);
-            for (a = 0; b = h[a]; ++a)
+            g = JSON.parse(this.responseText);
+            for (a = 0; b = g[a]; ++a)
               for (k = b.threads, b = 0; c = k[b]; ++b) ThreadHiding.hidden[c.no] && (l[c.no] = 1);
             ThreadHiding.hidden = l;
             ThreadHiding.save();
@@ -1157,7 +1165,8 @@ var Parser = {
     },
     save: function() {
       for (var a in this.hidden) {
-        localStorage.setItem("4chan-hide-r-" + Main.board, JSON.stringify(this.hidden));
+        localStorage.setItem("4chan-hide-r-" +
+          Main.board, JSON.stringify(this.hidden));
         return
       }
       localStorage.removeItem("4chan-hide-r-" + Main.board)
@@ -1203,8 +1212,7 @@ var Parser = {
     build: function(a) {
       var b, c, d, e;
       b = "";
-      for (d in this.watched) c = d.split("-"), b += '<li id="watch-' + d + '"><span class="pointer" data-cmd="unwatch" data-id="' + c[0] + '" data-board="' + c[1] + '">&times;</span> <a href="' +
-        Main.linkToThread(c[0], c[1]) + "#lr" + this.watched[d][1] + '"', b = -1 == this.watched[d][1] ? b + ' class="deadlink">' : this.watched[d][2] ? b + (' class="hasNewReplies">(' + this.watched[d][2] + ") ") : b + ">", b += "/" + c[1] + "/ - " + this.watched[d][0] + "</a></li>";
+      for (d in this.watched) c = d.split("-"), b += '<li id="watch-' + d + '"><span class="pointer" data-cmd="unwatch" data-id="' + c[0] + '" data-board="' + c[1] + '">&times;</span> <a href="' + Main.linkToThread(c[0], c[1]) + "#lr" + this.watched[d][1] + '"', b = -1 == this.watched[d][1] ? b + ' class="deadlink">' : this.watched[d][2] ? b + (' class="hasNewReplies">(' + this.watched[d][2] + ") ") : b + ">", b += "/" + c[1] + "/ - " + this.watched[d][0] + "</a></li>";
       if (a)
         for (c = $.cls("wbtn", $.id("delform")), a = 0; e = c[a]; ++a) d = e.getAttribute("data-id") + "-" + Main.board, ThreadWatcher.watched[d] ? e.hasAttribute("data-active") || (e.src = Main.icons.watched, e.setAttribute("data-active", "1")) : e.hasAttribute("data-active") && (e.src = Main.icons.notwatched, e.removeAttribute("data-active"));
       ThreadWatcher.listNode.innerHTML = b
@@ -1216,7 +1224,9 @@ var Parser = {
     toggle: function(a, b, c) {
       var d, e;
       b = a + "-" + (b || Main.board);
-      this.watched[b] ? delete this.watched[b] : (d = (d = $.cls("subject", $.id("pi" + a))[0].textContent) ? d.slice(0, this.charLimit) : (d = $.id("m" + a).innerHTML) ? d.replace(/(?:<br>)+/g, " ").replace(/<[^>]*?>/g, "").slice(0, this.charLimit) : "No." + a, a = (e = $.id("t" + a)).children[1] ? e.lastElementChild.id.slice(2) : a, this.watched[b] = [d, a, 0]);
+      if (this.watched[b]) {
+        if (delete this.watched[b], d = $.cls("wbtn-" + b)[0]) d.src = Main.icons.notwatched
+      } else if (d = (d = $.cls("subject", $.id("pi" + a))[0].textContent) ? d.slice(0, this.charLimit) : (d = $.id("m" + a).innerHTML) ? d.replace(/(?:<br>)+/g, " ").replace(/<[^>]*?>/g, "").slice(0, this.charLimit) : "No." + a, a = (e = $.id("t" + a)).children[1] ? e.lastElementChild.id.slice(2) : a, this.watched[b] = [d, a, 0], d = $.cls("wbtn-" + b)[0]) d.src = Main.icons.watched;
       this.save();
       this.load();
       this.build()
@@ -1274,12 +1284,12 @@ var Parser = {
       if (-1 == ThreadWatcher.watched[a][1]) {
         if (delete ThreadWatcher.watched[a], c.parentNode.removeChild(c), b) ThreadWatcher.onRefreshEnd(b)
       } else c = a.split("-"), d = new XMLHttpRequest, d.onload = function() {
-        var c, d, g, h;
+        var c, d, h, g;
         if (200 == this.status) {
-          g = Parser.parseThreadJSON(this.responseText);
-          h = ThreadWatcher.watched[a][1];
+          h = Parser.parseThreadJSON(this.responseText);
+          g = ThreadWatcher.watched[a][1];
           d = 0;
-          for (c = g.length - 1; 1 <= c && !(g[c].no <= h); c--)++d;
+          for (c = h.length - 1; 1 <= c && !(h[c].no <= g); c--)++d;
           d > ThreadWatcher.watched[a][2] && (ThreadWatcher.watched[a][2] = d)
         } else 404 == this.status && (ThreadWatcher.watched[a][1] = -1); if (b) ThreadWatcher.onRefreshEnd(b)
       }, b && (d.onerror = d.onload), d.open("GET", "//a.4cdn.org/" + c[1] + "/thread/" + c[0] + ".json"), d.send(null)
@@ -1293,18 +1303,18 @@ var Parser = {
       var b, c, d, e;
       if (b = a.getAttribute("href").match(/^(?:thread\/)([0-9]+)#p([0-9]+)$/)) c = b[1], d = b[2], e = a.parentNode, e.textContent = "Loading...", $.get("//a.4cdn.org/" + Main.board + "/thread/" + c + ".json", {
         onload: function() {
-          var a, b, h, k;
+          var a, b, g, k;
           if (200 == this.status) {
             b = $.id("m" + d);
             k = Parser.parseThreadJSON(this.responseText);
-            if (c == d) h = k[0];
+            if (c == d) g = k[0];
             else
               for (a = k.length - 1; 0 < a; a--)
                 if (k[a].no == d) {
-                  h = k[a];
+                  g = k[a];
                   break
                 }
-            h ? (h = Parser.buildHTMLFromJSON(h, Main.board), b.innerHTML = $.cls("postMessage", h)[0].innerHTML, Parser.prettify && Parser.parseMarkup(b), window.jsMath && Parser.parseMathOne(b)) : e.textContent = "This post doesn't exist anymore."
+            g ? (g = Parser.buildHTMLFromJSON(g, Main.board), b.innerHTML = $.cls("postMessage", g)[0].innerHTML, Parser.prettify && Parser.parseMarkup(b), window.jsMath && Parser.parseMathOne(b)) : e.textContent = "This post doesn't exist anymore."
           } else 404 == this.status ? e.textContent = "This thread doesn't exist anymore." : (e.textContent = "Connection Error", console.log("ThreadExpansion: " + this.status + " " + this.statusText))
         },
         onerror: function() {
@@ -1323,22 +1333,22 @@ var Parser = {
     fetch: function(a) {
       $.get("//a.4cdn.org/" + Main.board + "/thread/" + a + ".json", {
         onload: function() {
-          var b, c, d, e, f, g, h, k;
+          var b, c, d, e, f, h, g, k;
           e = $.id("t" + a);
           k = e.children[1];
           if (200 == this.status) {
             f = $.cls("reply", e);
-            g = Parser.parseThreadJSON(this.responseText);
-            !Config.revealSpoilers && g[0].custom_spoiler && Parser.setCustomSpoiler(Main.board, g[0].custom_spoiler);
+            h = Parser.parseThreadJSON(this.responseText);
+            !Config.revealSpoilers && h[0].custom_spoiler && Parser.setCustomSpoiler(Main.board, h[0].custom_spoiler);
             d = document.createDocumentFragment();
             if (f[0])
-              for (f = +f[0].id.slice(1), b = 1; c = g[b]; ++b)
+              for (f = +f[0].id.slice(1), b = 1; c = h[b]; ++b)
                 if (c.no < f) c = Parser.buildHTMLFromJSON(c, Main.board), c.className += " rExpanded", d.appendChild(c);
                 else break;
             else
-              for (b = 1; c = g[b]; ++b) c = Parser.buildHTMLFromJSON(c, Main.board), c.className += " rExpanded", d.appendChild(c);
+              for (b = 1; c = h[b]; ++b) c = Parser.buildHTMLFromJSON(c, Main.board), c.className += " rExpanded", d.appendChild(c);
             f = $.id("m" + a);
-            (h = $.cls("abbr", f)[0]) && /^Comment/.test(h.textContent) && (e.setAttribute("data-truncated", "1"), h = document.createElement("div"), h.style.display = "none", h.textContent = f.innerHTML, f.parentNode.insertBefore(h, f.nextSibling), (h = $.cls("capcodeReplies", f)[0]) ? (f.innerHTML = g[0].com + "<br><br>", f.appendChild(h)) : f.innerHTML = g[0].com, Parser.prettify && Parser.parseMarkup(f), window.jsMath && Parser.parseMathOne(f));
+            (g = $.cls("abbr", f)[0]) && /^Comment/.test(g.textContent) && (e.setAttribute("data-truncated", "1"), g = document.createElement("div"), g.style.display = "none", g.textContent = f.innerHTML, f.parentNode.insertBefore(g, f.nextSibling), (g = $.cls("capcodeReplies", f)[0]) ? (f.innerHTML = h[0].com + "<br><br>", f.appendChild(g)) : f.innerHTML = h[0].com, Parser.prettify && Parser.parseMarkup(f), window.jsMath && Parser.parseMathOne(f));
             e.insertBefore(d, k.nextSibling);
             Parser.parseThread(a, 1, b - 1);
             e.className += " tExpanded";
@@ -1359,34 +1369,34 @@ var Parser = {
       UA.hasCORS && (this.enabled = !0, this.pageTitle = document.title, this.unreadCount = 0, this.auto = this.hadAuto = !1, this.delayId = 0, this.delayIdHidden = 4, this.delayRange = [10, 15, 20, 30, 60, 90, 120, 180, 240, 300], this.timeLeft = 0, this.interval = null, this.lastModified = "0", this.currentIcon = this.lastReply = null, this.iconPath = "//s.4cdn.org/image/", this.iconNode = document.head.querySelector('link[rel="shortcut icon"]'), this.iconNode.type = "image/x-icon", this.defaultIcon = this.iconNode.getAttribute("href").replace(this.iconPath, ""), this.deletionQueue = {}, Config.updaterSound && (this.audioEnabled = !1, this.audio = document.createElement("audio"), this.audio.src = "//s.4cdn.org/media/beep.ogg"), this.hidden = "hidden", this.visibilitychange = "visibilitychange", this.adRefreshDelay = 1E3, this.adDebounce = 0, this.ads = {}, "undefined" === typeof document.hidden && ("mozHidden" in document ? (this.hidden = "mozHidden", this.visibilitychange = "mozvisibilitychange") : "webkitHidden" in document ? (this.hidden = "webkitHidden", this.visibilitychange = "webkitvisibilitychange") : "msHidden" in document && (this.hidden = "msHidden", this.visibilitychange = "msvisibilitychange")), this.initAds(), this.initControls(), document.addEventListener("scroll", this.onScroll, !1), (Config.alwaysAutoUpdate || sessionStorage.getItem("4chan-auto-" + Main.tid)) && this.start())
     },
     buildMobileControl: function(a, b) {
-      var c, d, e, f, g, h;
+      var c, d, e, f, h, g;
       b = b ? "Bot" : "";
       c = document.createElement("div");
       c.className = "btn-row";
-      h = a.parentNode;
-      d = h.cloneNode(!0);
+      g = a.parentNode;
+      d = g.cloneNode(!0);
       d.textContent = "Update";
       d.setAttribute("data-cmd", "update");
       c.appendChild(d);
       d = a.parentNode.parentNode;
       e = document.createElement("span");
       e.className = "mobileib button";
-      g = document.createElement("label");
+      h = document.createElement("label");
       f = document.createElement("input");
       f.type = "checkbox";
       f.setAttribute("data-cmd", "auto");
       this["autoNode" +
         b] = f;
-      g.appendChild(f);
-      g.appendChild(document.createTextNode("Auto"));
-      e.appendChild(g);
+      h.appendChild(f);
+      h.appendChild(document.createTextNode("Auto"));
+      e.appendChild(h);
       c.appendChild(document.createTextNode(" "));
       c.appendChild(e);
-      g = document.createElement("div");
-      g.className = "mobile-tu-status";
-      c.appendChild(this["statusNode" + b] = g);
+      h = document.createElement("div");
+      h.className = "mobile-tu-status";
+      c.appendChild(this["statusNode" + b] = h);
       d.appendChild(c);
-      h.parentNode.removeChild(h);
+      g.parentNode.removeChild(g);
       $.id("mpostform").parentNode.style.marginTop = ""
     },
     buildDesktopControl: function(a) {
@@ -1496,13 +1506,13 @@ var Parser = {
       for (a in b.ads) meta = b.ads[a], meta.seenOnce && (meta.isStale = !0)
     },
     refreshAds: function() {
-      var a, b, c, d, e, f, g, h;
+      var a, b, c, d, e, f, h, g;
       a = ThreadUpdater;
       b = Date.now();
       if (!(100 > b - a.adDebounce))
-        for (d in a.adDebounce = b, g = document[a.hidden], h = document.documentElement.clientHeight, a.ads)
-          if (f = a.ads[d], !g && (e = window[d]))
-            if (c = $.id(e.D)) c = c.getBoundingClientRect(), 0 > c.top || c.bottom > h || (f.seenOnce = !0, !f.isStale || b - f.time < a.adRefreshDelay || (f.time = b, f.isStale = !1, ados_refresh(e, 0, !1)))
+        for (d in a.adDebounce = b, h = document[a.hidden], g = document.documentElement.clientHeight, a.ads)
+          if (f = a.ads[d], !h && (e = window[d]))
+            if (c = $.id(e.D)) c = c.getBoundingClientRect(), 0 > c.top || c.bottom > g || (f.seenOnce = !0, !f.isStale || b - f.time < a.adRefreshDelay || (f.time = b, f.isStale = !1, ados_refresh(e, 0, !1)))
     },
     markDeletedReplies: function(a) {
       var b, c, d, e;
@@ -1512,15 +1522,15 @@ var Parser = {
       for (b = 0; c = a[b]; ++b) d[c.id] || $.hasClass(c, "deleted") || (this.deletionQueue[c.id] ? (e = document.createElement("img"), e.src = Main.icons2.trash, e.className = "trashIcon", e.title = "This post has been deleted", $.addClass(c, "deleted"), $.cls("postNum", c)[1].appendChild(e), delete this.deletionQueue[c.id]) : this.deletionQueue[c.id] = 1)
     },
     onload: function() {
-      var a, b, c, d, e, f, g, h, k, l, m, n;
+      var a, b, c, d, e, f, h, g, k, l, m, n;
       c = ThreadUpdater;
       d = [];
       c.setStatus("");
       if (200 == this.status) {
         c.lastModified = this.getResponseHeader("Last-Modified");
         e = $.id("t" + Main.tid);
-        h = e.children[e.childElementCount - 1];
-        k = +h.id.slice(2);
+        g = e.children[e.childElementCount - 1];
+        k = +g.id.slice(2);
         f = Parser.parseThreadJSON(this.responseText);
         b = !!f[0].closed;
         b != Main.threadClosed && (QR.enabled && $.id("quickReply") && (b ? QR.lock() : QR.unlock()), Main.setThreadState("closed", b));
@@ -1536,15 +1546,15 @@ var Parser = {
         if (b) {
           l = document.documentElement;
           m = Config.autoScroll && document[c.hidden] && l.scrollHeight == window.innerHeight + window.pageYOffset;
-          g = document.createDocumentFragment();
-          for (a = d.length - 1; 0 <= a; a--) g.appendChild(Parser.buildHTMLFromJSON(d[a], Main.board));
-          e.appendChild(g);
-          a = h.offsetTop;
+          h = document.createDocumentFragment();
+          for (a = d.length - 1; 0 <= a; a--) h.appendChild(Parser.buildHTMLFromJSON(d[a], Main.board));
+          e.appendChild(h);
+          a = g.offsetTop;
           Parser.hasYouMarkers = !1;
           Parser.hasHighlightedPosts = !1;
           Parser.parseThread(e.id.slice(1), -d.length);
-          a != h.offsetTop && window.scrollBy(0, h.offsetTop - a);
-          n || (!c.force && l.scrollHeight > window.innerHeight ? (c.lastReply || k == Main.tid || ((c.lastReply = h.lastChild).className += " newPostsMarker"), Parser.hasYouMarkers ? (c.setIcon("rep"), c.audioEnabled && document[c.hidden] && c.audio.play()) : Parser.hasHighlightedPosts && "rep" !== c.currentIcon ? c.setIcon("hl") : 0 == c.unreadCount && c.setIcon("new"), c.unreadCount += b, document.title = "(" + c.unreadCount + ") " + c.pageTitle) : c.setStatus(b + " new post" +
+          a != g.offsetTop && window.scrollBy(0, g.offsetTop - a);
+          n || (!c.force && l.scrollHeight > window.innerHeight ? (c.lastReply || k == Main.tid || ((c.lastReply = g.lastChild).className += " newPostsMarker"), Parser.hasYouMarkers ? (c.setIcon("rep"), c.audioEnabled && document[c.hidden] && c.audio.play()) : Parser.hasHighlightedPosts && "rep" !== c.currentIcon ? c.setIcon("hl") : 0 == c.unreadCount && c.setIcon("new"), c.unreadCount += b, document.title = "(" + c.unreadCount + ") " + c.pageTitle) : c.setStatus(b + " new post" +
             (1 < b ? "s" : "")));
           m && window.scrollTo(0, document.documentElement.scrollHeight);
           Config.threadWatcher && ThreadWatcher.refreshCurrent(!0);
@@ -1630,14 +1640,14 @@ var Parser = {
       })
     },
     onCatalogLoad: function() {
-      var a, b, c, d, e, f, g, h;
+      var a, b, c, d, e, f, h, g;
       a = ThreadStats;
       if (200 == this.status) {
-        h = +Main.tid;
-        g = JSON.parse(this.responseText);
-        for (b = 0; d = g[b]; ++b)
+        g = +Main.tid;
+        h = JSON.parse(this.responseText);
+        for (b = 0; d = h[b]; ++b)
           for (f = d.threads, c = 0; e = f[c]; ++c)
-            if (e.no == h) {
+            if (e.no == g) {
               b = $.cls("ts-page");
               b[0].textContent = b[1].textContent = d.page;
               a.pageNumber = d.page;
@@ -1704,7 +1714,7 @@ var Parser = {
       }
     },
     exec: function(a, b, c, d) {
-      var e, f, g, h, k, l, m, n, p;
+      var e, f, h, g, k, l, m, n, p;
       if (Parser.trackedReplies && Parser.trackedReplies[">>" + b.id.slice(2)]) return !1;
       n = Filter.activeFilters;
       p = !1;
@@ -1720,12 +1730,12 @@ var Parser = {
           break
         }
       } else if (2 == m.type) {
-        if (g || (this.entities.innerHTML = c.innerHTML.replace(/<br>/g, "\n").replace(/[<[^>]+>/g, ""), g = this.entities.textContent), m.pattern.test(g)) {
+        if (h || (this.entities.innerHTML = c.innerHTML.replace(/<br>/g, "\n").replace(/[<[^>]+>/g, ""), h = this.entities.textContent), m.pattern.test(h)) {
           p = !0;
           break
         }
       } else if (3 == m.type) {
-        if ((h || (h = b.getElementsByClassName("useremail")[0]) && (h = h.href.slice(7))) && m.pattern.test(h)) {
+        if ((g || (g = b.getElementsByClassName("useremail")[0]) && (g = g.href.slice(7))) && m.pattern.test(g)) {
           p = !0;
           break
         }
@@ -1747,25 +1757,25 @@ var Parser = {
       return !1
     },
     load: function() {
-      var a, b, c, d, e, f, g, h, k, l;
+      var a, b, c, d, e, f, h, g, k, l;
       this.activeFilters = [];
       if (c = localStorage.getItem("4chan-filters")) {
         c = JSON.parse(c);
         f = RegExp("(\\/|\\.|\\*|\\+|\\?|\\(|\\)|\\[|\\]|\\{|\\}|\\\\|\\^|\\$)", "g");
-        g = /^\/(.*)\/(i?)$/;
+        h = /^\/(.*)\/(i?)$/;
         l = /\\\*/g;
         try {
           for (e = 0; b = c[e]; ++e)
             if (b.active && "" != b.pattern) {
               d = b.pattern;
               if (b.type && 1 != b.type && 4 != b.type)
-                if (match = d.match(g)) pattern = RegExp(match[1], match[2]);
+                if (match = d.match(h)) pattern = RegExp(match[1], match[2]);
                 else if ('"' == d[0] && '"' == d[d.length - 1]) pattern = RegExp(d.slice(1, -1).replace(f, "\\$1"));
               else {
-                h = d.split(" ");
+                g = d.split(" ");
                 pattern = "";
                 a = 0;
-                for (j = h.length; a < j; ++a) k = h[a].replace(f, "\\$1").replace(l, "[^\\s]*"), pattern += "(?=.*\\b" + k + "\\b)";
+                for (j = g.length; a < j; ++a) k = g[a].replace(f, "\\$1").replace(l, "[^\\s]*"), pattern += "(?=.*\\b" + k + "\\b)";
                 pattern = RegExp("^" + pattern, "im")
               } else pattern = d;
               this.activeFilters.push({
@@ -1876,18 +1886,18 @@ var Parser = {
       return c
     },
     buildPalette: function(a) {
-      var b, c, d, e, f, g;
+      var b, c, d, e, f, h;
       e = [
         ["#E0B0FF", "#F2F3F4", "#7DF9FF", "#FFFF00"],
         ["#FBCEB1", "#FFBF00", "#ADFF2F", "#0047AB"],
         ["#00A550", "#007FFF", "#AF0A0F", "#B5BD68"]
       ];
       f = e.length;
-      g = e[0].length;
+      h = e[0].length;
       d = '<div id="colorpicker" class="reply extPanel"><table><tbody>';
       for (b = 0; b < f; ++b) {
         d += "<tr>";
-        for (c = 0; c < g; ++c) d += '<td><div data-cmd="palette-pick" class="colorbox" style="background:' + e[b][c] + '"></div></td>';
+        for (c = 0; c < h; ++c) d += '<td><div data-cmd="palette-pick" class="colorbox" style="background:' + e[b][c] + '"></div></td>';
         d += "</tr>"
       }
       d += '</tbody></table>Custom<div id="palette-custom"><input id="palette-custom-input" type="text"><div id="palette-custom-ok" data-cmd="palette-pick" title="Select Color" class="colorbox"></div></div>[<a href="javascript:;" data-cmd="palette-close">Close</a>][<a href="javascript:;" data-cmd="palette-clear">Clear</a>]</div>';
@@ -1972,19 +1982,19 @@ var Parser = {
       (b = $.id("swf-embed")) ? (b.parentNode.removeChild(b), a.target.textContent = "Embed") : (c = $.tag("a", a.target.parentNode)[0], b = document.documentElement.clientWidth - 100, f = +c.getAttribute("data-width"), e = +c.getAttribute("data-height"), f > b && (e = f / e, f = b, e = Math.round(b / e)), b = document.createElement("div"), b.id = "swf-embed", d = document.createElement("embed"), d.setAttribute("allowScriptAccess", "never"), d.type = "application/x-shockwave-flash", d.width = f, d.height = e, d.src = c.href, b.appendChild(d), c = $.id("m" + Main.tid), c.insertBefore(b, c.firstChild), $.cls("thread")[0].scrollIntoView(!0), a.target.textContent = "Remove")
     },
     embedIndex: function(a) {
-      var b, c, d, e, f, g, h;
+      var b, c, d, e, f, h, g;
       a.preventDefault();
       b = a.target.parentNode.parentNode.children[2].firstElementChild;
-      h = b.getAttribute("title") || b.textContent;
+      g = b.getAttribute("title") || b.textContent;
       c = d = +b.getAttribute("data-width");
       f = e = +b.getAttribute("data-height");
       b = document.documentElement.clientWidth;
-      g = document.documentElement.clientHeight;
+      h = document.documentElement.clientHeight;
       b -= 10;
-      g = g - 10 - 20;
+      h = h - 10 - 20;
       ratio = d / e;
       c > b && (c = b, f = Math.round(b / ratio));
-      f > g && (f = g, c = Math.round(g * ratio));
+      f > h && (f = h, c = Math.round(h * ratio));
       b = document.createElement("embed");
       b.setAttribute("allowScriptAccess", "never");
       b.src = a.target.href;
@@ -2002,7 +2012,7 @@ var Parser = {
       c = document.createElement("div");
       c.id = "swf-embed-header";
       c.className = "postblock";
-      c.textContent = h + ", " + d + "x" + e;
+      c.textContent = g + ", " + d + "x" + e;
       d = document.createElement("img");
       d.id = "swf-embed-close";
       d.className = "pointer";
@@ -2405,7 +2415,7 @@ var SettingsMenu = {
       $.id("settingsMenu") ? SettingsMenu.close() : SettingsMenu.open()
     },
     open: function() {
-      var a, b, c, d, e, f, g, h, k;
+      var a, b, c, d, e, f, h, g, k;
       Main.firstRun && ((k = $.id("settingsTip")) && k.parentNode.removeChild(k), (k = $.id("settingsTipBottom")) && k.parentNode.removeChild(k), Config.save());
       f = document.createElement("div");
       f.id = "settingsMenu";
@@ -2414,18 +2424,18 @@ var SettingsMenu = {
       e += '<ul><li id="settings-exp-all">[<a href="#" data-cmd="settings-exp-all">Expand All Settings</a>]</li></ul>';
       if (Main.hasMobileLayout)
         for (b in c = {}, SettingsMenu.options) {
-          h = {};
-          g = SettingsMenu.options[b];
-          for (d in g) g[d][2] && (h[d] = g[d]);
-          for (a in h) {
-            c[b] = h;
+          g = {};
+          h = SettingsMenu.options[b];
+          for (d in h) h[d][2] && (g[d] = h[d]);
+          for (a in g) {
+            c[b] = g;
             break
           }
         } else c = SettingsMenu.options;
       for (b in c) {
-        g = c[b];
+        h = c[b];
         e += '<ul><li class="settings-cat-lbl"><img alt="" class="settings-expand" src="' + Main.icons.plus + '"><span class="settings-expand pointer">' + b + '</span></li><ul class="settings-cat">';
-        for (d in g) e += "<li" + (g[d][3] ? ' class="settings-sub">' : ">") + '<label><input type="checkbox" class="menuOption" data-option="' + d + '"' + (Config[d] ? ' checked="checked">' : ">") + g[d][0] + "</label>" + (!1 !== g[d][1] ? '</li><li class="settings-tip' + (g[d][3] ? ' settings-sub">' : '">') + g[d][1] : "") + "</li>";
+        for (d in h) e += "<li" + (h[d][3] ? ' class="settings-sub">' : ">") + '<label><input type="checkbox" class="menuOption" data-option="' + d + '"' + (Config[d] ? ' checked="checked">' : ">") + h[d][0] + "</label>" + (!1 !== h[d][1] ? '</li><li class="settings-tip' + (h[d][3] ? ' settings-sub">' : '">') + h[d][1] : "") + "</li>";
         e += "</ul></ul>"
       }
       e += '</ul><ul><li class="settings-off"><label title="Completely disable the native extension (overrides any checked boxes)"><input type="checkbox" class="menuOption" data-option="disableAll"' + (Config.disableAll ? ' checked="checked">' : ">") + 'Disable the native extension</label></li></ul><div class="center"><button data-cmd="settings-export">Export Settings</button><button data-cmd="settings-save">Save Settings</button></div>';
@@ -2747,7 +2757,7 @@ var SettingsMenu = {
       var a;
       a = document.createElement("style");
       a.setAttribute("type", "text/css");
-      a.textContent = 'body.hasDropDownNav {  margin-top: 45px;}.extButton.threadHideButton {  float: left;  margin-right: 5px;  margin-top: -1px;}.extButton.replyHideButton {  margin-top: 1px;}div.op > span .postHideButtonCollapsed {  margin-right: 1px;}.dropDownNav #boardNavMobile, {  display: block !important;}.extPanel {  border: 1px solid rgba(0, 0, 0, 0.20);}.tomorrow .extPanel {  border: 1px solid #111;}.extButton,img.pointer {  width: 18px;  height: 18px;}.extControls {  display: inline;  margin-left: 5px;}.extButton {  cursor: pointer;  margin-bottom: -4px;}.trashIcon {  width: 16px;  height: 16px;  margin-bottom: -2px;  margin-left: 5px;}.threadUpdateStatus {  margin-left: 0.5ex;}.futaba_new .stub,.burichan_new .stub {  line-height: 1;  padding-bottom: 1px;}.stub .extControls,.stub .wbtn,.stub input {  display: none;}.stub .threadHideButton {  float: none;  margin-right: 2px;}div.post div.postInfo {  width: auto;  display: inline;}.right {  float: right;}.center {  display: block;  margin: auto;}.pointer {  cursor: pointer;}.drag {  cursor: move !important;  user-select: none !important;  -moz-user-select: none !important;  -webkit-user-select: none !important;}#quickReport,#quickReply {  display: block;  position: fixed;  padding: 2px;  font-size: 10pt;}#qrepHeader,#qrHeader {  text-align: center;  margin-bottom: 1px;  padding: 0;  height: 18px;  line-height: 18px;}#qrepClose,#qrClose {  float: right;}#quickReport iframe {  overflow: hidden;}#quickReport {  height: 190px;}#qrForm > div {  clear: both;}#quickReply input[type="text"],#quickReply textarea,#quickReply #recaptcha_response_field {  border: 1px solid #aaa;  font-family: arial,helvetica,sans-serif;  font-size: 10pt;  outline: medium none;  width: 296px;  padding: 2px;  margin: 0 0 1px 0;}#quickReply textarea {  min-width: 296px;  float: left;}#quickReply input::-moz-placeholder,#quickReply textarea::-moz-placeholder {  color: #aaa !important;  opacity: 1 !important;}#quickReply input[type="submit"] {  width: 83px;  margin: 0;  font-size: 10pt;  float: left;}#quickReply #qrCapField {  display: block;  margin-top: 1px;}#qrCaptcha {  width: 300px;  height: 53px;  cursor: pointer;  border: 1px solid #aaa;  display: block;}#quickReply input.presubmit {  margin-right: 1px;  width: 212px;  float: left;}#qrFile {  width: 215px;  margin-right: 5px;}.qrRealFile {  position: absolute;  left: 0;  visibility: hidden;}.yotsuba_new #qrFile {  color:black;}#qrSpoiler {  display: inline;}#qrError {  width: 292px;  display: none;  font-family: monospace;  background-color: #E62020;  font-size: 12px;  color: white;  padding: 3px 5px;  text-shadow: 0 1px rgba(0, 0, 0, 0.20);  clear: both;}#qrError a:hover,#qrError a {  color: white !important;}#twHeader {  font-weight: bold;  text-align: center;  height: 17px;}.futaba_new #twHeader,.burichan_new #twHeader {  line-height: 1;}#twPrune {  margin-left: 3px;  margin-top: -1px;}#threadWatcher {  max-width: 265px;  display: block;  position: absolute;  padding: 3px;}#watchList {  margin: 0;  padding: 0;  user-select: none;  -moz-user-select: none;  -webkit-user-select: none;}#watchList li:first-child {  margin-top: 3px;  padding-top: 2px;  border-top: 1px solid rgba(0, 0, 0, 0.20);}.photon #watchList li:first-child {  border-top: 1px solid #ccc;}.yotsuba_new #watchList li:first-child {  border-top: 1px solid #d9bfb7;}.yotsuba_b_new #watchList li:first-child {  border-top: 1px solid #b7c5d9;}.tomorrow #watchList li:first-child {  border-top: 1px solid #111;}#watchList a {  text-decoration: none;}#watchList li {  overflow: hidden;  white-space: nowrap;  text-overflow: ellipsis;}div.post div.image-expanded {  display: table;}div.op div.file .image-expanded-anti {  margin-left: -3px;}#quote-preview {  display: block;  position: absolute;  padding: 3px 6px 6px 3px;  margin: 0;}#quote-preview .dateTime {  white-space: nowrap;}.yotsuba_new #quote-preview.highlight,.yotsuba_b_new #quote-preview.highlight {  border-width: 1px 2px 2px 1px !important;  border-style: solid !important;}.yotsuba_new #quote-preview.highlight {  border-color: #D99F91 !important;}.yotsuba_b_new #quote-preview.highlight {  border-color: #BA9DBF !important;}.yotsuba_b_new .highlight-anti,.burichan_new .highlight-anti {  border-width: 1px !important;  background-color: #bfa6ba !important;}.yotsuba_new .highlight-anti,.futaba_new .highlight-anti {  background-color: #e8a690 !important;}.tomorrow .highlight-anti {  background-color: #111 !important;  border-color: #111;}.photon .highlight-anti {  background-color: #bbb !important;}.op.inlined {  display: block;}#quote-preview .inlined,#quote-preview .postMenuBtn,#quote-preview .extButton,#quote-preview .extControls {  display: none;}.hasNewReplies {  font-weight: bold;}.deadlink {  text-decoration: line-through !important;}div.backlink {  font-size: 0.8em !important;  display: inline;  padding: 0;  padding-left: 5px;}.backlink.mobile {  padding: 3px 5px;  display: block;  clear: both;  line-height: 2;}.op .backlink.mobile,#quote-preview .backlink.mobile {  display: none !important;}.backlink.mobile .quoteLink {  padding-right: 2px;}.backlink span {  padding: 0;}.burichan_new .backlink a,.yotsuba_b_new .backlink a {  color: #34345C !important;}.burichan_new .backlink a:hover,.yotsuba_b_new .backlink a:hover {  color: #dd0000 !important;}.expbtn {  margin-right: 3px;  margin-left: 2px;}.tCollapsed .rExpanded {  display: none;}#stickyNav {  position: fixed;  font-size: 0;}#stickyNav img {  vertical-align: middle;}.tu-error {  color: red;}.topPageNav {  position: absolute;}.yotsuba_b_new .topPageNav {  border-top: 1px solid rgba(255, 255, 255, 0.25);  border-left: 1px solid rgba(255, 255, 255, 0.25);}.newPostsMarker:not(#quote-preview) {  box-shadow: 0 3px red;}#toggleMsgBtn {  float: left;  margin-bottom: 6px;}.panelHeader {  font-weight: bold;  font-size: 16px;  text-align: center;  margin-bottom: 5px;  margin-top: 5px;  padding-bottom: 5px;  border-bottom: 1px solid rgba(0, 0, 0, 0.20);}.yotsuba_new .panelHeader {  border-bottom: 1px solid #d9bfb7;}.yotsuba_b_new .panelHeader {  border-bottom: 1px solid #b7c5d9;}.tomorrow .panelHeader {  border-bottom: 1px solid #111;}.panelHeader span {  position: absolute;  right: 5px;  top: 5px;}.UIMenu,.UIPanel {  position: fixed;  width: 100%;  height: 100%;  z-index: 9002;  top: 0;  left: 0;}.UIPanel {  line-height: 14px;  font-size: 14px;  background-color: rgba(0, 0, 0, 0.25);}.UIPanel:after {  display: inline-block;  height: 100%;  vertical-align: middle;  content: "";}.UIPanel > div {  -moz-box-sizing: border-box;  box-sizing: border-box;  display: inline-block;  height: auto;  max-height: 100%;  position: relative;  width: 400px;  left: 50%;  margin-left: -200px;  overflow: auto;  box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);  vertical-align: middle;}#settingsMenu > div {  top: 25px;;  vertical-align: top;  max-height: 85%;}.extPanel input[type="text"],.extPanel textarea {  border: 1px solid #AAA;  outline: none;}.UIPanel .center {  margin-bottom: 5px;}.UIPanel button {  display: inline-block;  margin-right: 5px;}.UIPanel code {  background-color: #eee;  color: #000000;  padding: 1px 4px;  font-size: 12px;}.UIPanel ul {  list-style: none;  padding: 0;  margin: 0 0 10px;}.UIPanel .export-field {  width: 385px;}#settingsMenu label input {  margin-right: 5px;}.tomorrow #settingsMenu ul {  border-bottom: 1px solid #282a2e;}.settings-off {  padding-left: 3px;}.settings-cat-lbl {  font-weight: bold;  margin: 10px 0 5px;  padding-left: 5px;}.settings-cat-lbl img {  vertical-align: text-bottom;  margin-right: 5px;  cursor: pointer;  width: 18px;  height: 18px;}.settings-tip {  font-size: 0.85em;  margin: 2px 0 5px 0;  padding-left: 23px;}#settings-exp-all {  padding-left: 7px;  text-align: center;}#settingsMenu .settings-cat {  display: none;  margin-left: 3px;}#customCSSMenu textarea {  display: block;  max-width: 100%;  min-width: 100%;  -moz-box-sizing: border-box;  box-sizing: border-box;  height: 200px;  margin: 0 0 5px;  font-family: monospace;}#customCSSMenu .right,#settingsMenu .right {  margin-top: 2px;}#settingsMenu label {  display: inline-block;  user-select: none;  -moz-user-select: none;  -webkit-user-select: none;}#filtersHelp > div {  width: 600px;  left: 50%;  margin-left: -300px;}#filtersHelp h4 {  font-size: 15px;  margin: 20px 0 0 10px;}#filtersHelp h4:before {  content: "\u00bb";  margin-right: 3px;}#filtersHelp ul {  padding: 0;  margin: 10px;}#filtersHelp li {  padding: 3px 0;  list-style: none;}#filtersMenu table {  width: 100%;}#filtersMenu th {  font-size: 12px;}#filtersMenu tbody {  text-align: center;}#filtersMenu select,#filtersMenu .fPattern,#palette-custom-input {  padding: 1px;  font-size: 11px;}#filtersMenu select {  width: 85px;}#filtersMenu tfoot td {  padding-top: 10px;}#keybindsHelp li {  padding: 3px 5px;}.fPattern {  width: 130px;}.fColor {  width: 60px;}.fDel {  font-size: 16px;}.filter-preview {  cursor: default;  margin-left: 3px;}#quote-preview iframe,#quote-preview .filter-preview {  display: none;}.post-hidden .extButton,.post-hidden:not(#quote-preview) .postInfo {  opacity: 0.5;}.post-hidden:not(.thread) .postInfo {  padding-left: 5px;}.post-hidden:not(#quote-preview) input,.post-hidden:not(#quote-preview) .replyContainer,.post-hidden:not(#quote-preview) .summary,.post-hidden:not(#quote-preview) .op .file,.post-hidden:not(#quote-preview) .file,.post-hidden .wbtn,.post-hidden .postNum span,.post-hidden:not(#quote-preview) .backlink,div.post-hidden:not(#quote-preview) div.file,div.post-hidden:not(#quote-preview) blockquote.postMessage {  display: none;}.click-me {  border-radius: 5px;  margin-top: 5px;  padding: 2px 5px;  position: absolute;  font-weight: bold;  z-index: 2;  white-space: nowrap;}.yotsuba_new .click-me,.futaba_new .click-me {  color: #800000;  background-color: #F0E0D6;  border: 2px solid #D9BFB7;}.yotsuba_b_new .click-me,.burichan_new .click-me {  color: #000;  background-color: #D6DAF0;  border: 2px solid #B7C5D9;}.tomorrow .click-me {  color: #C5C8C6;  background-color: #282A2E;  border: 2px solid #111;}.photon .click-me {  color: #333;  background-color: #ddd;  border: 2px solid #ccc;}.click-me:before {  content: "";  border-width: 0 6px 6px;  border-style: solid;  left: 50%;  margin-left: -6px;  position: absolute;  width: 0;  height: 0;  top: -6px;}.yotsuba_new .click-me:before,.futaba_new .click-me:before {  border-color: #D9BFB7 transparent;}.yotsuba_b_new .click-me:before,.burichan_new .click-me:before {  border-color: #B7C5D9 transparent;}.tomorrow .click-me:before {  border-color: #111 transparent;}.photon .click-me:before {  border-color: #ccc transparent;}.click-me:after {  content: "";  border-width: 0 4px 4px;  top: -4px;  display: block;  left: 50%;  margin-left: -4px;  position: absolute;  width: 0;  height: 0;}.yotsuba_new .click-me:after,.futaba_new .click-me:after {  border-color: #F0E0D6 transparent;  border-style: solid;}.yotsuba_b_new .click-me:after,.burichan_new .click-me:after {  border-color: #D6DAF0 transparent;  border-style: solid;}.tomorrow .click-me:after {  border-color: #282A2E transparent;  border-style: solid;}.photon .click-me:after {  border-color: #DDD transparent;  border-style: solid;}#image-hover {  position: fixed;  max-width: 100%;  max-height: 100%;  top: 0px;  right: 0px;  z-index: 9002;}.thread-stats {  float: right;  margin-right: 5px;  cursor: default;}.compact .thread {  max-width: 75%;}.dotted {  text-decoration: none;  border-bottom: 1px dashed;}.linkfade {  opacity: 0.5;}#quote-preview .linkfade {  opacity: 1.0;}kbd {  background-color: #f7f7f7;  color: black;  border: 1px solid #ccc;  border-radius: 3px 3px 3px 3px;  box-shadow: 0 1px 0 #ccc, 0 0 0 2px #fff inset;  font-family: monospace;  font-size: 11px;  line-height: 1.4;  padding: 0 5px;}.deleted {  opacity: 0.66;}.noPictures a.fileThumb img:not(.expanded-thumb) {  opacity: 0;}.noPictures.futaba_new a.fileThumb,.noPictures.yotsuba_new a.fileThumb {  border: 1px solid #800;}.noPictures.burichan_new a.fileThumb,.noPictures.yotsuba_b_new a.fileThumb {  border: 1px solid #34345C;}.noPictures.tomorrow a.fileThumb:not(.expanded-thumb) {  border: 1px solid #C5C8C6;}.noPictures.photon a.fileThumb:not(.expanded-thumb) {  border: 1px solid #004A99;}.spinner {  margin-top: 2px;  padding: 3px;  display: table;}#settings-presets {  position: relative;  top: -1px;}#colorpicker {   position: fixed;  text-align: center;}.colorbox {  font-size: 10px;  width: 16px;  height: 16px;  line-height: 17px;  display: inline-block;  text-align: center;  background-color: #fff;  border: 1px solid #aaa;  text-decoration: none;  color: #000;  cursor: pointer;  vertical-align: top;}#palette-custom-input {  vertical-align: top;  width: 45px;  margin-right: 2px;}#qrDummyFile {  float: left;  margin-right: 5px;  width: 220px;  cursor: default;  -moz-user-select: none;  -webkit-user-select: none;  -ms-user-select: none;  user-select: none;  white-space: nowrap;  text-overflow: ellipsis;  overflow: hidden;}#qrDummyFileLabel {  margin-left: 3px;}.depageNumber {  position: absolute;  right: 5px;}.depagerEnabled .depagelink {  font-weight: bold;}.depagerEnabled strong {  font-weight: normal;}.depagelink {  display: inline-block;  padding: 4px 0;  cursor: pointer;  text-decoration: none;}.burichan_new .depagelink,.futaba_new .depagelink {  text-decoration: underline;}#customMenuBox {  margin: 0 auto 5px auto;  width: 385px;  display: block;}.preview-summary {  display: block;}#swf-embed-header {  padding: 0 0 0 3px;  font-weight: normal;  height: 20px;  line-height: 20px;}.yotsuba_new #swf-embed-header,.yotsuba_b_new #swf-embed-header {  height: 18px;  line-height: 18px;}#swf-embed-close {  position: absolute;  right: 0;  top: 1px;}.open-qr-wrap {  text-align: center;  width: 200px;  position: absolute;  margin-left: 50%;  left: -100px;}.postMenuBtn {  margin-left: 5px;  text-decoration: none;  line-height: 1em;  display: inline-block;  -webkit-transition: -webkit-transform 0.1s;  -moz-transition: -moz-transform 0.1s;  transition: transform 0.1s;  width: 1em;  height: 1em;  text-align: center;  outline: none;}.yotsuba_new .postMenuBtn,.futaba_new .postMenuBtn {  color: #000080;}.tomorrow .postMenuBtn {  color: #5F89AC !important;}.tomorrow .postMenuBtn:hover {  color: #81a2be !important;}.photon .postMenuBtn {  color: #FF6600 !important;}.photon .postMenuBtn:hover {  color: #FF3300 !important;}.menuOpen {  -webkit-transform: rotate(90deg);  -moz-transform: rotate(90deg);  -ms-transform: rotate(90deg);  transform: rotate(90deg);}.settings-sub label:before {  border-bottom: 1px solid;  border-left: 1px solid;  content: " ";  display: inline-block;  height: 8px;  margin-bottom: 5px;  width: 8px;}.settings-sub {  margin-left: 25px;}.settings-tip.settings-sub {  padding-left: 32px;}@media only screen and (max-width: 480px) {.btn-row {  margin-top: 5px;}.image-expanded .mFileInfo {  display: none !important;}.mobile-report {  float: right;  font-size: 11px;  margin-bottom: 3px;  margin-left: 10px;}.mobile-report:after {  content: "]";}.mobile-report:before {  content: "[";}.nws .mobile-report:after {  color: #800000;}.nws .mobile-report:before {  color: #800000;}.ws .mobile-report {  color: #34345C;}.nws .mobile-report {  color:#0000EE;}.reply .mobile-report {  margin-left: 5px;  margin-right: 5px;}.postLink .mobileHideButton {  margin-right: 3px;}.board .mobile-hr-hidden {  margin-top: 10px !important;}.board > .mobileHideButton {  margin-top: -20px !important;}.board > .mobileHideButton:first-child {  margin-top: 10px !important;}.extButton.threadHideButton {  float: none;  margin: 0;  margin-bottom: 5px;}.mobile-post-hidden {  display: none;}#toggleMsgBtn {  display: none;}.mobile-tu-status {  height: 20px;  line-height: 20px;}.mobile-tu-show {  width: 150px;  margin: auto;  display: block;  text-align: center;}.button input {  margin: 0 3px 0 0;  position: relative;  top: -2px;  border-radius: 0;  height: 10px;  width: 10px;}.UIPanel > div {  width: 320px;  margin-left: -160px;}.UIPanel .export-field {  width: 300px;}.yotsuba_new #quote-preview.highlight,#quote-preview {  border-width: 1px !important;}.yotsuba_new #quote-preview.highlight {  border-color: #D9BFB7 !important;}#quickReply input[type="text"],#quickReply textarea,.extPanel input[type="text"],.extPanel textarea {  font-size: 16px;}#quickReply {  position: absolute;  left: 50%;  margin-left: -154px;}}';
+      a.textContent = 'body.hasDropDownNav {  margin-top: 45px;}.extButton.threadHideButton {  float: left;  margin-right: 5px;  margin-top: -1px;}.extButton.replyHideButton {  margin-top: 1px;}div.op > span .postHideButtonCollapsed {  margin-right: 1px;}.dropDownNav #boardNavMobile, {  display: block !important;}.extPanel {  border: 1px solid rgba(0, 0, 0, 0.20);}.tomorrow .extPanel {  border: 1px solid #111;}.extButton,img.pointer {  width: 18px;  height: 18px;}.extControls {  display: inline;  margin-left: 5px;}.extButton {  cursor: pointer;  margin-bottom: -4px;}.trashIcon {  width: 16px;  height: 16px;  margin-bottom: -2px;  margin-left: 5px;}.threadUpdateStatus {  margin-left: 0.5ex;}.futaba_new .stub,.burichan_new .stub {  line-height: 1;  padding-bottom: 1px;}.stub .extControls,.stub .wbtn,.stub input {  display: none;}.stub .threadHideButton {  float: none;  margin-right: 2px;}div.post div.postInfo {  width: auto;  display: inline;}.right {  float: right;}.center {  display: block;  margin: auto;}.pointer {  cursor: pointer;}.drag {  cursor: move !important;  user-select: none !important;  -moz-user-select: none !important;  -webkit-user-select: none !important;}#quickReport,#quickReply {  display: block;  position: fixed;  padding: 2px;  font-size: 10pt;}#qrepHeader,#qrHeader {  text-align: center;  margin-bottom: 1px;  padding: 0;  height: 18px;  line-height: 18px;}#qrepClose,#qrClose {  float: right;}#quickReport iframe {  overflow: hidden;}#quickReport {  height: 190px;}#qrForm > div {  clear: both;}#quickReply input[type="text"],#quickReply textarea,#quickReply #recaptcha_response_field {  border: 1px solid #aaa;  font-family: arial,helvetica,sans-serif;  font-size: 10pt;  outline: medium none;  width: 296px;  padding: 2px;  margin: 0 0 1px 0;}#quickReply textarea {  min-width: 296px;  float: left;}#quickReply input::-moz-placeholder,#quickReply textarea::-moz-placeholder {  color: #aaa !important;  opacity: 1 !important;}#quickReply input[type="submit"] {  width: 83px;  margin: 0;  font-size: 10pt;  float: left;}#quickReply #qrCapField {  display: block;  margin-top: 1px;}#qrCaptcha {  width: 300px;  height: 53px;  cursor: pointer;  border: 1px solid #aaa;  display: block;}#quickReply input.presubmit {  margin-right: 1px;  width: 212px;  float: left;}#qrFile {  width: 215px;  margin-right: 5px;}.qrRealFile {  position: absolute;  left: 0;  visibility: hidden;}.yotsuba_new #qrFile {  color:black;}#qrSpoiler {  display: inline;}#qrError {  width: 292px;  display: none;  font-family: monospace;  background-color: #E62020;  font-size: 12px;  color: white;  padding: 3px 5px;  text-shadow: 0 1px rgba(0, 0, 0, 0.20);  clear: both;}#qrError a:hover,#qrError a {  color: white !important;}#twHeader {  font-weight: bold;  text-align: center;  height: 17px;}.futaba_new #twHeader,.burichan_new #twHeader {  line-height: 1;}#twPrune {  margin-left: 3px;  margin-top: -1px;}#threadWatcher {  max-width: 265px;  display: block;  position: absolute;  padding: 3px;}#watchList {  margin: 0;  padding: 0;  user-select: none;  -moz-user-select: none;  -webkit-user-select: none;}#watchList li:first-child {  margin-top: 3px;  padding-top: 2px;  border-top: 1px solid rgba(0, 0, 0, 0.20);}.photon #watchList li:first-child {  border-top: 1px solid #ccc;}.yotsuba_new #watchList li:first-child {  border-top: 1px solid #d9bfb7;}.yotsuba_b_new #watchList li:first-child {  border-top: 1px solid #b7c5d9;}.tomorrow #watchList li:first-child {  border-top: 1px solid #111;}#watchList a {  text-decoration: none;}#watchList li {  overflow: hidden;  white-space: nowrap;  text-overflow: ellipsis;}div.post div.image-expanded {  display: table;}div.op div.file .image-expanded-anti {  margin-left: -3px;}#quote-preview {  display: block;  position: absolute;  padding: 3px 6px 6px 3px;  margin: 0;}#quote-preview .dateTime {  white-space: nowrap;}.yotsuba_new #quote-preview.highlight,.yotsuba_b_new #quote-preview.highlight {  border-width: 1px 2px 2px 1px !important;  border-style: solid !important;}.yotsuba_new #quote-preview.highlight {  border-color: #D99F91 !important;}.yotsuba_b_new #quote-preview.highlight {  border-color: #BA9DBF !important;}.yotsuba_b_new .highlight-anti,.burichan_new .highlight-anti {  border-width: 1px !important;  background-color: #bfa6ba !important;}.yotsuba_new .highlight-anti,.futaba_new .highlight-anti {  background-color: #e8a690 !important;}.tomorrow .highlight-anti {  background-color: #111 !important;  border-color: #111;}.photon .highlight-anti {  background-color: #bbb !important;}.op.inlined {  display: block;}#quote-preview .inlined,#quote-preview .postMenuBtn,#quote-preview .extButton,#quote-preview .extControls {  display: none;}.hasNewReplies {  font-weight: bold;}.deadlink {  text-decoration: line-through !important;}div.backlink {  font-size: 0.8em !important;  display: inline;  padding: 0;  padding-left: 5px;}.backlink.mobile {  padding: 3px 5px;  display: block;  clear: both;  line-height: 2;}.op .backlink.mobile,#quote-preview .backlink.mobile {  display: none !important;}.backlink.mobile .quoteLink {  padding-right: 2px;}.backlink span {  padding: 0;}.burichan_new .backlink a,.yotsuba_b_new .backlink a {  color: #34345C !important;}.burichan_new .backlink a:hover,.yotsuba_b_new .backlink a:hover {  color: #dd0000 !important;}.expbtn {  margin-right: 3px;  margin-left: 2px;}.tCollapsed .rExpanded {  display: none;}#stickyNav {  position: fixed;  font-size: 0;}#stickyNav img {  vertical-align: middle;}.tu-error {  color: red;}.topPageNav {  position: absolute;}.yotsuba_b_new .topPageNav {  border-top: 1px solid rgba(255, 255, 255, 0.25);  border-left: 1px solid rgba(255, 255, 255, 0.25);}.newPostsMarker:not(#quote-preview) {  box-shadow: 0 3px red;}#toggleMsgBtn {  float: left;  margin-bottom: 6px;}.panelHeader {  font-weight: bold;  font-size: 16px;  text-align: center;  margin-bottom: 5px;  margin-top: 5px;  padding-bottom: 5px;  border-bottom: 1px solid rgba(0, 0, 0, 0.20);}.yotsuba_new .panelHeader {  border-bottom: 1px solid #d9bfb7;}.yotsuba_b_new .panelHeader {  border-bottom: 1px solid #b7c5d9;}.tomorrow .panelHeader {  border-bottom: 1px solid #111;}.panelHeader span {  position: absolute;  right: 5px;  top: 5px;}.UIMenu,.UIPanel {  position: fixed;  width: 100%;  height: 100%;  z-index: 9002;  top: 0;  left: 0;}.UIPanel {  line-height: 14px;  font-size: 14px;  background-color: rgba(0, 0, 0, 0.25);}.UIPanel:after {  display: inline-block;  height: 100%;  vertical-align: middle;  content: "";}.UIPanel > div {  -moz-box-sizing: border-box;  box-sizing: border-box;  display: inline-block;  height: auto;  max-height: 100%;  position: relative;  width: 400px;  left: 50%;  margin-left: -200px;  overflow: auto;  box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);  vertical-align: middle;}#settingsMenu > div {  top: 25px;;  vertical-align: top;  max-height: 85%;}.extPanel input[type="text"],.extPanel textarea {  border: 1px solid #AAA;  outline: none;}.UIPanel .center {  margin-bottom: 5px;}.UIPanel button {  display: inline-block;  margin-right: 5px;}.UIPanel code {  background-color: #eee;  color: #000000;  padding: 1px 4px;  font-size: 12px;}.UIPanel ul {  list-style: none;  padding: 0;  margin: 0 0 10px;}.UIPanel .export-field {  width: 385px;}#settingsMenu label input {  margin-right: 5px;}.tomorrow #settingsMenu ul {  border-bottom: 1px solid #282a2e;}.settings-off {  padding-left: 3px;}.settings-cat-lbl {  font-weight: bold;  margin: 10px 0 5px;  padding-left: 5px;}.settings-cat-lbl img {  vertical-align: text-bottom;  margin-right: 5px;  cursor: pointer;  width: 18px;  height: 18px;}.settings-tip {  font-size: 0.85em;  margin: 2px 0 5px 0;  padding-left: 23px;}#settings-exp-all {  padding-left: 7px;  text-align: center;}#settingsMenu .settings-cat {  display: none;  margin-left: 3px;}#customCSSMenu textarea {  display: block;  max-width: 100%;  min-width: 100%;  -moz-box-sizing: border-box;  box-sizing: border-box;  height: 200px;  margin: 0 0 5px;  font-family: monospace;}#customCSSMenu .right,#settingsMenu .right {  margin-top: 2px;}#settingsMenu label {  display: inline-block;  user-select: none;  -moz-user-select: none;  -webkit-user-select: none;}#filtersHelp > div {  width: 600px;  left: 50%;  margin-left: -300px;}#filtersHelp h4 {  font-size: 15px;  margin: 20px 0 0 10px;}#filtersHelp h4:before {  content: "\u00bb";  margin-right: 3px;}#filtersHelp ul {  padding: 0;  margin: 10px;}#filtersHelp li {  padding: 3px 0;  list-style: none;}#filtersMenu table {  width: 100%;}#filtersMenu th {  font-size: 12px;}#filtersMenu tbody {  text-align: center;}#filtersMenu select,#filtersMenu .fPattern,#palette-custom-input {  padding: 1px;  font-size: 11px;}#filtersMenu select {  width: 85px;}#filtersMenu tfoot td {  padding-top: 10px;}#keybindsHelp li {  padding: 3px 5px;}.fPattern {  width: 130px;}.fColor {  width: 60px;}.fDel {  font-size: 16px;}.filter-preview {  cursor: default;  margin-left: 3px;}#quote-preview iframe,#quote-preview .filter-preview {  display: none;}.post-hidden .extButton,.post-hidden:not(#quote-preview) .postInfo {  opacity: 0.5;}.post-hidden:not(.thread) .postInfo {  padding-left: 5px;}.post-hidden:not(#quote-preview) input,.post-hidden:not(#quote-preview) .replyContainer,.post-hidden:not(#quote-preview) .summary,.post-hidden:not(#quote-preview) .op .file,.post-hidden:not(#quote-preview) .file,.post-hidden .wbtn,.post-hidden .postNum span,.post-hidden:not(#quote-preview) .backlink,div.post-hidden:not(#quote-preview) div.file,div.post-hidden:not(#quote-preview) blockquote.postMessage {  display: none;}.click-me {  border-radius: 5px;  margin-top: 5px;  padding: 2px 5px;  position: absolute;  font-weight: bold;  z-index: 2;  white-space: nowrap;}.yotsuba_new .click-me,.futaba_new .click-me {  color: #800000;  background-color: #F0E0D6;  border: 2px solid #D9BFB7;}.yotsuba_b_new .click-me,.burichan_new .click-me {  color: #000;  background-color: #D6DAF0;  border: 2px solid #B7C5D9;}.tomorrow .click-me {  color: #C5C8C6;  background-color: #282A2E;  border: 2px solid #111;}.photon .click-me {  color: #333;  background-color: #ddd;  border: 2px solid #ccc;}.click-me:before {  content: "";  border-width: 0 6px 6px;  border-style: solid;  left: 50%;  margin-left: -6px;  position: absolute;  width: 0;  height: 0;  top: -6px;}.yotsuba_new .click-me:before,.futaba_new .click-me:before {  border-color: #D9BFB7 transparent;}.yotsuba_b_new .click-me:before,.burichan_new .click-me:before {  border-color: #B7C5D9 transparent;}.tomorrow .click-me:before {  border-color: #111 transparent;}.photon .click-me:before {  border-color: #ccc transparent;}.click-me:after {  content: "";  border-width: 0 4px 4px;  top: -4px;  display: block;  left: 50%;  margin-left: -4px;  position: absolute;  width: 0;  height: 0;}.yotsuba_new .click-me:after,.futaba_new .click-me:after {  border-color: #F0E0D6 transparent;  border-style: solid;}.yotsuba_b_new .click-me:after,.burichan_new .click-me:after {  border-color: #D6DAF0 transparent;  border-style: solid;}.tomorrow .click-me:after {  border-color: #282A2E transparent;  border-style: solid;}.photon .click-me:after {  border-color: #DDD transparent;  border-style: solid;}#image-hover {  position: fixed;  max-width: 100%;  max-height: 100%;  top: 0px;  right: 0px;  z-index: 9002;}.thread-stats {  float: right;  margin-right: 5px;  cursor: default;}.compact .thread {  max-width: 75%;}.dotted {  text-decoration: none;  border-bottom: 1px dashed;}.linkfade {  opacity: 0.5;}#quote-preview .linkfade {  opacity: 1.0;}kbd {  background-color: #f7f7f7;  color: black;  border: 1px solid #ccc;  border-radius: 3px 3px 3px 3px;  box-shadow: 0 1px 0 #ccc, 0 0 0 2px #fff inset;  font-family: monospace;  font-size: 11px;  line-height: 1.4;  padding: 0 5px;}.deleted {  opacity: 0.66;}.noPictures a.fileThumb img:not(.expanded-thumb) {  opacity: 0;}.noPictures.futaba_new a.fileThumb,.noPictures.yotsuba_new a.fileThumb {  border: 1px solid #800;}.noPictures.burichan_new a.fileThumb,.noPictures.yotsuba_b_new a.fileThumb {  border: 1px solid #34345C;}.noPictures.tomorrow a.fileThumb:not(.expanded-thumb) {  border: 1px solid #C5C8C6;}.noPictures.photon a.fileThumb:not(.expanded-thumb) {  border: 1px solid #004A99;}.spinner {  margin-top: 2px;  padding: 3px;  display: table;}#settings-presets {  position: relative;  top: -1px;}#colorpicker {   position: fixed;  text-align: center;}.colorbox {  font-size: 10px;  width: 16px;  height: 16px;  line-height: 17px;  display: inline-block;  text-align: center;  background-color: #fff;  border: 1px solid #aaa;  text-decoration: none;  color: #000;  cursor: pointer;  vertical-align: top;}#palette-custom-input {  vertical-align: top;  width: 45px;  margin-right: 2px;}#qrDummyFile {  float: left;  margin-right: 5px;  width: 220px;  cursor: default;  -moz-user-select: none;  -webkit-user-select: none;  -ms-user-select: none;  user-select: none;  white-space: nowrap;  text-overflow: ellipsis;  overflow: hidden;}#qrDummyFileLabel {  margin-left: 3px;}.depageNumber {  position: absolute;  right: 5px;}.depagerEnabled .depagelink {  font-weight: bold;}.depagerEnabled strong {  font-weight: normal;}.depagelink {  display: inline-block;  padding: 4px 0;  cursor: pointer;  text-decoration: none;}.burichan_new .depagelink,.futaba_new .depagelink {  text-decoration: underline;}#customMenuBox {  margin: 0 auto 5px auto;  width: 385px;  display: block;}.preview-summary {  display: block;}#swf-embed-header {  padding: 0 0 0 3px;  font-weight: normal;  height: 20px;  line-height: 20px;}.yotsuba_new #swf-embed-header,.yotsuba_b_new #swf-embed-header {  height: 18px;  line-height: 18px;}#swf-embed-close {  position: absolute;  right: 0;  top: 1px;}.open-qr-wrap {  text-align: center;  width: 200px;  position: absolute;  margin-left: 50%;  left: -100px;}.postMenuBtn {  margin-left: 5px;  text-decoration: none;  line-height: 1em;  display: inline-block;  -webkit-transition: -webkit-transform 0.1s;  -moz-transition: -moz-transform 0.1s;  transition: transform 0.1s;  width: 1em;  height: 1em;  text-align: center;  outline: none;  opacity: 0.8;}.postMenuBtn:hover{  opacity: 1;}.yotsuba_new .postMenuBtn,.futaba_new .postMenuBtn {  color: #000080;}.tomorrow .postMenuBtn {  color: #5F89AC !important;}.tomorrow .postMenuBtn:hover {  color: #81a2be !important;}.photon .postMenuBtn {  color: #FF6600 !important;}.photon .postMenuBtn:hover {  color: #FF3300 !important;}.menuOpen {  -webkit-transform: rotate(90deg);  -moz-transform: rotate(90deg);  -ms-transform: rotate(90deg);  transform: rotate(90deg);}.settings-sub label:before {  border-bottom: 1px solid;  border-left: 1px solid;  content: " ";  display: inline-block;  height: 8px;  margin-bottom: 5px;  width: 8px;}.settings-sub {  margin-left: 25px;}.settings-tip.settings-sub {  padding-left: 32px;}@media only screen and (max-width: 480px) {.btn-row {  margin-top: 5px;}.image-expanded .mFileInfo {  display: none !important;}.mobile-report {  float: right;  font-size: 11px;  margin-bottom: 3px;  margin-left: 10px;}.mobile-report:after {  content: "]";}.mobile-report:before {  content: "[";}.nws .mobile-report:after {  color: #800000;}.nws .mobile-report:before {  color: #800000;}.ws .mobile-report {  color: #34345C;}.nws .mobile-report {  color:#0000EE;}.reply .mobile-report {  margin-left: 5px;  margin-right: 5px;}.postLink .mobileHideButton {  margin-right: 3px;}.board .mobile-hr-hidden {  margin-top: 10px !important;}.board > .mobileHideButton {  margin-top: -20px !important;}.board > .mobileHideButton:first-child {  margin-top: 10px !important;}.extButton.threadHideButton {  float: none;  margin: 0;  margin-bottom: 5px;}.mobile-post-hidden {  display: none;}#toggleMsgBtn {  display: none;}.mobile-tu-status {  height: 20px;  line-height: 20px;}.mobile-tu-show {  width: 150px;  margin: auto;  display: block;  text-align: center;}.button input {  margin: 0 3px 0 0;  position: relative;  top: -2px;  border-radius: 0;  height: 10px;  width: 10px;}.UIPanel > div {  width: 320px;  margin-left: -160px;}.UIPanel .export-field {  width: 300px;}.yotsuba_new #quote-preview.highlight,#quote-preview {  border-width: 1px !important;}.yotsuba_new #quote-preview.highlight {  border-color: #D9BFB7 !important;}#quickReply input[type="text"],#quickReply textarea,.extPanel input[type="text"],.extPanel textarea {  font-size: 16px;}#quickReply {  position: absolute;  left: 50%;  margin-left: -154px;}}';
       document.head.appendChild(a)
     }
   };
