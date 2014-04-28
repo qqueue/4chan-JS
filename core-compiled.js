@@ -79,7 +79,7 @@ function initRecaptcha() {
 
 function loadRecaptcha() {
   var a;
-  document.getElementById("recaptcha_area") || ((a = document.getElementById("captchaContainer")) && a.setAttribute("data-placeholder", a.textContent), Recaptcha.create(window.recaptchaKey, "captchaContainer" + window.recaptchaId, {
+  document.getElementById("recaptcha_area") || ((a = document.getElementById("captchaContainer")) && a.textContent && a.setAttribute("data-placeholder", a.textContent), Recaptcha.create(window.recaptchaKey, "captchaContainer" + window.recaptchaId, {
     theme: "clean",
     tabindex: 5,
     callback: onCaptchaReady
