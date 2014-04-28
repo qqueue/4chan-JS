@@ -55,32 +55,33 @@ function get_pass(a) {
   return "_" + a
 }
 var UA = {
-  init: function() {
-    document.head = document.head || $.tag("head")[0];
-    this.hasContextMenu = "HTMLMenuItemElement" in window;
-    var a;
-    try {
-      localStorage.setItem("catalog", "catalog"), localStorage.removeItem("catalog"), a = !0
-    } catch (b) {
-      a = !1
+    init: function() {
+      document.head = document.head || $.tag("head")[0];
+      this.hasContextMenu = "HTMLMenuItemElement" in window;
+      var a;
+      try {
+        localStorage.setItem("catalog", "catalog"), localStorage.removeItem("catalog"), a = !0
+      } catch (b) {
+        a = !1
+      }
+      this.hasWebStorage = a;
+      var c;
+      try {
+        sessionStorage.setItem("catalog", "catalog"), sessionStorage.removeItem("catalog"), c = !0
+      } catch (e) {
+        c = !1
+      }
+      this.hasSessionStorage = c;
+      this.hasCORS = "withCredentials" in new XMLHttpRequest
+    },
+    dispatchEvent: function(a, b) {
+      var c = document.createEvent("Event");
+      c.initEvent(a, !1, !1);
+      b && (c.detail = b);
+      document.dispatchEvent(c)
     }
-    this.hasWebStorage = a;
-    var c;
-    try {
-      sessionStorage.setItem("catalog", "catalog"), sessionStorage.removeItem("catalog"), c = !0
-    } catch (e) {
-      c = !1
-    }
-    this.hasSessionStorage = c;
-    this.hasCORS = "withCredentials" in new XMLHttpRequest
   },
-  dispatchEvent: function(a, b) {
-    var c = document.createEvent("Event");
-    c.initEvent(a, !1, !1);
-    b && (c.detail = b);
-    document.dispatchEvent(c)
-  }
-}, FC = function() {
+  FC = function() {
     function a() {
       var a, g, d;
       g = $.id("boardNavDesktop");
@@ -416,7 +417,7 @@ var UA = {
       d = document.createElement("td");
       f = document.createElement("input");
       f.type = "checkbox";
-      f.checked = !! a.active;
+      f.checked = !!a.active;
       f.className = "filter-active";
       d.appendChild(f);
       c.appendChild(d);
@@ -446,14 +447,14 @@ var UA = {
       d = document.createElement("td");
       f = document.createElement("input");
       f.type = "checkbox";
-      f.checked = !! a.hidden;
+      f.checked = !!a.hidden;
       f.className = "filter-hide";
       d.appendChild(f);
       c.appendChild(d);
       d = document.createElement("td");
       f = document.createElement("input");
       f.type = "checkbox";
-      f.checked = !! a.top;
+      f.checked = !!a.top;
       f.className = "filter-top";
       d.appendChild(f);
       c.appendChild(d);
@@ -506,7 +507,7 @@ var UA = {
 
     function F() {
       var a, b;
-      UA.hasWebStorage ? (a = $.id("theme"), theme = (theme = localStorage.getItem("catalog-theme")) ? JSON.parse(theme) : {}, $.id("theme-nobinds").checked = !! theme.nobinds, $.id("theme-nospoiler").checked = !! theme.nospoiler, $.id("theme-newtab").checked = !! theme.newtab, $.id("theme-tw").checked = M, $.id("theme-ddn").checked = Q, theme.css && ($.id("theme-css").value = theme.css), $.on($.id("theme-save"), "click", sa), $.on($.id("theme-close"), "click", N), $.id("theme-msg").style.display = "none", a.style.top = window.pageYOffset + 60 + "px", $.removeClass(a, "hidden"), (b = $.tag("input", a)[0]) && b.focus(), P()) : alert("Your browser doesn't support Local Storage")
+      UA.hasWebStorage ? (a = $.id("theme"), theme = (theme = localStorage.getItem("catalog-theme")) ? JSON.parse(theme) : {}, $.id("theme-nobinds").checked = !!theme.nobinds, $.id("theme-nospoiler").checked = !!theme.nospoiler, $.id("theme-newtab").checked = !!theme.newtab, $.id("theme-tw").checked = M, $.id("theme-ddn").checked = Q, theme.css && ($.id("theme-css").value = theme.css), $.on($.id("theme-save"), "click", sa), $.on($.id("theme-close"), "click", N), $.id("theme-msg").style.display = "none", a.style.top = window.pageYOffset + 60 + "px", $.removeClass(a, "hidden"), (b = $.tag("input", a)[0]) && b.focus(), P()) : alert("Your browser doesn't support Local Storage")
     }
 
     function N() {
@@ -663,7 +664,7 @@ var UA = {
                     continue a
                   }
                   k = h;
-                  m = !! h.top;
+                  m = !!h.top;
                   h.hits += 1;
                   break
                 }
@@ -770,12 +771,14 @@ var UA = {
           ["#FBCEB1", "#FFBF00", "#ADFF2F", "#0047AB"],
           ["#00A550", "#007FFF", "#AF0A0F", "#B5BD68"]
         ]
-      }, Qa = {
+      },
+      Qa = {
         admin: "Administrator",
         mod: "Moderator",
         developer: "Developer",
         manager: "Manager"
-      }, ma = {
+      },
+      ma = {
         83: function() {
           $.hasClass(C, "active") ? V(!0) : K()
         },
@@ -783,10 +786,16 @@ var UA = {
         88: function() {
           "date" == n.orderby ? A("alt") : "alt" == n.orderby ? A("r") : "r" == n.orderby ? A("absdate") : A("date")
         }
-      }, l = {}, va = ["orderby", "large", "extended"],
-      v = {}, ha, U, H = {}, S = !1,
+      },
+      l = {},
+      va = ["orderby", "large", "extended"],
+      v = {},
+      ha, U, H = {},
+      S = !1,
       fa = null,
-      s = {}, J = {}, x = 0,
+      s = {},
+      J = {},
+      x = 0,
       M = !1,
       Q = !1,
       T = !1,
@@ -875,7 +884,8 @@ var UA = {
       a.css && (c = document.createElement("style"), c.type = "text/css", c.id = "custom-css", c.styleSheet ? c.styleSheet.cssText = a.css : c.innerHTML = a.css, document.head.appendChild(c));
       UA.dispatchEvent("4chanMainInit")
     }
-  }, ThreadWatcher = {
+  },
+  ThreadWatcher = {
     init: function() {
       var a, b;
       this.listNode = null;
@@ -994,7 +1004,8 @@ var UA = {
     linkToThread: function(a, b, c) {
       return "//" + location.host + "/" + b + "/res/" + a + (0 < c ? "#p" + c : "")
     }
-  }, Draggable = {
+  },
+  Draggable = {
     el: null,
     key: null,
     scrollX: null,
