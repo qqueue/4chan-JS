@@ -19,9 +19,15 @@ Even more unfortunately, the minified versions of the scripts and the
 their near-unreadability, the compiled versions of the scripts are tracked as
 well. 
 
-If anybody knows a better way to decompile variable-mangled JS, please
-open an issue/PR. [beautify-with-words][2] looks promising, but its generated
-names aren't consistent due to RNG seeding.
+As of the 27th of April, 2014, Anonymous ## Developer and co. have removed
+the whitespace-minified version of the scripts, so only the variable-mangled
+scripts are accessible now. They are tracked as `$name-compiled.js` in this
+repository to keep git history clean.
+
+If anybody knows where the whitespace minified versions went, or better ways to
+decompile variable-mangled JS, please open an issue/PR.
+[beautify-with-words][2] looks promising, but its generated names aren't
+consistent due to RNG seeding.
 
 The cron job for `update.sh` is run every 15 minutes. The automatic commits it
 makes are dated with the value of the `Last-Modified` HTTP header, as returned

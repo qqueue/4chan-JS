@@ -9,6 +9,7 @@ git pull origin master
 # download file and commit if changed
 function poll {
   file=$1
+  filename="$file-compiled.js"
 
   echo "polling $file ..."
 
@@ -18,17 +19,17 @@ function poll {
     --user-agent "4chan-JS-auto-updater/1.0.0" \
     "http://s.4cdn.org/js/$file.$(date +%s).js")
 
-  js-beautify --indent-size=2 - <<< "$CODE" > $file.js
+  js-beautify --indent-size=2 - <<< "$CODE" > $filename
 
-  if [[ -n $(git status --porcelain $file.js) ]]; then
+  if [[ -n $(git status --porcelain $filename) ]]; then
     modified=$(grep 'Last-Modified' /tmp/headers |\
       awk -F ': ' '{print $2}')
 
     echo "update of $file detected, last modified: $modified"
 
-    git add $file.js
+    git add $filename
     git commit \
-      --message "Update $file.js" \
+      --message "Update $file" \
       --message "(update detected by update.sh)" \
       --author "Anonymous ## Developer <sage@4chan.org>" \
       --date "$modified"
@@ -36,9 +37,7 @@ function poll {
 }
 
 poll extension 
-poll extension-compiled
 poll core
-poll core-compiled
 poll catalog
 
 git push
