@@ -380,8 +380,7 @@ function getActiveStyleSheet() {
   if (1 == document.querySelectorAll("link[title]").length) return "Yotsuba P";
   for (a = 0; b = document.getElementsByTagName("link")[a]; a++)
     if ("switch" == b.getAttribute("title")) c = b;
-    else
-  if (-1 != b.getAttribute("rel").indexOf("style") && b.getAttribute("title") && b.href == c.href) return b.getAttribute("title");
+    else if (-1 != b.getAttribute("rel").indexOf("style") && b.getAttribute("title") && b.href == c.href) return b.getAttribute("title");
   return null
 }
 
