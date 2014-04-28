@@ -57,246 +57,247 @@ $.prettySeconds = function(a) {
 $.docEl = document.documentElement;
 $.cache = {};
 var Parser = {
-  init: function() {
-    var a, b, c, d;
-    if (Config.filter || Config.embedSoundCloud || Config.embedYouTube || Config.embedVocaroo) this.needMsg = !0;
-    a = 2 <= window.devicePixelRatio ? "@2x.gif" : ".gif";
-    this.icons = {
-      admin: "//s.4cdn.org/image/adminicon" + a,
-      mod: "//s.4cdn.org/image/modicon" + a,
-      dev: "//s.4cdn.org/image/developericon" + a,
-      manager: "//s.4cdn.org/image/managericon" + a,
-      del: "//s.4cdn.org/image/filedeleted-res" + a
-    };
-    this.prettify = "function" == typeof prettyPrint;
-    this.customSpoiler = {};
-    Config.localTime && (this.hasSeconds = (b = $.cls("dateTime")[1]) && /\d{2}:\d{2}:\d{2}$/.test(b.textContent), (a = (new Date).getTimezoneOffset()) ? (b = Math.abs(a), c = 0 | b / 60, this.utcOffset = "UTC" + (0 > a ? "+" : "-") + c + ((d = b - 60 * c) ? ":" + d : "")) : this.utcOffset = "UTC", this.weekdays = "Sun Mon Tue Wed Thu Fri Sat".split(" "));
-    Main.tid && (this.trackedReplies = this.getTrackedReplies(Main.tid) || {})
-  },
-  getTrackedReplies: function(a) {
-    var b = null;
-    if (b = sessionStorage.getItem("4chan-track-" + Main.board + "-" + a)) b = JSON.parse(b);
-    return b
-  },
-  saveTrackedReplies: function(a, b) {
-    sessionStorage.setItem("4chan-track-" +
-      Main.board + "-" + a, JSON.stringify(b))
-  },
-  parseThreadJSON: function(a) {
-    var b;
-    try {
-      b = JSON.parse(a).posts
-    } catch (c) {
-      console.log(c), b = []
+    init: function() {
+      var a, b, c, d;
+      if (Config.filter || Config.embedSoundCloud || Config.embedYouTube || Config.embedVocaroo) this.needMsg = !0;
+      a = 2 <= window.devicePixelRatio ? "@2x.gif" : ".gif";
+      this.icons = {
+        admin: "//s.4cdn.org/image/adminicon" + a,
+        mod: "//s.4cdn.org/image/modicon" + a,
+        dev: "//s.4cdn.org/image/developericon" + a,
+        manager: "//s.4cdn.org/image/managericon" + a,
+        del: "//s.4cdn.org/image/filedeleted-res" + a
+      };
+      this.prettify = "function" == typeof prettyPrint;
+      this.customSpoiler = {};
+      Config.localTime && (this.hasSeconds = (b = $.cls("dateTime")[1]) && /\d{2}:\d{2}:\d{2}$/.test(b.textContent), (a = (new Date).getTimezoneOffset()) ? (b = Math.abs(a), c = 0 | b / 60, this.utcOffset = "UTC" + (0 > a ? "+" : "-") + c + ((d = b - 60 * c) ? ":" + d : "")) : this.utcOffset = "UTC", this.weekdays = "Sun Mon Tue Wed Thu Fri Sat".split(" "));
+      Main.tid && (this.trackedReplies = this.getTrackedReplies(Main.tid) || {})
+    },
+    getTrackedReplies: function(a) {
+      var b = null;
+      if (b = sessionStorage.getItem("4chan-track-" + Main.board + "-" + a)) b = JSON.parse(b);
+      return b
+    },
+    saveTrackedReplies: function(a, b) {
+      sessionStorage.setItem("4chan-track-" +
+        Main.board + "-" + a, JSON.stringify(b))
+    },
+    parseThreadJSON: function(a) {
+      var b;
+      try {
+        b = JSON.parse(a).posts
+      } catch (c) {
+        console.log(c), b = []
+      }
+      return b
+    },
+    parseCatalogJSON: function(a) {
+      var b;
+      try {
+        b = JSON.parse(a)
+      } catch (c) {
+        console.log(c), b = []
+      }
+      return b
+    },
+    setCustomSpoiler: function(a, b) {
+      var c;
+      !this.customSpoiler[a] && (b = parseInt(b)) && (a == Main.board && (c = $.cls("imgspoiler")[0]) ? this.customSpoiler[a] = c.firstChild.src.match(/spoiler(-[a-z0-9]+)\.png$/)[1] : this.customSpoiler[a] = "-" + a + (Math.floor(Math.random() * b) + 1))
+    },
+    buildPost: function(a, b, c) {
+      var d, e, f = null;
+      for (d = 0; e = a[d]; ++d) e.no == c && (!Config.revealSpoilers && a[0].custom_spoiler && Parser.setCustomSpoiler(b, a[0].custom_spoiler), f = Parser.buildHTMLFromJSON(e, b, !1, !0).lastElementChild, Config.IDColor && (uid = $.cls("posteruid", f)[1]) && IDColor.applyRemote(uid.firstElementChild));
+      return f
+    },
+    decodeSpecialChars: function(a) {
+      return a.replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+    },
+    encodeSpecialChars: function(a) {
+      return a.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/'/g, "&#039;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    },
+    buildHTMLFromJSON: function(a, b, c, d) {
+      var e = document.createElement("div"),
+        f = !1,
+        g, h = "",
+        k = "",
+        l = "",
+        h = "",
+        m, n, p, l = '"',
+        u = "",
+        B = "",
+        x = p = "",
+        r = "",
+        q = "",
+        s = "",
+        t = "",
+        y, C = "",
+        D = "",
+        E = "",
+        w, z, F = "",
+        G = "",
+        A = "reply",
+        H = "",
+        I = "",
+        v = "",
+        J = !1;
+      n = "//i.4cdn.org/" + b;
+      0 == a.resto ? (f = !0, c && (G = '<div class="postLink mobile"><span class="info"></span><a href="thread/' + a.no + '" class="button">View Thread</a></div>', A = "op", F = '&nbsp; <span>[<a href="thread/' +
+        a.no + (a.semantic_url ? "/" + a.semantic_url : "") + '" class="replylink" rel="canonical">Reply</a>]</span>'), c = a.no) : c = a.resto;
+      w = c + "#p" + a.no;
+      Main.tid && b == Main.board ? z = "javascript:quote('" + a.no + "')" : (w = "thread/" + w, z = "thread/" + c + "#q" + a.no);
+      g = !a.capcode && a.id ? ' <span class="posteruid id_' + a.id + '">(ID: <span class="hand" title="Highlight posts by this ID">' + a.id + "</span>)</span> " : "";
+      switch (a.capcode) {
+        case "admin_highlight":
+          C = " highlightPost";
+        case "admin":
+          q = ' <strong class="capcode hand id_admin"title="Highlight posts by the Administrator">## Admin</strong>';
+          s = " capcodeAdmin";
+          t = ' <img src="' + Parser.icons.admin + '" alt="This user is the 4chan Administrator." title="This user is the 4chan Administrator." class="identityIcon">';
+          break;
+        case "mod":
+          q = ' <strong class="capcode hand id_mod" title="Highlight posts by Moderators">## Mod</strong>';
+          s = " capcodeMod";
+          t = ' <img src="' + Parser.icons.mod + '" alt="This user is a 4chan Moderator." title="This user is a 4chan Moderator." class="identityIcon">';
+          break;
+        case "developer":
+          q = ' <strong class="capcode hand id_developer" title="Highlight posts by Developers">## Developer</strong>';
+          s = " capcodeDeveloper";
+          t = ' <img src="' + Parser.icons.dev + '" alt="This user is a 4chan Developer." title="This user is a 4chan Developer." class="identityIcon">';
+          break;
+        case "manager":
+          q = ' <strong class="capcode hand id_manager" title="Highlight posts by Managers">## Manager</strong>', s = " capcodeManager", t = ' <img src="' + Parser.icons.manager + '" alt="This user is a 4chan Manager." title="This user is a 4chan Manager." class="identityIcon">'
+      }
+      a.email && (D = '<a href="mailto:' + a.email.replace(/ /g, "%20") + '" class="useremail">', E = "</a>");
+      y = a.country ? "pol" == b ? ' <img src="//s.4cdn.org/image/country/troll/' + a.country.toLowerCase() + '.gif" alt="' + a.country + '" title="' + a.country_name + '" class="countryFlag">' : ' <span title="' + a.country_name + '" class="flag flag-' + a.country.toLowerCase() + '"></span>' : "";
+      a.filedeleted ? h = '<div id="f' + a.no + '" class="file"><span class="fileThumb"><img src="' + Parser.icons.del + '" class="fileDeletedRes" alt="File deleted."></span></div>' : a.ext && (h = Parser.decodeSpecialChars(a.filename), p = x = a.filename + a.ext, h.length > (f ? 40 : 30) && (p = Parser.encodeSpecialChars(h.slice(0, f ? 35 : 25)) + "(...)" + a.ext, J = !0), a.tn_w || a.tn_h || ".gif" != a.ext || (a.tn_w = a.w, a.tn_h = a.h), u = 1048576 <= a.fsize ? (0 | a.fsize / 1048576 * 100 + 0.5) / 100 + " M" : 1024 < a.fsize ? (0 | a.fsize / 1024 + 0.5) + " K" : a.fsize + " ", a.spoiler && !Config.revealSpoilers && (p = "Spoiler Image", l = '" title="' + x + '"', B = " imgspoiler", m = "//s.4cdn.org/image/spoiler" + (Parser.customSpoiler[b] || "") + ".png", a.tn_w = 100, a.tn_h = 100), m || (m = "//t.4cdn.org/" + b + "/" + a.tim + "s.jpg"), h = ".pdf" == a.ext ? "PDF" : a.w + "x" + a.h, "f" != b ? (n = n + "/" + a.tim + a.ext, k = '<a class="fileThumb' + B + '" href="' + n + '" target="_blank"><img src="' + m + '" alt="' + u + 'B" data-md5="' + a.md5 + '" style="height: ' + a.tn_h + "px; width: " + a.tn_w + 'px;"><div class="mFileInfo mobile">' + u + "B " + a.ext.slice(1).toUpperCase() + "</div></a>", l = '<div class="fileText" id="fT' + a.no + l + ">File: <a" + (J ? ' title="' + x + '"' : "") + ' href="' + n + '" target="_blank">' + p + "</a> (" + u + "B, " + h + ")</div>") : (n = n + "/" + a.filename + a.ext, h += ", " + a.tag, l = '<div class="fileText" id="fT' + a.no + '">File: <a href="' +
+        n + '" target="_blank">' + a.filename + ".swf</a> (" + u + "B, " + h + ")</div>"), h = '<div id="f' + a.no + '" class="file">' + l + k + "</div>");
+      a.trip && (r = ' <span class="postertrip">' + a.trip + "</span>");
+      k = a.name || "";
+      m = a.sub || "";
+      f && (a.capcode_replies && (I = Parser.buildCapcodeReplies(a.capcode_replies, b, a.no)), d && a.replies && (d = a.replies + " post" + (1 < a.replies ? "s" : ""), a.images && (d += " and " + a.images + " image repl" + (1 < a.images ? "ies" : "y")), H = '<span class="summary preview-summary">' + d + ".</span>"), a.sticky && (v += '<img class="stickyIcon retina" title="Sticky" alt="Sticky" src="' +
+        Main.icons2.sticky + '"> '), a.closed && (v += '<img class="closedIcon retina" title="Closed" alt="Closed" src="' + Main.icons2.closed + '"> '));
+      e.className = "postContainer " + A + "Container";
+      e.id = "pc" + a.no;
+      e.innerHTML = (f ? "" : '<div class="sideArrows" id="sa' + a.no + '">&gt;&gt;</div>') + '<div id="p' + a.no + '" class="post ' + A + C + '"><div class="postInfoM mobile" id="pim' + a.no + '"><span class="nameBlock' + s + '"><span class="name">' + k + "</span>" + r + q + t + g + y + '<br><span class="subject">' + m + '</span></span><span class="dateTime postNum" data-utc="' +
+        a.time + '">' + a.now + ' <a href="' + a.no + "#p" + a.no + '">No.</a><a href="javascript:quote(\'' + a.no + '\');" title="Quote this post">' + a.no + "</a></span></div>" + (f ? h : "") + '<div class="postInfo desktop" id="pi' + a.no + '"' + (b != Main.board ? ' data-board="' + b + '"' : "") + '><input type="checkbox" name="' + a.no + '" value="delete"> <span class="subject">' + m + '</span> <span class="nameBlock' + s + '">' + D + '<span class="name">' + k + "</span>" + r + q + E + t + g + y + ' </span> <span class="dateTime" data-utc="' + a.time + '">' + a.now + '</span> <span class="postNum desktop"><a href="' +
+        w + '" title="Highlight this post">No.</a><a href="' + z + '" title="Quote this post">' + a.no + "</a> " + v + F + "</span></div>" + (f ? "" : h) + '<blockquote class="postMessage" id="m' + a.no + '">' + (a.com || "") + I + H + "</blockquote> </div>" + G;
+      if (!Main.tid || b != Main.board)
+        for (q = e.getElementsByClassName("quotelink"), a = 0; f = q[a]; ++a) r = f.getAttribute("href"), "/" != r.charAt(0) && (f.href = "/" + b + "/thread/" + c + r);
+      return e
+    },
+    buildCapcodeReplies: function(a, b, c) {
+      var d, e, f, g, h, k, l;
+      g = {
+        admin: "Administrator",
+        mod: "Moderator",
+        developer: "Developer",
+        manager: "Manager"
+      };
+      b != Main.board ? (k = "/" + b + "/thread/", l = "&gt;&gt;&gt;/" + b + "/") : (k = "", l = "&gt;&gt;");
+      f = '<br><br><span class="capcodeReplies"><span class="smaller">';
+      for (d in a)
+        for (f += '<span class="bold">' + g[d] + " Replies:</span> ", h = a[d], b = 0; e = h[b]; ++b) f += '<a class="quotelink" href="' + k + c + "#p" + e + '">' + l + e + "</a> ";
+      return f + "</span></span>"
+    },
+    parseBoard: function() {
+      var a, b = document.getElementsByClassName("thread");
+      for (a = 0; b[a]; ++a) Parser.parseThread(b[a].id.slice(1))
+    },
+    parseThread: function(a, b, c) {
+      var d, e, f, g, h;
+      e = $.id("t" + a);
+      f = e.getElementsByClassName("post");
+      b || (g = document.getElementById("pi" + a), Main.tid || (Config.filter && (h = Filter.exec(e, g, document.getElementById("m" + a), a)), Config.threadHiding && !h && (Main.hasMobileLayout ? (g = document.createElement("a"), g.href = "javascript:;", g.setAttribute("data-cmd", "hide"), g.setAttribute("data-id", a), g.className = "mobileHideButton button", g.textContent = "Hide", f[0].nextElementSibling.appendChild(g)) : (g = document.createElement("span"), g.innerHTML = '<img alt="H" class="extButton threadHideButton"data-cmd="hide" data-id="' +
+        a + '" src="' + Main.icons.minus + '" title="Toggle thread">', f[0].insertBefore(g, f[0].firstChild)), g.id = "sa" + a, ThreadHiding.hidden[a] && (ThreadHiding.hidden[a] = Main.now, ThreadHiding.hide(a))), ThreadExpansion.enabled && (d = $.cls("summary", e)[0]) && (e = document.createDocumentFragment(), h = d.cloneNode(!0), h.className = "", d.textContent = "", g = document.createElement("img"), g.className = "extButton expbtn", g.title = "Expand thread", g.alt = "+", g.setAttribute("data-cmd", "expand"), g.setAttribute("data-id", a), g.src = Main.icons.plus, e.appendChild(g), e.appendChild(h), g = document.createElement("span"), g.style.display = "none", g.textContent = "Showing all replies.", e.appendChild(g), d.appendChild(e))));
+      e = b ? 0 > b ? f.length + b : b : 0;
+      c = c ? e + c : f.length;
+      if (Main.isMobileDevice && Config.quotePreview)
+        for (d = e; d < c; ++d) Parser.parseMobileQuotelinks(f[d]);
+      if (Parser.trackedReplies)
+        for (d = e; d < c; ++d) Parser.parseTrackedReplies(f[d]);
+      for (d = e; d < c; ++d) Parser.parsePost(f[d].id.slice(1), a);
+      if (b) {
+        if (Parser.prettify)
+          for (d = e; d < c; ++d) Parser.parseMarkup(f[d]);
+        if (window.jsMath)
+          if (window.jsMath.loaded)
+            for (d = e; d < c; ++d) window.jsMath.ProcessBeforeShowing(f[d]);
+          else Parser.loadJSMath()
+      }
+      UA.dispatchEvent("4chanParsingDone", {
+        threadId: a,
+        offset: e,
+        limit: c
+      })
+    },
+    loadJSMath: function(a) {
+      $.cls("math", a)[0] && (window.jsMath.Autoload.Script.Push("ProcessBeforeShowing", [null]), window.jsMath.Autoload.LoadJsMath())
+    },
+    parseMathOne: function(a) {
+      window.jsMath.loaded ? window.jsMath.ProcessBeforeShowing(a) : Parser.loadJSMath(a)
+    },
+    parseTrackedReplies: function(a) {
+      var b, c;
+      c = $.cls("quotelink", a);
+      for (a = 0; b = c[a]; ++a) Parser.trackedReplies[b.textContent] && (b.textContent += " (You)", Parser.hasYouMarkers = !0)
+    },
+    parseMobileQuotelinks: function(a) {
+      var b, c, d;
+      c = $.cls("quotelink", a);
+      for (a = 0; b = c[a]; ++a)
+        if (d = b.getAttribute("href").match(/^(?:\/([^\/]+)\/)?(?:thread\/)?([0-9]+)?#p([0-9]+)$/)) d = document.createElement("a"), d.href = b.href, d.textContent = " #", d.className = "quoteLink", b.parentNode.insertBefore(d, b.nextSibling)
+    },
+    parseMarkup: function(a) {
+      var b, c;
+      if ((b = a.getElementsByClassName("prettyprint"))[0])
+        for (a = 0; c = b[a]; ++a) c.innerHTML = prettyPrintOne(c.innerHTML)
+    },
+    parsePost: function(a, b) {
+      var c, d, e, f, g, h;
+      b ? d = document.getElementById("pi" + a) : (d = a.getElementsByClassName("postInfo")[0], a = d.id.slice(2));
+      Parser.needMsg && (f = document.getElementById("m" + a));
+      c = document.createElement("a");
+      c.href = "#";
+      c.className = "postMenuBtn";
+      c.title = "Menu";
+      c.setAttribute("data-cmd", "post-menu");
+      c.textContent = "\u25b6";
+      d.appendChild(c);
+      b && a != b && (Config.filter && (g = Filter.exec(d.parentNode, d, f)), !g && ReplyHiding.hidden[a] && (ReplyHiding.hidden[a] = Main.now, ReplyHiding.hide(a)), Config.backlinks && Parser.parseBacklinks(a, b));
+      IDColor.enabled && (h = $.cls("posteruid", d)[0]) && IDColor.apply(h.firstElementChild);
+      Config.embedSoundCloud && Media.parseSoundCloud(f);
+      Config.embedYouTube && Media.parseYouTube(f);
+      Config.embedVocaroo && Media.parseVocaroo(f);
+      Config.revealSpoilers && (e = document.getElementById("f" + a)) && (e = e.children[1]) && $.hasClass(e, "imgspoiler") && (c = e.firstChild, e.removeChild(c), c.removeAttribute("style"), h = $.hasClass(d.parentNode, "op"), c.style.maxWidth = c.style.maxHeight = h ? "250px" : "125px", c.src = "//t.4cdn.org" + e.pathname.replace(/([0-9]+).+$/, "/$1s.jpg"), f = e.previousElementSibling, g = f.title.split("."), g[0].length > (h ? 40 : 30) ? g = g[0].slice(0, h ? 35 : 25) + "(...)" + g[1] : (g = f.title, f.removeAttribute("title")), f.firstElementChild.innerHTML = g, e.insertBefore(c, e.firstElementChild));
+      Config.localTime && (c = d.getElementsByClassName("dateTime")[0], c.title = this.utcOffset, c.textContent = Parser.getLocaleDate(new Date(1E3 * c.getAttribute("data-utc"))))
+    },
+    getLocaleDate: function(a) {
+      return ("0" + (1 + a.getMonth())).slice(-2) + "/" + ("0" + a.getDate()).slice(-2) + "/" + ("0" + a.getFullYear()).slice(-2) + "(" + this.weekdays[a.getDay()] + ")" + ("0" + a.getHours()).slice(-2) + ":" + ("0" + a.getMinutes()).slice(-2) + (this.hasSeconds ? ":" + ("0" + a.getSeconds()).slice(-2) : "")
+    },
+    parseBacklinks: function(a, b) {
+      var c, d, e, f, g, h, k;
+      if (e = document.getElementById("m" + a).getElementsByClassName("quotelink"))
+        for (f = {}, c = 0; d = e[c]; ++c)
+          if (g = d.getAttribute("href").split("#p"), g[1])(g[1] == b && (d.textContent += " (OP)"), h = document.getElementById("pi" + g[1])) ? f[g[1]] || (f[g[1]] = !0, d = document.createElement("span"), d.innerHTML = Main.hasMobileLayout ? '<a href="#p' + a + '" class="quotelink">&gt;&gt;' + a + '</a><a href="#p' + a + '" class="quoteLink"> #</a> ' : '<a href="#p' + a + '" class="quotelink">&gt;&gt;' + a + "</a> ", (k = document.getElementById("bl_" + g[1])) || (k = document.createElement("div"), k.id = "bl_" + g[1], k.className = "backlink", Main.hasMobileLayout && (k.className = "backlink mobile", h = document.getElementById("p" + g[1])), h.appendChild(k)), k.appendChild(d)) : Main.tid && ">" != d.textContent.charAt(2) && (d.textContent += " \u2192")
+    },
+    buildSummary: function(a, b, c) {
+      if (b) b = b + " post" + (1 < b ? "s" : "");
+      else return null;
+      c = c ? " and " + c + " image repl" + (1 < c ? "ies" : "y") : "";
+      el = document.createElement("span");
+      el.className = "summary desktop";
+      el.innerHTML = b + c + ' omitted. Click <a href="thread/' + a + '" class="replylink">here</a> to view.';
+      return el
     }
-    return b
   },
-  parseCatalogJSON: function(a) {
-    var b;
-    try {
-      b = JSON.parse(a)
-    } catch (c) {
-      console.log(c), b = []
-    }
-    return b
-  },
-  setCustomSpoiler: function(a, b) {
-    var c;
-    !this.customSpoiler[a] && (b = parseInt(b)) && (a == Main.board && (c = $.cls("imgspoiler")[0]) ? this.customSpoiler[a] = c.firstChild.src.match(/spoiler(-[a-z0-9]+)\.png$/)[1] : this.customSpoiler[a] = "-" + a + (Math.floor(Math.random() * b) + 1))
-  },
-  buildPost: function(a, b, c) {
-    var d, e, f = null;
-    for (d = 0; e = a[d]; ++d) e.no == c && (!Config.revealSpoilers && a[0].custom_spoiler && Parser.setCustomSpoiler(b, a[0].custom_spoiler), f = Parser.buildHTMLFromJSON(e, b, !1, !0).lastElementChild, Config.IDColor && (uid = $.cls("posteruid", f)[1]) && IDColor.applyRemote(uid.firstElementChild));
-    return f
-  },
-  decodeSpecialChars: function(a) {
-    return a.replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">")
-  },
-  encodeSpecialChars: function(a) {
-    return a.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/'/g, "&#039;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-  },
-  buildHTMLFromJSON: function(a, b, c, d) {
-    var e = document.createElement("div"),
-      f = !1,
-      g, h = "",
-      k = "",
-      l = "",
-      h = "",
-      m, n, p, l = '"',
-      u = "",
-      B = "",
-      x = p = "",
-      r = "",
-      q = "",
-      s = "",
-      t = "",
-      y, C = "",
-      D = "",
-      E = "",
-      w, z, F = "",
-      G = "",
-      A = "reply",
-      H = "",
-      I = "",
-      v = "",
-      J = !1;
-    n = "//i.4cdn.org/" + b;
-    0 == a.resto ? (f = !0, c && (G = '<div class="postLink mobile"><span class="info"></span><a href="thread/' + a.no + '" class="button">View Thread</a></div>', A = "op", F = '&nbsp; <span>[<a href="thread/' +
-      a.no + (a.semantic_url ? "/" + a.semantic_url : "") + '" class="replylink" rel="canonical">Reply</a>]</span>'), c = a.no) : c = a.resto;
-    w = c + "#p" + a.no;
-    Main.tid && b == Main.board ? z = "javascript:quote('" + a.no + "')" : (w = "thread/" + w, z = "thread/" + c + "#q" + a.no);
-    g = !a.capcode && a.id ? ' <span class="posteruid id_' + a.id + '">(ID: <span class="hand" title="Highlight posts by this ID">' + a.id + "</span>)</span> " : "";
-    switch (a.capcode) {
-      case "admin_highlight":
-        C = " highlightPost";
-      case "admin":
-        q = ' <strong class="capcode hand id_admin"title="Highlight posts by the Administrator">## Admin</strong>';
-        s = " capcodeAdmin";
-        t = ' <img src="' + Parser.icons.admin + '" alt="This user is the 4chan Administrator." title="This user is the 4chan Administrator." class="identityIcon">';
-        break;
-      case "mod":
-        q = ' <strong class="capcode hand id_mod" title="Highlight posts by Moderators">## Mod</strong>';
-        s = " capcodeMod";
-        t = ' <img src="' + Parser.icons.mod + '" alt="This user is a 4chan Moderator." title="This user is a 4chan Moderator." class="identityIcon">';
-        break;
-      case "developer":
-        q = ' <strong class="capcode hand id_developer" title="Highlight posts by Developers">## Developer</strong>';
-        s = " capcodeDeveloper";
-        t = ' <img src="' + Parser.icons.dev + '" alt="This user is a 4chan Developer." title="This user is a 4chan Developer." class="identityIcon">';
-        break;
-      case "manager":
-        q = ' <strong class="capcode hand id_manager" title="Highlight posts by Managers">## Manager</strong>', s = " capcodeManager", t = ' <img src="' + Parser.icons.manager + '" alt="This user is a 4chan Manager." title="This user is a 4chan Manager." class="identityIcon">'
-    }
-    a.email && (D = '<a href="mailto:' + a.email.replace(/ /g, "%20") + '" class="useremail">', E = "</a>");
-    y = a.country ? "pol" == b ? ' <img src="//s.4cdn.org/image/country/troll/' + a.country.toLowerCase() + '.gif" alt="' + a.country + '" title="' + a.country_name + '" class="countryFlag">' : ' <span title="' + a.country_name + '" class="flag flag-' + a.country.toLowerCase() + '"></span>' : "";
-    a.filedeleted ? h = '<div id="f' + a.no + '" class="file"><span class="fileThumb"><img src="' + Parser.icons.del + '" class="fileDeletedRes" alt="File deleted."></span></div>' : a.ext && (h = Parser.decodeSpecialChars(a.filename), p = x = a.filename + a.ext, h.length > (f ? 40 : 30) && (p = Parser.encodeSpecialChars(h.slice(0, f ? 35 : 25)) + "(...)" + a.ext, J = !0), a.tn_w || a.tn_h || ".gif" != a.ext || (a.tn_w = a.w, a.tn_h = a.h), u = 1048576 <= a.fsize ? (0 | a.fsize / 1048576 * 100 + 0.5) / 100 + " M" : 1024 < a.fsize ? (0 | a.fsize / 1024 + 0.5) + " K" : a.fsize + " ", a.spoiler && !Config.revealSpoilers && (p = "Spoiler Image", l = '" title="' + x + '"', B = " imgspoiler", m = "//s.4cdn.org/image/spoiler" + (Parser.customSpoiler[b] || "") + ".png", a.tn_w = 100, a.tn_h = 100), m || (m = "//t.4cdn.org/" + b + "/" + a.tim + "s.jpg"), h = ".pdf" == a.ext ? "PDF" : a.w + "x" + a.h, "f" != b ? (n = n + "/" + a.tim + a.ext, k = '<a class="fileThumb' + B + '" href="' + n + '" target="_blank"><img src="' + m + '" alt="' + u + 'B" data-md5="' + a.md5 + '" style="height: ' + a.tn_h + "px; width: " + a.tn_w + 'px;"><div class="mFileInfo mobile">' + u + "B " + a.ext.slice(1).toUpperCase() + "</div></a>", l = '<div class="fileText" id="fT' + a.no + l + ">File: <a" + (J ? ' title="' + x + '"' : "") + ' href="' + n + '" target="_blank">' + p + "</a> (" + u + "B, " + h + ")</div>") : (n = n + "/" + a.filename + a.ext, h += ", " + a.tag, l = '<div class="fileText" id="fT' + a.no + '">File: <a href="' +
-      n + '" target="_blank">' + a.filename + ".swf</a> (" + u + "B, " + h + ")</div>"), h = '<div id="f' + a.no + '" class="file">' + l + k + "</div>");
-    a.trip && (r = ' <span class="postertrip">' + a.trip + "</span>");
-    k = a.name || "";
-    m = a.sub || "";
-    f && (a.capcode_replies && (I = Parser.buildCapcodeReplies(a.capcode_replies, b, a.no)), d && a.replies && (d = a.replies + " post" + (1 < a.replies ? "s" : ""), a.images && (d += " and " + a.images + " image repl" + (1 < a.images ? "ies" : "y")), H = '<span class="summary preview-summary">' + d + ".</span>"), a.sticky && (v += '<img class="stickyIcon retina" title="Sticky" alt="Sticky" src="' +
-      Main.icons2.sticky + '"> '), a.closed && (v += '<img class="closedIcon retina" title="Closed" alt="Closed" src="' + Main.icons2.closed + '"> '));
-    e.className = "postContainer " + A + "Container";
-    e.id = "pc" + a.no;
-    e.innerHTML = (f ? "" : '<div class="sideArrows" id="sa' + a.no + '">&gt;&gt;</div>') + '<div id="p' + a.no + '" class="post ' + A + C + '"><div class="postInfoM mobile" id="pim' + a.no + '"><span class="nameBlock' + s + '"><span class="name">' + k + "</span>" + r + q + t + g + y + '<br><span class="subject">' + m + '</span></span><span class="dateTime postNum" data-utc="' +
-      a.time + '">' + a.now + ' <a href="' + a.no + "#p" + a.no + '">No.</a><a href="javascript:quote(\'' + a.no + '\');" title="Quote this post">' + a.no + "</a></span></div>" + (f ? h : "") + '<div class="postInfo desktop" id="pi' + a.no + '"' + (b != Main.board ? ' data-board="' + b + '"' : "") + '><input type="checkbox" name="' + a.no + '" value="delete"> <span class="subject">' + m + '</span> <span class="nameBlock' + s + '">' + D + '<span class="name">' + k + "</span>" + r + q + E + t + g + y + ' </span> <span class="dateTime" data-utc="' + a.time + '">' + a.now + '</span> <span class="postNum desktop"><a href="' +
-      w + '" title="Highlight this post">No.</a><a href="' + z + '" title="Quote this post">' + a.no + "</a> " + v + F + "</span></div>" + (f ? "" : h) + '<blockquote class="postMessage" id="m' + a.no + '">' + (a.com || "") + I + H + "</blockquote> </div>" + G;
-    if (!Main.tid || b != Main.board)
-      for (q = e.getElementsByClassName("quotelink"), a = 0; f = q[a]; ++a) r = f.getAttribute("href"), "/" != r.charAt(0) && (f.href = "/" + b + "/thread/" + c + r);
-    return e
-  },
-  buildCapcodeReplies: function(a, b, c) {
-    var d, e, f, g, h, k, l;
-    g = {
-      admin: "Administrator",
-      mod: "Moderator",
-      developer: "Developer",
-      manager: "Manager"
-    };
-    b != Main.board ? (k = "/" + b + "/thread/", l = "&gt;&gt;&gt;/" + b + "/") : (k = "", l = "&gt;&gt;");
-    f = '<br><br><span class="capcodeReplies"><span class="smaller">';
-    for (d in a)
-      for (f += '<span class="bold">' + g[d] + " Replies:</span> ", h = a[d], b = 0; e = h[b]; ++b) f += '<a class="quotelink" href="' + k + c + "#p" + e + '">' + l + e + "</a> ";
-    return f + "</span></span>"
-  },
-  parseBoard: function() {
-    var a, b = document.getElementsByClassName("thread");
-    for (a = 0; b[a]; ++a) Parser.parseThread(b[a].id.slice(1))
-  },
-  parseThread: function(a, b, c) {
-    var d, e, f, g, h;
-    e = $.id("t" + a);
-    f = e.getElementsByClassName("post");
-    b || (g = document.getElementById("pi" + a), Main.tid || (Config.filter && (h = Filter.exec(e, g, document.getElementById("m" + a), a)), Config.threadHiding && !h && (Main.hasMobileLayout ? (g = document.createElement("a"), g.href = "javascript:;", g.setAttribute("data-cmd", "hide"), g.setAttribute("data-id", a), g.className = "mobileHideButton button", g.textContent = "Hide", f[0].nextElementSibling.appendChild(g)) : (g = document.createElement("span"), g.innerHTML = '<img alt="H" class="extButton threadHideButton"data-cmd="hide" data-id="' +
-      a + '" src="' + Main.icons.minus + '" title="Toggle thread">', f[0].insertBefore(g, f[0].firstChild)), g.id = "sa" + a, ThreadHiding.hidden[a] && (ThreadHiding.hidden[a] = Main.now, ThreadHiding.hide(a))), ThreadExpansion.enabled && (d = $.cls("summary", e)[0]) && (e = document.createDocumentFragment(), h = d.cloneNode(!0), h.className = "", d.textContent = "", g = document.createElement("img"), g.className = "extButton expbtn", g.title = "Expand thread", g.alt = "+", g.setAttribute("data-cmd", "expand"), g.setAttribute("data-id", a), g.src = Main.icons.plus, e.appendChild(g), e.appendChild(h), g = document.createElement("span"), g.style.display = "none", g.textContent = "Showing all replies.", e.appendChild(g), d.appendChild(e))));
-    e = b ? 0 > b ? f.length + b : b : 0;
-    c = c ? e + c : f.length;
-    if (Main.isMobileDevice && Config.quotePreview)
-      for (d = e; d < c; ++d) Parser.parseMobileQuotelinks(f[d]);
-    if (Parser.trackedReplies)
-      for (d = e; d < c; ++d) Parser.parseTrackedReplies(f[d]);
-    for (d = e; d < c; ++d) Parser.parsePost(f[d].id.slice(1), a);
-    if (b) {
-      if (Parser.prettify)
-        for (d = e; d < c; ++d) Parser.parseMarkup(f[d]);
-      if (window.jsMath)
-        if (window.jsMath.loaded)
-          for (d = e; d < c; ++d) window.jsMath.ProcessBeforeShowing(f[d]);
-        else Parser.loadJSMath()
-    }
-    UA.dispatchEvent("4chanParsingDone", {
-      threadId: a,
-      offset: e,
-      limit: c
-    })
-  },
-  loadJSMath: function(a) {
-    $.cls("math", a)[0] && (window.jsMath.Autoload.Script.Push("ProcessBeforeShowing", [null]), window.jsMath.Autoload.LoadJsMath())
-  },
-  parseMathOne: function(a) {
-    window.jsMath.loaded ? window.jsMath.ProcessBeforeShowing(a) : Parser.loadJSMath(a)
-  },
-  parseTrackedReplies: function(a) {
-    var b, c;
-    c = $.cls("quotelink", a);
-    for (a = 0; b = c[a]; ++a) Parser.trackedReplies[b.textContent] && (b.textContent += " (You)", Parser.hasYouMarkers = !0)
-  },
-  parseMobileQuotelinks: function(a) {
-    var b, c, d;
-    c = $.cls("quotelink", a);
-    for (a = 0; b = c[a]; ++a)
-      if (d = b.getAttribute("href").match(/^(?:\/([^\/]+)\/)?(?:thread\/)?([0-9]+)?#p([0-9]+)$/)) d = document.createElement("a"), d.href = b.href, d.textContent = " #", d.className = "quoteLink", b.parentNode.insertBefore(d, b.nextSibling)
-  },
-  parseMarkup: function(a) {
-    var b, c;
-    if ((b = a.getElementsByClassName("prettyprint"))[0])
-      for (a = 0; c = b[a]; ++a) c.innerHTML = prettyPrintOne(c.innerHTML)
-  },
-  parsePost: function(a, b) {
-    var c, d, e, f, g, h;
-    b ? d = document.getElementById("pi" + a) : (d = a.getElementsByClassName("postInfo")[0], a = d.id.slice(2));
-    Parser.needMsg && (f = document.getElementById("m" + a));
-    c = document.createElement("a");
-    c.href = "#";
-    c.className = "postMenuBtn";
-    c.title = "Menu";
-    c.setAttribute("data-cmd", "post-menu");
-    c.textContent = "\u25b6";
-    d.appendChild(c);
-    b && a != b && (Config.filter && (g = Filter.exec(d.parentNode, d, f)), !g && ReplyHiding.hidden[a] && (ReplyHiding.hidden[a] = Main.now, ReplyHiding.hide(a)), Config.backlinks && Parser.parseBacklinks(a, b));
-    IDColor.enabled && (h = $.cls("posteruid", d)[0]) && IDColor.apply(h.firstElementChild);
-    Config.embedSoundCloud && Media.parseSoundCloud(f);
-    Config.embedYouTube && Media.parseYouTube(f);
-    Config.embedVocaroo && Media.parseVocaroo(f);
-    Config.revealSpoilers && (e = document.getElementById("f" + a)) && (e = e.children[1]) && $.hasClass(e, "imgspoiler") && (c = e.firstChild, e.removeChild(c), c.removeAttribute("style"), h = $.hasClass(d.parentNode, "op"), c.style.maxWidth = c.style.maxHeight = h ? "250px" : "125px", c.src = "//t.4cdn.org" + e.pathname.replace(/([0-9]+).+$/, "/$1s.jpg"), f = e.previousElementSibling, g = f.title.split("."), g[0].length > (h ? 40 : 30) ? g = g[0].slice(0, h ? 35 : 25) + "(...)" + g[1] : (g = f.title, f.removeAttribute("title")), f.firstElementChild.innerHTML = g, e.insertBefore(c, e.firstElementChild));
-    Config.localTime && (c = d.getElementsByClassName("dateTime")[0], c.title = this.utcOffset, c.textContent = Parser.getLocaleDate(new Date(1E3 * c.getAttribute("data-utc"))))
-  },
-  getLocaleDate: function(a) {
-    return ("0" + (1 + a.getMonth())).slice(-2) + "/" + ("0" + a.getDate()).slice(-2) + "/" + ("0" + a.getFullYear()).slice(-2) + "(" + this.weekdays[a.getDay()] + ")" + ("0" + a.getHours()).slice(-2) + ":" + ("0" + a.getMinutes()).slice(-2) + (this.hasSeconds ? ":" + ("0" + a.getSeconds()).slice(-2) : "")
-  },
-  parseBacklinks: function(a, b) {
-    var c, d, e, f, g, h, k;
-    if (e = document.getElementById("m" + a).getElementsByClassName("quotelink"))
-      for (f = {}, c = 0; d = e[c]; ++c)
-        if (g = d.getAttribute("href").split("#p"), g[1])(g[1] == b && (d.textContent += " (OP)"), h = document.getElementById("pi" + g[1])) ? f[g[1]] || (f[g[1]] = !0, d = document.createElement("span"), d.innerHTML = Main.hasMobileLayout ? '<a href="#p' + a + '" class="quotelink">&gt;&gt;' + a + '</a><a href="#p' + a + '" class="quoteLink"> #</a> ' : '<a href="#p' + a + '" class="quotelink">&gt;&gt;' + a + "</a> ", (k = document.getElementById("bl_" + g[1])) || (k = document.createElement("div"), k.id = "bl_" + g[1], k.className = "backlink", Main.hasMobileLayout && (k.className = "backlink mobile", h = document.getElementById("p" + g[1])), h.appendChild(k)), k.appendChild(d)) : Main.tid && ">" != d.textContent.charAt(2) && (d.textContent += " \u2192")
-  },
-  buildSummary: function(a, b, c) {
-    if (b) b = b + " post" + (1 < b ? "s" : "");
-    else return null;
-    c = c ? " and " + c + " image repl" + (1 < c ? "ies" : "y") : "";
-    el = document.createElement("span");
-    el.className = "summary desktop";
-    el.innerHTML = b + c + ' omitted. Click <a href="thread/' + a + '" class="replylink">here</a> to view.';
-    return el
-  }
-}, PostMenu = {
+  PostMenu = {
     activeBtn: null,
     open: function(a) {
       var b, c, d, e;
       PostMenu.close();
       d = a.parentNode.id.split("pi")[1];
       b = a.parentNode.getAttribute("data-board");
-      e = !b && !! $.id("t" + d);
+      e = !b && !!$.id("t" + d);
       c = '<ul><li data-cmd="report" data-id="' + d + (b ? '" data-board="' + b + '"' : '"') + '">Report post</li>';
       if (e) Main.tid || (c += '<li data-cmd="hide" data-id="' + d + '">' + ($.hasClass($.id("t" + d), "post-hidden") ? "Unhide" : "Hide") + " thread</li>"), Config.threadWatcher && (c += '<li data-cmd="watch" data-id="' + d + '">' + (ThreadWatcher.watched[d + "-" + Main.board] ? "Remove from" : "Add to") + " watch list</li>");
       else if (b = $.id("pc" + d)) c += '<li data-cmd="hide-r" data-id="' + d + '">' + ($.hasClass(b, "post-hidden") ? "Unhide" : "Hide") + " post</li>";
@@ -331,7 +332,8 @@ var Parser = {
       var a;
       if (a = $.id("post-menu")) a.parentNode.removeChild(a), document.removeEventListener("click", PostMenu.close, !1), $.removeClass(PostMenu.activeBtn, "menuOpen"), PostMenu.activeBtn = null
     }
-  }, Depager = {
+  },
+  Depager = {
     init: function() {
       var a, b;
       this.threadsLoaded = this.isComplete = this.isEnabled = this.isLoading = !1;
@@ -340,7 +342,7 @@ var Parser = {
       this.threshold = 350;
       this.adId = "azk53379";
       this.adZones = [16258, 16260];
-      if (this.boardHasAds = !! $.id(this.adId)) a = $.cls("ad-plea"), this.adPlea = a[a.length - 1];
+      if (this.boardHasAds = !!$.id(this.adId)) a = $.cls("ad-plea"), this.adPlea = a[a.length - 1];
       if (a = $.cls("prev")[0])
         if (a.innerHTML = '[<a title="Toggle infinite scroll" class="depagelink" href="" data-cmd="depage">All</a>]', a = a.firstElementChild, Config.alwaysDepage) {
           if (this.isEnabled = !0, a.parentNode.parentNode.className += " depagerEnabled", Depager.bindHandlers(), b = $.cls("board")[0]) a = document.createElement("span"), a.className = "depageNumber", a.textContent = "Page 1", b.insertBefore(a, b.firstElementChild)
@@ -416,8 +418,7 @@ var Parser = {
       if (c.length)
         if ("enabled" == a)
           for (a = 0; b = c[a]; ++a) b.textContent = "All", b = b.parentNode.parentNode, $.hasClass(b, "depagerEnabled") || $.addClass(b, "depagerEnabled");
-        else
-      if ("loading" == a)
+        else if ("loading" == a)
         for (a = 0; b = c[a]; ++a) b.textContent = "Loading\u2026";
       else if ("disabled" == a)
         for (a = 0; b = c[a]; ++a) b.textContent = "All", $.removeClass(b.parentNode.parentNode, "depagerEnabled");
@@ -462,7 +463,8 @@ var Parser = {
       console.log("Error: " + this.status);
       Depager.setStatus("error")
     }
-  }, QuoteInline = {
+  },
+  QuoteInline = {
     isSelfQuote: function(a, b, c) {
       if (c && c != Main.board) return !1;
       a = a.parentNode;
@@ -513,7 +515,8 @@ var Parser = {
       if (c = $.cls("backlink", f)[0]) c.id = e + c.id;
       h ? (a = g.parentNode.parentNode.getAttribute("data-pfx") || "", a = $.id(a + "m" + g.id.split("_")[1]), a.insertBefore(f, a.firstChild), (f = b.parentNode.getAttribute("data-inline-count")) ? f = +f + 1 : (f = 1, b.parentNode.style.display = "none"), b.parentNode.setAttribute("data-inline-count", f)) : ($.hasClass(a.parentNode, "quote") && (a = a.parentNode), b = a.parentNode, b.insertBefore(f, a.nextSibling))
     }
-  }, QuotePreview = {
+  },
+  QuotePreview = {
     init: function() {
       this.regex = /^(?:\/([^\/]+)\/)?(?:thread\/)?([0-9]+)?#p([0-9]+)$/;
       this.highlightAnti = this.highlight = null;
@@ -563,7 +566,8 @@ var Parser = {
       a && (a.style.cursor = "");
       (c = $.id("quote-preview")) && document.body.removeChild(c)
     }
-  }, ImageExpansion = {
+  },
+  ImageExpansion = {
     activeVideos: [],
     timeout: null,
     expand: function(a) {
@@ -685,7 +689,8 @@ var Parser = {
       if (a.naturalWidth) ImageExpansion.onLoadStart(a, b), b.style.opacity = "";
       else return setTimeout(ImageExpansion.checkLoadStart, 15, a, b)
     }
-  }, ImageHover = {
+  },
+  ImageHover = {
     show: function(a) {
       var b, c;
       c = a.parentNode.getAttribute("href");
@@ -730,7 +735,8 @@ var Parser = {
       if (a.naturalWidth) ImageHover.onLoadStart(a, b);
       else return setTimeout(ImageHover.checkLoadStart, 15, a, b)
     }
-  }, QR = {
+  },
+  QR = {
     init: function() {
       var a;
       if (UA.hasFormData) {
@@ -746,7 +752,7 @@ var Parser = {
         for (a in window.cooldowns) this.cooldowns[a] = 1E3 * window.cooldowns[a];
         this.captchaDelay = 240500;
         this.xhr = this.pulse = this.captchaInterval = null;
-        this.fileDisabled = !! window.imagelimit;
+        this.fileDisabled = !!window.imagelimit;
         this.tracked = {};
         this.lastTid = localStorage.getItem("4chan-cd-" + Main.board + "-tid");
         !Main.tid || Main.hasMobileLayout || Main.threadClosed || QR.addReplyLink();
@@ -840,7 +846,7 @@ var Parser = {
           if (window.captchaReady)
             if (null === QR.captchaInterval) QR.onCaptchaReady();
             else QR.reloadCaptcha();
-            else window.loadRecaptcha();
+        else window.loadRecaptcha();
         Main.hasMobileLayout || Draggable.set($.id("qrHeader"))
       }
     },
@@ -1032,7 +1038,8 @@ var Parser = {
       0 >= QR.cooldown ? (clearInterval(QR.pulse), QR.btn.value = "Post", QR.cooldown = !1, QR.auto && QR.submit()) : QR.btn.value = QR.cooldown +
         (QR.auto ? "s (auto)" : "s")
     }
-  }, ThreadHiding = {
+  },
+  ThreadHiding = {
     init: function() {
       this.threshold = 432E5;
       this.hidden = {};
@@ -1106,7 +1113,8 @@ var Parser = {
       }
       localStorage.removeItem("4chan-hide-t-" + Main.board)
     }
-  }, ReplyHiding = {
+  },
+  ReplyHiding = {
     init: function() {
       this.threshold = 6048E5;
       this.hidden = {};
@@ -1154,7 +1162,8 @@ var Parser = {
       }
       localStorage.removeItem("4chan-hide-r-" + Main.board)
     }
-  }, ThreadWatcher = {
+  },
+  ThreadWatcher = {
     init: function() {
       var a, b;
       this.listNode = null;
@@ -1275,7 +1284,8 @@ var Parser = {
         } else 404 == this.status && (ThreadWatcher.watched[a][1] = -1); if (b) ThreadWatcher.onRefreshEnd(b)
       }, b && (d.onerror = d.onload), d.open("GET", "//a.4cdn.org/" + c[1] + "/thread/" + c[0] + ".json"), d.send(null)
     }
-  }, ThreadExpansion = {
+  },
+  ThreadExpansion = {
     init: function() {
       this.enabled = UA.hasCORS
     },
@@ -1293,7 +1303,8 @@ var Parser = {
                 if (k[a].no == d) {
                   h = k[a];
                   break
-                } h ? (h = Parser.buildHTMLFromJSON(h, Main.board), b.innerHTML = $.cls("postMessage", h)[0].innerHTML, Parser.prettify && Parser.parseMarkup(b), window.jsMath && Parser.parseMathOne(b)) : e.textContent = "This post doesn't exist anymore."
+                }
+            h ? (h = Parser.buildHTMLFromJSON(h, Main.board), b.innerHTML = $.cls("postMessage", h)[0].innerHTML, Parser.prettify && Parser.parseMarkup(b), window.jsMath && Parser.parseMathOne(b)) : e.textContent = "This post doesn't exist anymore."
           } else 404 == this.status ? e.textContent = "This thread doesn't exist anymore." : (e.textContent = "Connection Error", console.log("ThreadExpansion: " + this.status + " " + this.statusText))
         },
         onerror: function() {
@@ -1324,8 +1335,8 @@ var Parser = {
               for (f = +f[0].id.slice(1), b = 1; c = g[b]; ++b)
                 if (c.no < f) c = Parser.buildHTMLFromJSON(c, Main.board), c.className += " rExpanded", d.appendChild(c);
                 else break;
-                else
-                  for (b = 1; c = g[b]; ++b) c = Parser.buildHTMLFromJSON(c, Main.board), c.className += " rExpanded", d.appendChild(c);
+            else
+              for (b = 1; c = g[b]; ++b) c = Parser.buildHTMLFromJSON(c, Main.board), c.className += " rExpanded", d.appendChild(c);
             f = $.id("m" + a);
             (h = $.cls("abbr", f)[0]) && /^Comment/.test(h.textContent) && (e.setAttribute("data-truncated", "1"), h = document.createElement("div"), h.style.display = "none", h.textContent = f.innerHTML, f.parentNode.insertBefore(h, f.nextSibling), (h = $.cls("capcodeReplies", f)[0]) ? (f.innerHTML = g[0].com + "<br><br>", f.appendChild(h)) : f.innerHTML = g[0].com, Parser.prettify && Parser.parseMarkup(f), window.jsMath && Parser.parseMathOne(f));
             e.insertBefore(d, k.nextSibling);
@@ -1342,7 +1353,8 @@ var Parser = {
         }
       })
     }
-  }, ThreadUpdater = {
+  },
+  ThreadUpdater = {
     init: function() {
       UA.hasCORS && (this.enabled = !0, this.pageTitle = document.title, this.unreadCount = 0, this.auto = this.hadAuto = !1, this.delayId = 0, this.delayIdHidden = 4, this.delayRange = [10, 15, 20, 30, 60, 90, 120, 180, 240, 300], this.timeLeft = 0, this.interval = null, this.lastModified = "0", this.currentIcon = this.lastReply = null, this.iconPath = "//s.4cdn.org/image/", this.iconNode = document.head.querySelector('link[rel="shortcut icon"]'), this.iconNode.type = "image/x-icon", this.defaultIcon = this.iconNode.getAttribute("href").replace(this.iconPath, ""), this.deletionQueue = {}, Config.updaterSound && (this.audioEnabled = !1, this.audio = document.createElement("audio"), this.audio.src = "//s.4cdn.org/media/beep.ogg"), this.hidden = "hidden", this.visibilitychange = "visibilitychange", this.adRefreshDelay = 1E3, this.adDebounce = 0, this.ads = {}, "undefined" === typeof document.hidden && ("mozHidden" in document ? (this.hidden = "mozHidden", this.visibilitychange = "mozvisibilitychange") : "webkitHidden" in document ? (this.hidden = "webkitHidden", this.visibilitychange = "webkitvisibilitychange") : "msHidden" in document && (this.hidden = "msHidden", this.visibilitychange = "msvisibilitychange")), this.initAds(), this.initControls(), document.addEventListener("scroll", this.onScroll, !1), (Config.alwaysAutoUpdate || sessionStorage.getItem("4chan-auto-" + Main.tid)) && this.start())
     },
@@ -1510,11 +1522,11 @@ var Parser = {
         h = e.children[e.childElementCount - 1];
         k = +h.id.slice(2);
         f = Parser.parseThreadJSON(this.responseText);
-        b = !! f[0].closed;
+        b = !!f[0].closed;
         b != Main.threadClosed && (QR.enabled && $.id("quickReply") && (b ? QR.lock() : QR.unlock()), Main.setThreadState("closed", b));
-        b = !! f[0].sticky;
+        b = !!f[0].sticky;
         b != Main.threadSticky && Main.setThreadState("sticky", b);
-        b = !! f[0].imagelimit;
+        b = !!f[0].imagelimit;
         QR.enabled && b != QR.fileDisabled && (QR.fileDisabled = b);
         !Config.revealSpoilers && f[0].custom_spoiler && Parser.setCustomSpoiler(Main.board, f[0].custom_spoiler);
         for (a = f.length - 1; 0 <= a && !(f[a].no <= k); a--) d.push(f[a]);
@@ -1585,7 +1597,8 @@ var Parser = {
       wshl: "favicon-ws-newfilters.ico",
       nwshl: "favicon-nws-newfilters.ico"
     }
-  }, ThreadStats = {
+  },
+  ThreadStats = {
     init: function() {
       var a;
       this.nodeTop = document.createElement("div");
@@ -1636,7 +1649,8 @@ var Parser = {
     onCatalogError: function() {
       console.log("ThreadStats: couldn't get the catalog (" + this.status + ")")
     }
-  }, Filter = {
+  },
+  Filter = {
     init: function() {
       this.entities = document.createElement("div");
       Filter.load()
@@ -1700,8 +1714,7 @@ var Parser = {
             p = !0;
             break
           }
-        } else
-      if (1 == m.type) {
+        } else if (1 == m.type) {
         if ((f || (f = b.getElementsByClassName("name")[0])) && m.pattern == f.textContent) {
           p = !0;
           break
@@ -1747,8 +1760,7 @@ var Parser = {
               d = b.pattern;
               if (b.type && 1 != b.type && 4 != b.type)
                 if (match = d.match(g)) pattern = RegExp(match[1], match[2]);
-                else
-              if ('"' == d[0] && '"' == d[d.length - 1]) pattern = RegExp(d.slice(1, -1).replace(f, "\\$1"));
+                else if ('"' == d[0] && '"' == d[d.length - 1]) pattern = RegExp(d.slice(1, -1).replace(f, "\\$1"));
               else {
                 h = d.split(" ");
                 pattern = "";
@@ -1913,7 +1925,8 @@ var Parser = {
       a = $.id("palette-custom-input");
       $.id("palette-custom-ok").style.backgroundColor = a.value
     }
-  }, IDColor = {
+  },
+  IDColor = {
     css: "padding: 0 5px; border-radius: 6px; font-size: 0.8em;",
     ids: {},
     init: function() {
@@ -1939,7 +1952,8 @@ var Parser = {
       this.apply(a);
       a.style.cssText += this.css
     }
-  }, SWFEmbed = {
+  },
+  SWFEmbed = {
     init: function() {
       Main.tid ? this.processThread() : this.processIndex()
     },
@@ -2007,7 +2021,8 @@ var Parser = {
       var b = $.id("swf-embed");
       if (a.target === b || "swf-embed-close" == a.target.id) b.removeEventListener("click", SWFEmbed.onBackdropClick, !1), b.parentNode.removeChild(b)
     }
-  }, Media = {
+  },
+  Media = {
     init: function() {
       this.matchSC = /(?:soundcloud\.com|snd\.sc)\/[^\s<]+(?:<wbr>)?[^\s<]*/g;
       this.matchYT = /(?:youtube\.com\/watch\?[^\s]*?v=|youtu\.be\/)[^\s<]+(?:<wbr>)?[^\s<]*(?:<wbr>)?[^\s<]*/g;
@@ -2058,7 +2073,8 @@ var Parser = {
       var b, c = a.getAttribute("data-type");
       c && (b = Media.map[c]) && b.call(this, a)
     }
-  }, CustomCSS = {
+  },
+  CustomCSS = {
     init: function() {
       var a, b;
       if (b = localStorage.getItem("4chan-css")) a = document.createElement("style"), a.id = "customCSS", a.setAttribute("type", "text/css"), a.textContent = b, document.head.appendChild(a)
@@ -2084,7 +2100,8 @@ var Parser = {
           CustomCSS.save(), CustomCSS.close()
       }
     }
-  }, Keybinds = {
+  },
+  Keybinds = {
     init: function() {
       this.map = {
         65: function() {
@@ -2137,7 +2154,8 @@ var Parser = {
       var b;
       (b = a.target.getAttribute("data-cmd")) && "keybinds-close" == b && Keybinds.close()
     }
-  }, Report = {
+  },
+  Report = {
     init: function() {
       window.addEventListener("message", Report.onMessage, !1)
     },
@@ -2147,7 +2165,8 @@ var Parser = {
     open: function(a, b) {
       window.open("https://sys.4chan.org/" + (b || Main.board) + "/imgboard.php?mode=report&no=" + a, Date.now(), "toolbar=0,scrollbars=0,location=0,status=1,menubar=0,resizable=1,width=600,height=170")
     }
-  }, CustomMenu = {
+  },
+  CustomMenu = {
     reset: function() {
       var a, b, c, d, e;
       c = $.cls("boardList");
@@ -2201,7 +2220,8 @@ var Parser = {
       if (a = $.id("customMenuBox")) Config.customMenuList = a.value;
       CustomMenu.closeEditor()
     }
-  }, Draggable = {
+  },
+  Draggable = {
     el: null,
     key: null,
     scrollX: null,
@@ -2234,7 +2254,8 @@ var Parser = {
       1 > b ? (c.left = "0", c.right = "") : Draggable.right < b ? (c.left = "", c.right = "0") : (c.left = b / document.documentElement.clientWidth * 100 + "%", c.right = "");
       1 > a ? (c.top = "0", c.bottom = "") : Draggable.bottom < a ? (c.bottom = "0", c.top = "") : (c.top = a / document.documentElement.clientHeight * 100 + "%", c.bottom = "")
     }
-  }, UA = {
+  },
+  UA = {
     init: function() {
       document.head = document.head || $.tag("head")[0];
       this.isOpera = "[object Opera]" == Object.prototype.toString.call(window.opera);
@@ -2254,7 +2275,8 @@ var Parser = {
       UA.isOpera && "string" == typeof(b = document.getSelection()) || (b = window.getSelection(), a || (b = b.toString()));
       return b
     }
-  }, Config = {
+  },
+  Config = {
     quotePreview: !0,
     backlinks: !0,
     quickReply: !0,
@@ -2290,7 +2312,8 @@ var Parser = {
     fixedThreadWatcher: !1,
     persistentQR: !1,
     disableAll: !1
-  }, ConfigMobile = {
+  },
+  ConfigMobile = {
     embedYouTube: !1,
     compactThreads: !1
   };
@@ -2320,129 +2343,130 @@ Config.save = function() {
   localStorage.setItem("4chan-settings", JSON.stringify(Config))
 };
 var SettingsMenu = {
-  options: {
-    "Quotes &amp; Replying": {
-      quotePreview: ["Quote preview", "Show post when mousing over post links", !0],
-      backlinks: ["Backlinks", "Show who has replied to a post", !0],
-      inlineQuotes: ["Inline quote links", "Clicking quote links will inline expand the quoted post, Shift-click to bypass inlining"],
-      quickReply: ["Quick Reply", "Quickly respond to a post by clicking its post number", !0],
-      persistentQR: ["Persistent Quick Reply", "Keep Quick Reply window open after posting"]
+    options: {
+      "Quotes &amp; Replying": {
+        quotePreview: ["Quote preview", "Show post when mousing over post links", !0],
+        backlinks: ["Backlinks", "Show who has replied to a post", !0],
+        inlineQuotes: ["Inline quote links", "Clicking quote links will inline expand the quoted post, Shift-click to bypass inlining"],
+        quickReply: ["Quick Reply", "Quickly respond to a post by clicking its post number", !0],
+        persistentQR: ["Persistent Quick Reply", "Keep Quick Reply window open after posting"]
+      },
+      Monitoring: {
+        threadUpdater: ["Thread updater", "Append new posts to bottom of thread without refreshing the page", !0],
+        alwaysAutoUpdate: ["Auto-update by default", "Always auto-update threads", !0],
+        threadWatcher: ["Thread Watcher", "Keep track of threads you're watching and see when they receive new posts"],
+        autoScroll: ["Auto-scroll with auto-updated posts", "Automatically scroll the page as new posts are added"],
+        updaterSound: ["Sound notification", "Play a sound when somebody replies to your post(s)"],
+        fixedThreadWatcher: ["Pin Thread Watcher to the page", "Thread Watcher will scroll with you"],
+        threadStats: ["Thread statistics", "Display post and image counts on the right of the page, <em>italics</em> signify bump/image limit has been met"],
+        pageTitle: ["Snippets in page title", "Show post subjects or comment snippets in page (tab) title"]
+      },
+      "Filters &amp; Post Hiding": {
+        filter: ['Filter and highlight specific threads/posts [<a href="javascript:;" data-cmd="filters-open">Edit</a>]', "Enable pattern-based filters"],
+        threadHiding: ['Thread hiding [<a href="javascript:;" data-cmd="thread-hiding-clear">Clear History</a>]', "Hide entire threads by clicking the minus button", !0],
+        hideStubs: ["Hide thread stubs", "Don't display stubs of hidden threads"]
+      },
+      Navigation: {
+        threadExpansion: ["Thread expansion", "Expand threads inline on board indexes", !0],
+        dropDownNav: ["Use persistent drop-down navigation bar", ""],
+        classicNav: ["Use traditional board list", "", !1, !0],
+        customMenu: ['Custom board list [<a href="javascript:;" data-cmd="custom-menu-edit">Edit</a>]', "Only show selected boards in top and bottom board lists"],
+        alwaysDepage: ["Always use infinite scroll", "Enable infinite scroll by default, so reaching the bottom of the board index will load subsequent pages"],
+        topPageNav: ["Page navigation at top of page", "Show the page switcher at the top of the page, hold Shift and drag to move"],
+        stickyNav: ["Navigation arrows", "Show top and bottom navigation arrows, hold Shift and drag to move"],
+        keyBinds: ['Use keyboard shortcuts [<a href="javascript:;" data-cmd="keybinds-open">Show</a>]', "Enable handy keyboard shortcuts for common actions"]
+      },
+      "Images &amp; Media": {
+        imageExpansion: ["Image expansion", "Enable inline image expansion, limited to browser width", !0],
+        fitToScreenExpansion: ["Fit expanded images to screen", "Limit expanded images to both browser width and height"],
+        imageHover: ["Image hover", "Mouse over images to view full size, limited to browser size"],
+        revealSpoilers: ["Don't spoiler images", "Show image thumbnail and original filename instead of spoiler placeholders"],
+        noPictures: ["Hide thumbnails", "Don't display thumbnails while browsing", !0],
+        embedYouTube: ["Embed YouTube links", "Embed YouTube player into replies"],
+        embedSoundCloud: ["Embed SoundCloud links", "Embed SoundCloud player into replies"],
+        embedVocaroo: ["Embed Vocaroo links", "Embed Vocaroo player into replies"]
+      },
+      Miscellaneous: {
+        customCSS: ['Custom CSS [<a href="javascript:;" data-cmd="css-open">Edit</a>]', "Include your own CSS rules", !0],
+        IDColor: ["Color user IDs", "Assign unique colors to user IDs on boards that use them"],
+        compactThreads: ["Force long posts to wrap", "Long posts will wrap at 75% browser width"],
+        localTime: ["Convert dates to local time", "Convert 4chan server time (US Eastern Time) to your local time"]
+      }
     },
-    Monitoring: {
-      threadUpdater: ["Thread updater", "Append new posts to bottom of thread without refreshing the page", !0],
-      alwaysAutoUpdate: ["Auto-update by default", "Always auto-update threads", !0],
-      threadWatcher: ["Thread Watcher", "Keep track of threads you're watching and see when they receive new posts"],
-      autoScroll: ["Auto-scroll with auto-updated posts", "Automatically scroll the page as new posts are added"],
-      updaterSound: ["Sound notification", "Play a sound when somebody replies to your post(s)"],
-      fixedThreadWatcher: ["Pin Thread Watcher to the page", "Thread Watcher will scroll with you"],
-      threadStats: ["Thread statistics", "Display post and image counts on the right of the page, <em>italics</em> signify bump/image limit has been met"],
-      pageTitle: ["Snippets in page title", "Show post subjects or comment snippets in page (tab) title"]
+    save: function() {
+      var a, b, c, d;
+      b = $.id("settingsMenu").getElementsByClassName("menuOption");
+      for (a = 0; c = b[a]; ++a) d = c.getAttribute("data-option"), Config[d] = "checkbox" == c.type ? c.checked : c.value;
+      Config.save();
+      SettingsMenu.close();
+      location.href = location.href.replace(/#.+$/, "")
     },
-    "Filters &amp; Post Hiding": {
-      filter: ['Filter and highlight specific threads/posts [<a href="javascript:;" data-cmd="filters-open">Edit</a>]', "Enable pattern-based filters"],
-      threadHiding: ['Thread hiding [<a href="javascript:;" data-cmd="thread-hiding-clear">Clear History</a>]', "Hide entire threads by clicking the minus button", !0],
-      hideStubs: ["Hide thread stubs", "Don't display stubs of hidden threads"]
+    toggle: function() {
+      $.id("settingsMenu") ? SettingsMenu.close() : SettingsMenu.open()
     },
-    Navigation: {
-      threadExpansion: ["Thread expansion", "Expand threads inline on board indexes", !0],
-      dropDownNav: ["Use persistent drop-down navigation bar", ""],
-      classicNav: ["Use traditional board list", "", !1, !0],
-      customMenu: ['Custom board list [<a href="javascript:;" data-cmd="custom-menu-edit">Edit</a>]', "Only show selected boards in top and bottom board lists"],
-      alwaysDepage: ["Always use infinite scroll", "Enable infinite scroll by default, so reaching the bottom of the board index will load subsequent pages"],
-      topPageNav: ["Page navigation at top of page", "Show the page switcher at the top of the page, hold Shift and drag to move"],
-      stickyNav: ["Navigation arrows", "Show top and bottom navigation arrows, hold Shift and drag to move"],
-      keyBinds: ['Use keyboard shortcuts [<a href="javascript:;" data-cmd="keybinds-open">Show</a>]', "Enable handy keyboard shortcuts for common actions"]
+    open: function() {
+      var a, b, c, d, e, f, g, h, k;
+      Main.firstRun && ((k = $.id("settingsTip")) && k.parentNode.removeChild(k), (k = $.id("settingsTipBottom")) && k.parentNode.removeChild(k), Config.save());
+      f = document.createElement("div");
+      f.id = "settingsMenu";
+      f.className = "UIPanel";
+      e = '<div class="extPanel reply"><div class="panelHeader">Settings<span><img alt="Close" title="Close" class="pointer" data-cmd="settings-toggle" src="' + Main.icons.cross + '"></a></span></div><ul>';
+      e += '<ul><li id="settings-exp-all">[<a href="#" data-cmd="settings-exp-all">Expand All Settings</a>]</li></ul>';
+      if (Main.hasMobileLayout)
+        for (b in c = {}, SettingsMenu.options) {
+          h = {};
+          g = SettingsMenu.options[b];
+          for (d in g) g[d][2] && (h[d] = g[d]);
+          for (a in h) {
+            c[b] = h;
+            break
+          }
+        } else c = SettingsMenu.options;
+      for (b in c) {
+        g = c[b];
+        e += '<ul><li class="settings-cat-lbl"><img alt="" class="settings-expand" src="' + Main.icons.plus + '"><span class="settings-expand pointer">' + b + '</span></li><ul class="settings-cat">';
+        for (d in g) e += "<li" + (g[d][3] ? ' class="settings-sub">' : ">") + '<label><input type="checkbox" class="menuOption" data-option="' + d + '"' + (Config[d] ? ' checked="checked">' : ">") + g[d][0] + "</label>" + (!1 !== g[d][1] ? '</li><li class="settings-tip' + (g[d][3] ? ' settings-sub">' : '">') + g[d][1] : "") + "</li>";
+        e += "</ul></ul>"
+      }
+      e += '</ul><ul><li class="settings-off"><label title="Completely disable the native extension (overrides any checked boxes)"><input type="checkbox" class="menuOption" data-option="disableAll"' + (Config.disableAll ? ' checked="checked">' : ">") + 'Disable the native extension</label></li></ul><div class="center"><button data-cmd="settings-export">Export Settings</button><button data-cmd="settings-save">Save Settings</button></div>';
+      f.innerHTML = e;
+      f.addEventListener("click", SettingsMenu.onClick, !1);
+      document.body.appendChild(f);
+      Main.firstRun && SettingsMenu.expandAll();
+      (k = $.cls("menuOption", f)[0]) && k.focus()
     },
-    "Images &amp; Media": {
-      imageExpansion: ["Image expansion", "Enable inline image expansion, limited to browser width", !0],
-      fitToScreenExpansion: ["Fit expanded images to screen", "Limit expanded images to both browser width and height"],
-      imageHover: ["Image hover", "Mouse over images to view full size, limited to browser size"],
-      revealSpoilers: ["Don't spoiler images", "Show image thumbnail and original filename instead of spoiler placeholders"],
-      noPictures: ["Hide thumbnails", "Don't display thumbnails while browsing", !0],
-      embedYouTube: ["Embed YouTube links", "Embed YouTube player into replies"],
-      embedSoundCloud: ["Embed SoundCloud links", "Embed SoundCloud player into replies"],
-      embedVocaroo: ["Embed Vocaroo links", "Embed Vocaroo player into replies"]
+    showExport: function() {
+      var a, b;
+      $.id("exportSettings") || (b = location.href.replace(location.hash, "") + "#cfg=" + Config.toURL(), a = document.createElement("div"), a.id = "exportSettings", a.className = "UIPanel", a.setAttribute("data-cmd", "export-close"), a.innerHTML = '<div class="extPanel reply"><div class="panelHeader">Export Settings<span><img data-cmd="export-close" class="pointer" alt="Close" title="Close" src="' +
+        Main.icons.cross + '"></span></div><p class="center">Copy and save the URL below, and visit it from another browser or computer to restore your extension and catalog settings.</p><p class="center"><input class="export-field" type="text" readonly="readonly" value="' + b + '"></p><p style="margin-top:15px" class="center">Alternatively, you can drag the link below into your bookmarks bar and click it to restore.</p><p class="center">[<a target="_blank" href="' + b + '">Restore 4chan Settings</a>]</p>', document.body.appendChild(a), a.addEventListener("click", this.onExportClick, !1), a = $.cls("export-field", a)[0], a.focus(), a.select())
     },
-    Miscellaneous: {
-      customCSS: ['Custom CSS [<a href="javascript:;" data-cmd="css-open">Edit</a>]', "Include your own CSS rules", !0],
-      IDColor: ["Color user IDs", "Assign unique colors to user IDs on boards that use them"],
-      compactThreads: ["Force long posts to wrap", "Long posts will wrap at 75% browser width"],
-      localTime: ["Convert dates to local time", "Convert 4chan server time (US Eastern Time) to your local time"]
+    closeExport: function() {
+      var a;
+      if (a = $.id("exportSettings")) a.removeEventListener("click", this.onExportClick, !1), document.body.removeChild(a)
+    },
+    onExportClick: function(a) {
+      "exportSettings" == a.target.id && (a.preventDefault(), a.stopPropagation(), SettingsMenu.closeExport())
+    },
+    expandAll: function() {
+      var a, b, c = $.cls("settings-expand");
+      for (a = 0; b = c[a]; ++a) b.src = Main.icons.minus, b.parentNode.nextElementSibling.style.display = "block"
+    },
+    toggleCat: function(a) {
+      var b, c, d = a.parentNode.nextElementSibling;
+      d.style.display ? (c = "", b = "plus") : (c = "block", b = "minus");
+      d.style.display = c;
+      a.parentNode.firstElementChild.src = Main.icons[b]
+    },
+    onClick: function(a) {
+      var b, c;
+      c = a.target;
+      $.hasClass(c, "settings-expand") ? SettingsMenu.toggleCat(c) : "settings-exp-all" == c.getAttribute("data-cmd") ? (a.preventDefault(), SettingsMenu.expandAll()) : "settingsMenu" == c.id && (b = $.id("settingsMenu")) && (a.preventDefault(), SettingsMenu.close(b))
+    },
+    close: function(a) {
+      if (a = a || $.id("settingsMenu")) a.removeEventListener("click", SettingsMenu.onClick, !1), document.body.removeChild(a)
     }
   },
-  save: function() {
-    var a, b, c, d;
-    b = $.id("settingsMenu").getElementsByClassName("menuOption");
-    for (a = 0; c = b[a]; ++a) d = c.getAttribute("data-option"), Config[d] = "checkbox" == c.type ? c.checked : c.value;
-    Config.save();
-    SettingsMenu.close();
-    location.href = location.href.replace(/#.+$/, "")
-  },
-  toggle: function() {
-    $.id("settingsMenu") ? SettingsMenu.close() : SettingsMenu.open()
-  },
-  open: function() {
-    var a, b, c, d, e, f, g, h, k;
-    Main.firstRun && ((k = $.id("settingsTip")) && k.parentNode.removeChild(k), (k = $.id("settingsTipBottom")) && k.parentNode.removeChild(k), Config.save());
-    f = document.createElement("div");
-    f.id = "settingsMenu";
-    f.className = "UIPanel";
-    e = '<div class="extPanel reply"><div class="panelHeader">Settings<span><img alt="Close" title="Close" class="pointer" data-cmd="settings-toggle" src="' + Main.icons.cross + '"></a></span></div><ul>';
-    e += '<ul><li id="settings-exp-all">[<a href="#" data-cmd="settings-exp-all">Expand All Settings</a>]</li></ul>';
-    if (Main.hasMobileLayout)
-      for (b in c = {}, SettingsMenu.options) {
-        h = {};
-        g = SettingsMenu.options[b];
-        for (d in g) g[d][2] && (h[d] = g[d]);
-        for (a in h) {
-          c[b] = h;
-          break
-        }
-      } else c = SettingsMenu.options;
-    for (b in c) {
-      g = c[b];
-      e += '<ul><li class="settings-cat-lbl"><img alt="" class="settings-expand" src="' + Main.icons.plus + '"><span class="settings-expand pointer">' + b + '</span></li><ul class="settings-cat">';
-      for (d in g) e += "<li" + (g[d][3] ? ' class="settings-sub">' : ">") + '<label><input type="checkbox" class="menuOption" data-option="' + d + '"' + (Config[d] ? ' checked="checked">' : ">") + g[d][0] + "</label>" + (!1 !== g[d][1] ? '</li><li class="settings-tip' + (g[d][3] ? ' settings-sub">' : '">') + g[d][1] : "") + "</li>";
-      e += "</ul></ul>"
-    }
-    e += '</ul><ul><li class="settings-off"><label title="Completely disable the native extension (overrides any checked boxes)"><input type="checkbox" class="menuOption" data-option="disableAll"' + (Config.disableAll ? ' checked="checked">' : ">") + 'Disable the native extension</label></li></ul><div class="center"><button data-cmd="settings-export">Export Settings</button><button data-cmd="settings-save">Save Settings</button></div>';
-    f.innerHTML = e;
-    f.addEventListener("click", SettingsMenu.onClick, !1);
-    document.body.appendChild(f);
-    Main.firstRun && SettingsMenu.expandAll();
-    (k = $.cls("menuOption", f)[0]) && k.focus()
-  },
-  showExport: function() {
-    var a, b;
-    $.id("exportSettings") || (b = location.href.replace(location.hash, "") + "#cfg=" + Config.toURL(), a = document.createElement("div"), a.id = "exportSettings", a.className = "UIPanel", a.setAttribute("data-cmd", "export-close"), a.innerHTML = '<div class="extPanel reply"><div class="panelHeader">Export Settings<span><img data-cmd="export-close" class="pointer" alt="Close" title="Close" src="' +
-      Main.icons.cross + '"></span></div><p class="center">Copy and save the URL below, and visit it from another browser or computer to restore your extension and catalog settings.</p><p class="center"><input class="export-field" type="text" readonly="readonly" value="' + b + '"></p><p style="margin-top:15px" class="center">Alternatively, you can drag the link below into your bookmarks bar and click it to restore.</p><p class="center">[<a target="_blank" href="' + b + '">Restore 4chan Settings</a>]</p>', document.body.appendChild(a), a.addEventListener("click", this.onExportClick, !1), a = $.cls("export-field", a)[0], a.focus(), a.select())
-  },
-  closeExport: function() {
-    var a;
-    if (a = $.id("exportSettings")) a.removeEventListener("click", this.onExportClick, !1), document.body.removeChild(a)
-  },
-  onExportClick: function(a) {
-    "exportSettings" == a.target.id && (a.preventDefault(), a.stopPropagation(), SettingsMenu.closeExport())
-  },
-  expandAll: function() {
-    var a, b, c = $.cls("settings-expand");
-    for (a = 0; b = c[a]; ++a) b.src = Main.icons.minus, b.parentNode.nextElementSibling.style.display = "block"
-  },
-  toggleCat: function(a) {
-    var b, c, d = a.parentNode.nextElementSibling;
-    d.style.display ? (c = "", b = "plus") : (c = "block", b = "minus");
-    d.style.display = c;
-    a.parentNode.firstElementChild.src = Main.icons[b]
-  },
-  onClick: function(a) {
-    var b, c;
-    c = a.target;
-    $.hasClass(c, "settings-expand") ? SettingsMenu.toggleCat(c) : "settings-exp-all" == c.getAttribute("data-cmd") ? (a.preventDefault(), SettingsMenu.expandAll()) : "settingsMenu" == c.id && (b = $.id("settingsMenu")) && (a.preventDefault(), SettingsMenu.close(b))
-  },
-  close: function(a) {
-    if (a = a || $.id("settingsMenu")) a.removeEventListener("click", SettingsMenu.onClick, !1), document.body.removeChild(a)
-  }
-}, Main = {
+  Main = {
     addTooltip: function(a, b, c) {
       var d;
       d = document.createElement("div");
@@ -2519,7 +2543,7 @@ var SettingsMenu = {
         ReplyHiding.init();
         Config.quotePreview && QuotePreview.init();
         Parser.init();
-        Main.tid ? (Main.threadClosed = !document.forms.post, Main.threadSticky = !! $.cls("stickyIcon", $.id("pi" + Main.tid))[0], Config.threadStats && ThreadStats.init(), Config.pageTitle && Main.setTitle(), Parser.parseThread(Main.tid), Config.threadUpdater && ThreadUpdater.init()) : (Main.page || Depager.init(), Config.topPageNav && Main.setPageNav(), Config.threadHiding && ThreadHiding.init(), Parser.parseBoard());
+        Main.tid ? (Main.threadClosed = !document.forms.post, Main.threadSticky = !!$.cls("stickyIcon", $.id("pi" + Main.tid))[0], Config.threadStats && ThreadStats.init(), Config.pageTitle && Main.setTitle(), Parser.parseThread(Main.tid), Config.threadUpdater && ThreadUpdater.init()) : (Main.page || Depager.init(), Config.topPageNav && Main.setPageNav(), Config.threadHiding && ThreadHiding.init(), Parser.parseBoard());
         "f" === Main.board && SWFEmbed.init();
         Config.quickReply && QR.init();
         ReplyHiding.purge()
