@@ -70,7 +70,7 @@ var Parser = {
       };
       this.prettify = "function" == typeof prettyPrint;
       this.customSpoiler = {};
-      Config.localTime && (this.hasSeconds = (b = $.cls("dateTime")[1]) && /\d{2}:\d{2}:\d{2}$/.test(b.textContent), (a = (new Date).getTimezoneOffset()) ? (b = Math.abs(a), c = 0 | b / 60, this.utcOffset = "UTC" + (0 > a ? "+" : "-") + c + ((d = b - 60 * c) ? ":" + d : "")) : this.utcOffset = "UTC", this.weekdays = "Sun Mon Tue Wed Thu Fri Sat".split(" "));
+      Config.localTime && (this.hasSeconds = (b = $.cls("dateTime")[1]) && /\d{2}:\d{2}:\d{2}$/.test(b.textContent), (a = (new Date).getTimezoneOffset()) ? (b = Math.abs(a), c = 0 | b / 60, this.utcOffset = "Timezone: UTC" + (0 > a ? "+" : "-") + c + ((d = b - 60 * c) ? ":" + d : "")) : this.utcOffset = "Timezone: UTC", this.weekdays = "Sun Mon Tue Wed Thu Fri Sat".split(" "));
       Main.tid && (this.trackedReplies = this.getTrackedReplies(Main.tid) || {})
     },
     getTrackedReplies: function(a) {
@@ -79,8 +79,7 @@ var Parser = {
       return b
     },
     saveTrackedReplies: function(a, b) {
-      sessionStorage.setItem("4chan-track-" +
-        Main.board + "-" + a, JSON.stringify(b))
+      sessionStorage.setItem("4chan-track-" + Main.board + "-" + a, JSON.stringify(b))
     },
     parseThreadJSON: function(a) {
       var b;
@@ -180,7 +179,7 @@ var Parser = {
       e.id = "pc" + a.no;
       e.innerHTML = (f ? "" : '<div class="sideArrows" id="sa' + a.no + '">&gt;&gt;</div>') + '<div id="p' + a.no + '" class="post ' + A + C + '"><div class="postInfoM mobile" id="pim' + a.no + '"><span class="nameBlock' + s + '"><span class="name">' + k + "</span>" + r + q + t + h + y + '<br><span class="subject">' + m + '</span></span><span class="dateTime postNum" data-utc="' +
         a.time + '">' + a.now + ' <a href="' + a.no + "#p" + a.no + '">No.</a><a href="javascript:quote(\'' + a.no + '\');" title="Quote this post">' + a.no + "</a></span></div>" + (f ? g : "") + '<div class="postInfo desktop" id="pi' + a.no + '"' + (b != Main.board ? ' data-board="' + b + '"' : "") + '><input type="checkbox" name="' + a.no + '" value="delete"> <span class="subject">' + m + '</span> <span class="nameBlock' + s + '">' + D + '<span class="name">' + k + "</span>" + r + q + E + t + h + y + ' </span> <span class="dateTime" data-utc="' + a.time + '">' + a.now + '</span> <span class="postNum desktop"><a href="' +
-        w + '" title="Highlight this post">No.</a><a href="' + z + '" title="Quote this post">' + a.no + "</a> " + v + F + "</span></div>" + (f ? "" : g) + '<blockquote class="postMessage" id="m' + a.no + '">' + (a.com || "") + I + H + "</blockquote> </div>" + G;
+        w + '" title="Link to this post">No.</a><a href="' + z + '" title="Reply to this post">' + a.no + "</a> " + v + F + "</span></div>" + (f ? "" : g) + '<blockquote class="postMessage" id="m' + a.no + '">' + (a.com || "") + I + H + "</blockquote> </div>" + G;
       if (!Main.tid || b != Main.board)
         for (q = e.getElementsByClassName("quotelink"), a = 0; f = q[a]; ++a) r = f.getAttribute("href"), "/" != r.charAt(0) && (f.href = "/" + b + "/thread/" + c + r);
       return e
@@ -208,7 +207,7 @@ var Parser = {
       f = $.id("t" + a);
       h = f.getElementsByClassName("post");
       b || (g = document.getElementById("pi" + a), Main.tid || (Config.filter && (k = Filter.exec(f, g, document.getElementById("m" + a), a)), Config.threadHiding && !k && (Main.hasMobileLayout ? (g = document.createElement("a"), g.href = "javascript:;", g.setAttribute("data-cmd", "hide"), g.setAttribute("data-id", a), g.className = "mobileHideButton button", g.textContent = "Hide", h[0].nextElementSibling.appendChild(g)) : (g = document.createElement("span"), g.innerHTML = '<img alt="H" class="extButton threadHideButton"data-cmd="hide" data-id="' +
-        a + '" src="' + Main.icons.minus + '" title="Toggle thread">', h[0].insertBefore(g, h[0].firstChild)), g.id = "sa" + a, ThreadHiding.hidden[a] && (ThreadHiding.hidden[a] = Main.now, ThreadHiding.hide(a))), ThreadExpansion.enabled && (e = $.cls("summary", f)[0]) && (f = document.createDocumentFragment(), k = e.cloneNode(!0), k.className = "", e.textContent = "", g = document.createElement("img"), g.className = "extButton expbtn", g.title = "Expand thread", g.alt = "+", g.setAttribute("data-cmd", "expand"), g.setAttribute("data-id", a), g.src = Main.icons.plus, f.appendChild(g), f.appendChild(k), g = document.createElement("span"), g.style.display = "none", g.textContent = "Showing all replies.", f.appendChild(g), e.appendChild(f))), Main.tid && Config.threadWatcher && (d = $.cls("navLinksBot")[0]) && (g = document.createElement("img"), ThreadWatcher.watched[e = a + "-" + Main.board] ? (g.src = Main.icons.watched, g.setAttribute("data-active", "1")) : g.src = Main.icons.notwatched, g.className = "extButton wbtn wbtn-" + e, g.setAttribute("data-cmd", "watch"), g.setAttribute("data-id", a), g.alt = "W", g.title = "Add to watch list", f = document.createDocumentFragment(), f.appendChild(document.createTextNode("[")), f.appendChild(g.cloneNode(!0)), f.appendChild(document.createTextNode("] ")), d.insertBefore(f, d.firstChild)));
+        a + '" src="' + Main.icons.minus + '" title="Hide thread">', h[0].insertBefore(g, h[0].firstChild)), g.id = "sa" + a, ThreadHiding.hidden[a] && (ThreadHiding.hidden[a] = Main.now, ThreadHiding.hide(a))), ThreadExpansion.enabled && (e = $.cls("summary", f)[0]) && (f = document.createDocumentFragment(), k = e.cloneNode(!0), k.className = "", e.textContent = "", g = document.createElement("img"), g.className = "extButton expbtn", g.title = "Expand thread", g.alt = "+", g.setAttribute("data-cmd", "expand"), g.setAttribute("data-id", a), g.src = Main.icons.plus, f.appendChild(g), f.appendChild(k), g = document.createElement("span"), g.style.display = "none", g.textContent = "Showing all replies.", f.appendChild(g), e.appendChild(f))), Main.tid && Config.threadWatcher && (d = $.cls("navLinksBot")[0]) && (g = document.createElement("img"), ThreadWatcher.watched[e = a + "-" + Main.board] ? (g.src = Main.icons.watched, g.setAttribute("data-active", "1")) : g.src = Main.icons.notwatched, g.className = "extButton wbtn wbtn-" + e, g.setAttribute("data-cmd", "watch"), g.setAttribute("data-id", a), g.alt = "W", g.title = "Add to watch list", f = document.createDocumentFragment(), f.appendChild(document.createTextNode("[")), f.appendChild(g.cloneNode(!0)), f.appendChild(document.createTextNode("] ")), d.insertBefore(f, d.firstChild)));
       e = b ? 0 > b ? h.length + b : b : 0;
       c = c ? e + c : h.length;
       if (Main.isMobileDevice && Config.quotePreview)
@@ -259,7 +258,7 @@ var Parser = {
       c = document.createElement("a");
       c.href = "#";
       c.className = "postMenuBtn";
-      c.title = "Menu";
+      c.title = "Post menu";
       c.setAttribute("data-cmd", "post-menu");
       c.textContent = "\u25b6";
       d.appendChild(c);
@@ -288,7 +287,7 @@ var Parser = {
       c = c ? " and " + c + " image repl" + (1 < c ? "ies" : "y") : "";
       el = document.createElement("span");
       el.className = "summary desktop";
-      el.innerHTML = b + c + ' omitted. Click <a href="thread/' + a + '" class="replylink">here</a> to view.';
+      el.innerHTML = b + c + ' omitted. <a href="thread/' + a + '" class="replylink">Click here</a> to view.';
       return el
     }
   },
@@ -766,7 +765,7 @@ var Parser = {
       a = $.cls("navLinks")[2];
       b = document.createElement("div");
       b.className = "open-qr-wrap";
-      b.innerHTML = '[<a href="#" class="open-qr-link" data-cmd="open-qr">Reply to Thread</a>]';
+      b.innerHTML = '[<a href="#" class="open-qr-link" data-cmd="open-qr">Post a Reply</a>]';
       a.insertBefore(b, a.firstChild)
     },
     lock: function() {
@@ -797,7 +796,8 @@ var Parser = {
     },
     show: function(a) {
       var b, c, d, e, f, h, g, k, l, m, n, p;
-      if (QR.currentTid) Main.tid || QR.currentTid == a || ($.id("qrTid").textContent = $.id("qrResto").value = QR.currentTid = a, $.byName("com")[1].value = "", QR.startCooldown()), Main.hasMobileLayout && ($.id("quickReply").style.top = window.pageYOffset + 25 + "px");
+      if (QR.currentTid) Main.tid || QR.currentTid == a || ($.id("qrTid").textContent = $.id("qrResto").value = QR.currentTid = a, $.byName("com")[1].value = "", QR.startCooldown()), Main.hasMobileLayout && ($.id("quickReply").style.top = window.pageYOffset +
+        25 + "px");
       else {
         QR.currentTid = a;
         e = $.id("postForm");
@@ -806,8 +806,7 @@ var Parser = {
         d.className = "extPanel reply";
         d.setAttribute("data-trackpos", "QR-position");
         Main.hasMobileLayout ? d.style.top = window.pageYOffset + 28 + "px" : Config["QR-position"] ? d.style.cssText = Config["QR-position"] : (d.style.right = "0px", d.style.top = "10%");
-        d.innerHTML = '<div id="qrHeader" class="drag postblock">Quick Reply - Thread No.<span id="qrTid">' + a + '</span><img alt="X" src="' +
-          Main.icons.cross + '" id="qrClose" class="extButton" title="Close Window"></div>';
+        d.innerHTML = '<div id="qrHeader" class="drag postblock">Reply to Thread No.<span id="qrTid">' + a + '</span><img alt="X" src="' + Main.icons.cross + '" id="qrClose" class="extButton" title="Close Window"></div>';
         f = e.parentNode.cloneNode(!1);
         f.setAttribute("name", "qrPost");
         f.innerHTML = '<input type="hidden" value="' + $.byName("MAX_FILE_SIZE")[0].value + '" name="MAX_FILE_SIZE"><input type="hidden" value="regist" name="mode"><input id="qrResto" type="hidden" value="' + a + '" name="resto">';
@@ -880,8 +879,7 @@ var Parser = {
     },
     checkComLength: function() {
       var a;
-      QR.comLength && (a = encodeURIComponent(QR.comField.value).split(/%..|./).length - 1, a > QR.comLength ? QR.showPostError("Error: Comment too long (" +
-        a + "/" + QR.comLength + ").", "length", !0) : QR.hidePostError("length"))
+      QR.comLength && (a = encodeURIComponent(QR.comField.value).split(/%..|./).length - 1, a > QR.comLength ? QR.showPostError("Error: Comment too long (" + a + "/" + QR.comLength + ").", "length", !0) : QR.hidePostError("length"))
     },
     close: function() {
       var a, b = $.id("quickReply");
@@ -2738,7 +2736,7 @@ var SettingsMenu = {
             break;
           case "custom-menu-edit":
             CustomMenu.showEditor()
-        } else Config.disableAll || (QR.enabled && "Quote this post" == b.title ? (a.preventDefault(), c = Main.tid || b.previousElementSibling.getAttribute("href").split("#")[0].split("/")[1], QR.quotePost(c, !a.ctrlKey && b.textContent)) : Config.imageExpansion && 1 == a.which && b.parentNode && $.hasClass(b.parentNode, "fileThumb") && "A" == b.parentNode.nodeName && !$.hasClass(b.parentNode, "deleted") ? ImageExpansion.toggle(b) && a.preventDefault() : Config.inlineQuotes && 1 == a.which && $.hasClass(b, "quotelink") ? a.shiftKey ? (a.preventDefault(), window.location = b.href) : QuoteInline.toggle(b, a) : Config.threadExpansion && b.parentNode && $.hasClass(b.parentNode, "abbr") ? (a.preventDefault(), ThreadExpansion.expandComment(b)) : Main.isMobileDevice && Config.quotePreview && $.hasClass(b, "quotelink") && (c = b.getAttribute("href").match(QuotePreview.regex)) && "rs" != c[1] && a.preventDefault())
+        } else Config.disableAll || (QR.enabled && "Reply to this post" == b.title ? (a.preventDefault(), c = Main.tid || b.previousElementSibling.getAttribute("href").split("#")[0].split("/")[1], QR.quotePost(c, !a.ctrlKey && b.textContent)) : Config.imageExpansion && 1 == a.which && b.parentNode && $.hasClass(b.parentNode, "fileThumb") && "A" == b.parentNode.nodeName && !$.hasClass(b.parentNode, "deleted") ? ImageExpansion.toggle(b) && a.preventDefault() : Config.inlineQuotes && 1 == a.which && $.hasClass(b, "quotelink") ? a.shiftKey ? (a.preventDefault(), window.location = b.href) : QuoteInline.toggle(b, a) : Config.threadExpansion && b.parentNode && $.hasClass(b.parentNode, "abbr") ? (a.preventDefault(), ThreadExpansion.expandComment(b)) : Main.isMobileDevice && Config.quotePreview && $.hasClass(b, "quotelink") && (c = b.getAttribute("href").match(QuotePreview.regex)) && "rs" != c[1] && a.preventDefault())
     },
     onThreadMouseOver: function(a) {
       var b = a.target;
