@@ -221,7 +221,7 @@ function loadExtraScripts() {
 function toggleMobilePostForm(a, b) {
   elem = document.getElementById("mpostform").firstElementChild;
   postForm = document.getElementById("postForm");
-  elem.className.match("hidden") ? (elem.className = elem.className.replace("hidden", "shown"), postForm.className = postForm.className.replace(" hideMobile", ""), elem.innerHTML = "Close Post Form") : (elem.className = elem.className.replace("shown", "hidden"), postForm.className += " hideMobile", elem.innerHTML = a ? "Start a Thread" : "Reply to Thread");
+  elem.className.match("hidden") ? (elem.className = elem.className.replace("hidden", "shown"), postForm.className = postForm.className.replace(" hideMobile", ""), elem.innerHTML = "Close Post Form") : (elem.className = elem.className.replace("shown", "hidden"), postForm.className += " hideMobile", elem.innerHTML = a ? "Start New Thread" : "Post Reply");
   b && window.scroll(0, 0)
 }
 
@@ -230,7 +230,7 @@ function toggleGlobalMessage(a) {
   a && a.preventDefault();
   a = document.getElementById("globalToggle");
   b = document.getElementById("globalMessage");
-  a.className.match("hidden") ? (a.className = a.className.replace("hidden", "shown"), b.className = b.className.replace(" hideMobile", ""), a.innerHTML = "Close Announcement") : (a.className = a.className.replace("shown", "hidden"), b.className += " hideMobile", a.innerHTML = "View Important Announcement")
+  a.className.match("hidden") ? (a.className = a.className.replace("hidden", "shown"), b.className = b.className.replace(" hideMobile", ""), a.innerHTML = "Close Announcement") : (a.className = a.className.replace("shown", "hidden"), b.className += " hideMobile", a.innerHTML = "View Announcement")
 }
 
 function checkRecaptcha() {
@@ -454,6 +454,11 @@ function submitPreupload() {
   }, a.send(d)) : (e.textContent = "You forgot to type in the CAPTCHA.", c && c.focus())
 }
 
+function showPostForm(a) {
+  a.preventDefault();
+  if (a = document.getElementById("postForm")) this.parentNode.style.display = "none", a.style.display = "table"
+}
+
 function contentLoaded() {
   var a, b, c, d, e;
   document.removeEventListener("DOMContentLoaded", contentLoaded, !0);
@@ -463,6 +468,7 @@ function contentLoaded() {
   window.passEnabled && setPassMsg();
   (b = document.getElementById("bottomReportBtn")) && b.addEventListener("click", onReportClick, !1);
   (b = document.getElementById("styleSelector")) && b.addEventListener("change", onStyleSheetChange, !1);
+  (b = document.getElementById("togglePostFormLink")) && (b = b.firstElementChild) && b.addEventListener("click", showPostForm, !1);
   if ("int" == d || "sp" == d) b = document.getElementById("delform"), b.addEventListener("click", onCoreClick, !1);
   !window.passEnabled && window.preupload_captcha && "FormData" in window && (b = document.forms.post) && b.addEventListener("submit", onPostSubmit, !1);
   (b = document.forms.post) && b.flag && (e = readCookie("4chan_flag")) && (a = b.querySelector('option[value="' + e + '"]')) && a.setAttribute("selected", "selected");
@@ -483,8 +489,7 @@ function contentLoaded() {
     b = c.options.length;
     for (a = 0; a < b; a++) c.options[a].value == d && (c.selectedIndex = a);
     c.onchange = function() {
-      window.location = "//boards.4chan.org/" +
-        this.options[this.selectedIndex].value + "/"
+      window.location = "//boards.4chan.org/" + this.options[this.selectedIndex].value + "/"
     }
   }
   clickable_ids && enableClickableIds();
