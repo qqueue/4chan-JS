@@ -279,7 +279,7 @@ var Parser = {
       if (e = document.getElementById("m" + a).getElementsByClassName("quotelink"))
         for (f = {}, c = 0; d = e[c]; ++c)
           if (h = d.getAttribute("href").split("#p"), h[1])(h[1] == b && (d.textContent += " (OP)"), g = document.getElementById("pi" +
-            h[1])) ? f[h[1]] || (f[h[1]] = !0, d = document.createElement("span"), d.innerHTML = Main.hasMobileLayout ? '<a href="#p' + a + '" class="quotelink">&gt;&gt;' + a + '</a><a href="#p' + a + '" class="quoteLink"> #</a> ' : '<a href="#p' + a + '" class="quotelink">&gt;&gt;' + a + "</a> ", (k = document.getElementById("bl_" + h[1])) || (k = document.createElement("div"), k.id = "bl_" + h[1], k.className = "backlink", Main.hasMobileLayout && (k.className = "backlink mobile", g = document.getElementById("p" + h[1])), g.appendChild(k)), k.appendChild(d)) : Main.tid && ">" != d.textContent.charAt(2) && (d.textContent += " \u2192")
+            h[1])) ? f[h[1]] || (f[h[1]] = !0, d = document.createElement("span"), k = Main.tid ? "#p" + a : "thread/" + b + "#p" + a, d.innerHTML = Main.hasMobileLayout ? '<a href="' + k + '" class="quotelink">&gt;&gt;' + a + '</a><a href="' + k + '" class="quoteLink"> #</a> ' : '<a href="' + k + '" class="quotelink">&gt;&gt;' + a + "</a> ", (k = document.getElementById("bl_" + h[1])) || (k = document.createElement("div"), k.id = "bl_" + h[1], k.className = "backlink", Main.hasMobileLayout && (k.className = "backlink mobile", g = document.getElementById("p" + h[1])), g.appendChild(k)), k.appendChild(d)) : Main.tid && ">" != d.textContent.charAt(2) && (d.textContent += " \u2192")
     },
     buildSummary: function(a, b, c) {
       if (b) b = b + " post" + (1 < b ? "s" : "");
@@ -298,8 +298,7 @@ var Parser = {
       PostMenu.close();
       d = a.parentNode.id.split("pi")[1];
       b = a.parentNode.getAttribute("data-board");
-      e = !b && !!$.id("t" +
-        d);
+      e = !b && !!$.id("t" + d);
       c = '<ul><li data-cmd="report" data-id="' + d + (b ? '" data-board="' + b + '"' : '"') + '">Report post</li>';
       if (e) Main.tid || (c += '<li data-cmd="hide" data-id="' + d + '">' + ($.hasClass($.id("t" + d), "post-hidden") ? "Unhide" : "Hide") + " thread</li>"), Config.threadWatcher && (c += '<li data-cmd="watch" data-id="' + d + '">' + (ThreadWatcher.watched[d + "-" + Main.board] ? "Remove from" : "Add to") + " watch list</li>");
       else if (b = $.id("pc" + d)) c += '<li data-cmd="hide-r" data-id="' + d + '">' + ($.hasClass(b, "post-hidden") ? "Unhide" : "Hide") + " post</li>";
