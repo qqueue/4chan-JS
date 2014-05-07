@@ -124,15 +124,15 @@ var Parser = {
         m, n, p, l = '"',
         u = "",
         B = "",
-        x = p = "",
+        w = p = "",
         r = "",
         q = "",
         s = "",
         t = "",
-        y, C = "",
+        x, C = "",
         D = "",
         E = "",
-        w, z, F = "",
+        y, z, F = "",
         G = "",
         A = "reply",
         H = "",
@@ -142,8 +142,7 @@ var Parser = {
       n = "//i.4cdn.org/" + b;
       0 == a.resto ? (f = !0, c && (G = '<div class="postLink mobile"><span class="info"></span><a href="thread/' + a.no + '" class="button">View Thread</a></div>', A = "op", F = '&nbsp; <span>[<a href="thread/' +
         a.no + (a.semantic_url ? "/" + a.semantic_url : "") + '" class="replylink" rel="canonical">Reply</a>]</span>'), c = a.no) : c = a.resto;
-      w = c + "#p" + a.no;
-      Main.tid && b == Main.board ? z = "javascript:quote('" + a.no + "')" : (w = "thread/" + w, z = "thread/" + c + "#q" + a.no);
+      Main.tid && b == Main.board ? (y = "#p" + a.no, z = "javascript:quote('" + a.no + "')") : (y = "thread/" + c + "#p" + a.no, z = "thread/" + c + "#q" + a.no);
       h = !a.capcode && a.id ? ' <span class="posteruid id_' + a.id + '">(ID: <span class="hand" title="Highlight posts by this ID">' + a.id + "</span>)</span> " : "";
       switch (a.capcode) {
         case "admin_highlight":
@@ -167,8 +166,8 @@ var Parser = {
           q = ' <strong class="capcode hand id_manager" title="Highlight posts by Managers">## Manager</strong>', s = " capcodeManager", t = ' <img src="' + Parser.icons.manager + '" alt="This user is a 4chan Manager." title="This user is a 4chan Manager." class="identityIcon">'
       }
       a.email && (D = '<a href="mailto:' + a.email.replace(/ /g, "%20") + '" class="useremail">', E = "</a>");
-      y = a.country ? "pol" == b ? ' <img src="//s.4cdn.org/image/country/troll/' + a.country.toLowerCase() + '.gif" alt="' + a.country + '" title="' + a.country_name + '" class="countryFlag">' : ' <span title="' + a.country_name + '" class="flag flag-' + a.country.toLowerCase() + '"></span>' : "";
-      a.filedeleted ? g = '<div id="f' + a.no + '" class="file"><span class="fileThumb"><img src="' + Parser.icons.del + '" class="fileDeletedRes" alt="File deleted."></span></div>' : a.ext && (g = Parser.decodeSpecialChars(a.filename), p = x = a.filename + a.ext, g.length > (f ? 40 : 30) && (p = Parser.encodeSpecialChars(g.slice(0, f ? 35 : 25)) + "(...)" + a.ext, J = !0), a.tn_w || a.tn_h || ".gif" != a.ext || (a.tn_w = a.w, a.tn_h = a.h), u = 1048576 <= a.fsize ? (0 | a.fsize / 1048576 * 100 + 0.5) / 100 + " M" : 1024 < a.fsize ? (0 | a.fsize / 1024 + 0.5) + " K" : a.fsize + " ", a.spoiler && !Config.revealSpoilers && (p = "Spoiler Image", l = '" title="' + x + '"', B = " imgspoiler", m = "//s.4cdn.org/image/spoiler" + (Parser.customSpoiler[b] || "") + ".png", a.tn_w = 100, a.tn_h = 100), m || (m = "//t.4cdn.org/" + b + "/" + a.tim + "s.jpg"), g = ".pdf" == a.ext ? "PDF" : a.w + "x" + a.h, "f" != b ? (n = n + "/" + a.tim + a.ext, k = '<a class="fileThumb' + B + '" href="' + n + '" target="_blank"><img src="' + m + '" alt="' + u + 'B" data-md5="' + a.md5 + '" style="height: ' + a.tn_h + "px; width: " + a.tn_w + 'px;"><div class="mFileInfo mobile">' + u + "B " + a.ext.slice(1).toUpperCase() + "</div></a>", l = '<div class="fileText" id="fT' + a.no + l + ">File: <a" + (J ? ' title="' + x + '"' : "") + ' href="' + n + '" target="_blank">' + p + "</a> (" + u + "B, " + g + ")</div>") : (n = n + "/" + a.filename + a.ext, g += ", " + a.tag, l = '<div class="fileText" id="fT' + a.no + '">File: <a href="' +
+      x = a.country ? "pol" == b ? ' <img src="//s.4cdn.org/image/country/troll/' + a.country.toLowerCase() + '.gif" alt="' + a.country + '" title="' + a.country_name + '" class="countryFlag">' : ' <span title="' + a.country_name + '" class="flag flag-' + a.country.toLowerCase() + '"></span>' : "";
+      a.filedeleted ? g = '<div id="f' + a.no + '" class="file"><span class="fileThumb"><img src="' + Parser.icons.del + '" class="fileDeletedRes" alt="File deleted."></span></div>' : a.ext && (g = Parser.decodeSpecialChars(a.filename), p = w = a.filename + a.ext, g.length > (f ? 40 : 30) && (p = Parser.encodeSpecialChars(g.slice(0, f ? 35 : 25)) + "(...)" + a.ext, J = !0), a.tn_w || a.tn_h || ".gif" != a.ext || (a.tn_w = a.w, a.tn_h = a.h), u = 1048576 <= a.fsize ? (0 | a.fsize / 1048576 * 100 + 0.5) / 100 + " M" : 1024 < a.fsize ? (0 | a.fsize / 1024 + 0.5) + " K" : a.fsize + " ", a.spoiler && !Config.revealSpoilers && (p = "Spoiler Image", l = '" title="' + w + '"', B = " imgspoiler", m = "//s.4cdn.org/image/spoiler" + (Parser.customSpoiler[b] || "") + ".png", a.tn_w = 100, a.tn_h = 100), m || (m = "//t.4cdn.org/" + b + "/" + a.tim + "s.jpg"), g = ".pdf" == a.ext ? "PDF" : a.w + "x" + a.h, "f" != b ? (n = n + "/" + a.tim + a.ext, k = '<a class="fileThumb' + B + '" href="' + n + '" target="_blank"><img src="' + m + '" alt="' + u + 'B" data-md5="' + a.md5 + '" style="height: ' + a.tn_h + "px; width: " + a.tn_w + 'px;"><div class="mFileInfo mobile">' + u + "B " + a.ext.slice(1).toUpperCase() + "</div></a>", l = '<div class="fileText" id="fT' + a.no + l + ">File: <a" + (J ? ' title="' + w + '"' : "") + ' href="' + n + '" target="_blank">' + p + "</a> (" + u + "B, " + g + ")</div>") : (n = n + "/" + a.filename + a.ext, g += ", " + a.tag, l = '<div class="fileText" id="fT' + a.no + '">File: <a href="' +
         n + '" target="_blank">' + a.filename + ".swf</a> (" + u + "B, " + g + ")</div>"), g = '<div id="f' + a.no + '" class="file">' + l + k + "</div>");
       a.trip && (r = ' <span class="postertrip">' + a.trip + "</span>");
       k = a.name || "";
@@ -177,9 +176,9 @@ var Parser = {
         Main.icons2.sticky + '"> '), a.closed && (v += '<img class="closedIcon retina" title="Closed" alt="Closed" src="' + Main.icons2.closed + '"> '));
       e.className = "postContainer " + A + "Container";
       e.id = "pc" + a.no;
-      e.innerHTML = (f ? "" : '<div class="sideArrows" id="sa' + a.no + '">&gt;&gt;</div>') + '<div id="p' + a.no + '" class="post ' + A + C + '"><div class="postInfoM mobile" id="pim' + a.no + '"><span class="nameBlock' + s + '"><span class="name">' + k + "</span>" + r + q + t + h + y + '<br><span class="subject">' + m + '</span></span><span class="dateTime postNum" data-utc="' +
-        a.time + '">' + a.now + ' <a href="' + a.no + "#p" + a.no + '">No.</a><a href="javascript:quote(\'' + a.no + '\');" title="Quote this post">' + a.no + "</a></span></div>" + (f ? g : "") + '<div class="postInfo desktop" id="pi' + a.no + '"' + (b != Main.board ? ' data-board="' + b + '"' : "") + '><input type="checkbox" name="' + a.no + '" value="delete"> <span class="subject">' + m + '</span> <span class="nameBlock' + s + '">' + D + '<span class="name">' + k + "</span>" + r + q + E + t + h + y + ' </span> <span class="dateTime" data-utc="' + a.time + '">' + a.now + '</span> <span class="postNum desktop"><a href="' +
-        w + '" title="Link to this post">No.</a><a href="' + z + '" title="Reply to this post">' + a.no + "</a> " + v + F + "</span></div>" + (f ? "" : g) + '<blockquote class="postMessage" id="m' + a.no + '">' + (a.com || "") + I + H + "</blockquote> </div>" + G;
+      e.innerHTML = (f ? "" : '<div class="sideArrows" id="sa' + a.no + '">&gt;&gt;</div>') + '<div id="p' + a.no + '" class="post ' + A + C + '"><div class="postInfoM mobile" id="pim' + a.no + '"><span class="nameBlock' + s + '"><span class="name">' + k + "</span>" + r + q + t + h + x + '<br><span class="subject">' + m + '</span></span><span class="dateTime postNum" data-utc="' +
+        a.time + '">' + a.now + ' <a href="' + a.no + "#p" + a.no + '" title="Link to this post">No.</a><a href="javascript:quote(\'' + a.no + '\');" title="Reply to this post">' + a.no + "</a></span></div>" + (f ? g : "") + '<div class="postInfo desktop" id="pi' + a.no + '"' + (b != Main.board ? ' data-board="' + b + '"' : "") + '><input type="checkbox" name="' + a.no + '" value="delete"> <span class="subject">' + m + '</span> <span class="nameBlock' + s + '">' + D + '<span class="name">' + k + "</span>" + r + q + E + t + h + x + ' </span> <span class="dateTime" data-utc="' + a.time + '">' +
+        a.now + '</span> <span class="postNum desktop"><a href="' + y + '" title="Link to this post">No.</a><a href="' + z + '" title="Reply to this post">' + a.no + "</a> " + v + F + "</span></div>" + (f ? "" : g) + '<blockquote class="postMessage" id="m' + a.no + '">' + (a.com || "") + I + H + "</blockquote> </div>" + G;
       if (!Main.tid || b != Main.board)
         for (q = e.getElementsByClassName("quotelink"), a = 0; f = q[a]; ++a) r = f.getAttribute("href"), "/" != r.charAt(0) && (f.href = "/" + b + "/thread/" + c + r);
       return e
@@ -206,8 +205,8 @@ var Parser = {
       var d, e, f, h, g, k;
       f = $.id("t" + a);
       h = f.getElementsByClassName("post");
-      b || (g = document.getElementById("pi" + a), Main.tid || (Config.filter && (k = Filter.exec(f, g, document.getElementById("m" + a), a)), Config.threadHiding && !k && (Main.hasMobileLayout ? (g = document.createElement("a"), g.href = "javascript:;", g.setAttribute("data-cmd", "hide"), g.setAttribute("data-id", a), g.className = "mobileHideButton button", g.textContent = "Hide", h[0].nextElementSibling.appendChild(g)) : (g = document.createElement("span"), g.innerHTML = '<img alt="H" class="extButton threadHideButton"data-cmd="hide" data-id="' +
-        a + '" src="' + Main.icons.minus + '" title="Hide thread">', h[0].insertBefore(g, h[0].firstChild)), g.id = "sa" + a, ThreadHiding.hidden[a] && (ThreadHiding.hidden[a] = Main.now, ThreadHiding.hide(a))), ThreadExpansion.enabled && (e = $.cls("summary", f)[0]) && (f = document.createDocumentFragment(), k = e.cloneNode(!0), k.className = "", e.textContent = "", g = document.createElement("img"), g.className = "extButton expbtn", g.title = "Expand thread", g.alt = "+", g.setAttribute("data-cmd", "expand"), g.setAttribute("data-id", a), g.src = Main.icons.plus, f.appendChild(g), f.appendChild(k), g = document.createElement("span"), g.style.display = "none", g.textContent = "Showing all replies.", f.appendChild(g), e.appendChild(f))), Main.tid && Config.threadWatcher && (d = $.cls("navLinksBot")[0]) && (g = document.createElement("img"), ThreadWatcher.watched[e = a + "-" + Main.board] ? (g.src = Main.icons.watched, g.setAttribute("data-active", "1")) : g.src = Main.icons.notwatched, g.className = "extButton wbtn wbtn-" + e, g.setAttribute("data-cmd", "watch"), g.setAttribute("data-id", a), g.alt = "W", g.title = "Add to watch list", f = document.createDocumentFragment(), f.appendChild(document.createTextNode("[")), f.appendChild(g.cloneNode(!0)), f.appendChild(document.createTextNode("] ")), d.insertBefore(f, d.firstChild)));
+      b || (g = document.getElementById("pi" + a), Main.tid || (Config.filter && (k = Filter.exec(f, g, document.getElementById("m" + a), a)), Config.threadHiding && !k && (Main.hasMobileLayout ? (g = document.createElement("a"), g.href = "javascript:;", g.setAttribute("data-cmd", "hide"), g.setAttribute("data-id", a), g.className = "mobileHideButton button", g.textContent = "Hide", h[0].nextElementSibling.appendChild(g)) : (g = document.createElement("span"), g.innerHTML = '<img alt="H" class="extButton threadHideButton"data-cmd="hide" data-id="' + a + '" src="' + Main.icons.minus + '" title="Hide thread">', h[0].insertBefore(g, h[0].firstChild)), g.id = "sa" + a, ThreadHiding.hidden[a] && (ThreadHiding.hidden[a] = Main.now, ThreadHiding.hide(a))), ThreadExpansion.enabled && (e = $.cls("summary", f)[0]) && (f = document.createDocumentFragment(), k = e.cloneNode(!0), k.className = "", e.textContent = "", g = document.createElement("img"), g.className = "extButton expbtn", g.title = "Expand thread", g.alt = "+", g.setAttribute("data-cmd", "expand"), g.setAttribute("data-id", a), g.src = Main.icons.plus, f.appendChild(g), f.appendChild(k), g = document.createElement("span"), g.style.display = "none", g.textContent = "Showing all replies.", f.appendChild(g), e.appendChild(f))), Main.tid && Config.threadWatcher && (d = $.cls("navLinksBot")[0]) && (g = document.createElement("img"), ThreadWatcher.watched[e = a + "-" + Main.board] ? (g.src = Main.icons.watched, g.setAttribute("data-active", "1")) : g.src = Main.icons.notwatched, g.className = "extButton wbtn wbtn-" +
+        e, g.setAttribute("data-cmd", "watch"), g.setAttribute("data-id", a), g.alt = "W", g.title = "Add to watch list", f = document.createDocumentFragment(), f.appendChild(document.createTextNode("[")), f.appendChild(g.cloneNode(!0)), f.appendChild(document.createTextNode("] ")), d.insertBefore(f, d.firstChild)));
       e = b ? 0 > b ? h.length + b : b : 0;
       c = c ? e + c : h.length;
       if (Main.isMobileDevice && Config.quotePreview)
@@ -271,15 +270,13 @@ var Parser = {
       Config.localTime && (c = d.getElementsByClassName("dateTime")[0], c.title = this.utcOffset, c.textContent = Parser.getLocaleDate(new Date(1E3 * c.getAttribute("data-utc"))))
     },
     getLocaleDate: function(a) {
-      return ("0" +
-        (1 + a.getMonth())).slice(-2) + "/" + ("0" + a.getDate()).slice(-2) + "/" + ("0" + a.getFullYear()).slice(-2) + "(" + this.weekdays[a.getDay()] + ")" + ("0" + a.getHours()).slice(-2) + ":" + ("0" + a.getMinutes()).slice(-2) + (this.hasSeconds ? ":" + ("0" + a.getSeconds()).slice(-2) : "")
+      return ("0" + (1 + a.getMonth())).slice(-2) + "/" + ("0" + a.getDate()).slice(-2) + "/" + ("0" + a.getFullYear()).slice(-2) + "(" + this.weekdays[a.getDay()] + ")" + ("0" + a.getHours()).slice(-2) + ":" + ("0" + a.getMinutes()).slice(-2) + (this.hasSeconds ? ":" + ("0" + a.getSeconds()).slice(-2) : "")
     },
     parseBacklinks: function(a, b) {
       var c, d, e, f, h, g, k;
       if (e = document.getElementById("m" + a).getElementsByClassName("quotelink"))
         for (f = {}, c = 0; d = e[c]; ++c)
-          if (h = d.getAttribute("href").split("#p"), h[1])(h[1] == b && (d.textContent += " (OP)"), g = document.getElementById("pi" +
-            h[1])) ? f[h[1]] || (f[h[1]] = !0, d = document.createElement("span"), k = Main.tid ? "#p" + a : "thread/" + b + "#p" + a, d.innerHTML = Main.hasMobileLayout ? '<a href="' + k + '" class="quotelink">&gt;&gt;' + a + '</a><a href="' + k + '" class="quoteLink"> #</a> ' : '<a href="' + k + '" class="quotelink">&gt;&gt;' + a + "</a> ", (k = document.getElementById("bl_" + h[1])) || (k = document.createElement("div"), k.id = "bl_" + h[1], k.className = "backlink", Main.hasMobileLayout && (k.className = "backlink mobile", g = document.getElementById("p" + h[1])), g.appendChild(k)), k.appendChild(d)) : Main.tid && ">" != d.textContent.charAt(2) && (d.textContent += " \u2192")
+          if (h = d.getAttribute("href").split("#p"), h[1])(h[1] == b && (d.textContent += " (OP)"), g = document.getElementById("pi" + h[1])) ? f[h[1]] || (f[h[1]] = !0, d = document.createElement("span"), k = Main.tid ? "#p" + a : "thread/" + b + "#p" + a, d.innerHTML = Main.hasMobileLayout ? '<a href="' + k + '" class="quotelink">&gt;&gt;' + a + '</a><a href="' + k + '" class="quoteLink"> #</a> ' : '<a href="' + k + '" class="quotelink">&gt;&gt;' + a + "</a> ", (k = document.getElementById("bl_" + h[1])) || (k = document.createElement("div"), k.id = "bl_" + h[1], k.className = "backlink", Main.hasMobileLayout && (k.className = "backlink mobile", g = document.getElementById("p" + h[1])), g.appendChild(k)), k.appendChild(d)) : Main.tid && ">" != d.textContent.charAt(2) && (d.textContent += " \u2192")
     },
     buildSummary: function(a, b, c) {
       if (b) b = b + " post" + (1 < b ? "s" : "");
@@ -556,7 +553,8 @@ var Parser = {
       e = c.offsetWidth;
       f = b.style;
       document.body.appendChild(b);
-      Main.isMobileDevice ? (f.top = d.top + a.offsetHeight + window.pageYOffset + "px", e - d.right < (0 | 0.3 * e) ? f.right = e - d.right + "px" : f.left = d.left + "px") : (e - d.right < (0 | 0.3 * e) ? (e -= d.left, f.right = e + 5 + "px") : (e = d.left + d.width, f.left = e + 5 + "px"), a = d.top + a.offsetHeight + window.pageYOffset - b.offsetHeight / 2 - d.height / 2, b = b.getBoundingClientRect().height, d = c.scrollTop != document.body.scrollTop ? c.scrollTop + document.body.scrollTop : document.body.scrollTop, f.top = a < d ? d + "px" : a + b > d + c.clientHeight ? d + c.clientHeight - b + "px" : a + "px")
+      Main.isMobileDevice ? (f.top = d.top + a.offsetHeight + window.pageYOffset + "px", e - d.right < (0 | 0.3 * e) ? f.right = e - d.right + "px" : f.left = d.left + "px") : (e - d.right < (0 | 0.3 * e) ? (e -= d.left, f.right = e + 5 + "px") : (e = d.left + d.width, f.left = e + 5 + "px"), a = d.top + a.offsetHeight + window.pageYOffset - b.offsetHeight / 2 - d.height / 2, b = b.getBoundingClientRect().height, d = c.scrollTop != document.body.scrollTop ? c.scrollTop + document.body.scrollTop : document.body.scrollTop, f.top = a < d ? d + "px" : a + b > d + c.clientHeight ? d + c.clientHeight -
+        b + "px" : a + "px")
     },
     remove: function(a) {
       var b, c;
@@ -795,8 +793,7 @@ var Parser = {
     },
     show: function(a) {
       var b, c, d, e, f, h, g, k, l, m, n, p;
-      if (QR.currentTid) Main.tid || QR.currentTid == a || ($.id("qrTid").textContent = $.id("qrResto").value = QR.currentTid = a, $.byName("com")[1].value = "", QR.startCooldown()), Main.hasMobileLayout && ($.id("quickReply").style.top = window.pageYOffset +
-        25 + "px");
+      if (QR.currentTid) Main.tid || QR.currentTid == a || ($.id("qrTid").textContent = $.id("qrResto").value = QR.currentTid = a, $.byName("com")[1].value = "", QR.startCooldown()), Main.hasMobileLayout && ($.id("quickReply").style.top = window.pageYOffset + 25 + "px");
       else {
         QR.currentTid = a;
         e = $.id("postForm");
@@ -805,7 +802,8 @@ var Parser = {
         d.className = "extPanel reply";
         d.setAttribute("data-trackpos", "QR-position");
         Main.hasMobileLayout ? d.style.top = window.pageYOffset + 28 + "px" : Config["QR-position"] ? d.style.cssText = Config["QR-position"] : (d.style.right = "0px", d.style.top = "10%");
-        d.innerHTML = '<div id="qrHeader" class="drag postblock">Reply to Thread No.<span id="qrTid">' + a + '</span><img alt="X" src="' + Main.icons.cross + '" id="qrClose" class="extButton" title="Close Window"></div>';
+        d.innerHTML = '<div id="qrHeader" class="drag postblock">Reply to Thread No.<span id="qrTid">' + a + '</span><img alt="X" src="' +
+          Main.icons.cross + '" id="qrClose" class="extButton" title="Close Window"></div>';
         f = e.parentNode.cloneNode(!1);
         f.setAttribute("name", "qrPost");
         f.innerHTML = '<input type="hidden" value="' + $.byName("MAX_FILE_SIZE")[0].value + '" name="MAX_FILE_SIZE"><input type="hidden" value="regist" name="mode"><input id="qrResto" type="hidden" value="' + a + '" name="resto">';
@@ -878,7 +876,8 @@ var Parser = {
     },
     checkComLength: function() {
       var a;
-      QR.comLength && (a = encodeURIComponent(QR.comField.value).split(/%..|./).length - 1, a > QR.comLength ? QR.showPostError("Error: Comment too long (" + a + "/" + QR.comLength + ").", "length", !0) : QR.hidePostError("length"))
+      QR.comLength && (a = encodeURIComponent(QR.comField.value).split(/%..|./).length - 1, a > QR.comLength ? QR.showPostError("Error: Comment too long (" +
+        a + "/" + QR.comLength + ").", "length", !0) : QR.hidePostError("length"))
     },
     close: function() {
       var a, b = $.id("quickReply");
