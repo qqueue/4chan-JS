@@ -105,7 +105,7 @@ var Parser = {
     },
     buildPost: function(a, b, c) {
       var d, e, f = null;
-      for (d = 0; e = a[d]; ++d) e.no == c && (!Config.revealSpoilers && a[0].custom_spoiler && Parser.setCustomSpoiler(b, a[0].custom_spoiler), f = Parser.buildHTMLFromJSON(e, b, !1, !0).lastElementChild, Config.IDColor && (uid = $.cls("posteruid", f)[1]) && IDColor.applyRemote(uid.firstElementChild));
+      for (d = 0; e = a[d]; ++d) e.no == c && (!Config.revealSpoilers && a[0].custom_spoiler && Parser.setCustomSpoiler(b, a[0].custom_spoiler), f = Parser.buildHTMLFromJSON(e, b, !1, !0).lastElementChild, Config.IDColor && (uid = $.cls("posteruid", f)[Main.hasMobileLayout ? 0 : 1]) && IDColor.applyRemote(uid.firstElementChild));
       return f
     },
     decodeSpecialChars: function(a) {
@@ -263,7 +263,7 @@ var Parser = {
       c.textContent = "\u25b6";
       d.appendChild(c);
       b && a != b && (Config.filter && (h = Filter.exec(d.parentNode, d, f)), !h && ReplyHiding.hidden[a] && (ReplyHiding.hidden[a] = Main.now, ReplyHiding.hide(a)), Config.backlinks && Parser.parseBacklinks(a, b));
-      IDColor.enabled && (g = $.cls("posteruid", d)[0]) && IDColor.apply(g.firstElementChild);
+      IDColor.enabled && (g = $.cls("posteruid", d.parentNode)[Main.hasMobileLayout ? 0 : 1]) && IDColor.apply(g.firstElementChild);
       Config.embedSoundCloud && Media.parseSoundCloud(f);
       Config.embedYouTube && Media.parseYouTube(f);
       Config.embedVocaroo && Media.parseVocaroo(f);
@@ -2406,7 +2406,7 @@ var SettingsMenu = {
       },
       Miscellaneous: {
         customCSS: ['Custom CSS [<a href="javascript:;" data-cmd="css-open">Edit</a>]', "Include your own CSS rules", !0],
-        IDColor: ["Color user IDs", "Assign unique colors to user IDs on boards that use them"],
+        IDColor: ["Color user IDs", "Assign unique colors to user IDs on boards that use them", !0],
         compactThreads: ["Force long posts to wrap", "Long posts will wrap at 75% browser width"],
         localTime: ["Convert dates to local time", "Convert 4chan server time (US Eastern Time) to your local time"]
       }
