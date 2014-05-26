@@ -166,7 +166,7 @@ var UA = {
 
     function ka() {
       var a, h;
-      "" != (h = $.id("qf-box").value) ? (UA.hasSessionStorage && (sessionStorage.setItem("4chan-catalog-search", h), sessionStorage.setItem("4chan-catalog-search-board", l.slug)), a = p(), $.id("search-term").textContent = $.id("search-term-bottom").textContent = h, $.id("search-label").style.display = $.id("search-label-bottom").style.display = "inline", h = h.replace(a, "\\$1"), L = RegExp(h, "i"), q()) : W()
+      "" != (h = $.id("qf-box").value) ? (UA.hasSessionStorage && (sessionStorage.setItem("4chan-catalog-search", h), sessionStorage.setItem("4chan-catalog-search-board", l.slug)), a = p(), $.id("search-term").textContent = $.id("search-term-bottom").textContent = h, $.id("search-label").style.display = $.id("search-label-bottom").style.display = "inline", h = h.replace(a, "\\$1"), L = new RegExp(h, "i"), q()) : W()
     }
 
     function W(a) {
@@ -345,9 +345,9 @@ var UA = {
             for (d in a)
               if (b = a[d], b.active && "" != b.pattern && (!b.boards || -1 != b.boards.split(" ").indexOf(l.slug))) {
                 r = b.pattern;
-                if ("#" == r.charAt(0)) y = "#" == r.charAt(1) ? 2 : 1, u = RegExp(r.slice(y).replace(n, "\\$1"));
-                else if (y = 0, t = r.match(g)) u = RegExp(t[1], t[2]);
-                else if ('"' == r.charAt(0) && '"' == r.charAt(r.length - 1)) u = RegExp(r.slice(1, -1).replace(n, "\\$1"));
+                if ("#" == r.charAt(0)) y = "#" == r.charAt(1) ? 2 : 1, u = new RegExp(r.slice(y).replace(n, "\\$1"));
+                else if (y = 0, t = r.match(g)) u = new RegExp(t[1], t[2]);
+                else if ('"' == r.charAt(0) && '"' == r.charAt(r.length - 1)) u = new RegExp(r.slice(1, -1).replace(n, "\\$1"));
                 else {
                   q = r.replace(k, "|").split(" ");
                   u = "";
@@ -360,7 +360,7 @@ var UA = {
                       s = x.join("|").replace(m, "[^\\s]*");
                       u += "(?=.*\\b(" + s + ")\\b)"
                     } else s = q[f].replace(n, "\\$1").replace(m, "[^\\s]*"), u += "(?=.*\\b" + s + "\\b)";
-                  u = RegExp("^" + u, "i")
+                  u = new RegExp("^" + u, "i")
                 }
                 G[d] = {
                   type: y,
@@ -740,7 +740,7 @@ var UA = {
       b.innerHTML = d;
       document.body.appendChild(b);
       d = b.style;
-      c - f.right < (0 | 0.3 * c) ? (c -= f.left, d.right = c + 5 + "px") : (c = f.left + f.width, d.left = c + 5 + "px");
+      c - f.right < (0 | .3 * c) ? (c -= f.left, d.right = c + 5 + "px") : (c = f.left + f.width, d.left = c + 5 + "px");
       d.top = f.top + a.offsetHeight + window.pageYOffset - b.offsetHeight / 2 - f.height / 2 + "px";
       T = !0
     }
@@ -1202,8 +1202,7 @@ function checkForBlock() {
 
 function initBlotter() {
   var a, b;
-  if (a = document.getElementById("toggleBlotter"))
-    if (a.addEventListener("click", toggleBlotter, !1), b = localStorage.getItem("4chan-blotter")) a = +a.getAttribute("data-utc"), a <= +b && toggleBlotter()
+  UA.hasWebStorage && (a = document.getElementById("toggleBlotter")) && (a.addEventListener("click", toggleBlotter, !1), b = localStorage.getItem("4chan-blotter")) && (a = +a.getAttribute("data-utc"), a <= +b && toggleBlotter())
 }
 
 function toggleBlotter(a) {
