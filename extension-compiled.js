@@ -1014,7 +1014,6 @@ var Parser = {
               QR.setPostTime();
               if (Config.persistentQR) {
                 $.byName("com")[1].value = "";
-                $.byName("sub")[1].value = "";
                 if (b = $.byName("spoiler")[2]) b.checked = !1;
                 QR.reloadCaptcha();
                 e && QR.resetFile();
@@ -1052,8 +1051,7 @@ var Parser = {
     onPulse: function() {
       QR.cdElapsed = Date.now() - QR.timestamp;
       QR.cooldown = Math.floor((QR.activeDelay - QR.cdElapsed) / 1E3);
-      0 >= QR.cooldown ? (clearInterval(QR.pulse), QR.btn.value = "Post", QR.cooldown = !1, QR.auto && QR.submit()) : QR.btn.value = QR.cooldown +
-        (QR.auto ? "s (auto)" : "s")
+      0 >= QR.cooldown ? (clearInterval(QR.pulse), QR.btn.value = "Post", QR.cooldown = !1, QR.auto && QR.submit()) : QR.btn.value = QR.cooldown + (QR.auto ? "s (auto)" : "s")
     }
   },
   ThreadHiding = {
