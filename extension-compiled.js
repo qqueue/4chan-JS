@@ -70,7 +70,7 @@ var Parser = {
       };
       this.prettify = "function" == typeof prettyPrint;
       this.customSpoiler = {};
-      Config.localTime && (this.hasSeconds = (b = $.cls("dateTime")[1]) && /\d{2}:\d{2}:\d{2}$/.test(b.textContent), (a = (new Date).getTimezoneOffset()) ? (b = Math.abs(a), c = 0 | b / 60, this.utcOffset = "Timezone: UTC" + (0 > a ? "+" : "-") + c + ((d = b - 60 * c) ? ":" + d : "")) : this.utcOffset = "Timezone: UTC", this.weekdays = "Sun Mon Tue Wed Thu Fri Sat".split(" "));
+      Config.localTime && ((a = (new Date).getTimezoneOffset()) ? (b = Math.abs(a), c = 0 | b / 60, this.utcOffset = "Timezone: UTC" + (0 > a ? "+" : "-") + c + ((d = b - 60 * c) ? ":" + d : "")) : this.utcOffset = "Timezone: UTC", this.weekdays = "Sun Mon Tue Wed Thu Fri Sat".split(" "));
       Main.tid && (this.trackedReplies = this.getTrackedReplies(Main.tid) || {})
     },
     getTrackedReplies: function(a) {
@@ -140,8 +140,7 @@ var Parser = {
         w = "",
         J = !1;
       n = "//i.4cdn.org/" + b;
-      0 == a.resto ? (f = !0, c && (H = '<div class="postLink mobile"><span class="info"></span><a href="thread/' + a.no + '" class="button">View Thread</a></div>', B = "op", G = '&nbsp; <span>[<a href="thread/' +
-        a.no + (a.semantic_url ? "/" + a.semantic_url : "") + '" class="replylink" rel="canonical">Reply</a>]</span>'), c = a.no) : c = a.resto;
+      0 == a.resto ? (f = !0, c && (H = '<div class="postLink mobile"><span class="info"></span><a href="thread/' + a.no + '" class="button">View Thread</a></div>', B = "op", G = '&nbsp; <span>[<a href="thread/' + a.no + (a.semantic_url ? "/" + a.semantic_url : "") + '" class="replylink" rel="canonical">Reply</a>]</span>'), c = a.no) : c = a.resto;
       Main.tid && b == Main.board ? (z = "#p" + a.no, A = "javascript:quote('" + a.no + "')") : (z = "thread/" + c + "#p" + a.no, A = "thread/" + c + "#q" + a.no);
       h = !a.capcode && a.id ? ' <span class="posteruid id_' + a.id + '">(ID: <span class="hand" title="Highlight posts by this ID">' + a.id + "</span>)</span> " : "";
       switch (a.capcode) {
@@ -265,17 +264,17 @@ var Parser = {
       Config.localTime && (c ? (d = e.parentNode.getElementsByClassName("dateTime")[0], d.firstChild.nodeValue = Parser.getLocaleDate(new Date(1E3 * d.getAttribute("data-utc"))) + " ") : (d = e.getElementsByClassName("dateTime")[0], d.title = this.utcOffset, d.textContent = Parser.getLocaleDate(new Date(1E3 * d.getAttribute("data-utc")))))
     },
     getLocaleDate: function(a) {
-      return ("0" + (1 + a.getMonth())).slice(-2) + "/" + ("0" + a.getDate()).slice(-2) + "/" + ("0" + a.getFullYear()).slice(-2) + "(" + this.weekdays[a.getDay()] + ")" + ("0" + a.getHours()).slice(-2) + ":" + ("0" + a.getMinutes()).slice(-2) + (this.hasSeconds ? ":" + ("0" + a.getSeconds()).slice(-2) : "")
+      return ("0" + (1 + a.getMonth())).slice(-2) + "/" + ("0" + a.getDate()).slice(-2) + "/" + ("0" + a.getFullYear()).slice(-2) + "(" + this.weekdays[a.getDay()] + ")" + ("0" + a.getHours()).slice(-2) + ":" + ("0" + a.getMinutes()).slice(-2) + ":" + ("0" + a.getSeconds()).slice(-2)
     },
     parseBacklinks: function(a, b) {
       var c, d, e, f, h, g, k;
       if (e = document.getElementById("m" + a).getElementsByClassName("quotelink"))
         for (f = {}, c = 0; d = e[c]; ++c)
-          if (h = d.getAttribute("href").split("#p"), h[1])(h[1] == b && (d.textContent += " (OP)"), g = document.getElementById("pi" + h[1])) ? f[h[1]] || (f[h[1]] = !0, d = document.createElement("span"), k = Main.tid ? "#p" + a : "thread/" + b + "#p" +
-            a, d.innerHTML = Main.hasMobileLayout ? '<a href="' + k + '" class="quotelink">&gt;&gt;' + a + '</a><a href="' + k + '" class="quoteLink"> #</a> ' : '<a href="' + k + '" class="quotelink">&gt;&gt;' + a + "</a> ", (k = document.getElementById("bl_" + h[1])) || (k = document.createElement("div"), k.id = "bl_" + h[1], k.className = "backlink", Main.hasMobileLayout && (k.className = "backlink mobile", g = document.getElementById("p" + h[1])), g.appendChild(k)), k.appendChild(d)) : Main.tid && ">" != d.textContent.charAt(2) && (d.textContent += " \u2192")
+          if (h = d.getAttribute("href").split("#p"), h[1])(h[1] == b && (d.textContent += " (OP)"), g = document.getElementById("pi" + h[1])) ? f[h[1]] || (f[h[1]] = !0, d = document.createElement("span"), k = Main.tid ? "#p" + a : "thread/" + b + "#p" + a, d.innerHTML = Main.hasMobileLayout ? '<a href="' + k + '" class="quotelink">&gt;&gt;' + a + '</a><a href="' + k + '" class="quoteLink"> #</a> ' : '<a href="' + k + '" class="quotelink">&gt;&gt;' + a + "</a> ", (k = document.getElementById("bl_" + h[1])) || (k = document.createElement("div"), k.id = "bl_" + h[1], k.className = "backlink", Main.hasMobileLayout && (k.className = "backlink mobile", g = document.getElementById("p" + h[1])), g.appendChild(k)), k.appendChild(d)) : Main.tid && ">" != d.textContent.charAt(2) && (d.textContent += " \u2192")
     },
     buildSummary: function(a, b, c) {
-      if (b) b = b + " post" + (1 < b ? "s" : "");
+      if (b) b = b + " post" +
+        (1 < b ? "s" : "");
       else return null;
       c = c ? " and " + c + " image repl" + (1 < c ? "ies" : "y") : "";
       el = document.createElement("span");
