@@ -72,7 +72,8 @@ var UA = {
         c = !1
       }
       this.hasSessionStorage = c;
-      this.hasCORS = "withCredentials" in new XMLHttpRequest
+      this.hasCORS = "withCredentials" in new XMLHttpRequest;
+      this.isMobileDevice = /Mobile|Android|Dolfin|Opera Mobi|PlayStation Vita|Nintendo DS/.test(navigator.userAgent)
     },
     dispatchEvent: function(a, b) {
       var c = document.createEvent("Event");
@@ -83,23 +84,23 @@ var UA = {
   },
   FC = function() {
     function a() {
-      var N, a, d;
+      var B, a, d;
       a = $.id("boardNavDesktop");
       d = $.id("boardNavDesktopFoot");
-      U ? (N = document.createElement("div"), N.className = "pageJump", N.innerHTML = '<a href="#bottom">&#9660;</a><a href="javascript:void(0);" id="settingsWindowLinkClassic">Settings</a><a href="//www.4chan.org" target="_top">Home</a></div>', a.appendChild(N), $.id("settingsWindowLinkClassic").addEventListener("click", F, !1), $.addClass(a, "persistentNav")) : (a.style.display = "none", $.removeClass($.id("boardNavMobile"), "mobile"));
+      U ? (B = document.createElement("div"), B.className = "pageJump", B.innerHTML = '<a href="#bottom">&#9660;</a><a href="javascript:void(0);" id="settingsWindowLinkClassic">Settings</a><a href="//www.4chan.org" target="_top">Home</a></div>', a.appendChild(B), $.id("settingsWindowLinkClassic").addEventListener("click", G, !1), $.addClass(a, "persistentNav")) : (a.style.display = "none", $.removeClass($.id("boardNavMobile"), "mobile"));
       d.style.display = "none";
       $.addClass(document.body, "hasDropDownNav")
     }
 
     function b() {
-      var a, h;
-      h = $.id("boardSelectMobile");
-      for (a = h.options.length - 1; 0 <= a; a--)
-        if (h.options[a].value == l.slug) {
-          h.selectedIndex = a;
+      var B, a;
+      a = $.id("boardSelectMobile");
+      for (B = a.options.length - 1; 0 <= B; B--)
+        if (a.options[B].value == l.slug) {
+          a.selectedIndex = B;
           break
         }
-      $.on(h, "change", function() {
+      $.on(a, "change", function() {
         var a = this.options[this.selectedIndex].value;
         window.location = "//boards.4chan.org/" + a + ("f" == a ? "" : "/catalog")
       });
@@ -131,10 +132,10 @@ var UA = {
     }
 
     function p() {
-      return RegExp("(\\/|\\.|\\*|\\+|\\?|\\(|\\)|\\[|\\]|\\{|\\}|\\\\)", "g")
+      return /(\/|\.|\*|\+|\?|\(|\)|\[|\]|\{|\}|\\)/g
     }
 
-    function H() {
+    function I() {
       var a = new Date;
       a.setTime(a.getTime() + 31536E6);
       document.cookie = ia + "=" + this.value + ";" + a.toGMTString() + "; path=/; domain=4chan.org";
@@ -149,30 +150,30 @@ var UA = {
       var d;
       return function() {
         var b = arguments,
-          f = this;
+          c = this;
         clearTimeout(d);
         d = setTimeout(function() {
-          h.apply(f, b)
+          h.apply(c, b)
         }, a)
       }
     }
 
-    function K() {
+    function M() {
       var a, h = $.id("qf-cnt");
-      $.hasClass(C, "active") ? (W(), h.style.display = "none", $.removeClass(C, "active")) : (h.style.display = "inline", a = $.id("qf-box"), h.hasAttribute("data-built") || (h.setAttribute("data-built", "1"), $.on(a, "keyup", Ca(250, ka)), $.on(a, "keydown", function(a) {
-        "27" == a.keyCode && K()
-      })), a.focus(), a.value = "", $.addClass(C, "active"))
+      $.hasClass(D, "active") ? (W(), h.style.display = "none", $.removeClass(D, "active")) : (h.style.display = "inline", a = $.id("qf-box"), h.hasAttribute("data-built") || (h.setAttribute("data-built", "1"), $.on(a, "keyup", Ca(250, ka)), $.on(a, "keydown", function(a) {
+        "27" == a.keyCode && M()
+      })), a.focus(), a.value = "", $.addClass(D, "active"))
     }
 
     function ka() {
       var a, h;
-      "" != (h = $.id("qf-box").value) ? (UA.hasSessionStorage && (sessionStorage.setItem("4chan-catalog-search", h), sessionStorage.setItem("4chan-catalog-search-board", l.slug)), a = p(), $.id("search-term").textContent = $.id("search-term-bottom").textContent = h, $.id("search-label").style.display = $.id("search-label-bottom").style.display = "inline", h = h.replace(a, "\\$1"), L = new RegExp(h, "i"), q()) : W()
+      "" != (h = $.id("qf-box").value) ? (UA.hasSessionStorage && (sessionStorage.setItem("4chan-catalog-search", h), sessionStorage.setItem("4chan-catalog-search-board", l.slug)), a = p(), $.id("search-term").textContent = $.id("search-term-bottom").textContent = h, $.id("search-label").style.display = $.id("search-label-bottom").style.display = "inline", h = h.replace(a, "\\$1"), K = new RegExp(h, "i"), q()) : W()
     }
 
     function W(a) {
       var h = $.id("qf-box");
       $.id("search-label").style.display = $.id("search-label-bottom").style.display = "none";
-      a ? (h.value = "", h.focus()) : (UA.hasSessionStorage && sessionStorage.removeItem("4chan-catalog-search"), L = !1, q())
+      a ? (h.value = "", h.focus()) : (UA.hasSessionStorage && sessionStorage.removeItem("4chan-catalog-search"), K = !1, q())
     }
 
     function Da() {
@@ -196,8 +197,8 @@ var UA = {
     }
 
     function ma(a) {
-      Y ? (delete J[a], --x) : (J[a] = !0, ++x);
-      localStorage.setItem("4chan-hide-t-" + l.slug, JSON.stringify(J));
+      Y ? (delete L[a], --x) : (L[a] = !0, ++x);
+      localStorage.setItem("4chan-hide-t-" + l.slug, JSON.stringify(L));
       $.id("thread-" + a).style.display = "none";
       Z("hidden", x);
       0 == x && aa(!1)
@@ -216,7 +217,8 @@ var UA = {
     }
 
     function Ea(a) {
-      window.open("http://sys.4chan.org/" + l.slug + "/imgboard.php?mode=report&no=" + a, Date.now(), "toolbar=0,scrollbars=0,location=0,status=1,menubar=0,resizable=1,width=600,height=170")
+      window.open("http://sys.4chan.org/" + l.slug + "/imgboard.php?mode=report&no=" +
+        a, Date.now(), "toolbar=0,scrollbars=0,location=0,status=1,menubar=0,resizable=1,width=600,height=170")
     }
 
     function Fa(a) {
@@ -244,7 +246,7 @@ var UA = {
     function Ha(a) {
       var h = a.target,
         d;
-      (h = a.target) != document && ((d = h.getAttribute("data-watch")) ? ThreadWatcher.toggle(d, l.slug, l.threads[d].teaser, l.threads[d].lr.id) : "backdrop" == h.id ? ba($.id("filters")) ? ba($.id("theme")) || O() : ba($.id("filters-protip")) ? ca() : qa() : "filter-palette" == a.target.id && P())
+      (h = a.target) != document && ((d = h.getAttribute("data-watch")) ? ThreadWatcher.toggle(d, l.slug, l.threads[d].teaser, l.threads[d].lr.id) : "backdrop" == h.id ? ba($.id("filters")) ? ba($.id("theme")) || P() : ba($.id("filters-protip")) ? ca() : qa() : "filter-palette" == a.target.id && Q())
     }
 
     function Ia() {
@@ -277,17 +279,17 @@ var UA = {
         var d;
         a = h.getBoundingClientRect();
         if (!w) {
-          var b, f, c, g, e, k;
+          var b, c, e, g, k, l;
           w = $.id("filter-palette");
           b = $.id("filter-color-table");
-          c = $.tag("tbody", b)[0];
+          e = $.tag("tbody", b)[0];
           g = m.filterColors.length;
           if (0 < g)
-            for (d = m.filterColors[0].length, f = $.tag("tfoot", b)[0], b = f.children.length - 1; 0 <= b; b--) f.children[b].firstElementChild.setAttribute("colspan", d);
+            for (d = m.filterColors[0].length, c = $.tag("tfoot", b)[0], b = c.children.length - 1; 0 <= b; b--) c.children[b].firstElementChild.setAttribute("colspan", d);
           for (b = 0; b < g; ++b) {
-            e = document.createElement("tr");
-            for (f = 0; f < d; ++f) k = document.createElement("td"), k.innerHTML = '<span class="button clickbox" style="background:' + m.filterColors[b][f] + '"></span>', $.on(k.firstElementChild, "click", ea), e.appendChild(k);
-            c.appendChild(e)
+            k = document.createElement("tr");
+            for (c = 0; c < d; ++c) l = document.createElement("td"), l.innerHTML = '<span class="button clickbox" style="background:' + m.filterColors[b][c] + '"></span>', $.on(l.firstElementChild, "click", ea), k.appendChild(l);
+            e.appendChild(k)
           }
         }
         $.removeClass(w, "hidden");
@@ -300,7 +302,7 @@ var UA = {
     function Ma() {
       var a, b, d, c, f, e;
       b = $.id("filters");
-      b.hasAttribute("data-built") || ($.on(b, "click", Ja), $.on($.id("filter-palette-close"), "click", P), $.on($.id("filter-palette-clear"), "click", Na), $.on($.id("filters-help-open"), "click", Ia), $.on($.id("filters-help-close"), "click", qa), $.on($.id("filter-rgb"), "keyup", Oa), $.on($.id("filter-rgb-ok"), "click", ea), b.setAttribute("data-built", "1"));
+      b.hasAttribute("data-built") || ($.on(b, "click", Ja), $.on($.id("filter-palette-close"), "click", Q), $.on($.id("filter-palette-clear"), "click", Na), $.on($.id("filters-help-open"), "click", Ia), $.on($.id("filters-help-close"), "click", qa), $.on($.id("filter-rgb"), "keyup", Oa), $.on($.id("filter-rgb-ok"), "click", ea), b.setAttribute("data-built", "1"));
       d = localStorage.getItem("catalog-filters");
       f = 0;
       if (d) {
@@ -312,7 +314,7 @@ var UA = {
       b.style.top = window.pageYOffset + 60 + "px";
       $.removeClass(b, "hidden");
       (e = $.cls("filter-active", b)[0]) && e.focus();
-      Q()
+      R()
     }
 
     function ca() {
@@ -322,17 +324,17 @@ var UA = {
       b = $.id("filter-list");
       d = $.tag("tr", b);
       for (a = d.length - 1; 0 <= a; a--) b.removeChild(d[a]);
-      P();
-      Q()
+      Q();
+      R()
     }
 
-    function P() {
+    function Q() {
       w && !$.hasClass(w, "hidden") && $.addClass(w, "hidden")
     }
 
     function ta() {
       if (UA.hasWebStorage) {
-        G = {};
+        H = {};
         var a = localStorage.getItem("catalog-filters");
         if (a) {
           var a = JSON.parse(a),
@@ -359,10 +361,11 @@ var UA = {
                       for (c = v.length - 1; 0 <= c; c--) "" != v[c] && x.push(v[c].replace(n, "\\$1"));
                       s = x.join("|").replace(m, "[^\\s]*");
                       u += "(?=.*\\b(" + s + ")\\b)"
-                    } else s = q[f].replace(n, "\\$1").replace(m, "[^\\s]*"), u += "(?=.*\\b" + s + "\\b)";
+                    } else s = q[f].replace(n, "\\$1").replace(m, "[^\\s]*"), u += "(?=.*\\b" +
+                      s + "\\b)";
                   u = new RegExp("^" + u, "i")
                 }
-                G[d] = {
+                H[d] = {
                   type: y,
                   pattern: u,
                   boards: b.boards,
@@ -374,8 +377,7 @@ var UA = {
                 }
               }
           } catch (w) {
-            alert("There was an error processing one of the filters: " +
-              w + " in: " + b.pattern)
+            alert("There was an error processing one of the filters: " + w + " in: " + b.pattern)
           }
         }
       }
@@ -443,8 +445,7 @@ var UA = {
       c.appendChild(d);
       d = document.createElement("td");
       f = document.createElement("span");
-      f.id = "filter-color-" +
-        b;
+      f.id = "filter-color-" + b;
       f.title = "Change Color";
       f.className = "button clickbox filter-color";
       a.color ? f.style.background = a.color : (f.setAttribute("data-nocolor", "1"), f.innerHTML = "&#x2215;");
@@ -481,7 +482,7 @@ var UA = {
     function ea(a) {
       var b = $.id("filter-color-" + w.getAttribute("data-target"));
       !0 === a ? (b.setAttribute("data-nocolor", "1"), b.innerHTML = "&#x2215;", b.style.background = "") : (b.removeAttribute("data-nocolor"), b.innerHTML = "", b.style.background = this.style.backgroundColor);
-      P()
+      Q()
     }
 
     function Na() {
@@ -504,26 +505,26 @@ var UA = {
 
     function sa() {
       var a, b, d = $.id("filter-list").children;
-      for (a = 0; b = d[a]; ++a) $.id("fhc-" + b.id.slice(7)).innerHTML = G[a] ? "x" + G[a].hits : ""
+      for (a = 0; b = d[a]; ++a) $.id("fhc-" + b.id.slice(7)).innerHTML = H[a] ? "x" + H[a].hits : ""
     }
 
     function ba(a) {
       return $.hasClass(a, "hidden")
     }
 
-    function F() {
+    function G() {
       var a, b;
-      UA.hasWebStorage ? (a = $.id("theme"), theme = (theme = localStorage.getItem("catalog-theme")) ? JSON.parse(theme) : {}, $.id("theme-nobinds").checked = !!theme.nobinds, $.id("theme-nospoiler").checked = !!theme.nospoiler, $.id("theme-newtab").checked = !!theme.newtab, $.id("theme-tw").checked = M, $.id("theme-ddn").checked = R, theme.css && ($.id("theme-css").value = theme.css), $.on($.id("theme-save"), "click", ua), $.on($.id("theme-close"), "click", O), $.id("theme-msg").style.display = "none", a.style.top = window.pageYOffset + 60 + "px", $.removeClass(a, "hidden"), (b = $.tag("input", a)[0]) && b.focus(), Q()) : alert("Your browser doesn't support Local Storage")
+      UA.hasWebStorage ? (a = $.id("theme"), theme = (theme = localStorage.getItem("catalog-theme")) ? JSON.parse(theme) : {}, $.id("theme-nobinds").checked = !!theme.nobinds, $.id("theme-nospoiler").checked = !!theme.nospoiler, $.id("theme-newtab").checked = !!theme.newtab, $.id("theme-tw").checked = N, $.id("theme-ddn").checked = O, theme.css && ($.id("theme-css").value = theme.css), $.on($.id("theme-save"), "click", ua), $.on($.id("theme-close"), "click", P), $.id("theme-msg").style.display = "none", a.style.top = window.pageYOffset + 60 + "px", $.removeClass(a, "hidden"), (b = $.tag("input", a)[0]) && b.focus(), R()) : alert("Your browser doesn't support Local Storage")
     }
 
-    function O() {
+    function P() {
       $.off($.id("theme-save"), "click", ua);
-      $.off($.id("theme-close"), "click", O);
+      $.off($.id("theme-close"), "click", P);
       $.addClass($.id("theme"), "hidden");
-      Q()
+      R()
     }
 
-    function Q() {
+    function R() {
       $.toggleClass($.id("backdrop"), "hidden")
     }
 
@@ -544,22 +545,22 @@ var UA = {
       e.threadWatcher = c;
       e.dropDownNav = d;
       localStorage.setItem("4chan-settings", JSON.stringify(e));
-      c != M && (c ? ThreadWatcher.init() : ThreadWatcher.unInit());
-      if (d != R)
+      c != N && (c ? ThreadWatcher.init() : ThreadWatcher.unInit());
+      if (d != O)
         if (d) a();
         else {
           var k, g;
           k = $.id("boardNavDesktop");
           g = $.id("boardNavDesktopFoot");
           if (U) {
-            if (e = $.cls("pageJump", k)) $.id("settingsWindowLinkClassic").removeEventListener("click", F, !1), k.removeChild(e);
+            if (e = $.cls("pageJump", k)) $.id("settingsWindowLinkClassic").removeEventListener("click", G, !1), k.removeChild(e);
             $.removeClass(k, "persistentNav")
           } else k.style.display = "", $.addClass($.id("boardNavMobile"), "mobile");
           g.style.display = "";
           $.removeClass(document.body, "hasDropDownNav")
         }
-      M = c;
-      R = d;
+      N = c;
+      O = d;
       "" != (c = $.id("theme-css").value) && (f.css = c);
       va(f);
       localStorage.removeItem("catalog-theme");
@@ -569,7 +570,7 @@ var UA = {
       }
       v = f;
       q();
-      O()
+      P()
     }
 
     function wa(a) {
@@ -603,7 +604,7 @@ var UA = {
 
     function za(a, b) {
       var d = m.extended ? "extended-" : "";
-      a ? (D.selectedIndex = 1, d += "large", m.large = !0) : (D.selectedIndex = 0, d += "small", m.large = !1);
+      a ? (E.selectedIndex = 1, d += "large", m.large = !0) : (E.selectedIndex = 0, d += "small", m.large = !1);
       t.className = d;
       b || (fa(), q())
     }
@@ -628,24 +629,24 @@ var UA = {
     }
 
     function Ra() {
-      za("large" == D.options[D.selectedIndex].value)
+      za("large" == E.options[E.selectedIndex].value)
     }
 
     function q() {
-      var a, b, d, c, f, e, g, k, n, p, q, w, H = 0,
+      var a, b, d, c, f, e, g, k, n, p, q, w, I = 0,
         r = "",
         u = 0,
-        C, D, y, A = "",
-        z, B, E, I, F;
+        D, E, y, A = "",
+        z, C, F, J, G;
       if (0 != l.count) {
         w = l.custom_spoiler ? m.imgspoiler + "-" + l.slug + l.custom_spoiler + ".png" : m.imgspoiler + ".png";
         t.hasChildNodes() && ((a = document.getElementById("th-tip")) && document.body.removeChild(a), t.textContent = "");
         q = "//boards.4chan.org/" + l.slug + "/thread/";
-        C = ".t.4cdn.org/" + l.slug + "/";
+        D = ".t.4cdn.org/" + l.slug + "/";
         x = 0;
-        for (c in G) G[c].hits = 0;
-        F = !m.large;
-        D = v.newtab ? 'target="_blank" ' : "";
+        for (c in H) H[c].hits = 0;
+        G = !m.large;
+        E = v.newtab ? 'target="_blank" ' : "";
         a = 0;
         a: for (; a < l.count; ++a) {
           f = l.order[m.orderby][a];
@@ -653,19 +654,19 @@ var UA = {
           k = n = p = !1;
           e.sub ? (y = "<b>" + e.sub + "</b>", e.teaser && (y += ": " + e.teaser)) : y = e.teaser;
           if (Y) {
-            if (!J[f]) continue;
+            if (!L[f]) continue;
             ++x
-          } else if (!L) {
-            if (J[f]) {
+          } else if (!K) {
+            if (L[f]) {
               ++x;
               continue
             }
             if (0 <= s[f]) p = n = !0;
             else
-              for (c in d = e.capcode ? (e.trip || "") + "!#" + e.capcode : e.trip, G)
-                if (g = G[c], 0 == g.type && g.pattern.test(y) || 1 == g.type && g.pattern.test(d) || 2 == g.type && g.pattern.test(e.author)) {
+              for (c in d = e.capcode ? (e.trip || "") + "!#" + e.capcode : e.trip, H)
+                if (g = H[c], 0 == g.type && (g.pattern.test(y) || g.pattern.test(e.file)) || 1 == g.type && g.pattern.test(d) || 2 == g.type && g.pattern.test(e.author)) {
                   if (g.hidden) {
-                    ++H;
+                    ++I;
                     g.hits += 1;
                     continue a
                   }
@@ -674,37 +675,38 @@ var UA = {
                   g.hits += 1;
                   break
                 }
-          } else if (!L.test(y)) continue;
+          } else if (!K.test(y) && !K.test(e.file)) continue;
           u = 0 === u ? 1 : 0;
           g = '<div id="thread-' + f + '" class="thread">';
-          M && (d = f + "-" + l.slug, g += '<span id="leaf-' + f + '" data-watch="' + f + '" ' + (ThreadWatcher.watched[d] ? 'title="Unwatch" class="unwatchIcon"></span>' : 'title="Watch" class="watchIcon"></span>'));
-          g += "<a " + D + 'href="' + q + f + (e.semantic_url ? "/" + e.semantic_url : "") + '"><img alt="" id="thumb-' + f + '" class="thumb';
+          N && (d = f + "-" + l.slug, g += '<span id="leaf-' + f + '" data-watch="' + f + '" ' + (ThreadWatcher.watched[d] ? 'title="Unwatch" class="unwatchIcon"></span>' : 'title="Watch" class="watchIcon"></span>'));
+          g += "<a " + E + 'href="' + q + f + (e.semantic_url ? "/" + e.semantic_url : "") + '"><img alt="" id="thumb-' + f + '" class="thumb';
           d = k.color ? ' hl" style="border-color: ' + k.color : p ? " pinned" : "";
-          e.imgurl ? e.imgspoiler && !v.nospoiler ? g += d + '" src="' + w : (E = e.tn_w, I = e.tn_h, F && (B = m.smallsize, E > B && (z = B / E, E = B, I *= z), I > B && (z = B / I, I = B, E *= z)), g += d + '" width="' + E + '" height="' + I + '" src="//' + u + C + e.imgurl + "s.jpg") : g = e.imgdel ? g + (" imgdel" + d + '" src="' + m.imgdel) : g + (" nofile" + d + '" src="' + m.nofile);
+          e.imgurl ? e.imgspoiler && !v.nospoiler ? g += d + '" src="' + w : (F = e.tn_w, J = e.tn_h, G && (C = m.smallsize, F > C && (z = C / F, F = C, J *= z), J > C && (z = C / J, J = C, F *= z)), g += d + '" width="' + F + '" height="' + J + '" src="//' + u + D + e.imgurl + "s.jpg") : g = e.imgdel ? g + (" imgdel" + d + '" src="' + m.imgdel) : g + (" nofile" + d + '" src="' + m.nofile);
           g += '" data-id="' + f + '" /></a>';
           if (e.sticky || e.closed || e.capcodereps) {
             g += '<div class="threadIcons">';
             e.sticky && (g += '<span title="Sticky" class="threadIcon stickyIcon"></span>');
             e.closed && (g += '<span title="Closed" class="threadIcon closedIcon"></span>');
             if (e.capcodereps)
-              for (z = e.capcodereps.split(","), d = 0; B = z[d]; ++d)
-                if (E = Sa[B]) g += '<span title="' + E + ' Replies" class="threadIcon ' + B + 'Icon"></span>';
+              for (z = e.capcodereps.split(","), d = 0; C = z[d]; ++d)
+                if (F = Sa[C]) g += '<span title="' + F + ' Replies" class="threadIcon ' + C + 'Icon"></span>';
             g += "</div>"
           }
-          g += '<div title="(R)eplies / (I)mages' + (n ? " / (P)age" : "") + '" id="meta-' + f + '" class="meta">';
+          g += '<div title="(R)eplies / (I)mages' + (n ? " / (P)age" : "") + '" id="meta-' +
+            f + '" class="meta">';
           e.r && (g = e.bumplimit ? g + ("<i>R: <b>" + e.r + "</b></i>") : g + ("R: <b>" + e.r + "</b>"), p && (p = e.r - s[f], 0 < p ? (g += " (+" + p + ")", s[f] = e.r) : g += "(+0)"), e.i && (g = e.imagelimit ? g + (" / <i>I: <b>" + e.i + "</b></i>") : g + (" / I: <b>" + e.i + "</b>")));
           n && 0 <= (page = 0 | l.order.alt.indexOf(f) / l.pagesize) && (e.r && (g += " / "), g += "P: <b>" + page + "</b>");
           g += "</div>";
           y && (g += '<div class="teaser', k.color && (g += ' style="color:' + k.color), g += '">' + y + "</div>");
           n ? A += g + "</div>" : r += g + "</div>"
         }
-        r = L && "" == r ? '<div class="error">Nothing Found</div>' : A ? A + r + '<div class="clear"></div>' : r + '<div class="clear"></div>';
+        r = K && "" == r ? '<div class="error">Nothing Found</div>' : A ? A + r + '<div class="clear"></div>' : r + '<div class="clear"></div>';
         for (b in s) {
           localStorage.setItem("4chan-pin-" + l.slug, JSON.stringify(s));
           break
         }
         t.innerHTML = r;
-        Z("filtered", H);
+        Z("filtered", I);
         Z("hidden", x)
       }
     }
@@ -720,9 +722,9 @@ var UA = {
     }
 
     function Ua(a) {
-      var b, d, c, f;
+      var b, d, c, e;
       b = Date.now() / 1E3;
-      f = a.getBoundingClientRect();
+      e = a.getBoundingClientRect();
       c = document.documentElement.offsetWidth;
       thread = l.threads[a.getAttribute("data-id")];
       d = thread.sub ? '<span class="post-subject">' + thread.sub + "</span>" : "Posted";
@@ -733,15 +735,14 @@ var UA = {
       l.flags && thread.country && (d += '<div class="flag flag-' + thread.country.toLowerCase() + '"></div> ');
       d += '<span class="post-ago">' + Ba(b - thread.date) + " ago</span>";
       !m.extended && thread.teaser && (d += '<p class="post-teaser">' + thread.teaser + "</p>");
-      0 < thread.r && (d += '<div class="post-last">Last reply by <span class="' + (thread.lr.capcode ? thread.lr.capcode + "-capcode " : "") + 'post-author">' + thread.lr.author, thread.lr.trip && (d += ' <span class="post-tripcode">' + thread.lr.trip + "</span>"), thread.lr.capcode && (d += " ## " + thread.lr.capcode.charAt(0).toUpperCase() +
-        thread.lr.capcode.slice(1)), d += '</span> <span class="post-ago">' + Ba(b - thread.lr.date) + " ago</span>");
+      0 < thread.r && (d += '<div class="post-last">Last reply by <span class="' + (thread.lr.capcode ? thread.lr.capcode + "-capcode " : "") + 'post-author">' + thread.lr.author, thread.lr.trip && (d += ' <span class="post-tripcode">' + thread.lr.trip + "</span>"), thread.lr.capcode && (d += " ## " + thread.lr.capcode.charAt(0).toUpperCase() + thread.lr.capcode.slice(1)), d += '</span> <span class="post-ago">' + Ba(b - thread.lr.date) + " ago</span>");
       b = document.createElement("div");
       b.id = "post-preview";
       b.innerHTML = d;
       document.body.appendChild(b);
       d = b.style;
-      c - f.right < (0 | .3 * c) ? (c -= f.left, d.right = c + 5 + "px") : (c = f.left + f.width, d.left = c + 5 + "px");
-      d.top = f.top + a.offsetHeight + window.pageYOffset - b.offsetHeight / 2 - f.height / 2 + "px";
+      c - e.right < (0 | .3 * c) ? (c -= e.left, d.right = c + 5 + "px") : (c = e.left + e.width, d.left = c + 5 + "px");
+      d.top = e.top + a.offsetHeight + window.pageYOffset - b.offsetHeight / 2 - e.height / 2 + "px";
       T = !0
     }
 
@@ -786,7 +787,7 @@ var UA = {
       },
       oa = {
         83: function() {
-          $.hasClass(C, "active") ? W(!0) : K()
+          $.hasClass(D, "active") ? W(!0) : M()
         },
         82: ja,
         88: function() {
@@ -796,18 +797,18 @@ var UA = {
       l = {},
       xa = ["orderby", "large", "extended"],
       v = {},
-      ia, V, G = {},
+      ia, V, H = {},
       T = !1,
       ha = null,
       s = {},
-      J = {},
+      L = {},
       x = 0,
-      M = !1,
-      R = !1,
+      N = !1,
+      O = !1,
       U = !1,
-      L = !1,
+      K = !1,
       Y = !1,
-      t, C, D, z, w, na;
+      t, D, E, z, w, na;
     2 <= window.devicePixelRatio && (m.imgdel.replace(".", "@2x."), m.nofile.replace(".", "@2x."));
     UA.init();
     (function() {
@@ -825,22 +826,22 @@ var UA = {
       buildMobileNav();
       va(v, !0);
       t = $.id("threads");
-      C = $.id("qf-ctrl");
+      D = $.id("qf-ctrl");
       $teaserCtrl = $.id("teaser-ctrl");
-      D = $.id("size-ctrl");
+      E = $.id("size-ctrl");
       z = $.id("order-ctrl");
       $filtersPanel = $.id("filters");
       $themePanel = $.id("theme");
-      $.on(C, "click", K);
+      $.on(D, "click", M);
       $.on($.id("filters-clear-hidden"), "click", pa);
       $.on($.id("filters-clear-hidden-bottom"), "click", pa);
-      $.on($.id("qf-clear"), "click", K);
-      $.on($.id("settingsWindowLink"), "click", F);
-      $.on($.id("settingsWindowLinkBot"), "click", F);
-      $.on($.id("settingsWindowLinkMobile"), "click", F);
+      $.on($.id("qf-clear"), "click", M);
+      $.on($.id("settingsWindowLink"), "click", G);
+      $.on($.id("settingsWindowLinkBot"), "click", G);
+      $.on($.id("settingsWindowLinkMobile"), "click", G);
       $.on($.id("filters-ctrl"), "click", Ma);
       $.on($teaserCtrl, "change", Pa);
-      $.on(D, "change", Ra);
+      $.on(E, "change", Ra);
       $.on(z, "change", Qa);
       $.on(t, "mouseover", Ta);
       $.on(t, "mouseout", Va);
@@ -851,8 +852,8 @@ var UA = {
       var l;
       UA.hasWebStorage && (l = localStorage.getItem("catalog-settings")) && $.extend(m, JSON.parse(l));
       Da();
-      var f, p, g;
-      if (UA.hasWebStorage && (f = $.id("globalMessage")) && f.textContent && (f.nextElementSibling.style.clear = "both", l = document.createElement("span"), l.id = "toggleMsgBtn", l.setAttribute("data-cmd", "toggleMsg"), l.title = "Toggle announcement", g = localStorage.getItem("4chan-global-msg"), p = f.getAttribute("data-utc"), g && p <= g ? (f.style.display = "none", l.style.opacity = "0.5", l.className = "expandIcon") : l.className = "collapseIcon", $.on(l, "click", c), f.parentNode.insertBefore(l, f), l = $.id("globalToggle"), 0 < l.offsetWidth)) $.on(l, "click", e);
+      var f, p;
+      if (UA.hasWebStorage && (b = $.id("globalMessage")) && b.textContent && (b.nextElementSibling.style.clear = "both", l = document.createElement("span"), l.id = "toggleMsgBtn", l.setAttribute("data-cmd", "toggleMsg"), l.title = "Toggle announcement", p = localStorage.getItem("4chan-global-msg"), f = b.getAttribute("data-utc"), p && f <= p ? (b.style.display = "none", l.style.opacity = "0.5", l.className = "expandIcon") : l.className = "collapseIcon", $.on(l, "click", c), b.parentNode.insertBefore(l, b), l = $.id("globalToggle"), 0 < l.offsetWidth)) $.on(l, "click", e);
       initBlotter();
       !window.passEnabled && window.preupload_captcha && "FormData" in window && document.forms.post.addEventListener("submit", onPostSubmit, !1);
       UA.hasContextMenu && (na = {
@@ -860,9 +861,10 @@ var UA = {
         hide: ma,
         report: Ea
       }, $.id("ctxmenu-main").innerHTML = '<menuitem label="Unpin all threads"></menuitem>', $.id("ctxmenu-thread").innerHTML = '<menuitem label="Pin/Unpin" data-cmd="pin"></menuitem><menuitem label="Hide/Unhide" data-cmd="hide"></menuitem><menuitem label="Report" data-cmd="report"></menuitem>', $.on($.id("ctxmenu-main"), "click", Ga), $.on($.id("ctxmenu-thread"), "click", Fa));
-      UA.hasWebStorage && (b = localStorage.getItem("4chan-settings")) && (b = JSON.parse(b), !b.disableAll && b.threadWatcher && (M = !0, ThreadWatcher.init()), b.customMenu && CustomMenu.apply(b.customMenuList), !1 === b.dropDownNav || FC.hasMobileLayout || (R = !0, U = b.classicNav, a()));
+      UA.hasWebStorage && ((b = localStorage.getItem("4chan-settings")) ? (b = JSON.parse(b), !b.disableAll && b.threadWatcher && (N = !0, ThreadWatcher.init()), b.customMenu && CustomMenu.apply(b.customMenuList), !1 === b.dropDownNav || FC.hasMobileLayout || (O = !0, U = b.classicNav, a())) : UA.isMobileDevice && !FC.hasMobileLayout && (O = !0, a()));
       window.passEnabled && setPassMsg();
-      (h = document.forms.post.flag) && (d = $.readCookie("4chan_flag")) && (h = h.querySelector('option[value="' + d + '"]')) && h.setAttribute("selected", "selected");
+      (h = document.forms.post.flag) && (d = $.readCookie("4chan_flag")) && (h = h.querySelector('option[value="' +
+        d + '"]')) && h.setAttribute("selected", "selected");
       A(m.orderby, !0);
       za(m.large, !0);
       ya(m.extended, !0);
@@ -876,18 +878,19 @@ var UA = {
       d = $.id("styleSelector");
       e = d.children;
       for (a = 0; f = e[a]; ++a) f.value == V && (d.selectedIndex = a);
-      $.on(d, "change", H);
+      $.on(d, "change", I);
       ta();
-      UA.hasWebStorage && (J = wa("4chan-hide-t-" + l.slug), s = wa("4chan-pin-" + l.slug));
+      UA.hasWebStorage && (L = wa("4chan-hide-t-" + l.slug), s = wa("4chan-pin-" + l.slug));
       UA.hasSessionStorage && !location.hash && (c = sessionStorage.getItem("4chan-catalog-search")) ? l.slug != sessionStorage.getItem("4chan-catalog-search-board") && (sessionStorage.removeItem("4chan-catalog-search"), sessionStorage.removeItem("4chan-catalog-search-board"), c = null) : location.hash && (c = location.hash.match(/#s=(.+)/)) && (c = decodeURIComponent(c[1].replace(/\+/g, " ")));
-      c ? (K(), $.id("qf-box").value = c, ka()) : q()
+      c ? (M(), $.id("qf-box").value = c, ka()) : q()
     };
-    S.applyCSS = function(a, b, d) {
-      var c, e;
+    S.applyCSS = function(a, b, c) {
+      var e, f;
       a || (a = v);
-      void 0 !== b && ((e = $.readCookie(b)) || (e = "nws_style" == b ? "Yotsuba New" : "Yotsuba B New"), ia = b, V = e, c = document.createElement("link"), c.type = "text/css", c.id = "base-css", c.rel = "stylesheet", c.setAttribute("href", "//s.4cdn.org/css/catalog_" + e.toLowerCase().replace(/ /g, "_") + "." + d + ".css"), document.head.insertBefore(c, $.id("mobile-css")));
-      (c = $.id("custom-css")) && document.head.removeChild(c);
-      a.css && (c = document.createElement("style"), c.type = "text/css", c.id = "custom-css", c.styleSheet ? c.styleSheet.cssText = a.css : c.innerHTML = a.css, document.head.appendChild(c));
+      void 0 !== b && ((f = $.readCookie(b)) || (f = "nws_style" == b ? "Yotsuba New" : "Yotsuba B New"), ia = b, V = f, e = document.createElement("link"), e.type = "text/css", e.id = "base-css", e.rel = "stylesheet", e.setAttribute("href", "//s.4cdn.org/css/catalog_" +
+        f.toLowerCase().replace(/ /g, "_") + "." + c + ".css"), document.head.insertBefore(e, $.id("mobile-css")));
+      (e = $.id("custom-css")) && document.head.removeChild(e);
+      a.css && (e = document.createElement("style"), e.type = "text/css", e.id = "custom-css", e.styleSheet ? e.styleSheet.cssText = a.css : e.innerHTML = a.css, document.head.appendChild(e));
       UA.dispatchEvent("4chanMainInit")
     }
   },
@@ -902,8 +905,7 @@ var UA = {
       a.id = "threadWatcher";
       a.setAttribute("data-trackpos", "TW-position");
       (b = localStorage.getItem("catalog-tw-pos")) ? a.style.cssText = b : (a.style.left = "10px", a.style.top = "75px");
-      a.innerHTML = '<div class="drag" id="twHeader">Thread Watcher' +
-        (UA.hasCORS ? '<div id="twPrune" class="icon refreshIcon" title="Refresh"></div></div>' : "</div>");
+      a.innerHTML = '<div class="drag" id="twHeader">Thread Watcher' + (UA.hasCORS ? '<div id="twPrune" class="icon refreshIcon" title="Refresh"></div></div>' : "</div>");
       this.listNode = document.createElement("ul");
       this.listNode.id = "watchList";
       this.load();
@@ -929,8 +931,7 @@ var UA = {
     build: function() {
       var a, b, c;
       a = "";
-      for (c in this.watched) b = c.split("-"), a += '<li id="watch-' + c + '"><span class="pointer" data-cmd="unwatch" data-id="' +
-        b[0] + '" data-board="' + b[1] + '">&times;</span> <a href="' + this.linkToThread(b[0], b[1], this.watched[c][1]) + '"', a = -1 == this.watched[c][1] ? a + ' class="deadlink">' : this.watched[c][2] ? a + (' class="hasNewReplies">(' + this.watched[c][2] + ") ") : a + ">", a += "/" + b[1] + "/ - " + this.watched[c][0] + "</a></li>";
+      for (c in this.watched) b = c.split("-"), a += '<li id="watch-' + c + '"><span class="pointer" data-cmd="unwatch" data-id="' + b[0] + '" data-board="' + b[1] + '">&times;</span> <a href="' + this.linkToThread(b[0], b[1], this.watched[c][1]) + '"', a = -1 == this.watched[c][1] ? a + ' class="deadlink">' : this.watched[c][2] ? a + (' class="hasNewReplies">(' + this.watched[c][2] + ") ") : a + ">", a += "/" + b[1] + "/ - " + this.watched[c][0] + "</a></li>";
       ThreadWatcher.listNode.innerHTML = a
     },
     onClick: function(a) {
@@ -998,12 +999,12 @@ var UA = {
       if (-1 == ThreadWatcher.watched[a][1]) {
         if (delete ThreadWatcher.watched[a], c.parentNode.removeChild(c), b) ThreadWatcher.onRefreshEnd(b)
       } else c = a.split("-"), e = new XMLHttpRequest, e.onload = function() {
-        var c, e, p, H;
+        var c, e, p, I;
         if (200 == this.status) {
           p = ThreadWatcher.parseThreadJSON(this.responseText);
-          H = ThreadWatcher.watched[a][1];
+          I = ThreadWatcher.watched[a][1];
           e = 0;
-          for (c = p.length - 1; 1 <= c && !(p[c].no <= H); c--)++e;
+          for (c = p.length - 1; 1 <= c && !(p[c].no <= I); c--)++e;
           e > ThreadWatcher.watched[a][2] && (ThreadWatcher.watched[a][2] = e)
         } else 404 == this.status && (ThreadWatcher.watched[a][1] = -1); if (b) ThreadWatcher.onRefreshEnd(b)
       }, b && (e.onerror = e.onload), e.open("GET", "//a.4cdn.org/" + c[1] + "/res/" + c[0] + ".json"), e.send(null)
