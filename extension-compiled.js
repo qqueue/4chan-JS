@@ -1285,7 +1285,7 @@ var Parser = {
           d = 0;
           for (c = h.length - 1; 1 <= c && !(h[c].no <= g); c--)++d;
           d > ThreadWatcher.watched[a][2] && (ThreadWatcher.watched[a][2] = d);
-          h[0].is_archived && (ThreadWatcher.watched[a][3] = 1)
+          h[0].archived && (ThreadWatcher.watched[a][3] = 1)
         } else 404 == this.status && (ThreadWatcher.watched[a][1] = -1); if (b) ThreadWatcher.onRefreshEnd(b)
       }, b && (d.onerror = d.onload), d.open("GET", "//a.4cdn.org/" + c[1] + "/thread/" + c[0] + ".json"), d.send(null)
     }
@@ -1558,7 +1558,7 @@ var Parser = {
             count: b
           })
         } else c.setStatus("No new posts");
-        f[0].is_archived && (c.setError("This thread is archived"), c.dead || (c.setIcon("dead"), window.thread_archived = !0, c.dead = !0, c.stop()))
+        f[0].archived && (c.setError("This thread is archived"), c.dead || (c.setIcon("dead"), window.thread_archived = !0, c.dead = !0, c.stop()))
       } else if (304 == this.status || 0 == this.status) c.setStatus("No new posts");
       else if (404 == this.status) {
         c.setIcon("dead");
