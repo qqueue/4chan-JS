@@ -121,7 +121,7 @@ var Parser = {
         k = "",
         l = "",
         g = "",
-        m, n, p, l = '"',
+        n, m, p, l = '"',
         v = "",
         C = "",
         x = p = "",
@@ -139,7 +139,7 @@ var Parser = {
         I = "",
         w = "",
         J = !1;
-      n = "//i.4cdn.org/" + b;
+      m = "//i.4cdn.org/" + b;
       0 == a.resto ? (f = !0, c && (H = '<div class="postLink mobile"><span class="info"></span><a href="thread/' + a.no + '" class="button">View Thread</a></div>', B = "op", G = '&nbsp; <span>[<a href="thread/' + a.no + (a.semantic_url ? "/" + a.semantic_url : "") + '" class="replylink" rel="canonical">Reply</a>]</span>'), c = a.no) : c = a.resto;
       Main.tid && b == Main.board ? (z = "#p" + a.no, A = "javascript:quote('" + a.no + "')") : (z = "thread/" + c + "#p" + a.no, A = "thread/" + c + "#q" + a.no);
       h = !a.capcode && a.id ? ' <span class="posteruid id_' + a.id + '">(ID: <span class="hand" title="Highlight posts by this ID">' + a.id + "</span>)</span> " : "";
@@ -166,9 +166,9 @@ var Parser = {
       }
       a.email && (E = '<a href="mailto:' + a.email.replace(/ /g, "%20") + '" class="useremail">', F = "</a>");
       y = a.country ? "pol" == b ? ' <img src="//s.4cdn.org/image/country/troll/' + a.country.toLowerCase() + '.gif" alt="' + a.country + '" title="' + a.country_name + '" class="countryFlag">' : ' <span title="' + a.country_name + '" class="flag flag-' + a.country.toLowerCase() + '"></span>' : "";
-      a.filedeleted ? g = '<div id="f' + a.no + '" class="file"><span class="fileThumb"><img src="' + Parser.icons.del + '" class="fileDeletedRes" alt="File deleted."></span></div>' : a.ext && (g = Parser.decodeSpecialChars(a.filename), p = x = a.filename + a.ext, g.length > (f ? 40 : 30) && (p = Parser.encodeSpecialChars(g.slice(0, f ? 35 : 25)) + "(...)" + a.ext, J = !0), a.tn_w || a.tn_h || ".gif" != a.ext || (a.tn_w = a.w, a.tn_h = a.h), v = 1048576 <= a.fsize ? (0 | a.fsize / 1048576 * 100 + .5) / 100 + " M" : 1024 < a.fsize ? (0 | a.fsize / 1024 + .5) + " K" : a.fsize + " ", a.spoiler && !Config.revealSpoilers && (p = "Spoiler Image", l = '" title="' + x + '"', C = " imgspoiler", m = "//s.4cdn.org/image/spoiler" + (Parser.customSpoiler[b] || "") + ".png", a.tn_w = 100, a.tn_h = 100), m || (m = "//t.4cdn.org/" + b + "/" + a.tim + "s.jpg"), g = ".pdf" == a.ext ? "PDF" : a.w + "x" +
-        a.h, "f" != b ? (n = n + "/" + a.tim + a.ext, k = '<a class="fileThumb' + C + '" href="' + n + '" target="_blank"><img src="' + m + '" alt="' + v + 'B" data-md5="' + a.md5 + '" style="height: ' + a.tn_h + "px; width: " + a.tn_w + 'px;"><div class="mFileInfo mobile">' + v + "B " + a.ext.slice(1).toUpperCase() + "</div></a>", l = '<div class="fileText" id="fT' + a.no + l + ">File: <a" + (J ? ' title="' + x + '"' : "") + ' href="' + n + '" target="_blank">' + p + "</a> (" + v + "B, " + g + ")</div>") : (n = n + "/" + a.filename + a.ext, g += ", " + a.tag, l = '<div class="fileText" id="fT' + a.no + '">File: <a href="' +
-          n + '" target="_blank">' + a.filename + ".swf</a> (" + v + "B, " + g + ")</div>"), g = '<div id="f' + a.no + '" class="file">' + l + k + "</div>");
+      a.filedeleted ? g = '<div id="f' + a.no + '" class="file"><span class="fileThumb"><img src="' + Parser.icons.del + '" class="fileDeletedRes" alt="File deleted."></span></div>' : a.ext && (g = Parser.decodeSpecialChars(a.filename), p = x = a.filename + a.ext, g.length > (f ? 40 : 30) && (p = Parser.encodeSpecialChars(g.slice(0, f ? 35 : 25)) + "(...)" + a.ext, J = !0), a.tn_w || a.tn_h || ".gif" != a.ext || (a.tn_w = a.w, a.tn_h = a.h), v = 1048576 <= a.fsize ? (0 | a.fsize / 1048576 * 100 + .5) / 100 + " M" : 1024 < a.fsize ? (0 | a.fsize / 1024 + .5) + " K" : a.fsize + " ", a.spoiler && !Config.revealSpoilers && (p = "Spoiler Image", l = '" title="' + x + '"', C = " imgspoiler", n = "//s.4cdn.org/image/spoiler" + (Parser.customSpoiler[b] || "") + ".png", a.tn_w = 100, a.tn_h = 100), n || (n = "//t.4cdn.org/" + b + "/" + a.tim + "s.jpg"), g = ".pdf" == a.ext ? "PDF" : a.w + "x" +
+        a.h, "f" != b ? (m = m + "/" + a.tim + a.ext, k = '<a class="fileThumb' + C + '" href="' + m + '" target="_blank"><img src="' + n + '" alt="' + v + 'B" data-md5="' + a.md5 + '" style="height: ' + a.tn_h + "px; width: " + a.tn_w + 'px;"><div class="mFileInfo mobile">' + v + "B " + a.ext.slice(1).toUpperCase() + "</div></a>", l = '<div class="fileText" id="fT' + a.no + l + ">File: <a" + (J ? ' title="' + x + '"' : "") + ' href="' + m + '" target="_blank">' + p + "</a> (" + v + "B, " + g + ")</div>") : (m = m + "/" + a.filename + a.ext, g += ", " + a.tag, l = '<div class="fileText" id="fT' + a.no + '">File: <a href="' +
+          m + '" target="_blank">' + a.filename + ".swf</a> (" + v + "B, " + g + ")</div>"), g = '<div id="f' + a.no + '" class="file">' + l + k + "</div>");
       a.trip && (r = ' <span class="postertrip">' + a.trip + "</span>");
       k = a.name || "";
       f ? (a.capcode_replies && (I = Parser.buildCapcodeReplies(a.capcode_replies, b, a.no)), d && a.replies && (u = a.replies + " post" + (1 < a.replies ? "s" : ""), a.images && (u += " and " + a.images + " image repl" + (1 < a.images ? "ies" : "y")), u = '<span class="summary preview-summary">' + u + ".</span>"), a.sticky && (w += '<img class="stickyIcon retina" title="Sticky" alt="Sticky" src="' +
@@ -359,18 +359,18 @@ var Parser = {
       Depager.boardHasAds && window.ados_load && window.ados_load()
     },
     renderNext: function() {
-      var a, b, c, d, e, f, h, g, k, l, m, n;
+      var a, b, c, d, e, f, h, g, k, l, n, m;
       k = [];
       l = window.pageYOffset;
       b = document.createDocumentFragment();
       if (a = Depager.threadQueue.shift()) {
         e = a.threads;
-        m = a.page;
-        n = !Depager.threadQueue.length;
-        Depager.insertAd(m, b, a.adZone, n);
+        n = a.page;
+        m = !Depager.threadQueue.length;
+        Depager.insertAd(n, b, a.adZone, m);
         a = document.createElement("span");
         a.className = "depageNumber";
-        a.textContent = "Page " + m;
+        a.textContent = "Page " + n;
         b.appendChild(a);
         for (c = 0; a = e[c]; ++c)
           if (!$.id("t" + a.no)) {
@@ -385,10 +385,10 @@ var Parser = {
             b.appendChild(document.createElement("hr"));
             k.push(a.no)
           }
-        n && (Depager.unbindHandlers(), Depager.isComplete = !0, Depager.setStatus("disabled"));
+        m && (Depager.unbindHandlers(), Depager.isComplete = !0, Depager.setStatus("disabled"));
         boardDiv = $.cls("board")[0];
         boardDiv.insertBefore(b, boardDiv.lastElementChild);
-        Depager.trackPageview(m);
+        Depager.trackPageview(n);
         Depager.loadAds();
         for (b = 0; a = k[b]; ++b) Parser.parseThread(a);
         window.scrollTo(0, l)
@@ -795,7 +795,7 @@ var Parser = {
       d.focus()
     },
     show: function(a) {
-      var b, c, d, e, f, h, g, k, l, m, n, p;
+      var b, c, d, e, f, h, g, k, l, n, m, p;
       if (QR.currentTid) Main.tid || QR.currentTid == a || ($.id("qrTid").textContent = $.id("qrResto").value = QR.currentTid = a, $.byName("com")[1].value = "", QR.startCooldown()), Main.hasMobileLayout && ($.id("quickReply").style.top = window.pageYOffset + 25 + "px");
       else {
         QR.currentTid = a;
@@ -818,14 +818,16 @@ var Parser = {
           if ("captchaFormPart" == h[b].id) {
             if (QR.noCaptcha) continue;
             g.id = "qrCaptchaContainer"
-          } else if (n = h[b].getAttribute("data-type"), "Password" == n || "Spoilers" == n) continue;
-          else if ("File" == n) k = h[b].children[1].firstChild.cloneNode(!1), k.tabIndex += 20, k.id = "qrFile", k.size = "19", k.addEventListener("change", QR.onFileChange, !1), g.appendChild(k), UA.hasDragAndDrop && ($.addClass(k, "qrRealFile"), k = document.createElement("div"), k.id = "qrDummyFile", l = document.createElement("button"), l.id = "qrDummyFileButton", l.type = "button", l.textContent = "Browse\u2026", k.appendChild(l), l = document.createElement("span"), l.id = "qrDummyFileLabel", l.textContent = "No file selected.", k.appendChild(l), g.appendChild(k)), k.title = "Shift + Click to remove the file";
+          } else if (m = h[b].getAttribute("data-type"), "Password" == m || "Spoilers" == m) continue;
+          else if ("File" == m) k = h[b].children[1].firstChild.cloneNode(!1), k.tabIndex += 20, k.id = "qrFile", k.size = "19", k.addEventListener("change", QR.onFileChange, !1), g.appendChild(k), UA.hasDragAndDrop && ($.addClass(k, "qrRealFile"), k = document.createElement("div"), k.id = "qrDummyFile", l = document.createElement("button"), l.id = "qrDummyFileButton", l.type = "button", l.textContent = "Browse\u2026", k.appendChild(l), l = document.createElement("span"), l.id = "qrDummyFileLabel", l.textContent = "No file selected.", k.appendChild(l), g.appendChild(k)), k.title = "Shift + Click to remove the file";
           else if (g.innerHTML = h[b].children[1].innerHTML, l = "hidden" == g.firstChild.type ? g.lastChild.previousSibling : g.firstChild, 0 < l.tabIndex && (l.tabIndex += 20), "INPUT" == l.nodeName || "TEXTAREA" == l.nodeName) {
             if ("name" == l.name) {
               if (p = Main.getCookie("4chan_name")) l.value = p
-            } else "email" == l.name ? l.id = "qrEmail" : "com" == l.name && (QR.comField = l, l.addEventListener("keydown", QR.onKeyDown, !1), l.addEventListener("paste", QR.onKeyDown, !1), l.addEventListener("cut", QR.onKeyDown, !1), g.children[1] && g.removeChild(l.nextSibling));
-            null !== n && l.setAttribute("placeholder", n)
-          } else "flag" == l.name && ((m = l.querySelector("option[selected]")) && m.removeAttribute("selected"), (p = Main.getCookie("4chan_flag")) && (m = l.querySelector('option[value="' + p + '"]')) && m.setAttribute("selected", "selected"));
+            } else if ("email" == l.name) l.id = "qrEmail";
+            else if ("com" == l.name) QR.comField = l, l.addEventListener("keydown", QR.onKeyDown, !1), l.addEventListener("paste", QR.onKeyDown, !1), l.addEventListener("cut", QR.onKeyDown, !1), g.children[1] && g.removeChild(l.nextSibling);
+            else if ("sub" == l.name) continue;
+            null !== m && l.setAttribute("placeholder", m)
+          } else "flag" == l.name && ((n = l.querySelector("option[selected]")) && n.removeAttribute("selected"), (p = Main.getCookie("4chan_flag")) && (n = l.querySelector('option[value="' + p + '"]')) && n.setAttribute("selected", "selected"));
           a.appendChild(g)
         }
         this.btn = a.querySelector('input[type="submit"]');
@@ -1516,7 +1518,7 @@ var Parser = {
       for (b = 0; c = a[b]; ++b) d[c.id] || $.hasClass(c, "deleted") || (this.deletionQueue[c.id] ? (e = document.createElement("img"), e.src = Main.icons2.trash, e.className = "trashIcon", e.title = "This post has been deleted", $.addClass(c, "deleted"), $.cls("postNum", c)[1].appendChild(e), delete this.deletionQueue[c.id]) : this.deletionQueue[c.id] = 1)
     },
     onload: function() {
-      var a, b, c, d, e, f, h, g, k, l, m, n;
+      var a, b, c, d, e, f, h, g, k, l, n, m;
       c = ThreadUpdater;
       d = [];
       c.setStatus("");
@@ -1535,11 +1537,11 @@ var Parser = {
         !Config.revealSpoilers && f[0].custom_spoiler && Parser.setCustomSpoiler(Main.board, f[0].custom_spoiler);
         for (a = f.length - 1; 0 <= a && !(f[a].no <= k); a--) d.push(f[a]);
         b = d.length;
-        1 == b && QR.lastReplyId == d[0].no && (n = !0, QR.lastReplyId = null);
-        n || c.markDeletedReplies(f);
+        1 == b && QR.lastReplyId == d[0].no && (m = !0, QR.lastReplyId = null);
+        m || c.markDeletedReplies(f);
         if (b) {
           l = document.documentElement;
-          m = Config.autoScroll && document[c.hidden] && l.scrollHeight == window.innerHeight + window.pageYOffset;
+          n = Config.autoScroll && document[c.hidden] && l.scrollHeight == window.innerHeight + window.pageYOffset;
           h = document.createDocumentFragment();
           for (a = d.length - 1; 0 <= a; a--) h.appendChild(Parser.buildHTMLFromJSON(d[a], Main.board));
           e.appendChild(h);
@@ -1548,8 +1550,8 @@ var Parser = {
           Parser.hasHighlightedPosts = !1;
           Parser.parseThread(e.id.slice(1), -d.length);
           a != g.offsetTop && window.scrollBy(0, g.offsetTop - a);
-          n || (!c.force && l.scrollHeight > window.innerHeight ? (c.lastReply || k == Main.tid || ((c.lastReply = g.lastChild).className += " newPostsMarker"), Parser.hasYouMarkers ? (c.setIcon("rep"), c.audioEnabled && document[c.hidden] && c.audio.play()) : Parser.hasHighlightedPosts && "rep" !== c.currentIcon ? c.setIcon("hl") : 0 == c.unreadCount && c.setIcon("new"), c.unreadCount += b, document.title = "(" + c.unreadCount + ") " + c.pageTitle) : c.setStatus(b + " new post" + (1 < b ? "s" : "")));
-          m && window.scrollTo(0, document.documentElement.scrollHeight);
+          m || (!c.force && l.scrollHeight > window.innerHeight ? (c.lastReply || k == Main.tid || ((c.lastReply = g.lastChild).className += " newPostsMarker"), Parser.hasYouMarkers ? (c.setIcon("rep"), c.audioEnabled && document[c.hidden] && c.audio.play()) : Parser.hasHighlightedPosts && "rep" !== c.currentIcon ? c.setIcon("hl") : 0 == c.unreadCount && c.setIcon("new"), c.unreadCount += b, document.title = "(" + c.unreadCount + ") " + c.pageTitle) : c.setStatus(b + " new post" + (1 < b ? "s" : "")));
+          n && window.scrollTo(0, document.documentElement.scrollHeight);
           Config.threadWatcher && ThreadWatcher.refreshCurrent(!0);
           Config.threadStats && (e = f[0], ThreadStats.update(e.replies, e.images, e.bumplimit, e.imagelimit));
           c.invalidateAds();
@@ -1707,44 +1709,39 @@ var Parser = {
       }
     },
     exec: function(a, b, c, d) {
-      var e, f, h, g, k, l, m, n, p;
+      var e, f, h, g, k, l, n, m;
       if (Parser.trackedReplies && Parser.trackedReplies[">>" + b.id.slice(2)]) return !1;
       n = Filter.activeFilters;
-      p = !1;
-      for (i = 0; m = n[i]; ++i)
-        if (0 == m.type) {
-          if ((e || (e = b.getElementsByClassName("postertrip")[0])) && m.pattern == e.textContent) {
-            p = !0;
+      m = !1;
+      for (i = 0; l = n[i]; ++i)
+        if (0 == l.type) {
+          if ((e || (e = b.getElementsByClassName("postertrip")[0])) && l.pattern == e.textContent) {
+            m = !0;
             break
           }
-        } else if (1 == m.type) {
-        if ((f || (f = b.getElementsByClassName("name")[0])) && m.pattern == f.textContent) {
-          p = !0;
+        } else if (1 == l.type) {
+        if ((f || (f = b.getElementsByClassName("name")[0])) && l.pattern == f.textContent) {
+          m = !0;
           break
         }
-      } else if (2 == m.type) {
-        if (h || (this.entities.innerHTML = c.innerHTML.replace(/<br>/g, "\n").replace(/[<[^>]+>/g, ""), h = this.entities.textContent), m.pattern.test(h)) {
-          p = !0;
+      } else if (2 == l.type) {
+        if (h || (this.entities.innerHTML = c.innerHTML.replace(/<br>/g, "\n").replace(/[<[^>]+>/g, ""), h = this.entities.textContent), l.pattern.test(h)) {
+          m = !0;
           break
         }
-      } else if (3 == m.type) {
-        if ((g || (g = b.getElementsByClassName("useremail")[0]) && (g = g.href.slice(7))) && m.pattern.test(g)) {
-          p = !0;
+      } else if (4 == l.type) {
+        if ((g || (g = b.getElementsByClassName("posteruid")[0]) && (g = g.firstElementChild.textContent)) && l.pattern == g) {
+          m = !0;
           break
         }
-      } else if (4 == m.type) {
-        if ((k || (k = b.getElementsByClassName("posteruid")[0]) && (k = k.firstElementChild.textContent)) && m.pattern == k) {
-          p = !0;
-          break
-        }
-      } else if ((l || (l = b.getElementsByClassName("subject")[0]) && (l = l.textContent)) && m.pattern.test(l)) {
-        p = !0;
+      } else if (!Main.tid && 5 == l.type && (k || (k = b.getElementsByClassName("subject")[0]) && (k = k.textContent)) && l.pattern.test(k)) {
+        m = !0;
         break
       }
-      if (p) {
-        if (m.hide) return a.className += " post-hidden", el = document.createElement("span"), d ? el.innerHTML = '[<a data-filtered="1" href="thread/' + d + '">View</a>]' : (el.textContent = "[View]", el.setAttribute("data-filtered", "1")), el.className = "filter-preview", b.appendChild(el), !0;
+      if (m) {
+        if (l.hide) return a.className += " post-hidden", el = document.createElement("span"), d ? el.innerHTML = '[<a data-filtered="1" href="thread/' + d + '">View</a>]' : (el.textContent = "[View]", el.setAttribute("data-filtered", "1")), el.className = "filter-preview", b.appendChild(el), !0;
         a.className += " filter-hl";
-        a.style.boxShadow = "-3px 0 " + m.color;
+        a.style.boxShadow = "-3px 0 " + l.color;
         Parser.hasHighlightedPosts = !0
       }
       return !1
@@ -1778,8 +1775,9 @@ var Parser = {
                 hide: b.hide
               })
             }
-        } catch (m) {
-          alert("There was an error processing one of the filters: " + m + " in: " + d)
+        } catch (n) {
+          alert("There was an error processing one of the filters: " +
+            n + " in: " + d)
         }
       }
     },
