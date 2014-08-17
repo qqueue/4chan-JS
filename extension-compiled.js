@@ -1866,10 +1866,10 @@ var Parser = {
       var a, b, c, d, e;
       b = [];
       c = $.id("filter-list").children;
-      for (a = 0; d = c[a]; ++a) e = {
+      for (a = 0; d = c[a]; ++a) e = d.children[3].firstChild, e = {
         active: d.children[1].firstChild.checked,
         pattern: d.children[2].firstChild.value,
-        type: d.children[3].firstChild.selectedIndex,
+        type: +e.options[e.selectedIndex].value,
         hide: d.children[5].firstChild.checked
       }, d = d.children[4].firstChild, d.hasAttribute("data-nocolor") || (e.color = d.style.backgroundColor), b.push(e);
       b[0] ? localStorage.setItem("4chan-filters", JSON.stringify(b)) : localStorage.removeItem("4chan-filters")
@@ -1889,12 +1889,12 @@ var Parser = {
       d = '<td><span data-cmd="filters-up" class="pointer">&uarr;</span></td><td><input type="checkbox"' + (a.active ? ' checked="checked"></td>' : "></td>");
       d += '<td><input class="fPattern" type="text" value="' +
         a.pattern.replace(/"/g, "&quot;") + '"></td>';
+      3 === a.type && (a.type = 4);
       e = "     ".split(" ");
       e[a.type] = ' selected="selected"';
-      d += '<td><select size="1"><option value="0"' + e[0] + '>Tripcode</option><option value="1"' + e[1] + '>Name</option><option value="2"' + e[2] + '>Comment</option><option value="3"' + e[3] + '>E-mail</option><option value="4"' + e[4] + '>ID</option><option value="5"' + e[5] + ">Subject</option></select></td>";
+      d += '<td><select size="1"><option value="0"' + e[0] + '>Tripcode</option><option value="1"' + e[1] + '>Name</option><option value="2"' + e[2] + '>Comment</option><option value="4"' + e[4] + '>ID</option><option value="5"' + e[5] + ">Subject</option></select></td>";
       d += '<td><span data-cmd="filters-palette" title="Change Color" class="colorbox fColor" ';
-      d = a.color ? d + (' style="background-color:' +
-        a.color + '">') : d + ' data-nocolor="1">&#x2215;';
+      d = a.color ? d + (' style="background-color:' + a.color + '">') : d + ' data-nocolor="1">&#x2215;';
       d += "</span></td>";
       d += '<td><input type="checkbox"' + (a.hide ? ' checked="checked"></td>' : "></td>");
       d += '<td><span data-cmd="filters-del" class="pointer fDel">&times;</span></td>';
