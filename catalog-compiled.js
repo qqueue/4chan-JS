@@ -132,7 +132,7 @@ var UA = {
     }
 
     function p() {
-      return RegExp("(\\/|\\.|\\*|\\+|\\?|\\(|\\)|\\[|\\]|\\{|\\}|\\\\)", "g")
+      return /(\/|\.|\*|\+|\?|\(|\)|\[|\]|\{|\}|\\)/g
     }
 
     function H() {
@@ -198,8 +198,7 @@ var UA = {
 
     function la(a) {
       X ? (delete K[a], --x) : (K[a] = !0, ++x);
-      localStorage.setItem("4chan-hide-t-" +
-        l.slug, JSON.stringify(K));
+      localStorage.setItem("4chan-hide-t-" + l.slug, JSON.stringify(K));
       $.id("thread-" + a).style.display = "none";
       Y("hidden", x);
       0 == x && Z(!1)
@@ -218,7 +217,8 @@ var UA = {
     }
 
     function Da(a) {
-      window.open("http://sys.4chan.org/" + l.slug + "/imgboard.php?mode=report&no=" + a, Date.now(), "toolbar=0,scrollbars=0,location=0,status=1,menubar=0,resizable=1,width=600,height=170")
+      window.open("http://sys.4chan.org/" + l.slug + "/imgboard.php?mode=report&no=" +
+        a, Date.now(), "toolbar=0,scrollbars=0,location=0,status=1,menubar=0,resizable=1,width=600,height=170")
     }
 
     function Ea(a) {
@@ -361,7 +361,8 @@ var UA = {
                       for (c = v.length - 1; 0 <= c; c--) "" != v[c] && x.push(v[c].replace(n, "\\$1"));
                       s = x.join("|").replace(m, "[^\\s]*");
                       u += "(?=.*\\b(" + s + ")\\b)"
-                    } else s = q[f].replace(n, "\\$1").replace(m, "[^\\s]*"), u += "(?=.*\\b" + s + "\\b)";
+                    } else s = q[f].replace(n, "\\$1").replace(m, "[^\\s]*"), u += "(?=.*\\b" +
+                      s + "\\b)";
                   u = new RegExp("^" + u, "i")
                 }
                 G[d] = {
@@ -697,7 +698,9 @@ var UA = {
           n && 0 <= (page = 0 | l.order.alt.indexOf(f) / l.pagesize) && (e.r && (h += " / "), h += "P: <b>" + page + "</b>");
           h += "</div>";
           y && (h += '<div class="teaser', k.color && (h += ' style="color:' + k.color), h += '">' + y + "</div>");
-          n ? A += h + "</div>" : r += h + "</div>"
+          h = window.partyHats ? '<div class="party-cnt">' + h + '</div><img class="party-hat" src="//s.4cdn.org/image/' +
+            window.partyHats + '"></div>' : h + "</div>";
+          n ? A += h : r += h
         }
         r = J && "" == r ? '<div class="error">Nothing Found</div>' : A ? A + r + '<div class="clear"></div>' : r + '<div class="clear"></div>';
         for (b in s) {
@@ -734,7 +737,8 @@ var UA = {
       l.flags && thread.country && (d += '<div class="flag flag-' + thread.country.toLowerCase() + '"></div> ');
       d += '<span class="post-ago">' + Aa(b - thread.date) + " ago</span>";
       !m.extended && thread.teaser && (d += '<p class="post-teaser">' + thread.teaser + "</p>");
-      0 < thread.r && (d += '<div class="post-last">Last reply by <span class="' + (thread.lr.capcode ? thread.lr.capcode + "-capcode " : "") + 'post-author">' + thread.lr.author, thread.lr.trip && (d += ' <span class="post-tripcode">' + thread.lr.trip + "</span>"), thread.lr.capcode && (d += " ## " + thread.lr.capcode.charAt(0).toUpperCase() + thread.lr.capcode.slice(1)), d += '</span> <span class="post-ago">' + Aa(b - thread.lr.date) + " ago</span>");
+      0 < thread.r && (d += '<div class="post-last">Last reply by <span class="' + (thread.lr.capcode ? thread.lr.capcode + "-capcode " : "") + 'post-author">' + thread.lr.author, thread.lr.trip && (d += ' <span class="post-tripcode">' + thread.lr.trip + "</span>"), thread.lr.capcode && (d += " ## " + thread.lr.capcode.charAt(0).toUpperCase() + thread.lr.capcode.slice(1)), d += '</span> <span class="post-ago">' +
+        Aa(b - thread.lr.date) + " ago</span>");
       b = document.createElement("div");
       b.id = "post-preview";
       b.innerHTML = d;
@@ -862,8 +866,7 @@ var UA = {
       }, $.id("ctxmenu-main").innerHTML = '<menuitem label="Unpin all threads"></menuitem>', $.id("ctxmenu-thread").innerHTML = '<menuitem label="Pin/Unpin" data-cmd="pin"></menuitem><menuitem label="Hide/Unhide" data-cmd="hide"></menuitem><menuitem label="Report" data-cmd="report"></menuitem>', $.on($.id("ctxmenu-main"), "click", Fa), $.on($.id("ctxmenu-thread"), "click", Ea));
       UA.hasWebStorage && ((b = localStorage.getItem("4chan-settings")) ? (b = JSON.parse(b), !b.disableAll && b.threadWatcher && (M = !0, ThreadWatcher.init()), b.customMenu && CustomMenu.apply(b.customMenuList), !1 === b.dropDownNav || FC.hasMobileLayout || (N = !0, T = b.classicNav, a())) : UA.isMobileDevice && !FC.hasMobileLayout && (N = !0, a()));
       window.passEnabled && setPassMsg();
-      (g = document.forms.post.flag) && (d = $.readCookie("4chan_flag")) && (g = g.querySelector('option[value="' +
-        d + '"]')) && g.setAttribute("selected", "selected");
+      (g = document.forms.post.flag) && (d = $.readCookie("4chan_flag")) && (g = g.querySelector('option[value="' + d + '"]')) && g.setAttribute("selected", "selected");
       A(m.orderby, !0);
       ya(m.large, !0);
       xa(m.extended, !0);
@@ -886,8 +889,7 @@ var UA = {
     R.applyCSS = function(a, b, c) {
       var e, f;
       a || (a = v);
-      void 0 !== b && ((f = $.readCookie(b)) || (f = "nws_style" == b ? "Yotsuba New" : "Yotsuba B New"), ha = b, U = f, e = document.createElement("link"), e.type = "text/css", e.id = "base-css", e.rel = "stylesheet", e.setAttribute("href", "//s.4cdn.org/css/catalog_" +
-        f.toLowerCase().replace(/ /g, "_") + "." + c + ".css"), document.head.insertBefore(e, $.id("mobile-css")));
+      void 0 !== b && ((f = $.readCookie(b)) || (f = "nws_style" == b ? "Yotsuba New" : "Yotsuba B New"), ha = b, U = f, e = document.createElement("link"), e.type = "text/css", e.id = "base-css", e.rel = "stylesheet", e.setAttribute("href", "//s.4cdn.org/css/catalog_" + f.toLowerCase().replace(/ /g, "_") + "." + c + ".css"), document.head.insertBefore(e, $.id("mobile-css")));
       (e = $.id("custom-css")) && document.head.removeChild(e);
       a.css && (e = document.createElement("style"), e.type = "text/css", e.id = "custom-css", e.styleSheet ? e.styleSheet.cssText = a.css : e.innerHTML = a.css, document.head.appendChild(e));
       UA.dispatchEvent("4chanMainInit")
@@ -905,8 +907,7 @@ var UA = {
       a.id = "threadWatcher";
       a.setAttribute("data-trackpos", "TW-position");
       FC.hasMobileLayout ? a.style.display = "none" : (b = localStorage.getItem("catalog-tw-pos")) ? a.style.cssText = b : (a.style.left = "10px", a.style.top = "75px");
-      a.innerHTML = '<div class="drag" id="twHeader">' +
-        (FC.hasMobileLayout ? '<div id="twClose" class="icon closeIcon"></div>' : "") + "Thread Watcher" + (UA.hasCORS ? '<div id="twPrune" class="icon refreshIcon" title="Refresh"></div></div>' : "</div>");
+      a.innerHTML = '<div class="drag" id="twHeader">' + (FC.hasMobileLayout ? '<div id="twClose" class="icon closeIcon"></div>' : "") + "Thread Watcher" + (UA.hasCORS ? '<div id="twPrune" class="icon refreshIcon" title="Refresh"></div></div>' : "</div>");
       this.listNode = document.createElement("ul");
       this.listNode.id = "watchList";
       this.load();
@@ -1037,8 +1038,7 @@ var UA = {
     },
     startDrag: function(a) {
       var b, c, e;
-      if (!this.parentNode.hasAttribute("data-shiftkey") || a.shiftKey) a.preventDefault(), b = Draggable, c = document.documentElement, b.el = this.parentNode, b.key = b.el.getAttribute("data-trackpos"), e = b.el.getBoundingClientRect(), b.dx = a.clientX - e.left, b.dy = a.clientY - e.top, b.right = c.clientWidth -
-        e.width, b.bottom = c.clientHeight - e.height, "fixed" != getComputedStyle(b.el, null).position ? (b.scrollX = window.scrollX || window.pageXOffset, b.scrollY = window.scrollY || window.pageYOffset) : b.scrollX = b.scrollY = 0, document.addEventListener("mouseup", b.endDrag, !1), document.addEventListener("mousemove", b.onDrag, !1)
+      if (!this.parentNode.hasAttribute("data-shiftkey") || a.shiftKey) a.preventDefault(), b = Draggable, c = document.documentElement, b.el = this.parentNode, b.key = b.el.getAttribute("data-trackpos"), e = b.el.getBoundingClientRect(), b.dx = a.clientX - e.left, b.dy = a.clientY - e.top, b.right = c.clientWidth - e.width, b.bottom = c.clientHeight - e.height, "fixed" != getComputedStyle(b.el, null).position ? (b.scrollX = window.scrollX || window.pageXOffset, b.scrollY = window.scrollY || window.pageYOffset) : b.scrollX = b.scrollY = 0, document.addEventListener("mouseup", b.endDrag, !1), document.addEventListener("mousemove", b.onDrag, !1)
     },
     endDrag: function(a) {
       document.removeEventListener("mouseup", Draggable.endDrag, !1);
