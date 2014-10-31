@@ -550,7 +550,7 @@ var UA = {
           g = $.id("boardNavDesktop");
           l = $.id("boardNavDesktopFoot");
           if (T) {
-            if (k = $.cls("pageJump", g)) $.id("settingsWindowLinkClassic").removeEventListener("click", F, !1), g.removeChild(k);
+            if (k = $.cls("pageJump", g)[0]) $.id("settingsWindowLinkClassic").removeEventListener("click", F, !1), g.removeChild(k);
             $.removeClass(g, "persistentNav")
           } else g.style.display = "", $.addClass($.id("boardNavMobile"), "mobile");
           l.style.display = "";
