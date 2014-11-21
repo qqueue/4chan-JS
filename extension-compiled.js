@@ -2300,7 +2300,7 @@ StickyNav = {
   timeout: null,
   el: null,
   init: function() {
-    this.el = $.id("boardNavMobile");
+    this.el = Config.classicNav ? $.id("boardNavDesktop") : $.id("boardNavMobile");
     $.addClass(this.el, "autohide-nav");
     window.addEventListener("scroll", this.onScroll, !1)
   },
@@ -2326,8 +2326,7 @@ var CustomCSS = {
         a.id = "customCSSMenu";
         a.className = "UIPanel";
         a.setAttribute("data-cmd", "css-close");
-        a.innerHTML = '<div class="extPanel reply"><div class="panelHeader">Custom CSS<span><img alt="Close" title="Close" class="pointer" data-cmd="css-close" src="' +
-          Main.icons.cross + '"></span></div><textarea id="customCSSBox"></textarea><div class="center"><button data-cmd="css-save">Save CSS</button></div></td></tr></tfoot></table></div>';
+        a.innerHTML = '<div class="extPanel reply"><div class="panelHeader">Custom CSS<span><img alt="Close" title="Close" class="pointer" data-cmd="css-close" src="' + Main.icons.cross + '"></span></div><textarea id="customCSSBox"></textarea><div class="center"><button data-cmd="css-save">Save CSS</button></div></td></tr></tfoot></table></div>';
         document.body.appendChild(a);
         a.addEventListener("click", this.onClick, !1);
         a = $.id("customCSSBox");
@@ -2560,6 +2559,7 @@ var CustomCSS = {
     compactThreads: !1,
     centeredThreads: !1,
     dropDownNav: !1,
+    autoHideNav: !1,
     classicNav: !1,
     fixedThreadWatcher: !1,
     persistentQR: !1,
@@ -2625,6 +2625,7 @@ var SettingsMenu = {
         threadExpansion: ["Thread expansion", "Expand threads inline on board indexes", !0],
         dropDownNav: ["Use persistent drop-down navigation bar", ""],
         classicNav: ["Use traditional board list", "", !1, !0],
+        autoHideNav: ["Auto-hide", "", !1, !0],
         customMenu: ['Custom board list [<a href="javascript:;" data-cmd="custom-menu-edit">Edit</a>]', "Only show selected boards in top and bottom board lists"],
         alwaysDepage: ["Always use infinite scroll", "Enable infinite scroll by default, so reaching the bottom of the board index will load subsequent pages", !0],
         topPageNav: ["Page navigation at top of page", "Show the page switcher at the top of the page, hold Shift and drag to move"],
@@ -2671,8 +2672,7 @@ var SettingsMenu = {
       f = document.createElement("div");
       f.id = "settingsMenu";
       f.className = "UIPanel";
-      e = '<div class="extPanel reply"><div class="panelHeader">Settings<span><img alt="Close" title="Close" class="pointer" data-cmd="settings-toggle" src="' +
-        Main.icons.cross + '"></a></span></div><ul>';
+      e = '<div class="extPanel reply"><div class="panelHeader">Settings<span><img alt="Close" title="Close" class="pointer" data-cmd="settings-toggle" src="' + Main.icons.cross + '"></a></span></div><ul>';
       e += '<ul><li id="settings-exp-all">[<a href="#" data-cmd="settings-exp-all">Expand All Settings</a>]</li></ul>';
       if (Main.hasMobileLayout)
         for (b in c = {}, SettingsMenu.options) {
@@ -2691,8 +2691,7 @@ var SettingsMenu = {
           if (!h[d][4] || Main.hasMobileLayout) e += "<li" + (h[d][3] ? ' class="settings-sub">' : ">") + '<label><input type="checkbox" class="menuOption" data-option="' + d + '"' + (Config[d] ? ' checked="checked">' : ">") + h[d][0] + "</label>" + (!1 !== h[d][1] ? '</li><li class="settings-tip' + (h[d][3] ? ' settings-sub">' : '">') + h[d][1] : "") + "</li>";
         e += "</ul></ul>"
       }
-      e += '</ul><ul><li class="settings-off"><label title="Completely disable the native extension (overrides any checked boxes)"><input type="checkbox" class="menuOption" data-option="disableAll"' +
-        (Config.disableAll ? ' checked="checked">' : ">") + 'Disable the native extension</label></li></ul><div class="center"><button data-cmd="settings-export">Export Settings</button><button data-cmd="settings-save">Save Settings</button></div>';
+      e += '</ul><ul><li class="settings-off"><label title="Completely disable the native extension (overrides any checked boxes)"><input type="checkbox" class="menuOption" data-option="disableAll"' + (Config.disableAll ? ' checked="checked">' : ">") + 'Disable the native extension</label></li></ul><div class="center"><button data-cmd="settings-export">Export Settings</button><button data-cmd="settings-save">Save Settings</button></div>';
       f.innerHTML = e;
       f.addEventListener("click", SettingsMenu.onClick, !1);
       document.body.appendChild(f);
@@ -2701,8 +2700,8 @@ var SettingsMenu = {
     },
     showExport: function() {
       var a, b;
-      $.id("exportSettings") || (b = location.href.replace(location.hash, "") + "#cfg=" + Config.toURL(), a = document.createElement("div"), a.id = "exportSettings", a.className = "UIPanel", a.setAttribute("data-cmd", "export-close"), a.innerHTML = '<div class="extPanel reply"><div class="panelHeader">Export Settings<span><img data-cmd="export-close" class="pointer" alt="Close" title="Close" src="' + Main.icons.cross + '"></span></div><p class="center">Copy and save the URL below, and visit it from another browser or computer to restore your extension and catalog settings.</p><p class="center"><input class="export-field" type="text" readonly="readonly" value="' +
-        b + '"></p><p style="margin-top:15px" class="center">Alternatively, you can drag the link below into your bookmarks bar and click it to restore.</p><p class="center">[<a target="_blank" href="' + b + '">Restore 4chan Settings</a>]</p>', document.body.appendChild(a), a.addEventListener("click", this.onExportClick, !1), a = $.cls("export-field", a)[0], a.focus(), a.select())
+      $.id("exportSettings") || (b = location.href.replace(location.hash, "") + "#cfg=" + Config.toURL(), a = document.createElement("div"), a.id = "exportSettings", a.className = "UIPanel", a.setAttribute("data-cmd", "export-close"), a.innerHTML = '<div class="extPanel reply"><div class="panelHeader">Export Settings<span><img data-cmd="export-close" class="pointer" alt="Close" title="Close" src="' +
+        Main.icons.cross + '"></span></div><p class="center">Copy and save the URL below, and visit it from another browser or computer to restore your extension and catalog settings.</p><p class="center"><input class="export-field" type="text" readonly="readonly" value="' + b + '"></p><p style="margin-top:15px" class="center">Alternatively, you can drag the link below into your bookmarks bar and click it to restore.</p><p class="center">[<a target="_blank" href="' + b + '">Restore 4chan Settings</a>]</p>', document.body.appendChild(a), a.addEventListener("click", this.onExportClick, !1), a = $.cls("export-field", a)[0], a.focus(), a.select())
     },
     closeExport: function() {
       var a;
@@ -2789,7 +2788,7 @@ var SettingsMenu = {
         Config.customMenu && CustomMenu.apply(Config.customMenuList);
         if (Config.quotePreview || Config.imageHover || Config.filter) a = $.id("delform"), a.addEventListener("mouseover", Main.onThreadMouseOver, !1), a.addEventListener("mouseout", Main.onThreadMouseOut, !1);
         Config.stickyNav && Main.setStickyNav();
-        Main.hasMobileLayout ? StickyNav.init() : Main.initGlobalMessage();
+        Main.hasMobileLayout ? StickyNav.init() : (Main.initGlobalMessage(), Config.autoHideNav && StickyNav.init());
         Config.threadExpansion && ThreadExpansion.init();
         Config.filter && Filter.init();
         Config.threadWatcher && ThreadWatcher.init();
@@ -2800,7 +2799,8 @@ var SettingsMenu = {
         Main.tid ? (Main.threadClosed = !document.forms.post, Main.threadSticky = !!$.cls("stickyIcon", $.id("pi" + Main.tid))[0], Config.threadStats && ThreadStats.init(), Parser.parseThread(Main.tid), Config.threadUpdater && ThreadUpdater.init()) : (Main.page || Depager.init(), Config.topPageNav && Main.setPageNav(), Config.threadHiding && ThreadHiding.init(), Parser.parseBoard());
         "f" === Main.board && SWFEmbed.init();
         Config.quickReply && QR.init();
-        ReplyHiding.purge()
+        ReplyHiding.purge();
+        Config.alwaysDepage && !Main.hasMobileLayout && $.docEl.scrollHeight <= $.docEl.clientHeight && Depager.depage()
       }
     },
     isThreadClosed: function(a) {
