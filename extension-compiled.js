@@ -2625,7 +2625,7 @@ var SettingsMenu = {
         threadExpansion: ["Thread expansion", "Expand threads inline on board indexes", !0],
         dropDownNav: ["Use persistent drop-down navigation bar", ""],
         classicNav: ["Use traditional board list", "", !1, !0],
-        autoHideNav: ["Auto-hide", "", !1, !0],
+        autoHideNav: ["Auto-hide on scroll", "", !1, !0],
         customMenu: ['Custom board list [<a href="javascript:;" data-cmd="custom-menu-edit">Edit</a>]', "Only show selected boards in top and bottom board lists"],
         alwaysDepage: ["Always use infinite scroll", "Enable infinite scroll by default, so reaching the bottom of the board index will load subsequent pages", !0],
         topPageNav: ["Page navigation at top of page", "Show the page switcher at the top of the page, hold Shift and drag to move"],
