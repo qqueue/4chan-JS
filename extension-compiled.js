@@ -48,6 +48,19 @@ $.get = function(a, b, c) {
   e.send(null);
   return e
 };
+$.ago = function(a) {
+  var b, c;
+  b = Date.now() / 1E3 - a;
+  if (1 > b) return "moments ago";
+  if (60 > b) return (0 | b) + " seconds ago";
+  if (3600 > b) return c = 0 | b / 60, 1 < c ? c + " minutes ago" : "one minute ago";
+  if (86400 > b) return c = 0 | b / 3600, a = 1 < c ? c + " hours" : "one hour", b = 0 | b / 60 - 60 * c, 1 < b && (a += " and " + b + " minutes"), a + " ago";
+  c = 0 | b / 86400;
+  a = 1 < c ? c + " days" : "one day";
+  b = 0 | b / 3600 - 24 * c;
+  1 < b && (a += " and " + b + " hours");
+  return a + " ago"
+};
 $.hash = function(a) {
   var b, c, d = 0;
   b = 0;
@@ -63,6 +76,7 @@ $.prettySeconds = function(a) {
 $.docEl = document.documentElement;
 $.cache = {};
 var Parser = {
+    dateTimeout: null,
     init: function() {
       var a, b, c, d;
       if (Config.filter || Config.embedSoundCloud || Config.embedYouTube || Config.embedVocaroo || Main.hasMobileLayout) this.needMsg = !0;
@@ -85,8 +99,8 @@ var Parser = {
       return b
     },
     saveTrackedReplies: function(a, b) {
-      sessionStorage.setItem("4chan-track-" + Main.board + "-" +
-        a, JSON.stringify(b))
+      sessionStorage.setItem("4chan-track-" +
+        Main.board + "-" + a, JSON.stringify(b))
     },
     parseThreadJSON: function(a) {
       var b;
@@ -121,6 +135,13 @@ var Parser = {
     encodeSpecialChars: function(a) {
       return a.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/'/g, "&#039;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
     },
+    onDateMouseOver: function(a) {
+      Parser.dateTimeout && (clearTimeout(Parser.dateTimeout), Parser.dateTimeout = null);
+      Parser.dateTimeout = setTimeout(Tip.show, 500, a, $.ago(+a.getAttribute("data-utc")))
+    },
+    onDateMouseOut: function(a) {
+      Parser.dateTimeout && (clearTimeout(Parser.dateTimeout), Parser.dateTimeout = null)
+    },
     buildHTMLFromJSON: function(a, b, c, d) {
       var e = document.createElement("div"),
         f = !1,
@@ -146,8 +167,7 @@ var Parser = {
         w = "",
         J = !1;
       n = "//i.4cdn.org/" + b;
-      0 == a.resto ? (f = !0, c && (0 < a.replies ? (c = a.replies + " Repl" + (1 < a.replies ? "ies" : "y"), 0 < a.images && (c += " / " + a.images + " Image" + (1 < a.images ? "s" : ""))) : c = "", H = '<div class="postLink mobile"><span class="info">' +
-        c + '</span><a href="thread/' + a.no + '" class="button">View Thread</a></div>', C = "op", G = '&nbsp; <span>[<a href="thread/' + a.no + (a.semantic_url ? "/" + a.semantic_url : "") + '" class="replylink" rel="canonical">Reply</a>]</span>'), c = a.no) : c = a.resto;
+      0 == a.resto ? (f = !0, c && (0 < a.replies ? (c = a.replies + " Repl" + (1 < a.replies ? "ies" : "y"), 0 < a.images && (c += " / " + a.images + " Image" + (1 < a.images ? "s" : ""))) : c = "", H = '<div class="postLink mobile"><span class="info">' + c + '</span><a href="thread/' + a.no + '" class="button">View Thread</a></div>', C = "op", G = '&nbsp; <span>[<a href="thread/' + a.no + (a.semantic_url ? "/" + a.semantic_url : "") + '" class="replylink" rel="canonical">Reply</a>]</span>'), c = a.no) : c = a.resto;
       Main.tid && b == Main.board ? (A = "#p" + a.no, B = "javascript:quote('" + a.no + "')") : (A = "thread/" + c + "#p" + a.no, B = "thread/" + c + "#q" + a.no);
       h = !a.capcode && a.id ? ' <span class="posteruid id_' + a.id + '">(ID: <span class="hand" title="Highlight posts by this ID">' + a.id + "</span>)</span> " : "";
       switch (a.capcode) {
@@ -173,18 +193,16 @@ var Parser = {
       }
       a.email && (E = '<a href="mailto:' + a.email.replace(/ /g, "%20") + '" class="useremail">', F = "</a>");
       z = a.country ? "pol" == b ? ' <img src="//s.4cdn.org/image/country/troll/' + a.country.toLowerCase() + '.gif" alt="' + a.country + '" title="' + a.country_name + '" class="countryFlag">' : ' <span title="' + a.country_name + '" class="flag flag-' + a.country.toLowerCase() + '"></span>' : "";
-      a.filedeleted ? g = '<div id="f' + a.no + '" class="file"><span class="fileThumb"><img src="' + Parser.icons.del + '" class="fileDeletedRes" alt="File deleted."></span></div>' : a.ext && (g = Parser.decodeSpecialChars(a.filename), m = y = a.filename + a.ext, g.length > (f ? 40 : 30) && (m = Parser.encodeSpecialChars(g.slice(0, f ? 35 : 25)) + "(...)" + a.ext, J = !0), a.tn_w || a.tn_h || ".gif" != a.ext || (a.tn_w = a.w, a.tn_h = a.h), p = 1048576 <= a.fsize ? (0 | a.fsize / 1048576 * 100 + .5) / 100 + " M" : 1024 < a.fsize ? (0 | a.fsize / 1024 + .5) + " K" : a.fsize + " ", a.spoiler && !Config.revealSpoilers && (m = "Spoiler Image", q = '" title="' + y + '"', x = " imgspoiler", l = "//s.4cdn.org/image/spoiler" + (Parser.customSpoiler[b] || "") + ".png", a.tn_w = 100, a.tn_h = 100), l || (l = "//0.t.4cdn.org/" + b + "/" + a.tim + "s.jpg"), g = ".pdf" == a.ext ? "PDF" : a.w + "x" + a.h, "f" != b ? (n = n + "/" + a.tim + a.ext, k = '<a class="fileThumb' + x + '" href="' + n + '" target="_blank"><img src="' + l + '" alt="' + p + 'B" data-md5="' + a.md5 + '" style="height: ' + a.tn_h + "px; width: " + a.tn_w + 'px;"><div data-tip data-tip-cb="mShowFull" class="mFileInfo mobile">' + p + "B " + a.ext.slice(1).toUpperCase() + "</div></a>", g = '<div class="fileText" id="fT' + a.no + q + ">File: <a" + (J ? ' title="' + y + '"' : "") + ' href="' + n + '" target="_blank">' + m + "</a> (" + p + "B, " + g + ")</div>") : (n = n + "/" + a.filename + a.ext, g += ", " + a.tag, g = '<div class="fileText" id="fT' + a.no + '">File: <a href="' + n + '" target="_blank">' + a.filename + ".swf</a> (" + p + "B, " + g + ")</div>"), g = '<div id="f' + a.no + '" class="file">' + g + k + "</div>");
+      a.filedeleted ? g = '<div id="f' + a.no + '" class="file"><span class="fileThumb"><img src="' + Parser.icons.del + '" class="fileDeletedRes" alt="File deleted."></span></div>' : a.ext && (g = Parser.decodeSpecialChars(a.filename), m = y = a.filename + a.ext, g.length > (f ? 40 : 30) && (m = Parser.encodeSpecialChars(g.slice(0, f ? 35 : 25)) + "(...)" + a.ext, J = !0), a.tn_w || a.tn_h || ".gif" != a.ext || (a.tn_w = a.w, a.tn_h = a.h), p = 1048576 <= a.fsize ? (0 | a.fsize / 1048576 * 100 + .5) / 100 + " M" : 1024 < a.fsize ? (0 | a.fsize / 1024 + .5) + " K" : a.fsize + " ", a.spoiler && !Config.revealSpoilers && (m = "Spoiler Image", q = '" title="' + y + '"', x = " imgspoiler", l = "//s.4cdn.org/image/spoiler" + (Parser.customSpoiler[b] || "") + ".png", a.tn_w = 100, a.tn_h = 100), l || (l = "//0.t.4cdn.org/" + b + "/" + a.tim + "s.jpg"), g = ".pdf" == a.ext ? "PDF" : a.w + "x" + a.h, "f" != b ? (n = n + "/" + a.tim + a.ext, k = '<a class="fileThumb' + x + '" href="' + n + '" target="_blank"><img src="' + l + '" alt="' + p + 'B" data-md5="' + a.md5 + '" style="height: ' + a.tn_h + "px; width: " + a.tn_w + 'px;"><div data-tip data-tip-cb="mShowFull" class="mFileInfo mobile">' + p + "B " + a.ext.slice(1).toUpperCase() + "</div></a>", g = '<div class="fileText" id="fT' + a.no + q + ">File: <a" + (J ? ' title="' + y + '"' : "") + ' href="' + n + '" target="_blank">' + m + "</a> (" + p + "B, " + g + ")</div>") : (n = n + "/" + a.filename + a.ext, g += ", " + a.tag, g = '<div class="fileText" id="fT' +
+        a.no + '">File: <a href="' + n + '" target="_blank">' + a.filename + ".swf</a> (" + p + "B, " + g + ")</div>"), g = '<div id="f' + a.no + '" class="file">' + g + k + "</div>");
       a.trip && (s = ' <span class="postertrip">' + a.trip + "</span>");
       k = a.name || "";
-      l = 30 < k.length ? '<span class="name" data-tip data-tip-cb="mShowFull">' +
-        Parser.truncate(k, 30) + "(...)</span> " : '<span class="name">' + k + "</span> ";
-      f ? (a.capcode_replies && (I = Parser.buildCapcodeReplies(a.capcode_replies, b, a.no)), d && a.replies && (v = a.replies + " post" + (1 < a.replies ? "s" : ""), a.images && (v += " and " + a.images + " image repl" + (1 < a.images ? "ies" : "y")), v = '<span class="summary preview-summary">' + v + ".</span>"), a.sticky && (w += '<img class="stickyIcon retina" title="Sticky" alt="Sticky" src="' + Main.icons2.sticky + '"> '), a.closed && (w = a.archived ? w + ('<img class="archivedIcon retina" title="Archived" alt="Archived" src="' +
-        Main.icons2.archived + '"> ') : w + ('<img class="closedIcon retina" title="Closed" alt="Closed" src="' + Main.icons2.closed + '"> ')), d = void 0 === a.sub ? '<span class="subject"></span> ' : 30 < a.sub.length ? '<span class="subject" data-tip data-tip-cb="mShowFull">' + Parser.truncate(a.sub, 30) + "(...)</span> " : '<span class="subject">' + a.sub + "</span> ") : d = "";
+      l = 30 < k.length ? '<span class="name" data-tip data-tip-cb="mShowFull">' + Parser.truncate(k, 30) + "(...)</span> " : '<span class="name">' + k + "</span> ";
+      f ? (a.capcode_replies && (I = Parser.buildCapcodeReplies(a.capcode_replies, b, a.no)), d && a.replies && (v = a.replies + " post" + (1 < a.replies ? "s" : ""), a.images && (v += " and " + a.images + " image repl" + (1 < a.images ? "ies" : "y")), v = '<span class="summary preview-summary">' + v + ".</span>"), a.sticky && (w += '<img class="stickyIcon retina" title="Sticky" alt="Sticky" src="' + Main.icons2.sticky + '"> '), a.closed && (w = a.archived ? w + ('<img class="archivedIcon retina" title="Archived" alt="Archived" src="' + Main.icons2.archived + '"> ') : w + ('<img class="closedIcon retina" title="Closed" alt="Closed" src="' + Main.icons2.closed + '"> ')), d = void 0 === a.sub ? '<span class="subject"></span> ' : 30 < a.sub.length ? '<span class="subject" data-tip data-tip-cb="mShowFull">' + Parser.truncate(a.sub, 30) + "(...)</span> " : '<span class="subject">' + a.sub + "</span> ") : d = "";
       e.className = "postContainer " + C + "Container";
       e.id = "pc" + a.no;
-      e.innerHTML = (f ? "" : '<div class="sideArrows" id="sa' + a.no + '">&gt;&gt;</div>') + '<div id="p' + a.no + '" class="post ' +
-        C + D + '"><div class="postInfoM mobile" id="pim' + a.no + '"><span class="nameBlock' + t + '">' + l + s + r + u + h + z + "<br>" + d + '</span><span class="dateTime postNum" data-utc="' + a.time + '">' + a.now + ' <a href="' + a.no + "#p" + a.no + '" title="Link to this post">No.</a><a href="javascript:quote(\'' + a.no + '\');" title="Reply to this post">' + a.no + "</a></span></div>" + (f ? g : "") + '<div class="postInfo desktop" id="pi' + a.no + '"' + (b != Main.board ? ' data-board="' + b + '"' : "") + '><input type="checkbox" name="' + a.no + '" value="delete"> ' + d + '<span class="nameBlock' +
-        t + '">' + E + '<span class="name">' + k + "</span>" + s + r + F + u + h + z + ' </span> <span class="dateTime" data-utc="' + a.time + '">' + a.now + '</span> <span class="postNum desktop"><a href="' + A + '" title="Link to this post">No.</a><a href="' + B + '" title="Reply to this post">' + a.no + "</a> " + w + G + "</span></div>" + (f ? "" : g) + '<blockquote class="postMessage" id="m' + a.no + '">' + (a.com || "") + I + v + "</blockquote> </div>" + H;
+      e.innerHTML = (f ? "" : '<div class="sideArrows" id="sa' + a.no + '">&gt;&gt;</div>') + '<div id="p' + a.no + '" class="post ' + C + D + '"><div class="postInfoM mobile" id="pim' + a.no + '"><span class="nameBlock' + t + '">' + l + s + r + u + h + z + "<br>" + d + '</span><span class="dateTime postNum" data-utc="' + a.time + '">' + a.now + ' <a href="' + a.no + "#p" + a.no + '" title="Link to this post">No.</a><a href="javascript:quote(\'' + a.no + '\');" title="Reply to this post">' + a.no + "</a></span></div>" + (f ? g : "") + '<div class="postInfo desktop" id="pi' + a.no + '"' + (b != Main.board ? ' data-board="' + b + '"' : "") + '><input type="checkbox" name="' + a.no + '" value="delete"> ' + d + '<span class="nameBlock' + t + '">' + E + '<span class="name">' + k + "</span>" + s + r + F + u + h + z + ' </span> <span class="dateTime" data-utc="' + a.time + '">' + a.now + '</span> <span class="postNum desktop"><a href="' +
+        A + '" title="Link to this post">No.</a><a href="' + B + '" title="Reply to this post">' + a.no + "</a> " + w + G + "</span></div>" + (f ? "" : g) + '<blockquote class="postMessage" id="m' + a.no + '">' + (a.com || "") + I + v + "</blockquote> </div>" + H;
       if (!Main.tid || b != Main.board)
         for (r = e.getElementsByClassName("quotelink"), a = 0; f = r[a]; ++a) s = f.getAttribute("href"), "/" != s.charAt(0) && (f.href = "/" + b + "/thread/" + c + s);
       return e
@@ -206,8 +224,7 @@ var Parser = {
       b != Main.board ? (k = "/" + b + "/thread/", l = "&gt;&gt;&gt;/" + b + "/") : (k = "", l = "&gt;&gt;");
       f = '<br><br><span class="capcodeReplies"><span class="smaller">';
       for (d in a)
-        for (f += '<span class="bold">' +
-          h[d] + " Replies:</span> ", g = a[d], b = 0; e = g[b]; ++b) f += '<a class="quotelink" href="' + k + c + "#p" + e + '">' + l + e + "</a> ";
+        for (f += '<span class="bold">' + h[d] + " Replies:</span> ", g = a[d], b = 0; e = g[b]; ++b) f += '<a class="quotelink" href="' + k + c + "#p" + e + '">' + l + e + "</a> ";
       return f + "</span></span>"
     },
     parseBoard: function() {
@@ -265,8 +282,7 @@ var Parser = {
     parsePost: function(a, b) {
       var c, d, e, f, h, g, k;
       c = Main.hasMobileLayout;
-      b ? e = document.getElementById("pi" +
-        a) : (e = a.getElementsByClassName("postInfo")[0], a = e.id.slice(2));
+      b ? e = document.getElementById("pi" + a) : (e = a.getElementsByClassName("postInfo")[0], a = e.id.slice(2));
       Parser.needMsg && (h = document.getElementById("m" + a));
       c ? Config.reportButton && (d = document.createElement("span"), d.className = "mobile mobile-report", d.setAttribute("data-cmd", "report"), d.setAttribute("data-id", a), d.textContent = "Report", e.parentNode.appendChild(d)) : (d = document.createElement("a"), d.href = "#", d.className = "postMenuBtn", d.title = "Post menu", d.setAttribute("data-cmd", "post-menu"), d.textContent = "\u25b6", e.appendChild(d));
       b && (a != b && (Config.filter && (g = Filter.exec(e.parentNode, e, h)), !g && ReplyHiding.hidden[a] && (ReplyHiding.hidden[a] = Main.now, ReplyHiding.hide(a))), Config.backlinks && Parser.parseBacklinks(a, b));
@@ -275,17 +291,17 @@ var Parser = {
       (Config.embedYouTube || Main.hasMobileLayout) && Media.parseYouTube(h);
       Config.embedVocaroo && Media.parseVocaroo(h);
       Config.revealSpoilers && (f = document.getElementById("f" + a)) && (f = f.children[1]) && $.hasClass(f, "imgspoiler") && (d = f.firstChild, f.removeChild(d), d.removeAttribute("style"), k = $.hasClass(e.parentNode, "op"), d.style.maxWidth = d.style.maxHeight = k ? "250px" : "125px", d.src = "//0.t.4cdn.org" + f.pathname.replace(/([0-9]+).+$/, "/$1s.jpg"), h = f.previousElementSibling, g = h.title.split("."), g[0].length > (k ? 40 : 30) ? g = g[0].slice(0, k ? 35 : 25) + "(...)" + g[1] : (g = h.title, h.removeAttribute("title")), h.firstElementChild.innerHTML = g, f.insertBefore(d, f.firstElementChild));
-      Config.localTime && (c ? (d = e.parentNode.getElementsByClassName("dateTime")[0], d.firstChild.nodeValue = Parser.getLocaleDate(new Date(1E3 * d.getAttribute("data-utc"))) + " ") : (d = e.getElementsByClassName("dateTime")[0], d.title = this.utcOffset, d.textContent = Parser.getLocaleDate(new Date(1E3 * d.getAttribute("data-utc")))))
+      Config.localTime && (c ? (d = e.parentNode.getElementsByClassName("dateTime")[0], d.firstChild.nodeValue = Parser.getLocaleDate(new Date(1E3 * d.getAttribute("data-utc"))) + " ") : (d = e.getElementsByClassName("dateTime")[0], d.textContent = Parser.getLocaleDate(new Date(1E3 * d.getAttribute("data-utc")))))
     },
     getLocaleDate: function(a) {
-      return ("0" + (1 + a.getMonth())).slice(-2) + "/" + ("0" + a.getDate()).slice(-2) + "/" + ("0" + a.getFullYear()).slice(-2) + "(" + this.weekdays[a.getDay()] + ")" + ("0" + a.getHours()).slice(-2) + ":" + ("0" + a.getMinutes()).slice(-2) + ":" + ("0" + a.getSeconds()).slice(-2)
+      return ("0" +
+        (1 + a.getMonth())).slice(-2) + "/" + ("0" + a.getDate()).slice(-2) + "/" + ("0" + a.getFullYear()).slice(-2) + "(" + this.weekdays[a.getDay()] + ")" + ("0" + a.getHours()).slice(-2) + ":" + ("0" + a.getMinutes()).slice(-2) + ":" + ("0" + a.getSeconds()).slice(-2)
     },
     parseBacklinks: function(a, b) {
       var c, d, e, f, h, g, k;
       if (e = document.getElementById("m" + a).getElementsByClassName("quotelink"))
         for (f = {}, c = 0; d = e[c]; ++c)
-          if (h = d.getAttribute("href").split("#p"), h[1])(h[1] == b && (d.textContent += " (OP)"), g = document.getElementById("pi" + h[1])) ? f[h[1]] || (f[h[1]] = !0, d = document.createElement("span"), k = Main.tid ? "#p" + a : "thread/" + b + "#p" + a, d.innerHTML = Main.hasMobileLayout ? '<a href="' + k + '" class="quotelink">&gt;&gt;' + a + '</a><a href="' + k + '" class="quoteLink"> #</a> ' : '<a href="' + k + '" class="quotelink">&gt;&gt;' +
-            a + "</a> ", (k = document.getElementById("bl_" + h[1])) || (k = document.createElement("div"), k.id = "bl_" + h[1], k.className = "backlink", Main.hasMobileLayout && (k.className = "backlink mobile", g = document.getElementById("p" + h[1])), g.appendChild(k)), k.appendChild(d)) : Main.tid && ">" != d.textContent.charAt(2) && (d.textContent += " \u2192")
+          if (h = d.getAttribute("href").split("#p"), h[1])(h[1] == b && (d.textContent += " (OP)"), g = document.getElementById("pi" + h[1])) ? f[h[1]] || (f[h[1]] = !0, d = document.createElement("span"), k = Main.tid ? "#p" + a : "thread/" + b + "#p" + a, d.innerHTML = Main.hasMobileLayout ? '<a href="' + k + '" class="quotelink">&gt;&gt;' + a + '</a><a href="' + k + '" class="quoteLink"> #</a> ' : '<a href="' + k + '" class="quotelink">&gt;&gt;' + a + "</a> ", (k = document.getElementById("bl_" + h[1])) || (k = document.createElement("div"), k.id = "bl_" + h[1], k.className = "backlink", Main.hasMobileLayout && (k.className = "backlink mobile", g = document.getElementById("p" + h[1])), g.appendChild(k)), k.appendChild(d)) : Main.tid && ">" != d.textContent.charAt(2) && (d.textContent += " \u2192")
     },
     buildSummary: function(a, b, c) {
       if (b) b = b + " post" + (1 < b ? "s" : "");
@@ -309,8 +325,7 @@ var Parser = {
       if (e) Main.tid || (c += '<li data-cmd="hide" data-id="' + d + '">' + ($.hasClass($.id("t" + d), "post-hidden") ? "Unhide" : "Hide") + " thread</li>"), Config.threadWatcher && (c += '<li data-cmd="watch" data-id="' + d + '">' + (ThreadWatcher.watched[d + "-" + Main.board] ? "Remove from" : "Add to") + " watch list</li>");
       else if (b = $.id("pc" + d)) c += '<li data-cmd="hide-r" data-id="' + d + '">' + ($.hasClass(b, "post-hidden") ? "Unhide" : "Hide") + " post</li>";
       if (file = $.id("fT" + d))
-        if (b = $.cls("fileThumb", file.parentNode)[0]) b = /\.(png|jpg)$/.test(b.href) ? b.href : "http://0.t.4cdn.org/" + Main.board + "/" + b.href.match(/\/([0-9]+)\..+$/)[1] + "s.jpg", c += '<li><ul><li><a href="//www.google.com/searchbyimage?image_url=' +
-          b + '" target="_blank">Google</a></li><li><a href="http://iqdb.org/?url=' + b + '" target="_blank">iqdb</a></li></ul>Image search &raquo</li>';
+        if (b = $.cls("fileThumb", file.parentNode)[0]) b = /\.(png|jpg)$/.test(b.href) ? b.href : "http://0.t.4cdn.org/" + Main.board + "/" + b.href.match(/\/([0-9]+)\..+$/)[1] + "s.jpg", c += '<li><ul><li><a href="//www.google.com/searchbyimage?image_url=' + b + '" target="_blank">Google</a></li><li><a href="http://iqdb.org/?url=' + b + '" target="_blank">iqdb</a></li></ul>Image search &raquo</li>';
       Config.filter && (c += '<li><a href="#" data-cmd="filter-sel">Filter selected text</a></li>');
       b = document.createElement("div");
       b.id = "post-menu";
@@ -398,7 +413,8 @@ var Parser = {
         a.textContent = "Page " + n;
         b.appendChild(a);
         for (c = 0; a = e[c]; ++c)
-          if (!$.id("t" + a.no)) {
+          if (!$.id("t" +
+            a.no)) {
             h = document.createElement("div");
             h.id = "t" + a.no;
             h.className = "thread";
@@ -798,8 +814,7 @@ var Parser = {
         this.xhr = this.pulse = this.captchaInterval = null;
         this.fileDisabled = !!window.imagelimit;
         this.tracked = {};
-        this.lastTid = localStorage.getItem("4chan-cd-" +
-          Main.board + "-tid");
+        this.lastTid = localStorage.getItem("4chan-cd-" + Main.board + "-tid");
         !Main.tid || Main.hasMobileLayout || Main.threadClosed || QR.addReplyLink();
         window.addEventListener("storage", this.syncStorage, !1)
       }
@@ -852,7 +867,8 @@ var Parser = {
         d.innerHTML = '<div id="qrHeader" class="drag postblock">Reply to Thread No.<span id="qrTid">' + a + '</span><img alt="X" src="' + Main.icons.cross + '" id="qrClose" class="extButton" title="Close Window"></div>';
         f = e.parentNode.cloneNode(!1);
         f.setAttribute("name", "qrPost");
-        f.innerHTML = '<input type="hidden" value="' + $.byName("MAX_FILE_SIZE")[0].value + '" name="MAX_FILE_SIZE"><input type="hidden" value="regist" name="mode"><input id="qrResto" type="hidden" value="' + a + '" name="resto">';
+        f.innerHTML = '<input type="hidden" value="' + $.byName("MAX_FILE_SIZE")[0].value + '" name="MAX_FILE_SIZE"><input type="hidden" value="regist" name="mode"><input id="qrResto" type="hidden" value="' +
+          a + '" name="resto">';
         a = document.createElement("div");
         a.id = "qrForm";
         this.btn = null;
@@ -901,7 +917,8 @@ var Parser = {
     onFileChange: function(a) {
       var b;
       QR.needPreuploadCaptcha = !1;
-      this.value ? (b = window.maxFilesize, this.files ? (a = this.files[0].size, "video/webm" == this.files[0].type && window.maxWebmFilesize && (b = window.maxWebmFilesize)) : a = 0, QR.fileDisabled ? QR.showPostError("Image limit reached.", "imagelimit", !0) : a > b ? QR.showPostError("Error: Maximum file size allowed is " + Math.floor(b / 1048576) + " MB", "filesize", !0) : QR.hidePostError(), a >= QR.preuploadSizeLimit && (QR.needPreuploadCaptcha = !0)) : QR.hidePostError();
+      this.value ? (b = window.maxFilesize, this.files ? (a = this.files[0].size, "video/webm" == this.files[0].type && window.maxWebmFilesize && (b = window.maxWebmFilesize)) : a = 0, QR.fileDisabled ? QR.showPostError("Image limit reached.", "imagelimit", !0) : a > b ? QR.showPostError("Error: Maximum file size allowed is " +
+        Math.floor(b / 1048576) + " MB", "filesize", !0) : QR.hidePostError(), a >= QR.preuploadSizeLimit && (QR.needPreuploadCaptcha = !0)) : QR.hidePostError();
       QR.startCooldown()
     },
     onKeyDown: function(a) {
@@ -922,8 +939,7 @@ var Parser = {
     },
     checkComLength: function() {
       var a;
-      QR.comLength && (a = encodeURIComponent(QR.comField.value).split(/%..|./).length -
-        1, a > QR.comLength ? QR.showPostError("Error: Comment too long (" + a + "/" + QR.comLength + ").", "length", !0) : QR.hidePostError("length"))
+      QR.comLength && (a = encodeURIComponent(QR.comField.value).split(/%..|./).length - 1, a > QR.comLength ? QR.showPostError("Error: Comment too long (" + a + "/" + QR.comLength + ").", "length", !0) : QR.hidePostError("length"))
     },
     close: function() {
       var a, b = $.id("quickReply");
@@ -943,8 +959,8 @@ var Parser = {
     cloneCaptcha: function() {
       var a = $.id("qrCaptchaContainer");
       if (!a) return !1;
-      a.innerHTML = '<img id="qrCaptcha" title="Reload" width="300" height="57" src="' + $.id("recaptcha_challenge_image").src + '" alt="reCAPTCHA challenge image">' +
-        (window.preupload_captcha ? '<input id="qrCapToken" type="hidden" name="captcha_token" disabled>' : "") + '<input id="qrCapField" tabindex="25" name="recaptcha_response_field" placeholder="Type the text (Required)" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"><input id="qrChallenge" name="recaptcha_challenge_field" type="hidden" value="' + $.id("recaptcha_challenge_field").value + '">';
+      a.innerHTML = '<img id="qrCaptcha" title="Reload" width="300" height="57" src="' + $.id("recaptcha_challenge_image").src + '" alt="reCAPTCHA challenge image">' + (window.preupload_captcha ? '<input id="qrCapToken" type="hidden" name="captcha_token" disabled>' : "") + '<input id="qrCapField" tabindex="25" name="recaptcha_response_field" placeholder="Type the text (Required)" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"><input id="qrChallenge" name="recaptcha_challenge_field" type="hidden" value="' +
+        $.id("recaptcha_challenge_field").value + '">';
       return !0
     },
     reloadCaptcha: function(a) {
@@ -1041,7 +1057,8 @@ var Parser = {
               a = f[1];
               f = f[2];
               QR.lastTid = a;
-              localStorage.setItem("4chan-cd-" + Main.board + "-tid", a);
+              localStorage.setItem("4chan-cd-" +
+                Main.board + "-tid", a);
               e = (b = $.id("qrFile")) && b.value;
               QR.setPostTime();
               if (Config.persistentQR) {
@@ -1083,7 +1100,8 @@ var Parser = {
     onPulse: function() {
       QR.cdElapsed = Date.now() - QR.timestamp;
       QR.cooldown = Math.floor((QR.activeDelay - QR.cdElapsed) / 1E3);
-      0 >= QR.cooldown ? (clearInterval(QR.pulse), QR.btn.value = "Post", QR.cooldown = !1, QR.auto && QR.submit()) : QR.btn.value = QR.cooldown + (QR.auto ? "s (auto)" : "s")
+      0 >= QR.cooldown ? (clearInterval(QR.pulse), QR.btn.value = "Post", QR.cooldown = !1, QR.auto && QR.submit()) : QR.btn.value = QR.cooldown +
+        (QR.auto ? "s (auto)" : "s")
     }
   },
   ThreadHiding = {
@@ -3037,11 +3055,17 @@ var Main = {
   },
   onThreadMouseOver: function(a) {
     var b = a.target;
-    Config.quotePreview && $.hasClass(b, "quotelink") && !$.hasClass(b, "deadlink") && !$.hasClass(b, "linkfade") ? QuotePreview.resolve(a.target) : Config.imageHover && b.hasAttribute("data-md5") && !$.hasClass(b.parentNode, "deleted") ? ImageHover.show(b) : Config.embedYouTube && "yt" === b.getAttribute("data-type") && !Main.hasMobileLayout ? Media.showYTPreview(b) : Config.filter && b.hasAttribute("data-filtered") && QuotePreview.show(b, b.href ? b.parentNode.parentNode.parentNode : b.parentNode.parentNode)
+    if (Config.quotePreview && $.hasClass(b, "quotelink") && !$.hasClass(b, "deadlink") && !$.hasClass(b, "linkfade")) QuotePreview.resolve(a.target);
+    else if (Config.imageHover && b.hasAttribute("data-md5") && !$.hasClass(b.parentNode, "deleted")) ImageHover.show(b);
+    else if ($.hasClass(b, "dateTime")) Parser.onDateMouseOver(b);
+    else Config.embedYouTube && "yt" === b.getAttribute("data-type") && !Main.hasMobileLayout ? Media.showYTPreview(b) : Config.filter && b.hasAttribute("data-filtered") && QuotePreview.show(b, b.href ? b.parentNode.parentNode.parentNode : b.parentNode.parentNode)
   },
   onThreadMouseOut: function(a) {
     a = a.target;
-    Config.quotePreview && $.hasClass(a, "quotelink") ? QuotePreview.remove(a) : Config.imageHover && a.hasAttribute("data-md5") ? ImageHover.hide() : Config.embedYouTube && "yt" === a.getAttribute("data-type") && !Main.hasMobileLayout ? Media.removeYTPreview() : Config.filter && a.hasAttribute("data-filtered") && QuotePreview.remove(a)
+    if (Config.quotePreview && $.hasClass(a, "quotelink")) QuotePreview.remove(a);
+    else if (Config.imageHover && a.hasAttribute("data-md5")) ImageHover.hide();
+    else if ($.hasClass(a, "dateTime")) Parser.onDateMouseOut(a);
+    else Config.embedYouTube && "yt" === a.getAttribute("data-type") && !Main.hasMobileLayout ? Media.removeYTPreview() : Config.filter && a.hasAttribute("data-filtered") && QuotePreview.remove(a)
   },
   linkToThread: function(a, b, c) {
     return "//" + location.host + "/" + (b || Main.board) + "/thread/" + a + (0 < c ? "#p" + c : "")
