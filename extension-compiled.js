@@ -883,7 +883,7 @@ var Parser = {
           else if (g.innerHTML = h[b].children[1].innerHTML, l = "hidden" == g.firstChild.type ? g.lastChild.previousSibling : g.firstChild, l.tabIndex = "", "INPUT" == l.nodeName || "TEXTAREA" == l.nodeName) {
             if ("name" == l.name) {
               if (q = Main.getCookie("4chan_name")) l.value = q
-            } else if ("email" == l.name) l.id = "qrEmail", Main.tid && l.nextElementSibling && l.parentNode.removeChild(l.nextElementSibling);
+            } else if ("email" == l.name) l.id = "qrEmail", l.nextElementSibling && l.parentNode.removeChild(l.nextElementSibling);
             else if ("com" == l.name) QR.comField = l, l.addEventListener("keydown", QR.onKeyDown, !1), l.addEventListener("paste", QR.onKeyDown, !1), l.addEventListener("cut", QR.onKeyDown, !1), g.children[1] && g.removeChild(l.nextSibling);
             else if ("sub" == l.name) continue;
             null !== m && l.setAttribute("placeholder", m)
