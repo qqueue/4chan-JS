@@ -1213,9 +1213,7 @@ var UA = {
 
 function setPassMsg() {
   var a;
-  a = document.getElementById("captchaFormPart").children[1];
-  a.innerHTML = '<div style="padding: 5px;">You are using a 4chan Pass. [<a href="https://sys.4chan.org/auth?act=logout" onclick="confirmPassLogout(event);" tabindex="-1">Logout</a>]</div>';
-  a.removeAttribute("style")
+  if (a = document.getElementById("captchaFormPart")) a = a.children[1], a.innerHTML = '<div style="padding: 5px;">You are using a 4chan Pass. [<a href="https://sys.4chan.org/auth?act=logout" onclick="confirmPassLogout(event);" tabindex="-1">Logout</a>]</div>', a.removeAttribute("style")
 }
 var CustomMenu = {
   reset: function() {
