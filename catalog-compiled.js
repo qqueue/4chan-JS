@@ -218,7 +218,7 @@ var UA = {
 
     function Ca(a) {
       window.open("http://sys.4chan.org/" + k.slug + "/imgboard.php?mode=report&no=" +
-        a, Date.now(), "toolbar=0,scrollbars=0,location=0,status=1,menubar=0,resizable=1,width=600,height=170")
+        a, Date.now(), "toolbar=0,scrollbars=0,location=0,status=1,menubar=0,resizable=1,width=600,height=270")
     }
 
     function Da(a) {
