@@ -890,7 +890,7 @@ var Parser = {
           } else "flag" == l.name && ((n = l.querySelector("option[selected]")) && n.removeAttribute("selected"), (q = Main.getCookie("4chan_flag")) && (n = l.querySelector('option[value="' + q + '"]')) && n.setAttribute("selected", "selected"));
           a.appendChild(g)
         }
-        this.btn || (this.btn = e.querySelector('input[type="submit"]').cloneNode(!1), this.btn.tabIndex = "", k.parentNode.appendChild(this.btn));
+        this.btn || (this.btn = e.querySelector('input[type="submit"]').cloneNode(!1), this.btn.tabIndex = "", k ? k.parentNode.appendChild(this.btn) : (a.appendChild(document.createElement("div")), a.lastElementChild.appendChild(this.btn)));
         e.querySelector('.desktop > label > input[name="spoiler"]') && (e = document.createElement("span"), e.id = "qrSpoiler", e.innerHTML = '<label>[<input type="checkbox" value="on" name="spoiler">Spoiler?]</label>', k.parentNode.insertBefore(e, k.nextSibling));
         f.appendChild(a);
         d.appendChild(f);
@@ -1023,8 +1023,7 @@ var Parser = {
                 e && QR.resetFile();
                 QR.startCooldown()
               } else QR.close();
-              Main.tid ? (Config.threadWatcher && ThreadWatcher.setLastRead(f, a), QR.lastReplyId = +f, Parser.trackedReplies[">>" +
-                f] = 1, Parser.saveTrackedReplies(a, Parser.trackedReplies)) : (b = Parser.getTrackedReplies(a) || {}, b[">>" + f] = 1, Parser.saveTrackedReplies(a, b));
+              Main.tid ? (Config.threadWatcher && ThreadWatcher.setLastRead(f, a), QR.lastReplyId = +f, Parser.trackedReplies[">>" + f] = 1, Parser.saveTrackedReplies(a, Parser.trackedReplies)) : (b = Parser.getTrackedReplies(a) || {}, b[">>" + f] = 1, Parser.saveTrackedReplies(a, b));
               UA.dispatchEvent("4chanQRPostSuccess", {
                 threadId: a,
                 postId: f
@@ -1044,7 +1043,8 @@ var Parser = {
       return localStorage.setItem("4chan-cd-" + Main.board, Date.now())
     },
     getPostTime: function() {
-      return localStorage.getItem("4chan-cd-" + Main.board)
+      return localStorage.getItem("4chan-cd-" +
+        Main.board)
     },
     removePostTime: function() {
       return localStorage.removeItem("4chan-cd-" + Main.board)
@@ -1072,8 +1072,7 @@ var Parser = {
       b = 0;
       for (c in this.hidden)++b;
       c = "4chan-hide-t-" + Main.board;
-      a ? localStorage.removeItem(c) : b ? (a = "This will unhide " + b + " thread" + (1 < b ? "s" : "") + " on /" +
-        Main.board + "/", confirm(a) && localStorage.removeItem(c)) : alert("You don't have any hidden threads on /" + Main.board + "/")
+      a ? localStorage.removeItem(c) : b ? (a = "This will unhide " + b + " thread" + (1 < b ? "s" : "") + " on /" + Main.board + "/", confirm(a) && localStorage.removeItem(c)) : alert("You don't have any hidden threads on /" + Main.board + "/")
     },
     isHidden: function(a) {
       a = $.id("sa" + a);
@@ -1094,8 +1093,7 @@ var Parser = {
     hide: function(a) {
       var b, c;
       c = $.id("t" + a);
-      Main.hasMobileLayout ? (c.style.display = "none", $.addClass(c.nextElementSibling, "mobile-hr-hidden"), b = $.id("sa" + a), b.setAttribute("data-hidden", a), b.textContent = "Show Hidden Thread", $.addClass(b, "mobile-tu-show"), c.parentNode.insertBefore(b, c)) : Config.hideStubs && !$.cls("stickyIcon", c)[0] ? c.style.display = c.nextElementSibling.style.display = "none" : (b = $.id("sa" +
-        a), b.setAttribute("data-hidden", a), b.firstChild.src = Main.icons.plus, c.className += " post-hidden");
+      Main.hasMobileLayout ? (c.style.display = "none", $.addClass(c.nextElementSibling, "mobile-hr-hidden"), b = $.id("sa" + a), b.setAttribute("data-hidden", a), b.textContent = "Show Hidden Thread", $.addClass(b, "mobile-tu-show"), c.parentNode.insertBefore(b, c)) : Config.hideStubs && !$.cls("stickyIcon", c)[0] ? c.style.display = c.nextElementSibling.style.display = "none" : (b = $.id("sa" + a), b.setAttribute("data-hidden", a), b.firstChild.src = Main.icons.plus, c.className += " post-hidden");
       this.hidden[a] = Date.now()
     },
     load: function() {
@@ -1130,7 +1128,8 @@ var Parser = {
     },
     save: function() {
       for (var a in this.hidden) {
-        localStorage.setItem("4chan-hide-t-" + Main.board, JSON.stringify(this.hidden));
+        localStorage.setItem("4chan-hide-t-" +
+          Main.board, JSON.stringify(this.hidden));
         return
       }
       localStorage.removeItem("4chan-hide-t-" + Main.board)
@@ -1159,7 +1158,8 @@ var Parser = {
     },
     hide: function(a) {
       var b;
-      b = $.id("pc" + a);
+      b = $.id("pc" +
+        a);
       $.addClass(b, "post-hidden");
       $.id("sa" + a).setAttribute("data-hidden", a);
       ReplyHiding.hidden[a] = Date.now()
@@ -1191,8 +1191,7 @@ var Parser = {
     },
     load: function() {
       var a;
-      if (a = localStorage.getItem("4chan-hide-r-" +
-        Main.board)) this.hidden = JSON.parse(a)
+      if (a = localStorage.getItem("4chan-hide-r-" + Main.board)) this.hidden = JSON.parse(a)
     },
     purge: function() {
       var a, b;
@@ -1256,7 +1255,8 @@ var Parser = {
     build: function(a) {
       var b, c, d, e;
       b = "";
-      for (d in this.watched) c = d.split("-"), b += '<li id="watch-' + d + '"><span class="pointer" data-cmd="unwatch" data-id="' + c[0] + '" data-board="' + c[1] + '">&times;</span> <a href="' + Main.linkToThread(c[0], c[1]) + "#lr" + this.watched[d][1] + '"', -1 == this.watched[d][1] ? b += ' class="deadlink">' : (e = this.watched[d][3] ? "archivelink" : !1, b = this.watched[d][2] ? b + (' class="' + (e ? e + " " : "") + 'hasNewReplies">(' + this.watched[d][2] + ") ") : b + ((e ? 'class="' + e + '"' : "") + ">")), b += "/" + c[1] + "/ - " + this.watched[d][0] + "</a></li>";
+      for (d in this.watched) c = d.split("-"), b += '<li id="watch-' + d + '"><span class="pointer" data-cmd="unwatch" data-id="' +
+        c[0] + '" data-board="' + c[1] + '">&times;</span> <a href="' + Main.linkToThread(c[0], c[1]) + "#lr" + this.watched[d][1] + '"', -1 == this.watched[d][1] ? b += ' class="deadlink">' : (e = this.watched[d][3] ? "archivelink" : !1, b = this.watched[d][2] ? b + (' class="' + (e ? e + " " : "") + 'hasNewReplies">(' + this.watched[d][2] + ") ") : b + ((e ? 'class="' + e + '"' : "") + ">")), b += "/" + c[1] + "/ - " + this.watched[d][0] + "</a></li>";
       a && ThreadWatcher.rebuildButtons();
       ThreadWatcher.listNode.innerHTML = b
     },
@@ -1423,28 +1423,27 @@ var Parser = {
     },
     expandComment: function(a) {
       var b, c, d, e;
-      if (b = a.getAttribute("href").match(/^(?:thread\/)([0-9]+)#p([0-9]+)$/)) c = b[1], d = b[2], e = a.parentNode, e.textContent = "Loading...", $.get("//a.4cdn.org/" +
-        Main.board + "/thread/" + c + ".json", {
-          onload: function() {
-            var a, b, g, k;
-            if (200 == this.status) {
-              b = $.id("m" + d);
-              k = Parser.parseThreadJSON(this.responseText);
-              if (c == d) g = k[0];
-              else
-                for (a = k.length - 1; 0 < a; a--)
-                  if (k[a].no == d) {
-                    g = k[a];
-                    break
-                  }
-              g ? (g = Parser.buildHTMLFromJSON(g, Main.board), b.innerHTML = $.cls("postMessage", g)[0].innerHTML, Parser.prettify && Parser.parseMarkup(b), window.jsMath && Parser.parseMathOne(b)) : e.textContent = "This post doesn't exist anymore."
-            } else 404 == this.status ? e.textContent = "This thread doesn't exist anymore." : (e.textContent = "Connection Error", console.log("ThreadExpansion: " + this.status + " " + this.statusText))
-          },
-          onerror: function() {
-            e.textContent = "Connection Error";
-            console.log("ThreadExpansion: xhr failed")
-          }
-        })
+      if (b = a.getAttribute("href").match(/^(?:thread\/)([0-9]+)#p([0-9]+)$/)) c = b[1], d = b[2], e = a.parentNode, e.textContent = "Loading...", $.get("//a.4cdn.org/" + Main.board + "/thread/" + c + ".json", {
+        onload: function() {
+          var a, b, g, k;
+          if (200 == this.status) {
+            b = $.id("m" + d);
+            k = Parser.parseThreadJSON(this.responseText);
+            if (c == d) g = k[0];
+            else
+              for (a = k.length - 1; 0 < a; a--)
+                if (k[a].no == d) {
+                  g = k[a];
+                  break
+                }
+            g ? (g = Parser.buildHTMLFromJSON(g, Main.board), b.innerHTML = $.cls("postMessage", g)[0].innerHTML, Parser.prettify && Parser.parseMarkup(b), window.jsMath && Parser.parseMathOne(b)) : e.textContent = "This post doesn't exist anymore."
+          } else 404 == this.status ? e.textContent = "This thread doesn't exist anymore." : (e.textContent = "Connection Error", console.log("ThreadExpansion: " + this.status + " " + this.statusText))
+        },
+        onerror: function() {
+          e.textContent = "Connection Error";
+          console.log("ThreadExpansion: xhr failed")
+        }
+      })
     },
     toggle: function(a) {
       var b, c, d, e;
