@@ -998,43 +998,43 @@ var Parser = {
       QR.startCooldown()
     },
     submit: function(a) {
-      var b;
       QR.hidePostError();
-      QR.presubmitChecks(a) && (QR.auto = !1, !a && (b = $.id("qrCapField")) && "" == b.value ? (QR.showPostError("You forgot to type in the CAPTCHA."), b.focus()) : (QR.xhr = new XMLHttpRequest, QR.xhr.open("POST", document.forms.qrPost.action, !0), QR.xhr.withCredentials = !0, QR.xhr.upload.onprogress = function(a) {
+      QR.presubmitChecks(a) && (QR.auto = !1, QR.xhr = new XMLHttpRequest, QR.xhr.open("POST", document.forms.qrPost.action, !0), QR.xhr.withCredentials = !0, QR.xhr.upload.onprogress = function(a) {
         QR.btn.value = a.loaded >= a.total ? "100%" : (0 | a.loaded / a.total * 100) + "%"
       }, QR.xhr.onerror = function() {
         QR.xhr = null;
         QR.showPostError("Connection error.")
       }, QR.xhr.onload = function() {
-        var a, b, e, f;
+        var a, c, d, e;
         QR.xhr = null;
         QR.btn.value = "Post";
         if (200 == this.status)
           if (a = this.responseText.match(/"errmsg"[^>]*>(.*?)<\/span/)) QR.resetCaptcha(), QR.showPostError(a[1]);
           else {
-            if (f = this.responseText.match(/\x3c!-- thread:([0-9]+),no:([0-9]+) --\x3e/)) {
-              a = f[1];
-              f = f[2];
+            if (e = this.responseText.match(/\x3c!-- thread:([0-9]+),no:([0-9]+) --\x3e/)) {
+              a = e[1];
+              e = e[2];
               QR.lastTid = a;
               localStorage.setItem("4chan-cd-" + Main.board + "-tid", a);
-              e = (b = $.id("qrFile")) && b.value;
+              d = (c = $.id("qrFile")) && c.value;
               QR.setPostTime();
               if (Config.persistentQR) {
                 $.byName("com")[1].value = "";
-                if (b = $.byName("spoiler")[2]) b.checked = !1;
+                if (c = $.byName("spoiler")[2]) c.checked = !1;
                 QR.resetCaptcha();
-                e && QR.resetFile();
+                d && QR.resetFile();
                 QR.startCooldown()
               } else QR.close();
-              Main.tid ? (Config.threadWatcher && ThreadWatcher.setLastRead(f, a), QR.lastReplyId = +f, Parser.trackedReplies[">>" + f] = 1, Parser.saveTrackedReplies(a, Parser.trackedReplies)) : (b = Parser.getTrackedReplies(a) || {}, b[">>" + f] = 1, Parser.saveTrackedReplies(a, b));
+              Main.tid ? (Config.threadWatcher && ThreadWatcher.setLastRead(e, a), QR.lastReplyId = +e, Parser.trackedReplies[">>" +
+                e] = 1, Parser.saveTrackedReplies(a, Parser.trackedReplies)) : (c = Parser.getTrackedReplies(a) || {}, c[">>" + e] = 1, Parser.saveTrackedReplies(a, c));
               UA.dispatchEvent("4chanQRPostSuccess", {
                 threadId: a,
-                postId: f
+                postId: e
               })
             }
             ThreadUpdater.enabled && setTimeout(ThreadUpdater.forceUpdate, 500)
           } else QR.showPostError("Error: " + this.status + " " + this.statusText)
-      }, a = new FormData(document.forms.qrPost), clearInterval(QR.pulse), QR.btn.value = "Sending", QR.xhr.send(a)))
+      }, a = new FormData(document.forms.qrPost), clearInterval(QR.pulse), QR.btn.value = "Sending", QR.xhr.send(a))
     },
     presubmitChecks: function(a) {
       return QR.xhr ? (QR.xhr.abort(), QR.xhr = null, QR.showPostError("Aborted."), QR.btn.value = "Post", !1) : !a && QR.cooldown ? ((QR.auto = !QR.auto) ? QR.btn.value = QR.cooldown + "s (auto)" : QR.btn.value = QR.cooldown + "s", !1) : !0
@@ -1046,8 +1046,7 @@ var Parser = {
       return localStorage.setItem("4chan-cd-" + Main.board, Date.now())
     },
     getPostTime: function() {
-      return localStorage.getItem("4chan-cd-" +
-        Main.board)
+      return localStorage.getItem("4chan-cd-" + Main.board)
     },
     removePostTime: function() {
       return localStorage.removeItem("4chan-cd-" + Main.board)
@@ -1096,7 +1095,8 @@ var Parser = {
     hide: function(a) {
       var b, c;
       c = $.id("t" + a);
-      Main.hasMobileLayout ? (c.style.display = "none", $.addClass(c.nextElementSibling, "mobile-hr-hidden"), b = $.id("sa" + a), b.setAttribute("data-hidden", a), b.textContent = "Show Hidden Thread", $.addClass(b, "mobile-tu-show"), c.parentNode.insertBefore(b, c)) : Config.hideStubs && !$.cls("stickyIcon", c)[0] ? c.style.display = c.nextElementSibling.style.display = "none" : (b = $.id("sa" + a), b.setAttribute("data-hidden", a), b.firstChild.src = Main.icons.plus, c.className += " post-hidden");
+      Main.hasMobileLayout ? (c.style.display = "none", $.addClass(c.nextElementSibling, "mobile-hr-hidden"), b = $.id("sa" + a), b.setAttribute("data-hidden", a), b.textContent = "Show Hidden Thread", $.addClass(b, "mobile-tu-show"), c.parentNode.insertBefore(b, c)) : Config.hideStubs && !$.cls("stickyIcon", c)[0] ? c.style.display = c.nextElementSibling.style.display = "none" : (b = $.id("sa" +
+        a), b.setAttribute("data-hidden", a), b.firstChild.src = Main.icons.plus, c.className += " post-hidden");
       this.hidden[a] = Date.now()
     },
     load: function() {
@@ -1131,8 +1131,7 @@ var Parser = {
     },
     save: function() {
       for (var a in this.hidden) {
-        localStorage.setItem("4chan-hide-t-" +
-          Main.board, JSON.stringify(this.hidden));
+        localStorage.setItem("4chan-hide-t-" + Main.board, JSON.stringify(this.hidden));
         return
       }
       localStorage.removeItem("4chan-hide-t-" + Main.board)
@@ -1161,8 +1160,7 @@ var Parser = {
     },
     hide: function(a) {
       var b;
-      b = $.id("pc" +
-        a);
+      b = $.id("pc" + a);
       $.addClass(b, "post-hidden");
       $.id("sa" + a).setAttribute("data-hidden", a);
       ReplyHiding.hidden[a] = Date.now()
@@ -1194,7 +1192,8 @@ var Parser = {
     },
     load: function() {
       var a;
-      if (a = localStorage.getItem("4chan-hide-r-" + Main.board)) this.hidden = JSON.parse(a)
+      if (a = localStorage.getItem("4chan-hide-r-" +
+        Main.board)) this.hidden = JSON.parse(a)
     },
     purge: function() {
       var a, b;
@@ -1258,8 +1257,7 @@ var Parser = {
     build: function(a) {
       var b, c, d, e;
       b = "";
-      for (d in this.watched) c = d.split("-"), b += '<li id="watch-' + d + '"><span class="pointer" data-cmd="unwatch" data-id="' +
-        c[0] + '" data-board="' + c[1] + '">&times;</span> <a href="' + Main.linkToThread(c[0], c[1]) + "#lr" + this.watched[d][1] + '"', -1 == this.watched[d][1] ? b += ' class="deadlink">' : (e = this.watched[d][3] ? "archivelink" : !1, b = this.watched[d][2] ? b + (' class="' + (e ? e + " " : "") + 'hasNewReplies">(' + this.watched[d][2] + ") ") : b + ((e ? 'class="' + e + '"' : "") + ">")), b += "/" + c[1] + "/ - " + this.watched[d][0] + "</a></li>";
+      for (d in this.watched) c = d.split("-"), b += '<li id="watch-' + d + '"><span class="pointer" data-cmd="unwatch" data-id="' + c[0] + '" data-board="' + c[1] + '">&times;</span> <a href="' + Main.linkToThread(c[0], c[1]) + "#lr" + this.watched[d][1] + '"', -1 == this.watched[d][1] ? b += ' class="deadlink">' : (e = this.watched[d][3] ? "archivelink" : !1, b = this.watched[d][2] ? b + (' class="' + (e ? e + " " : "") + 'hasNewReplies">(' + this.watched[d][2] + ") ") : b + ((e ? 'class="' + e + '"' : "") + ">")), b += "/" + c[1] + "/ - " + this.watched[d][0] + "</a></li>";
       a && ThreadWatcher.rebuildButtons();
       ThreadWatcher.listNode.innerHTML = b
     },
@@ -1426,27 +1424,28 @@ var Parser = {
     },
     expandComment: function(a) {
       var b, c, d, e;
-      if (b = a.getAttribute("href").match(/^(?:thread\/)([0-9]+)#p([0-9]+)$/)) c = b[1], d = b[2], e = a.parentNode, e.textContent = "Loading...", $.get("//a.4cdn.org/" + Main.board + "/thread/" + c + ".json", {
-        onload: function() {
-          var a, b, g, k;
-          if (200 == this.status) {
-            b = $.id("m" + d);
-            k = Parser.parseThreadJSON(this.responseText);
-            if (c == d) g = k[0];
-            else
-              for (a = k.length - 1; 0 < a; a--)
-                if (k[a].no == d) {
-                  g = k[a];
-                  break
-                }
-            g ? (g = Parser.buildHTMLFromJSON(g, Main.board), b.innerHTML = $.cls("postMessage", g)[0].innerHTML, Parser.prettify && Parser.parseMarkup(b), window.jsMath && Parser.parseMathOne(b)) : e.textContent = "This post doesn't exist anymore."
-          } else 404 == this.status ? e.textContent = "This thread doesn't exist anymore." : (e.textContent = "Connection Error", console.log("ThreadExpansion: " + this.status + " " + this.statusText))
-        },
-        onerror: function() {
-          e.textContent = "Connection Error";
-          console.log("ThreadExpansion: xhr failed")
-        }
-      })
+      if (b = a.getAttribute("href").match(/^(?:thread\/)([0-9]+)#p([0-9]+)$/)) c = b[1], d = b[2], e = a.parentNode, e.textContent = "Loading...", $.get("//a.4cdn.org/" +
+        Main.board + "/thread/" + c + ".json", {
+          onload: function() {
+            var a, b, g, k;
+            if (200 == this.status) {
+              b = $.id("m" + d);
+              k = Parser.parseThreadJSON(this.responseText);
+              if (c == d) g = k[0];
+              else
+                for (a = k.length - 1; 0 < a; a--)
+                  if (k[a].no == d) {
+                    g = k[a];
+                    break
+                  }
+              g ? (g = Parser.buildHTMLFromJSON(g, Main.board), b.innerHTML = $.cls("postMessage", g)[0].innerHTML, Parser.prettify && Parser.parseMarkup(b), window.jsMath && Parser.parseMathOne(b)) : e.textContent = "This post doesn't exist anymore."
+            } else 404 == this.status ? e.textContent = "This thread doesn't exist anymore." : (e.textContent = "Connection Error", console.log("ThreadExpansion: " + this.status + " " + this.statusText))
+          },
+          onerror: function() {
+            e.textContent = "Connection Error";
+            console.log("ThreadExpansion: xhr failed")
+          }
+        })
     },
     toggle: function(a) {
       var b, c, d, e;
@@ -2474,6 +2473,7 @@ var CustomCSS = {
     dy: null,
     right: null,
     bottom: null,
+    offsetTop: null,
     set: function(a) {
       a.addEventListener("mousedown", Draggable.startDrag, !1)
     },
@@ -2482,7 +2482,7 @@ var CustomCSS = {
     },
     startDrag: function(a) {
       var b, c, d;
-      if (!this.parentNode.hasAttribute("data-shiftkey") || a.shiftKey) a.preventDefault(), b = Draggable, c = document.documentElement, b.el = this.parentNode, b.key = b.el.getAttribute("data-trackpos"), d = b.el.getBoundingClientRect(), b.dx = a.clientX - d.left, b.dy = a.clientY - d.top, b.right = c.clientWidth - d.width, b.bottom = c.clientHeight - d.height, "fixed" != getComputedStyle(b.el, null).position ? (b.scrollX = window.pageXOffset, b.scrollY = window.pageYOffset) : b.scrollX = b.scrollY = 0, document.addEventListener("mouseup", b.endDrag, !1), document.addEventListener("mousemove", b.onDrag, !1)
+      if (!this.parentNode.hasAttribute("data-shiftkey") || a.shiftKey) a.preventDefault(), b = Draggable, c = document.documentElement, b.el = this.parentNode, b.key = b.el.getAttribute("data-trackpos"), d = b.el.getBoundingClientRect(), b.dx = a.clientX - d.left, b.dy = a.clientY - d.top, b.right = c.clientWidth - d.width, b.bottom = c.clientHeight - d.height, "fixed" != getComputedStyle(b.el, null).position ? (b.scrollX = window.pageXOffset, b.scrollY = window.pageYOffset) : b.scrollX = b.scrollY = 0, b.offsetTop = Config.dropDownNav && !Config.autoHideNav ? $.id(Config.classicNav ? "boardNavDesktop" : "boardNavMobile").offsetHeight : 0, document.addEventListener("mouseup", b.endDrag, !1), document.addEventListener("mousemove", b.onDrag, !1)
     },
     endDrag: function(a) {
       document.removeEventListener("mouseup", Draggable.endDrag, !1);
@@ -2493,11 +2493,10 @@ var CustomCSS = {
     onDrag: function(a) {
       var b, c;
       b = a.clientX - Draggable.dx + Draggable.scrollX;
-      a = a.clientY - Draggable.dy +
-        Draggable.scrollY;
+      a = a.clientY - Draggable.dy + Draggable.scrollY;
       c = Draggable.el.style;
       1 > b ? (c.left = "0", c.right = "") : Draggable.right < b ? (c.left = "", c.right = "0") : (c.left = b / document.documentElement.clientWidth * 100 + "%", c.right = "");
-      1 > a ? (c.top = "0", c.bottom = "") : Draggable.bottom < a ? (c.bottom = "0", c.top = "") : (c.top = a / document.documentElement.clientHeight * 100 + "%", c.bottom = "")
+      a <= Draggable.offsetTop ? (c.top = Draggable.offsetTop + "px", c.bottom = "") : Draggable.bottom < a ? (c.bottom = "0", c.top = "") : (c.top = a / document.documentElement.clientHeight * 100 + "%", c.bottom = "")
     }
   },
   UA = {
