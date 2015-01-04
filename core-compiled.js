@@ -38,6 +38,21 @@ var Tip = {
   }
 };
 
+function toggleArcSort() {
+  var a, b, c, d, e;
+  c = document.getElementById("arc-list").getElementsByTagName("tbody")[0];
+  d = c.children;
+  e = [];
+  for (a = 0; b = d[a]; ++a) e.push([+b.children[3].textContent, b]);
+  e.sort(function(a, b) {
+    return b[0] - a[0]
+  });
+  c.style.display = "none";
+  c.textContent = "";
+  for (a = 0; b = e[a]; ++a) c.appendChild(b[1]);
+  c.style.display = ""
+}
+
 function mShowFull(a) {
   var b, c;
   if ("name" === a.className) {
@@ -429,6 +444,7 @@ function contentLoaded() {
   initAnalytics();
   c = location.pathname.split(/\//);
   d = c[1];
+  "archive" == c[2] && document.getElementById("arc-sort").addEventListener("click", toggleArcSort, !1);
   window.passEnabled && setPassMsg();
   (b = document.getElementById("bottomReportBtn")) && b.addEventListener("click", onReportClick, !1);
   (b = document.getElementById("styleSelector")) && b.addEventListener("change", onStyleSheetChange, !1);
@@ -452,8 +468,7 @@ function contentLoaded() {
     b = c.options.length;
     for (a = 0; a < b; a++) c.options[a].value == d && (c.selectedIndex = a);
     c.onchange = function() {
-      window.location = "//boards.4chan.org/" +
-        this.options[this.selectedIndex].value + "/"
+      window.location = "//boards.4chan.org/" + this.options[this.selectedIndex].value + "/"
     }
   }
   clickable_ids && enableClickableIds();
