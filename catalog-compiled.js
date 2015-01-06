@@ -1313,7 +1313,7 @@ function checkMobileLayout() {
 function checkForBlock() {
   var a, b, c, e, d;
   if (!/Mobile|Android|Dolfin|Opera Mobi|PlayStation Vita|Nintendo DS/.test(navigator.userAgent) && 1 != $.readCookie("pass_enabled"))
-    for (e = document.getElementsByClassName("ad-cnt"), a = 0; b = e[a]; ++a) 0 == b.offsetHeight && (c = document.createElement("div"), c.className = "center", c.innerHTML = '<div style="display:table-cell;vertical-align:middle">' + blockPlea + "</div>", d = c.style, /middlead/.test(b.className) ? (d.width = "468px", d.height = "60px", d.padding = "0 5px") : (d.width = "728px", d.height = "90px"), d.display = "table", d.border = "1px solid #000", b.parentNode.insertBefore(c, b))
+    for (e = document.getElementsByClassName("ad-cnt"), a = 0; b = e[a]; ++a) 0 == b.offsetHeight && (c = document.createElement("div"), c.className = "center", c.innerHTML = '<div style="display:table-cell;vertical-align:middle">' + blockPlea + "</div>", d = c.style, /middlead/.test(b.className) ? (d.width = "468px", d.height = "60px", d.padding = "0 5px") : (d.width = "728px", d.height = "90px"), d.display = "table", d.border = "1px solid #000", d.margin = "auto", b.parentNode.insertBefore(c, b))
 }
 
 function initBlotter() {
