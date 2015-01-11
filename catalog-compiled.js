@@ -826,6 +826,7 @@ var UA = {
     U.init = function() {
       var b, m, g;
       FC.hasMobileLayout = checkMobileLayout();
+      cloneTopNav();
       buildMobileNav();
       va(x, !0);
       u = $.id("threads");
@@ -1353,4 +1354,16 @@ function initRecaptcha() {
     sitekey: window.recaptchaKey,
     theme: $.hasClass(document.body, "tomorrow") ? "dark" : "light"
   })
+}
+
+function cloneTopNav() {
+  var a, b, c;
+  if (a = document.getElementById("boardNavDesktop")) {
+    b = document.getElementById("absbot");
+    a = a.cloneNode(!0);
+    a.id += "Foot";
+    if (c = a.querySelector("#navtopright")) c.id = "navbotright";
+    if (c = a.querySelector("#settingsWindowLink")) c.id += "Bot";
+    document.getElementById("bottomnav").insertBefore(a, b)
+  }
 };
