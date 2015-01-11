@@ -13,7 +13,8 @@ var Tip = {
     d.hasAttribute("data-tip") && (c = null, d.hasAttribute("data-tip-cb") && (b = d.getAttribute("data-tip-cb"), window[b] && (c = window[b](d))), Tip.timeout = setTimeout(Tip.show, Tip.delay, a.target, c))
   },
   onMouseOut: function(a) {
-    Tip.timeout && (clearTimeout(Tip.timeout), Tip.timeout = null);
+    Tip.timeout && (clearTimeout(Tip.timeout),
+      Tip.timeout = null);
     Tip.hide()
   },
   show: function(a, b, c) {
@@ -29,7 +30,8 @@ var Tip = {
     0 > b ? (b = e.left + 2, d.className += "-right") : b + d.offsetWidth > document.documentElement.clientWidth && (b = e.left - d.offsetWidth + a.offsetWidth + 2, d.className += "-left");
     e = e.top - d.offsetHeight - 5;
     a = d.style;
-    a.top = e + window.pageYOffset + "px";
+    a.top = e + window.pageYOffset +
+      "px";
     a.left = b + window.pageXOffset + "px";
     Tip.node = d
   },
@@ -155,7 +157,8 @@ function initAds(a, b) {
     ados.run.push(function() {
       window._top_ad = ados_add_placement(3536, 18130, "azk91603", 4).setZone(16258);
       window._middle_ad = ados_add_placement(3536, 18130, "azk98887", 3).setZone(16259);
-      window._bottom_ad = ados_add_placement(3536, 18130, "azk53379", 4).setZone(16260);
+      window._bottom_ad = ados_add_placement(3536, 18130, "azk53379",
+        4).setZone(16260);
       ados_setDomain("engine.4chan-ads.org");
       ados_setKeywords(a + ", " + b);
       ados_setNoTrack();
@@ -304,7 +307,8 @@ function initStyleSheet() {
       setActiveStyleSheet(activeStyleSheet, !0)
   }
   if ("true" == localStorage.getItem("4chan_never_show_mobile"))
-    for (c = document.querySelectorAll("link"), d = c.length, a = 0; a < d; a++) c[a].getAttribute("href").match("mobile") && (b = c[a]).parentNode.removeChild(b)
+    for (c =
+      document.querySelectorAll("link"), d = c.length, a = 0; a < d; a++) c[a].getAttribute("href").match("mobile") && (b = c[a]).parentNode.removeChild(b)
 }
 captchainterval = null;
 
@@ -316,11 +320,13 @@ function init() {
   if ("undefined" != typeof jsMath && "undefined" != typeof jsMath.Easy.onload && !jsMath.Easy.loaded) jsMath.Easy.onload();
   if (navigator.userAgent && navigator.userAgent.match(/iP(hone|ad|od)/i))
     for (links = document.querySelectorAll("s"), len = links.length, c = 0; c < len; c++) links[c].onclick = function() {
-      this.hasAttribute("style") ? this.removeAttribute("style") : this.setAttribute("style", "color: #fff!important;")
+      this.hasAttribute("style") ? this.removeAttribute("style") :
+        this.setAttribute("style", "color: #fff!important;")
     };
   if (document.getElementById("styleSelector"))
     for (styleSelect = document.getElementById("styleSelector"), len = styleSelect.options.length, c = 0; c < len; c++) styleSelect.options[c].value == activeStyleSheet && (styleSelect.selectedIndex = c);
-  !a && document.forms.post && (document.getElementById("delPassword").value = get_pass("4chan_pass"), "i" != b && "ic" != b && "f" != b && window.File && window.FileReader && window.FileList && window.Blob && document.getElementById("postFile").addEventListener("change", handleFileSelect, !1));
+  !a && document.forms.post && (document.getElementById("delPassword").value = get_pass("4chan_pass"), "i" != b && "ic" != b && "f" != b && window.File && window.FileReader && window.FileList && window.Blob && document.getElementById("postFile").addEventListener("change",
+    handleFileSelect, !1));
   "undefined" != typeof extra && extra && !a && extra.init();
   window.check_for_block && checkForBlock()
 }
@@ -349,7 +355,8 @@ function enableMobile() {
 function checkForBlock() {
   var a, b, c, d, e, f;
   if (!/Mobile|Android|Dolfin|Opera Mobi|PlayStation Vita|Nintendo DS/.test(navigator.userAgent) && 1 != readCookie("pass_enabled"))
-    for (d = document.getElementsByClassName("ad-cnt"), a = 0; b = d[a]; ++a) 0 == b.offsetHeight && (c = document.createElement("div"), c.className = "center", c.innerHTML = '<div style="display:table-cell;vertical-align:middle">' + blockPlea + "</div>", e = c.style, /middlead/.test(b.className) ? (e.width = "448px", e.height = "60px", e.padding = "0 10px") : (e.width = "728px", e.height = "90px"), e.display = "table", f = "1px solid ", f = "Yotsuba B New" == activeStyleSheet ? f + "#34345c" : "Yotsuba New" == activeStyleSheet ? f + "#800" : f + "#000", e.border = f, b.parentNode.insertBefore(c, b))
+    for (d = document.getElementsByClassName("ad-cnt"), a = 0; b = d[a]; ++a) 0 == b.offsetHeight && (c = document.createElement("div"), c.className = "center", c.innerHTML = '<div style="display:table-cell;vertical-align:middle">' + blockPlea + "</div>", e = c.style, /middlead/.test(b.className) ? (e.width = "448px", e.height = "60px", e.padding = "0 10px") : (e.width = "728px", e.height =
+      "90px"), e.display = "table", f = "1px solid ", f = "Yotsuba B New" == activeStyleSheet ? f + "#34345c" : "Yotsuba New" == activeStyleSheet ? f + "#800" : f + "#000", e.border = f, b.parentNode.insertBefore(c, b))
 }
 var currentHighlighted = null;
 
@@ -371,7 +378,8 @@ function idClick(a) {
   for (var d = document.getElementsByClassName("highlight"), c = d.length, b = 0; b < c; b++) d[0].className = d[0].className.toString().replace(/highlight /g, "");
   if (currentHighlighted == a) currentHighlighted = null;
   else
-    for (currentHighlighted = a, d = document.getElementsByClassName("id_" + a), c = d.length, b = 0; b < c; b++) a = d[b].parentNode.parentNode.parentNode, a.className.match(/highlight /) || (a.className = "highlight " + a.className)
+    for (currentHighlighted = a, d = document.getElementsByClassName("id_" + a), c = d.length, b = 0; b < c; b++) a = d[b].parentNode.parentNode.parentNode, a.className.match(/highlight /) ||
+      (a.className = "highlight " + a.className)
 }
 
 function handleFileSelect() {
@@ -461,25 +469,29 @@ function contentLoaded() {
   window.passEnabled && setPassMsg();
   (b = document.getElementById("bottomReportBtn")) && b.addEventListener("click", onReportClick, !1);
   (b = document.getElementById("styleSelector")) && b.addEventListener("change", onStyleSheetChange, !1);
-  if (b = document.getElementById("togglePostFormLink"))(b = b.firstElementChild) && b.addEventListener("click", showPostForm, !1), "#reply" === location.hash && showPostForm();
+  if (b = document.getElementById("togglePostFormLink"))(b =
+    b.firstElementChild) && b.addEventListener("click", showPostForm, !1), "#reply" === location.hash && showPostForm();
   if ("int" == d || "sp" == d) b = document.getElementById("delform"), b.addEventListener("click", onCoreClick, !1);
   (b = document.forms.post) && b.flag && (e = readCookie("4chan_flag")) && (a = b.querySelector('option[value="' + e + '"]')) && a.setAttribute("selected", "selected");
   if (!c[3]) {
     c = document.getElementsByClassName("pageSwitcherForm");
     for (a = 0; b = c[a]; ++a) b.addEventListener("submit", onPageSwitch, !1);
-    (b = document.getElementById("search-box")) && b.addEventListener("keydown", onKeyDownSearch, !1)
+    (b = document.getElementById("search-box")) &&
+      b.addEventListener("keydown", onKeyDownSearch, !1)
   }
   buildMobileNav(d);
   c = document.getElementsByClassName("mobilePostFormToggle");
   for (a = 0; b = c[a]; ++a) b.addEventListener("click", onMobileFormClick, !1);
   if (b = document.getElementsByName("com")[0]) b.addEventListener("keydown", onComKeyDown, !1), b.addEventListener("paste", onComKeyDown, !1), b.addEventListener("cut", onComKeyDown, !1);
   (b = document.getElementById("refresh_top")) && b.addEventListener("mouseup", onMobileRefreshClick, !1);
-  (b = document.getElementById("refresh_bottom")) && b.addEventListener("mouseup", onMobileRefreshClick, !1);
+  (b = document.getElementById("refresh_bottom")) &&
+    b.addEventListener("mouseup", onMobileRefreshClick, !1);
   (b = document.getElementById("globalToggle")) && b.addEventListener("click", toggleGlobalMessage, !1);
   "true" == localStorage.getItem("4chan_never_show_mobile") && (b = document.getElementById("disable-mobile")) && (b.style.display = "none", b = document.getElementById("enable-mobile"), b.parentNode.style.cssText = "display: inline !important;");
   if (c = document.getElementById("boardSelectMobile")) {
     b = c.options.length;
-    for (a = 0; a < b; a++) c.options[a].value == d && (c.selectedIndex = a);
+    for (a = 0; a < b; a++) c.options[a].value == d && (c.selectedIndex =
+      a);
     c.onchange = function() {
       window.location = "//boards.4chan.org/" + this.options[this.selectedIndex].value + "/"
     }
