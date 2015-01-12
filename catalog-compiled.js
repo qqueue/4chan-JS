@@ -870,7 +870,8 @@ var UA = {
       z(n.orderby, !0);
       za(n.large, !0);
       ya(n.extended, !0);
-      loadBannerImage()
+      loadBannerImage();
+      UA.dispatchEvent("4chanMainInit")
     };
     U.loadCatalog = function(a) {
       var c;
@@ -891,8 +892,7 @@ var UA = {
       a || (a = x);
       void 0 !== b && ((e = $.readCookie(b)) || (e = "nws_style" == b ? "Yotsuba New" : "Yotsuba B New"), ka = b, X = e, d = document.createElement("link"), d.type = "text/css", d.id = "base-css", d.rel = "stylesheet", d.setAttribute("href", "//s.4cdn.org/css/catalog_" + e.toLowerCase().replace(/ /g, "_") + "." + c + ".css"), document.head.insertBefore(d, $.id("mobile-css")));
       (d = $.id("custom-css")) && document.head.removeChild(d);
-      a.css && (d = document.createElement("style"), d.type = "text/css", d.id = "custom-css", d.styleSheet ? d.styleSheet.cssText = a.css : d.innerHTML = a.css, document.head.appendChild(d));
-      UA.dispatchEvent("4chanMainInit")
+      a.css && (d = document.createElement("style"), d.type = "text/css", d.id = "custom-css", d.styleSheet ? d.styleSheet.cssText = a.css : d.innerHTML = a.css, document.head.appendChild(d))
     }
   },
   Filter = {
