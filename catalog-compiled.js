@@ -24,7 +24,8 @@ var $ = {
     for (a = 0; b = c[a]; ++a) {
       for (;
         " " == b.charAt(0);) b = b.substring(1, b.length);
-      if (0 == b.indexOf(e)) return decodeURIComponent(b.substring(e.length, b.length))
+      if (0 == b.indexOf(e)) return decodeURIComponent(b.substring(e.length,
+        b.length))
     }
     return null
   }
@@ -87,7 +88,8 @@ var UA = {
       var a, b, g;
       b = $.id("boardNavDesktop");
       g = $.id("boardNavDesktopFoot");
-      W ? (a = document.createElement("div"), a.className = "pageJump", a.innerHTML = '<a href="#bottom">&#9660;</a><a href="javascript:void(0);" id="settingsWindowLinkClassic">Settings</a><a href="//www.4chan.org" target="_top">Home</a></div>', b.appendChild(a), $.id("settingsWindowLinkClassic").addEventListener("click", M, !1), $.addClass(b, "persistentNav")) : (b.style.display = "none", $.removeClass($.id("boardNavMobile"), "mobile"));
+      W ? (a = document.createElement("div"), a.className = "pageJump", a.innerHTML = '<a href="#bottom">&#9660;</a><a href="javascript:void(0);" id="settingsWindowLinkClassic">Settings</a><a href="//www.4chan.org" target="_top">Home</a></div>', b.appendChild(a), $.id("settingsWindowLinkClassic").addEventListener("click",
+        M, !1), $.addClass(b, "persistentNav")) : (b.style.display = "none", $.removeClass($.id("boardNavMobile"), "mobile"));
       g.style.display = "none";
       $.addClass(document.body, "hasDropDownNav")
     }
@@ -104,7 +106,8 @@ var UA = {
         var a = this.options[this.selectedIndex].value;
         window.location = "//boards.4chan.org/" + a + ("f" == a ? "" : "/catalog")
       });
-      $.addClass(document.body, X.toLowerCase().replace(/ /g, "_"))
+      $.addClass(document.body, X.toLowerCase().replace(/ /g,
+        "_"))
     }
 
     function c() {
@@ -128,7 +131,8 @@ var UA = {
 
     function l() {
       var a = document.getElementById("postForm");
-      "table" == a.style.display ? (a.style.display = "", this.textContent = "Start a New Thread") : (a.style.display = "table", this.textContent = "Close Post Form", initRecaptcha())
+      "table" == a.style.display ? (a.style.display = "", this.textContent = "Start a New Thread") : (a.style.display =
+        "table", this.textContent = "Close Post Form", initRecaptcha())
     }
 
     function m() {
@@ -168,7 +172,8 @@ var UA = {
 
     function Q() {
       var a, b;
-      "" != (b = $.id("qf-box").value) ? (UA.hasSessionStorage && (sessionStorage.setItem("4chan-catalog-search", b), sessionStorage.setItem("4chan-catalog-search-board", k.slug)), a = m(), $.id("search-term").textContent = $.id("search-term-bottom").textContent = b, $.id("search-label").style.display = $.id("search-label-bottom").style.display = "inline", b = b.replace(a, "\\$1"), K = new RegExp(b, "i"), r()) : Y()
+      "" != (b = $.id("qf-box").value) ? (UA.hasSessionStorage && (sessionStorage.setItem("4chan-catalog-search", b), sessionStorage.setItem("4chan-catalog-search-board", k.slug)), a = m(), $.id("search-term").textContent = $.id("search-term-bottom").textContent =
+        b, $.id("search-label").style.display = $.id("search-label-bottom").style.display = "inline", b = b.replace(a, "\\$1"), K = new RegExp(b, "i"), r()) : Y()
     }
 
     function Y(a) {
@@ -182,7 +187,8 @@ var UA = {
       if (UA.hasWebStorage) $.on(u, "mousedown", function(g) {
         a = g.target;
         if (-1 != a.className.indexOf("thumb"))
-          if (b = a.getAttribute("data-id"), 3 == g.which) u.setAttribute("contextmenu", "ctxmenu-thread"), $.id("ctxmenu-thread").target = b;
+          if (b = a.getAttribute("data-id"),
+            3 == g.which) u.setAttribute("contextmenu", "ctxmenu-thread"), $.id("ctxmenu-thread").target = b;
           else {
             if (1 == g.which && g.altKey) return la(b), !1;
             if (1 == g.which && g.shiftKey) return ma(b), !1
@@ -303,7 +309,8 @@ var UA = {
     function La() {
       var a, b, g, c, f, e;
       b = $.id("filters");
-      b.hasAttribute("data-built") || ($.on(b, "click", Ia), $.on($.id("filter-palette-close"), "click", S), $.on($.id("filter-palette-clear"), "click", Ma), $.on($.id("filters-help-open"), "click", Ha), $.on($.id("filters-help-close"), "click", qa), $.on($.id("filter-rgb"), "keyup", Na), $.on($.id("filter-rgb-ok"), "click", ha), b.setAttribute("data-built", "1"));
+      b.hasAttribute("data-built") || ($.on(b, "click", Ia), $.on($.id("filter-palette-close"), "click", S), $.on($.id("filter-palette-clear"), "click",
+        Ma), $.on($.id("filters-help-open"), "click", Ha), $.on($.id("filters-help-close"), "click", qa), $.on($.id("filter-rgb"), "keyup", Na), $.on($.id("filter-rgb-ok"), "click", ha), b.setAttribute("data-built", "1"));
       g = localStorage.getItem("catalog-filters");
       f = 0;
       if (g) {
@@ -320,7 +327,8 @@ var UA = {
 
     function ea() {
       var a, b, g;
-      $.id("filters-msg").style.display = "none";
+      $.id("filters-msg").style.display =
+        "none";
       $.addClass($.id("filters"), "hidden");
       b = $.id("filter-list");
       g = $.tag("tr", b);
@@ -362,7 +370,8 @@ var UA = {
                       for (c = r.length - 1; 0 <= c; c--) "" != r[c] && x.push(r[c].replace(p, "\\$1"));
                       u = x.join("|").replace(n, "[^\\s]*");
                       w += "(?=.*\\b(" + u + ")\\b)"
-                    } else u = q[f].replace(p, "\\$1").replace(n, "[^\\s]*"), w += "(?=.*\\b" + u + "\\b)";
+                    } else u = q[f].replace(p, "\\$1").replace(n,
+                      "[^\\s]*"), w += "(?=.*\\b" + u + "\\b)";
                   w = new RegExp("^" + w, "i")
                 }
                 I[g] = {
@@ -391,7 +400,8 @@ var UA = {
         active: $.cls("filter-active", b)[0].checked ? 1 : 0,
         pattern: $.cls("filter-pattern", b)[0].value,
         boards: $.cls("filter-boards", b)[0].value,
-        hidden: $.cls("filter-hide", b)[0].checked ? 1 : 0,
+        hidden: $.cls("filter-hide", b)[0].checked ?
+          1 : 0,
         top: $.cls("filter-top", b)[0].checked ? 1 : 0
       }, b = $.cls("filter-color", b)[0], b.hasAttribute("data-nocolor") || (g.color = b.style.backgroundColor), c[a] = g;
       c[0] ? localStorage.setItem("catalog-filters", JSON.stringify(c)) : localStorage.removeItem("catalog-filters");
@@ -473,7 +483,8 @@ var UA = {
       g.appendChild(f);
       c.appendChild(g);
       g = document.createElement("td");
-      g.id = "fhc-" + b;
+      g.id =
+        "fhc-" + b;
       g.className = "filter-hits";
       c.appendChild(g);
       return c
@@ -499,7 +510,8 @@ var UA = {
     }
 
     function fa(a, b, c) {
-      b = "data-" + b;
+      b =
+        "data-" + b;
       "0" == a.getAttribute(b) ? (a.setAttribute(b, "1"), $.addClass(a, "active"), a.innerHTML = "&#x2714;", c && (a = $.cls("filter-" + c, a.parentNode.parentNode)[0], a.setAttribute("data-" + c, "0"), $.removeClass(a, "active"), a.innerHTML = "")) : (a.setAttribute(b, "0"), $.removeClass(a, "active"), a.innerHTML = "")
     }
 
@@ -514,7 +526,8 @@ var UA = {
 
     function M() {
       var a, b;
-      UA.hasWebStorage ? (a = $.id("theme"), theme = (theme = localStorage.getItem("catalog-theme")) ? JSON.parse(theme) : {}, $.id("theme-nobinds").checked = !!theme.nobinds, $.id("theme-nospoiler").checked = !!theme.nospoiler, $.id("theme-newtab").checked = !!theme.newtab, $.id("theme-tw").checked = N, $.id("theme-ddn").checked = O, theme.css && ($.id("theme-css").value = theme.css), $.on($.id("theme-save"), "click", ua), $.on($.id("theme-close"), "click", R), $.id("theme-msg").style.display = "none", a.style.top = window.pageYOffset + 60 + "px", $.removeClass(a, "hidden"), (b = $.tag("input", a)[0]) && b.focus(), T()) : alert("Your browser doesn't support Local Storage")
+      UA.hasWebStorage ?
+        (a = $.id("theme"), theme = (theme = localStorage.getItem("catalog-theme")) ? JSON.parse(theme) : {}, $.id("theme-nobinds").checked = !!theme.nobinds, $.id("theme-nospoiler").checked = !!theme.nospoiler, $.id("theme-newtab").checked = !!theme.newtab, $.id("theme-tw").checked = N, $.id("theme-ddn").checked = O, theme.css && ($.id("theme-css").value = theme.css), $.on($.id("theme-save"), "click", ua), $.on($.id("theme-close"), "click", R), $.id("theme-msg").style.display = "none", a.style.top = window.pageYOffset + 60 + "px", $.removeClass(a, "hidden"), (b = $.tag("input", a)[0]) && b.focus(), T()) : alert("Your browser doesn't support Local Storage")
     }
 
     function R() {
@@ -537,7 +550,8 @@ var UA = {
     function ua() {
       var b, c, g, e, f = {};
       $.id("theme-nobinds").checked && (f.nobinds = !0);
-      $.id("theme-nospoiler").checked && (f.nospoiler = !0);
+      $.id("theme-nospoiler").checked &&
+        (f.nospoiler = !0);
       $.id("theme-newtab").checked && (f.newtab = !0);
       c = $.id("theme-tw").checked;
       g = $.id("theme-ddn").checked;
@@ -552,7 +566,8 @@ var UA = {
           if (W) {
             if (d = $.cls("pageJump", h)[0]) $.id("settingsWindowLinkClassic").removeEventListener("click", M, !1), h.removeChild(d);
             $.removeClass(h, "persistentNav")
-          } else h.style.display = "", $.addClass($.id("boardNavMobile"), "mobile");
+          } else h.style.display =
+            "", $.addClass($.id("boardNavMobile"), "mobile");
           l.style.display = "";
           $.removeClass(document.body, "hasDropDownNav")
         }
@@ -578,7 +593,8 @@ var UA = {
         f = k.order.date[0];
       if (c = localStorage.getItem(a)) {
         c = JSON.parse(c);
-        for (b in c)!k.threads[b] && b < f && (delete c[b], e = !0);
+        for (b in c)!k.threads[b] &&
+          b < f && (delete c[b], e = !0);
         for (b in c) return e && localStorage.setItem(a, JSON.stringify(c)), c;
         localStorage.removeItem(a)
       }
@@ -603,7 +619,8 @@ var UA = {
     }
 
     function za(a, b) {
-      var c = n.extended ? "extended-" : "";
+      var c = n.extended ? "extended-" :
+        "";
       a ? (B.selectedIndex = 1, c += "large", n.large = !0) : (B.selectedIndex = 0, c += "small", n.large = !1);
       u.className = c;
       b || (ia(), r())
@@ -634,7 +651,8 @@ var UA = {
 
     function r() {
       var a, b, c, e, f, d, h, l, m, p, q, r, A = 0,
-        t = "",
+        t =
+        "",
         w = 0,
         C, F, y, B = "",
         z, E, H, J, G;
@@ -652,7 +670,8 @@ var UA = {
           f = k.order[n.orderby][a];
           d = k.threads[f];
           l = m = p = !1;
-          d.sub ? (y = "<b>" + d.sub + "</b>", d.teaser && (y += ": " + d.teaser)) : y = d.teaser;
+          d.sub ? (y = "<b>" + d.sub + "</b>", d.teaser && (y += ": " + d.teaser)) :
+            y = d.teaser;
           if (aa) {
             if (!L[f]) continue;
             ++D
@@ -683,7 +702,8 @@ var UA = {
             f + '" data-watch="' + f + '" ' + (ThreadWatcher.watched[c] ? 'title="Unwatch" class="unwatchIcon"></span>' : 'title="Watch" class="watchIcon"></span>'));
           h += "<a " + F + 'href="' + q + f + (d.semantic_url ? "/" + d.semantic_url : "") + '"><img alt="" id="thumb-' + f + '" class="thumb';
           c = l.color ? ' hl" style="border-color: ' + l.color : p ? " pinned" : "";
-          d.imgurl ? d.imgspoiler && !x.nospoiler ? h += c + '" src="' + r : (H = d.tn_w, J = d.tn_h, G && (E = n.smallsize, H > E && (z = E / H, H = E, J *= z), J > E && (z = E / J, J = E, H *= z)), h += c + '" width="' + H + '" height="' + J + '" src="//' + w + C + d.imgurl + "s.jpg") : h = d.imgdel ? h + (" imgdel" + c + '" src="' + n.imgdel) : h + (" nofile" + c + '" src="' + n.nofile);
+          d.imgurl ? d.imgspoiler && !x.nospoiler ? h += c + '" src="' + r : (H = d.tn_w, J = d.tn_h, G && (E = n.smallsize, H > E && (z = E / H, H = E, J *= z), J > E && (z = E / J, J = E, H *= z)), h += c + '" width="' + H + '" height="' + J + '" src="//' + w + C + d.imgurl +
+            "s.jpg") : h = d.imgdel ? h + (" imgdel" + c + '" src="' + n.imgdel) : h + (" nofile" + c + '" src="' + n.nofile);
           h += '" data-id="' + f + '" /></a>';
           if (d.sticky || d.closed || d.capcodereps) {
             h += '<div class="threadIcons">';
@@ -739,7 +759,8 @@ var UA = {
       k.flags && thread.country && (c += '<div class="flag flag-' + thread.country.toLowerCase() + '"></div> ');
       c += '<span class="post-ago">' + Ba(b - thread.date) + " ago</span>";
       !n.extended && thread.teaser && (c += '<p class="post-teaser">' + thread.teaser + "</p>");
-      0 < thread.r && (c += '<div class="post-last">Last reply by <span class="' + (thread.lr.capcode ? thread.lr.capcode + "-capcode " : "") + 'post-author">' + thread.lr.author, thread.lr.trip && (c += ' <span class="post-tripcode">' + thread.lr.trip + "</span>"), thread.lr.capcode && (c += " ## " + thread.lr.capcode.charAt(0).toUpperCase() + thread.lr.capcode.slice(1)), c += '</span> <span class="post-ago">' + Ba(b - thread.lr.date) + " ago</span>");
+      0 < thread.r && (c += '<div class="post-last">Last reply by <span class="' + (thread.lr.capcode ? thread.lr.capcode + "-capcode " : "") + 'post-author">' + thread.lr.author, thread.lr.trip && (c += ' <span class="post-tripcode">' + thread.lr.trip + "</span>"), thread.lr.capcode &&
+        (c += " ## " + thread.lr.capcode.charAt(0).toUpperCase() + thread.lr.capcode.slice(1)), c += '</span> <span class="post-ago">' + Ba(b - thread.lr.date) + " ago</span>");
       b = document.createElement("div");
       b.id = "post-preview";
       b.innerHTML = c;
@@ -755,7 +776,8 @@ var UA = {
       V = !1
     }
 
-    function Ba(a, b) {
+    function Ba(a,
+      b) {
       var c, d;
       if (2 > a) return "less than a second";
       if (b && 300 > a || 60 > a) return (0 | a) + " seconds";
@@ -844,7 +866,8 @@ var UA = {
       $.on($.id("settingsWindowLink"), "click", M);
       $.on($.id("settingsWindowLinkBot"), "click", M);
       $.on($.id("settingsWindowLinkMobile"), "click", M);
-      $.on($.id("filters-ctrl"), "click", La);
+      $.on($.id("filters-ctrl"),
+        "click", La);
       $.on($teaserCtrl, "change", Oa);
       $.on(B, "change", Qa);
       $.on(G, "change", Pa);
@@ -858,14 +881,17 @@ var UA = {
       UA.hasWebStorage && (k = localStorage.getItem("catalog-settings")) && $.extend(n, JSON.parse(k));
       Ca();
       var f, p;
-      if (UA.hasWebStorage && (b = $.id("globalMessage")) && b.textContent && (b.nextElementSibling.style.clear = "both", k = document.createElement("span"), k.id = "toggleMsgBtn", k.setAttribute("data-cmd", "toggleMsg"), k.title = "Toggle announcement", p = localStorage.getItem("4chan-global-msg"), f = b.getAttribute("data-utc"), p && f <= p ? (b.style.display = "none", k.style.opacity = "0.5", k.className = "expandIcon") : k.className = "collapseIcon", $.on(k, "click", c), b.parentNode.insertBefore(k, b), k = $.id("globalToggle"), 0 < k.offsetWidth)) $.on(k, "click", e);
+      if (UA.hasWebStorage && (b = $.id("globalMessage")) && b.textContent && (b.nextElementSibling.style.clear =
+        "both", k = document.createElement("span"), k.id = "toggleMsgBtn", k.setAttribute("data-cmd", "toggleMsg"), k.title = "Toggle announcement", p = localStorage.getItem("4chan-global-msg"), f = b.getAttribute("data-utc"), p && f <= p ? (b.style.display = "none", k.style.opacity = "0.5", k.className = "expandIcon") : k.className = "collapseIcon", $.on(k, "click", c), b.parentNode.insertBefore(k, b), k = $.id("globalToggle"), 0 < k.offsetWidth)) $.on(k, "click", e);
       initBlotter();
       UA.hasContextMenu && (na = {
-        pin: la,
-        hide: ma,
-        report: Da
-      }, $.id("ctxmenu-main").innerHTML = '<menuitem label="Unpin all threads"></menuitem>', $.id("ctxmenu-thread").innerHTML = '<menuitem label="Pin/Unpin" data-cmd="pin"></menuitem><menuitem label="Hide/Unhide" data-cmd="hide"></menuitem><menuitem label="Report" data-cmd="report"></menuitem>', $.on($.id("ctxmenu-main"), "click", Fa), $.on($.id("ctxmenu-thread"), "click", Ea));
-      UA.hasWebStorage && ((b = localStorage.getItem("4chan-settings")) ? (b = JSON.parse(b), b.disableAll || (b.filter && (ThreadWatcher.hasFilters = !0), b.threadWatcher && (N = !0, ThreadWatcher.init()), b.customMenu && CustomMenu.apply(b.customMenuList), !1 === b.dropDownNav || FC.hasMobileLayout || (O = !0, W = b.classicNav, a()))) : UA.isMobileDevice && !FC.hasMobileLayout && (O = !0, a()));
+          pin: la,
+          hide: ma,
+          report: Da
+        }, $.id("ctxmenu-main").innerHTML =
+        '<menuitem label="Unpin all threads"></menuitem>', $.id("ctxmenu-thread").innerHTML = '<menuitem label="Pin/Unpin" data-cmd="pin"></menuitem><menuitem label="Hide/Unhide" data-cmd="hide"></menuitem><menuitem label="Report" data-cmd="report"></menuitem>', $.on($.id("ctxmenu-main"), "click", Fa), $.on($.id("ctxmenu-thread"), "click", Ea));
+      UA.hasWebStorage && ((b = localStorage.getItem("4chan-settings")) ? (b = JSON.parse(b), b.disableAll || (b.filter && (ThreadWatcher.hasFilters = !0), b.threadWatcher && (N = !0, ThreadWatcher.init()),
+        b.customMenu && CustomMenu.apply(b.customMenuList), !1 === b.dropDownNav || FC.hasMobileLayout || (O = !0, W = b.classicNav, a()))) : UA.isMobileDevice && !FC.hasMobileLayout && (O = !0, a()));
       window.passEnabled && setPassMsg();
       (m = document.forms.post.flag) && (g = $.readCookie("4chan_flag")) && (m = m.querySelector('option[value="' + g + '"]')) && m.setAttribute("selected", "selected");
       z(n.orderby, !0);
@@ -879,13 +905,15 @@ var UA = {
       k = a;
       b();
       var d, e, f;
-      d = $.id("styleSelector");
+      d =
+        $.id("styleSelector");
       e = d.children;
       for (a = 0; f = e[a]; ++a) f.value == X && (d.selectedIndex = a);
       $.on(d, "change", p);
       ta();
       UA.hasWebStorage && (L = wa("4chan-hide-t-" + k.slug), v = wa("4chan-pin-" + k.slug));
-      UA.hasSessionStorage && !location.hash && (c = sessionStorage.getItem("4chan-catalog-search")) ? k.slug != sessionStorage.getItem("4chan-catalog-search-board") && (sessionStorage.removeItem("4chan-catalog-search"), sessionStorage.removeItem("4chan-catalog-search-board"), c = null) : location.hash && (c = location.hash.match(/#s=(.+)/)) && (c = decodeURIComponent(c[1].replace(/\+/g, " ")));
+      UA.hasSessionStorage && !location.hash && (c = sessionStorage.getItem("4chan-catalog-search")) ? k.slug != sessionStorage.getItem("4chan-catalog-search-board") && (sessionStorage.removeItem("4chan-catalog-search"), sessionStorage.removeItem("4chan-catalog-search-board"), c = null) : location.hash && (c = location.hash.match(/#s=(.+)/)) &&
+        (c = decodeURIComponent(c[1].replace(/\+/g, " ")));
       c ? (C(), $.id("qf-box").value = c, Q()) : r()
     };
     U.applyCSS = function(a, b, c) {
@@ -918,7 +946,8 @@ var UA = {
           break
         }
       } else if (2 == d.type && a.com) {
-        if (void 0 === e && (this.entities.innerHTML = a.com.replace(/<br>/g, "\n").replace(/[<[^>]+>/g, ""), e = this.entities.textContent), d.pattern.test(e)) {
+        if (void 0 === e && (this.entities.innerHTML =
+          a.com.replace(/<br>/g, "\n").replace(/[<[^>]+>/g, ""), e = this.entities.textContent), d.pattern.test(e)) {
           m = !0;
           break
         }
@@ -947,7 +976,8 @@ var UA = {
         p = /^\/(.*)\/(i?)$/;
         C = /\\\*/g;
         try {
-          for (l = 0; c = e[l]; ++l)
+          for (l =
+            0; c = e[l]; ++l)
             if (c.active && "" != c.pattern) {
               if (c.boards)
                 for (tmp = c.boards.split(/[^a-z0-9]+/i), boards = {}, a = 0; b = tmp[a]; ++a) boards[b] = !0;
@@ -961,7 +991,8 @@ var UA = {
                 pattern = "";
                 a = 0;
                 for (b = q.length; a < b; ++a) P = q[a].replace(m, "\\$1").replace(C, "[^\\s]*"), pattern += "(?=.*\\b" + P + "\\b)";
-                pattern = new RegExp("^" + pattern, "im")
+                pattern = new RegExp("^" + pattern,
+                  "im")
               } else pattern = d;
               this.activeFilters.push({
                 type: c.type,
@@ -988,12 +1019,14 @@ var UA = {
       this.watched = {};
       this.blacklisted = {};
       this.isRefreshing = !1;
-      FC.hasMobileLayout && (el = document.createElement("a"), el.href = "#", el.textContent = "TW", el.addEventListener("click", ThreadWatcher.toggleList, !1), a = $.id("settingsWindowLinkMobile"), a.parentNode.insertBefore(el, a), a.parentNode.insertBefore(document.createTextNode(" "), a));
+      FC.hasMobileLayout && (el = document.createElement("a"), el.href = "#", el.textContent = "TW", el.addEventListener("click",
+        ThreadWatcher.toggleList, !1), a = $.id("settingsWindowLinkMobile"), a.parentNode.insertBefore(el, a), a.parentNode.insertBefore(document.createTextNode(" "), a));
       a = document.createElement("div");
       a.id = "threadWatcher";
       a.setAttribute("data-trackpos", "TW-position");
       FC.hasMobileLayout ? a.style.display = "none" : (b = localStorage.getItem("catalog-tw-pos")) ? a.style.cssText = b : (a.style.left = "10px", a.style.top = "75px");
-      a.innerHTML = '<div class="drag" id="twHeader">' + (FC.hasMobileLayout ? '<div id="twClose" class="icon closeIcon"></div>' : "") + "Thread Watcher" + (UA.hasCORS ? '<div id="twPrune" class="icon refreshIcon" title="Refresh"></div></div>' : "</div>");
+      a.innerHTML = '<div class="drag" id="twHeader">' + (FC.hasMobileLayout ? '<div id="twClose" class="icon closeIcon"></div>' :
+        "") + "Thread Watcher" + (UA.hasCORS ? '<div id="twPrune" class="icon refreshIcon" title="Refresh"></div></div>' : "</div>");
       this.listNode = document.createElement("ul");
       this.listNode.id = "watchList";
       this.load();
@@ -1007,7 +1040,8 @@ var UA = {
     },
     unInit: function() {
       var a;
-      if (a = $.id("threadWatcher")) a.removeEventListener("mouseup", this.onClick, !1), Draggable.unset($.id("twHeader")), window.removeEventListener("storage", this.syncStorage, !1), document.body.removeChild(a)
+      if (a = $.id("threadWatcher")) a.removeEventListener("mouseup",
+        this.onClick, !1), Draggable.unset($.id("twHeader")), window.removeEventListener("storage", this.syncStorage, !1), document.body.removeChild(a)
     },
     toggleList: function(a) {
       var b = $.id("threadWatcher");
@@ -1017,7 +1051,8 @@ var UA = {
     },
     syncStorage: function(a) {
       var b;
-      a.key && (b = a.key.split("-"), "4chan" == b[0] && "watch" == b[1] && a.newValue != a.oldValue && (ThreadWatcher.load(), ThreadWatcher.build()))
+      a.key && (b = a.key.split("-"), "4chan" == b[0] && "watch" == b[1] && a.newValue != a.oldValue && (ThreadWatcher.load(),
+        ThreadWatcher.build()))
     },
     load: function() {
       if (storage = localStorage.getItem("4chan-watch")) this.watched = JSON.parse(storage);
@@ -1026,7 +1061,8 @@ var UA = {
     build: function() {
       var a, b, c;
       a = "";
-      for (c in this.watched) b = c.split("-"), a += '<li id="watch-' + c + '"><span class="pointer" data-cmd="unwatch" data-id="' + b[0] + '" data-board="' + b[1] + '">&times;</span> <a href="' + this.linkToThread(b[0], b[1], this.watched[c][1]) + '"', a = -1 == this.watched[c][1] ? a + ' class="deadlink">' : this.watched[c][2] ? a + (' class="hasNewReplies">(' + this.watched[c][2] + ") ") : a + ">", a += "/" + b[1] + "/ - " + this.watched[c][0] + "</a></li>";
+      for (c in this.watched) b = c.split("-"), a += '<li id="watch-' + c + '"><span class="pointer" data-cmd="unwatch" data-id="' + b[0] + '" data-board="' + b[1] + '">&times;</span> <a href="' + this.linkToThread(b[0], b[1], this.watched[c][1]) + '"', a = -1 == this.watched[c][1] ? a + ' class="deadlink">' :
+        this.watched[c][2] ? a + (' class="hasNewReplies">(' + this.watched[c][2] + ") ") : a + ">", a += "/" + b[1] + "/ - " + this.watched[c][0] + "</a></li>";
       ThreadWatcher.listNode.innerHTML = a
     },
     onClick: function(a) {
@@ -1035,7 +1071,8 @@ var UA = {
     },
     generateLabel: function(a, b, c) {
       var e;
-      return e = (e = a) ? e.slice(0, this.charLimit) : (e = b) ? e.replace(/(?:<br>)+/g, " ").replace(/<[^>]*?>/g, "").slice(0, this.charLimit) : "No." + c
+      return e = (e = a) ? e.slice(0, this.charLimit) :
+        (e = b) ? e.replace(/(?:<br>)+/g, " ").replace(/<[^>]*?>/g, "").slice(0, this.charLimit) : "No." + c
     },
     toggle: function(a, b, c, e, d) {
       var l;
@@ -1049,7 +1086,8 @@ var UA = {
     addRaw: function(a, b) {
       var c, e;
       c = a.no + "-" + b;
-      this.watched[c] || (e = ThreadWatcher.generateLabel(a.sub, a.com, a.no), this.watched[c] = [e, 0, 0])
+      this.watched[c] || (e = ThreadWatcher.generateLabel(a.sub, a.com, a.no), this.watched[c] =
+        [e, 0, 0])
     },
     save: function() {
       ThreadWatcher.sortByBoard();
@@ -1091,7 +1129,8 @@ var UA = {
         c ? (a = $.id("twPrune"), a.className = "icon rotateIcon", this.isRefreshing = !0, this.fetchCatalogs(d, c)) : this.refresh()
       } else this.refresh()
     },
-    fetchCatalogs: function(a, b) {
+    fetchCatalogs: function(a,
+      b) {
       var c, e, d, l;
       d = {};
       l = {
@@ -1139,7 +1178,8 @@ var UA = {
     refresh: function() {
       var a, b, c, e, d;
       if (e = $.id("watchList").children.length)
-        for (c in a = b = 0, d = $.id("twPrune"), d.className = "icon rotateIcon", ThreadWatcher.isRefreshing = !0, ThreadWatcher.setRefreshTimestamp(), ThreadWatcher.watched) setTimeout(ThreadWatcher.fetch, b, c, ++a == e ? d : null), b += 200
+        for (c in a = b = 0, d = $.id("twPrune"), d.className = "icon rotateIcon", ThreadWatcher.isRefreshing = !0, ThreadWatcher.setRefreshTimestamp(),
+          ThreadWatcher.watched) setTimeout(ThreadWatcher.fetch, b, c, ++a == e ? d : null), b += 200
     },
     onRefreshEnd: function(a) {
       a.className = "icon refreshIcon";
@@ -1162,16 +1202,17 @@ var UA = {
       c = $.id("watch-" + a);
       if (-1 == ThreadWatcher.watched[a][1]) {
         if (delete ThreadWatcher.watched[a], c.parentNode.removeChild(c), b) ThreadWatcher.onRefreshEnd(b)
-      } else c = a.split("-"), e = new XMLHttpRequest, e.onload = function() {
-        var c, e, m, p;
-        if (200 == this.status) {
-          m = ThreadWatcher.parseThreadJSON(this.responseText);
-          p = ThreadWatcher.watched[a][1];
-          e = 0;
-          for (c = m.length - 1; 1 <= c && !(m[c].no <= p); c--)++e;
-          e > ThreadWatcher.watched[a][2] && (ThreadWatcher.watched[a][2] = e)
-        } else 404 == this.status && (ThreadWatcher.watched[a][1] = -1); if (b) ThreadWatcher.onRefreshEnd(b)
-      }, b && (e.onerror = e.onload), e.open("GET", "//a.4cdn.org/" + c[1] + "/thread/" + c[0] + ".json"), e.send(null)
+      } else c = a.split("-"), e = new XMLHttpRequest,
+        e.onload = function() {
+          var c, e, m, p;
+          if (200 == this.status) {
+            m = ThreadWatcher.parseThreadJSON(this.responseText);
+            p = ThreadWatcher.watched[a][1];
+            e = 0;
+            for (c = m.length - 1; 1 <= c && !(m[c].no <= p); c--)++e;
+            e > ThreadWatcher.watched[a][2] && (ThreadWatcher.watched[a][2] = e)
+          } else 404 == this.status && (ThreadWatcher.watched[a][1] = -1); if (b) ThreadWatcher.onRefreshEnd(b)
+        }, b && (e.onerror = e.onload), e.open("GET", "//a.4cdn.org/" + c[1] + "/thread/" + c[0] + ".json"), e.send(null)
     },
     linkToThread: function(a, b, c) {
       return "//" + location.host + "/" + b + "/res/" +
@@ -1195,7 +1236,8 @@ var UA = {
     },
     startDrag: function(a) {
       var b, c, e;
-      if (!this.parentNode.hasAttribute("data-shiftkey") || a.shiftKey) a.preventDefault(), b = Draggable, c = document.documentElement, b.el = this.parentNode, b.key = b.el.getAttribute("data-trackpos"), e = b.el.getBoundingClientRect(), b.dx = a.clientX - e.left, b.dy = a.clientY - e.top, b.right = c.clientWidth - e.width, b.bottom = c.clientHeight - e.height, "fixed" != getComputedStyle(b.el, null).position ? (b.scrollX = window.scrollX || window.pageXOffset, b.scrollY = window.scrollY || window.pageYOffset) : b.scrollX = b.scrollY = 0, document.addEventListener("mouseup", b.endDrag, !1), document.addEventListener("mousemove", b.onDrag, !1)
+      if (!this.parentNode.hasAttribute("data-shiftkey") || a.shiftKey) a.preventDefault(), b = Draggable, c = document.documentElement, b.el = this.parentNode, b.key = b.el.getAttribute("data-trackpos"), e = b.el.getBoundingClientRect(),
+        b.dx = a.clientX - e.left, b.dy = a.clientY - e.top, b.right = c.clientWidth - e.width, b.bottom = c.clientHeight - e.height, "fixed" != getComputedStyle(b.el, null).position ? (b.scrollX = window.scrollX || window.pageXOffset, b.scrollY = window.scrollY || window.pageYOffset) : b.scrollX = b.scrollY = 0, document.addEventListener("mouseup", b.endDrag, !1), document.addEventListener("mousemove", b.onDrag, !1)
     },
     endDrag: function(a) {
       document.removeEventListener("mouseup", Draggable.endDrag, !1);
@@ -1209,7 +1251,8 @@ var UA = {
       a = a.clientY - Draggable.dy + Draggable.scrollY;
       c = Draggable.el.style;
       1 > b ? (c.left = "0", c.right = "") : Draggable.right < b ? (c.left = "", c.right = "0") : (c.left = b / document.documentElement.clientWidth * 100 + "%", c.right = "");
-      1 > a ? (c.top = "0", c.bottom = "") : Draggable.bottom < a ? (c.bottom = "0", c.top = "") : (c.top = a / document.documentElement.clientHeight * 100 + "%", c.bottom = "")
+      1 > a ? (c.top = "0", c.bottom = "") : Draggable.bottom < a ? (c.bottom = "0", c.top = "") : (c.top = a / document.documentElement.clientHeight * 100 + "%",
+        c.bottom = "")
     }
   };
 
@@ -1232,7 +1275,8 @@ var CustomMenu = {
       e = a.split(/[^0-9a-z]/i);
       cnt = document.createElement("span");
       cnt.className = "customBoardList";
-      for (a = 0; c = e[a]; ++a) a ? cnt.appendChild(document.createTextNode(" / ")) : cnt.appendChild(document.createTextNode("[")), b = document.createElement("a"), b.textContent = c, b.href = "//boards.4chan.org/" + c + ("f" !== c ? "/catalog" : ""), cnt.appendChild(b);
+      for (a = 0; c = e[a]; ++a) a ? cnt.appendChild(document.createTextNode(" / ")) : cnt.appendChild(document.createTextNode("[")),
+        b = document.createElement("a"), b.textContent = c, b.href = "//boards.4chan.org/" + c + ("f" !== c ? "/catalog" : ""), cnt.appendChild(b);
       cnt.appendChild(document.createTextNode("]"));
       cnt.appendChild(document.createTextNode(" ["));
       b = document.createElement("a");
@@ -1243,7 +1287,8 @@ var CustomMenu = {
       cnt.appendChild(document.createTextNode("] "));
       c = cnt.cloneNode(!0);
       e = $.cls("boardList");
-      for (a = 0; b = e[a]; ++a) b.style.display = "none", b.parentNode.insertBefore(a ? c : cnt, b);
+      for (a = 0; b = e[a]; ++a) b.style.display = "none", b.parentNode.insertBefore(a ? c :
+        cnt, b);
       e = $.cls("show-all-boards");
       for (a = 0; b = e[a]; ++a) b.addEventListener("click", CustomMenu.reset, !1)
     }
@@ -1315,7 +1360,8 @@ function checkMobileLayout() {
 function checkForBlock() {
   var a, b, c, e, d;
   if (!/Mobile|Android|Dolfin|Opera Mobi|PlayStation Vita|Nintendo DS/.test(navigator.userAgent) && 1 != $.readCookie("pass_enabled"))
-    for (e = document.getElementsByClassName("ad-cnt"), a = 0; b = e[a]; ++a) 0 == b.offsetHeight && (c = document.createElement("div"), c.className = "center", c.innerHTML = '<div style="display:table-cell;vertical-align:middle">' + blockPlea + "</div>", d = c.style, /middlead/.test(b.className) ? (d.width = "448px", d.height = "60px", d.padding = "0 10px") : (d.width = "728px", d.height = "90px"), d.display = "table", d.border = "1px solid #000", d.margin = "auto", b.parentNode.insertBefore(c, b))
+    for (e = document.getElementsByClassName("ad-cnt"), a = 0; b = e[a]; ++a) 0 == b.offsetHeight && (c = document.createElement("div"), c.className = "center", c.innerHTML = '<div style="display:table-cell;vertical-align:middle">' + blockPlea + "</div>", d = c.style, /middlead/.test(b.className) ? (d.width = "448px", d.height = "60px", d.padding = "0 10px") : (d.width = "728px", d.height =
+      "90px"), d.display = "table", d.border = "1px solid #000", d.margin = "auto", b.parentNode.insertBefore(c, b))
 }
 
 function initBlotter() {
