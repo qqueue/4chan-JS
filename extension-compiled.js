@@ -774,6 +774,7 @@ var Parser = {
       c = a.getBoundingClientRect();
       c = window.innerWidth - c.right - 20;
       d > c && (b.style.maxWidth = c + "px");
+      b.style.top = window.pageYOffset + "px";
       document.body.appendChild(b)
     },
     showWebMDuration: function(a, b) {
