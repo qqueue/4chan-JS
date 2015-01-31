@@ -759,7 +759,7 @@ var Parser = {
     hide: function() {
       var a;
       clearTimeout(this.timeout);
-      if (a = $.id("image-hover")) a.play && Tip.hide(), document.body.removeChild(a)
+      if (a = $.id("image-hover")) a.play && (a.pause(), Tip.hide()), document.body.removeChild(a)
     },
     showWebm: function(a) {
       var b, c, d;
