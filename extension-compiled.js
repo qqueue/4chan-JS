@@ -646,7 +646,7 @@ var Parser = {
       d = c.getAttribute("href");
       c.getBoundingClientRect();
       b = document.createElement("video");
-      b.muted = !0;
+      b.muted = !Config.unmuteWebm;
       b.controls = !0;
       b.loop = !0;
       b.autoplay = !0;
@@ -656,6 +656,7 @@ var Parser = {
       b.src = d;
       c.style.display = "none";
       c.parentNode.appendChild(b);
+      Config.unmuteWebm && (b.volume = .5);
       a = a.parentNode.previousElementSibling;
       b = document.createElement("span");
       b.className = "collapseWebm";
@@ -686,8 +687,7 @@ var Parser = {
     collapseWebm: function(a) {
       var b, c;
       a.preventDefault();
-      this.removeEventListener("click",
-        ImageExpansion.collapseWebm, !1);
+      this.removeEventListener("click", ImageExpansion.collapseWebm, !1);
       a = this.parentNode;
       b = a.parentNode.parentNode.getElementsByClassName("expandedWebm")[0];
       Config.centeredThreads && (c = b.parentNode.parentNode.parentNode, $.removeClass(c, "centre-exp"), c.style.marginLeft = "");
@@ -768,7 +768,7 @@ var Parser = {
       b.id = "image-hover";
       b.src = a.parentNode.getAttribute("href");
       b.loop = !0;
-      b.muted = !0;
+      b.muted = !Config.unmuteWebm;
       b.autoplay = !0;
       b.onerror = ImageHover.onLoadError;
       b.onloadedmetadata = function() {
@@ -778,7 +778,8 @@ var Parser = {
       c = window.innerWidth - c.right - 20;
       d > c && (b.style.maxWidth = c + "px");
       b.style.top = window.pageYOffset + "px";
-      document.body.appendChild(b)
+      document.body.appendChild(b);
+      Config.unmuteWebm && (b.volume = .5)
     },
     showWebMDuration: function(a, b) {
       if (a.parentNode) {
@@ -867,7 +868,8 @@ var Parser = {
         d.id = "quickReply";
         d.className = "extPanel reply";
         d.setAttribute("data-trackpos", "QR-position");
-        Main.hasMobileLayout ? d.style.top = window.pageYOffset + 28 + "px" : Config["QR-position"] ? d.style.cssText = Config["QR-position"] : (d.style.right = "0px", d.style.top = "10%");
+        Main.hasMobileLayout ? d.style.top = window.pageYOffset +
+          28 + "px" : Config["QR-position"] ? d.style.cssText = Config["QR-position"] : (d.style.right = "0px", d.style.top = "10%");
         d.innerHTML = '<div id="qrHeader" class="drag postblock">Reply to Thread No.<span id="qrTid">' + a + '</span><img alt="X" src="' + Main.icons.cross + '" id="qrClose" class="extButton" title="Close Window"></div>';
         f = e.parentNode.cloneNode(!1);
         f.setAttribute("name", "qrPost");
@@ -2590,6 +2592,7 @@ var CustomCSS = {
     reportButton: !1,
     darkTheme: !1,
     linkify: !1,
+    unmuteWebm: !1,
     disableAll: !1
   },
   ConfigMobile = {
@@ -2662,6 +2665,7 @@ var SettingsMenu = {
       fitToScreenExpansion: ["Fit expanded images to screen", "Limit expanded images to both browser width and height"],
       imageHover: ["Image hover", "Mouse over images to view full size, limited to browser size"],
       revealSpoilers: ["Don't spoiler images", "Show image thumbnail and original filename instead of spoiler placeholders", !0],
+      unmuteWebm: ["Un-mute WebM audio", "Un-mute sound automatically for WebM playback", !0],
       noPictures: ["Hide thumbnails", "Don't display thumbnails while browsing", !0],
       embedYouTube: ["Embed YouTube links", "Embed YouTube player into replies"],
       embedSoundCloud: ["Embed SoundCloud links", "Embed SoundCloud player into replies"]
@@ -2685,6 +2689,7 @@ var SettingsMenu = {
     b = $.id("settingsMenu").getElementsByClassName("menuOption");
     for (a = 0; c = b[a]; ++a) d = c.getAttribute("data-option"), Config[d] = "checkbox" == c.type ? c.checked : c.value;
     Config.save(e);
+    UA.dispatchEvent("4chanSettingsSaved");
     SettingsMenu.close();
     location.href = location.href.replace(/#.+$/, "")
   },
@@ -2697,8 +2702,7 @@ var SettingsMenu = {
     f = document.createElement("div");
     f.id = "settingsMenu";
     f.className = "UIPanel";
-    e = '<div class="extPanel reply"><div class="panelHeader">Settings<span><img alt="Close" title="Close" class="pointer" data-cmd="settings-toggle" src="' +
-      Main.icons.cross + '"></a></span></div><ul>';
+    e = '<div class="extPanel reply"><div class="panelHeader">Settings<span><img alt="Close" title="Close" class="pointer" data-cmd="settings-toggle" src="' + Main.icons.cross + '"></a></span></div><ul>';
     e += '<ul><li id="settings-exp-all">[<a href="#" data-cmd="settings-exp-all">Expand All Settings</a>]</li></ul>';
     if (Main.hasMobileLayout)
       for (b in c = {}, SettingsMenu.options) {
@@ -2717,8 +2721,7 @@ var SettingsMenu = {
         if (!h[d][4] || Main.hasMobileLayout) e += "<li" + (h[d][3] ? ' class="settings-sub">' : ">") + '<label><input type="checkbox" class="menuOption" data-option="' + d + '"' + (Config[d] ? ' checked="checked">' : ">") + h[d][0] + "</label>" + (!1 !== h[d][1] ? '</li><li class="settings-tip' + (h[d][3] ? ' settings-sub">' : '">') + h[d][1] : "") + "</li>";
       e += "</ul></ul>"
     }
-    e += '</ul><ul><li class="settings-off"><label title="Completely disable the native extension (overrides any checked boxes)"><input type="checkbox" class="menuOption" data-option="disableAll"' +
-      (Config.disableAll ? ' checked="checked">' : ">") + 'Disable the native extension</label></li></ul><div class="center"><button data-cmd="settings-export">Export Settings</button><button data-cmd="settings-save">Save Settings</button></div>';
+    e += '</ul><ul><li class="settings-off"><label title="Completely disable the native extension (overrides any checked boxes)"><input type="checkbox" class="menuOption" data-option="disableAll"' + (Config.disableAll ? ' checked="checked">' : ">") + 'Disable the native extension</label></li></ul><div class="center"><button data-cmd="settings-export">Export Settings</button><button data-cmd="settings-save">Save Settings</button></div>';
     f.innerHTML = e;
     f.addEventListener("click", SettingsMenu.onClick, !1);
     document.body.appendChild(f);
@@ -2727,8 +2730,8 @@ var SettingsMenu = {
   },
   showExport: function() {
     var a, b;
-    $.id("exportSettings") || (b = location.href.replace(location.hash, "") + "#cfg=" + Config.toURL(), a = document.createElement("div"), a.id = "exportSettings", a.className = "UIPanel", a.setAttribute("data-cmd", "export-close"), a.innerHTML = '<div class="extPanel reply"><div class="panelHeader">Export Settings<span><img data-cmd="export-close" class="pointer" alt="Close" title="Close" src="' + Main.icons.cross + '"></span></div><p class="center">Copy and save the URL below, and visit it from another browser or computer to restore your extension and catalog settings.</p><p class="center"><input class="export-field" type="text" readonly="readonly" value="' +
-      b + '"></p><p style="margin-top:15px" class="center">Alternatively, you can drag the link below into your bookmarks bar and click it to restore.</p><p class="center">[<a target="_blank" href="' + b + '">Restore 4chan Settings</a>]</p>', document.body.appendChild(a), a.addEventListener("click", this.onExportClick, !1), a = $.cls("export-field", a)[0], a.focus(), a.select())
+    $.id("exportSettings") || (b = location.href.replace(location.hash, "") + "#cfg=" + Config.toURL(), a = document.createElement("div"), a.id = "exportSettings", a.className = "UIPanel", a.setAttribute("data-cmd", "export-close"), a.innerHTML = '<div class="extPanel reply"><div class="panelHeader">Export Settings<span><img data-cmd="export-close" class="pointer" alt="Close" title="Close" src="' +
+      Main.icons.cross + '"></span></div><p class="center">Copy and save the URL below, and visit it from another browser or computer to restore your extension and catalog settings.</p><p class="center"><input class="export-field" type="text" readonly="readonly" value="' + b + '"></p><p style="margin-top:15px" class="center">Alternatively, you can drag the link below into your bookmarks bar and click it to restore.</p><p class="center">[<a target="_blank" href="' + b + '">Restore 4chan Settings</a>]</p>', document.body.appendChild(a), a.addEventListener("click", this.onExportClick, !1), a = $.cls("export-field", a)[0], a.focus(), a.select())
   },
   closeExport: function() {
     var a;
