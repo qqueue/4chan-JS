@@ -504,8 +504,17 @@ var Parser = {
       return "BLOCKQUOTE" == a.nodeName && a.id.split("m")[1] == b || a.parentNode.id.split("_")[1] == b ? !0 : !1
     },
     toggle: function(a, b) {
-      var c, d, e;
-      (c = a.getAttribute("href").match(/^(?:\/([^\/]+)\/)?(?:thread\/)?([0-9]+)?#p([0-9]+)$/)) && "rs" != c[1] && !QuoteInline.isSelfQuote(a, c[3], c[1]) && (b && b.preventDefault(), (d = a.getAttribute("data-pfx")) ? (a.removeAttribute("data-pfx"), $.removeClass(a, "linkfade"), d = $.id(d + "p" + c[3]), d.parentNode.removeChild(d), "backlink" == a.parentNode.parentNode.className && (d = $.id("pc" + c[3]), c = +d.getAttribute("data-inline-count") - 1, 0 == c ? (d.style.display = "", d.removeAttribute("data-inline-count")) : d.setAttribute("data-inline-count", c))) : (e = $.id("p" + c[3])) ? QuoteInline.inline(a, e, c[3]) : QuoteInline.inlineRemote(a, c[1] || Main.board, c[2], c[3]))
+      var c, d, e, f, h;
+      if ((e = a.getAttribute("href").match(/^(?:\/([^\/]+)\/)?(?:thread\/)?([0-9]+)?#p([0-9]+)$/)) && "rs" != e[1] && !QuoteInline.isSelfQuote(a, e[3], e[1]))
+        if (b && b.preventDefault(), f = a.getAttribute("data-pfx")) {
+          a.removeAttribute("data-pfx");
+          $.removeClass(a, "linkfade");
+          f = $.id(f + "p" + e[3]);
+          h = $.cls("expandedWebm", f);
+          for (c = 0; d = h[c]; ++c) d.pause();
+          f.parentNode.removeChild(f);
+          "backlink" == a.parentNode.parentNode.className && (f = $.id("pc" + e[3]), e = +f.getAttribute("data-inline-count") - 1, 0 == e ? (f.style.display = "", f.removeAttribute("data-inline-count")) : f.setAttribute("data-inline-count", e))
+        } else(c = $.id("p" + e[3])) ? QuoteInline.inline(a, c, e[3]) : QuoteInline.inlineRemote(a, e[1] || Main.board, e[2], e[3])
     },
     inlineRemote: function(a, b, c, d) {
       var e, f, h, g;
@@ -544,6 +553,8 @@ var Parser = {
         k = $.cls("quotelink", f);
         for (c = 0; d = k[c]; ++c) d.removeAttribute("data-pfx"), $.removeClass(d, "linkfade")
       }
+      k = $.cls("expandedWebm", f);
+      for (c = 0; d = k[c]; ++c) d.autoplay = !1;
       for (c = 0; d = f.children[c]; ++c) d.id = e + d.id;
       if (c = $.cls("backlink", f)[0]) c.id = e + c.id;
       g ? (a = h.parentNode.parentNode.getAttribute("data-pfx") || "", a = $.id(a + "m" + h.id.split("_")[1]), a.insertBefore(f, a.firstChild), (f = b.parentNode.getAttribute("data-inline-count")) ? f = +f + 1 : (f = 1, b.parentNode.style.display = "none"), b.parentNode.setAttribute("data-inline-count", f)) : ($.hasClass(a.parentNode, "quote") && (a = a.parentNode), b = a.parentNode, b.insertBefore(f, a.nextSibling))
@@ -578,6 +589,7 @@ var Parser = {
     show: function(a, b, c) {
       var d, e, f;
       c ? (Parser.parsePost(b), b.style.display = "") : (b = b.cloneNode(!0), location.hash && location.hash == "#" + b.id && (b.className += " highlight"), b.id = "quote-preview", b.className += " preview" + ($.hasClass(a.parentNode.parentNode, "backlink") ? "" : " reveal-spoilers"), Config.imageExpansion && (f = $.cls("expanded-thumb", b)[0]) && ImageExpansion.contract(f));
+      if (c = $.cls("expandedWebm", b)[0]) c.controls = !1, c.autoplay = !1;
       if (!a.parentNode.className && (c = b.querySelectorAll("#" + $.cls("postMessage", b)[0].id + " > .quotelink"), c[1]))
         for (e = ">>" + a.parentNode.parentNode.id.split("_")[1], f = 0; d = c[f]; ++f)
           if (d.textContent == e) {
@@ -589,7 +601,8 @@ var Parser = {
       e = c.offsetWidth;
       f = b.style;
       document.body.appendChild(b);
-      Main.isMobileDevice ? (f.top = d.top + a.offsetHeight + window.pageYOffset + "px", e - d.right < (0 | .3 * e) ? f.right = e - d.right + "px" : f.left = d.left + "px") : (e - d.right < (0 | .3 * e) ? (e -= d.left, f.right = e + 5 + "px") : (e = d.left + d.width, f.left = e + 5 + "px"), a = d.top + a.offsetHeight + window.pageYOffset - b.offsetHeight / 2 - d.height / 2, b = b.getBoundingClientRect().height, d = c.scrollTop != document.body.scrollTop ? c.scrollTop + document.body.scrollTop : document.body.scrollTop, f.top = a < d ? d + "px" : a + b > d + c.clientHeight ? d + c.clientHeight - b + "px" : a + "px")
+      Main.isMobileDevice ? (f.top = d.top + a.offsetHeight + window.pageYOffset + "px", e - d.right < (0 | .3 * e) ? f.right = e - d.right + "px" : f.left = d.left + "px") : (e - d.right < (0 | .3 * e) ? (e -= d.left, f.right = e + 5 + "px") : (e = d.left + d.width, f.left = e + 5 + "px"), a = d.top + a.offsetHeight + window.pageYOffset -
+        b.offsetHeight / 2 - d.height / 2, b = b.getBoundingClientRect().height, d = c.scrollTop != document.body.scrollTop ? c.scrollTop + document.body.scrollTop : document.body.scrollTop, f.top = a < d ? d + "px" : a + b > d + c.clientHeight ? d + c.clientHeight - b + "px" : a + "px")
     },
     remove: function(a) {
       var b, c;
@@ -690,6 +703,7 @@ var Parser = {
       this.removeEventListener("click", ImageExpansion.collapseWebm, !1);
       a = this.parentNode;
       b = a.parentNode.parentNode.getElementsByClassName("expandedWebm")[0];
+      b.pause();
       Config.centeredThreads && (c = b.parentNode.parentNode.parentNode, $.removeClass(c, "centre-exp"), c.style.marginLeft = "");
       b.previousElementSibling.style.display = "";
       b.parentNode.removeChild(b);
