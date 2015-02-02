@@ -795,8 +795,9 @@ var Parser = {
     },
     showWebMDuration: function(a, b) {
       if (a.parentNode) {
-        var c = $.prettySeconds(a.duration);
-        Tip.show(b, c[0] + ":" + ("0" + c[1]).slice(-2))
+        var c, d = $.prettySeconds(a.duration);
+        c = !0 === a.mozHasAudio || 0 < a.webkitAudioDecodedByteCount || a.audioTracks && a.audioTracks.length ? " (audio)" : "";
+        Tip.show(b, d[0] + ":" + ("0" + d[1]).slice(-2) + c)
       }
     },
     onLoadError: function() {
@@ -880,13 +881,11 @@ var Parser = {
         d.id = "quickReply";
         d.className = "extPanel reply";
         d.setAttribute("data-trackpos", "QR-position");
-        Main.hasMobileLayout ? d.style.top = window.pageYOffset +
-          28 + "px" : Config["QR-position"] ? d.style.cssText = Config["QR-position"] : (d.style.right = "0px", d.style.top = "10%");
+        Main.hasMobileLayout ? d.style.top = window.pageYOffset + 28 + "px" : Config["QR-position"] ? d.style.cssText = Config["QR-position"] : (d.style.right = "0px", d.style.top = "10%");
         d.innerHTML = '<div id="qrHeader" class="drag postblock">Reply to Thread No.<span id="qrTid">' + a + '</span><img alt="X" src="' + Main.icons.cross + '" id="qrClose" class="extButton" title="Close Window"></div>';
         f = e.parentNode.cloneNode(!1);
         f.setAttribute("name", "qrPost");
-        f.innerHTML = '<input type="hidden" value="' + $.byName("MAX_FILE_SIZE")[0].value + '" name="MAX_FILE_SIZE"><input type="hidden" value="regist" name="mode"><input id="qrResto" type="hidden" value="' +
-          a + '" name="resto">';
+        f.innerHTML = '<input type="hidden" value="' + $.byName("MAX_FILE_SIZE")[0].value + '" name="MAX_FILE_SIZE"><input type="hidden" value="regist" name="mode"><input id="qrResto" type="hidden" value="' + a + '" name="resto">';
         a = document.createElement("div");
         a.id = "qrForm";
         this.btn = null;
@@ -943,7 +942,8 @@ var Parser = {
     },
     onFileChange: function(a) {
       var b;
-      this.value ? (b = window.maxFilesize, this.files ? (a = this.files[0].size, "video/webm" == this.files[0].type && window.maxWebmFilesize && (b = window.maxWebmFilesize)) : a = 0, QR.fileDisabled ? QR.showPostError("Image limit reached.", "imagelimit", !0) : a > b ? QR.showPostError("Error: Maximum file size allowed is " + Math.floor(b / 1048576) + " MB", "filesize", !0) : QR.hidePostError()) : QR.hidePostError();
+      this.value ? (b = window.maxFilesize, this.files ? (a = this.files[0].size, "video/webm" == this.files[0].type && window.maxWebmFilesize && (b = window.maxWebmFilesize)) : a = 0, QR.fileDisabled ? QR.showPostError("Image limit reached.", "imagelimit", !0) : a > b ? QR.showPostError("Error: Maximum file size allowed is " +
+        Math.floor(b / 1048576) + " MB", "filesize", !0) : QR.hidePostError()) : QR.hidePostError();
       QR.startCooldown()
     },
     onKeyDown: function(a) {
