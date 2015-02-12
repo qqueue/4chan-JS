@@ -90,7 +90,8 @@ var Parser = {
       };
       this.prettify = "function" == typeof prettyPrint;
       this.customSpoiler = {};
-      Config.localTime && ((a = (new Date).getTimezoneOffset()) ? (b = Math.abs(a), c = 0 | b / 60, this.utcOffset = "Timezone: UTC" + (0 > a ? "+" : "-") + c + ((d = b - 60 * c) ? ":" + d : "")) : this.utcOffset = "Timezone: UTC", this.weekdays = "Sun Mon Tue Wed Thu Fri Sat".split(" "));
+      Config.localTime &&
+        ((a = (new Date).getTimezoneOffset()) ? (b = Math.abs(a), c = 0 | b / 60, this.utcOffset = "Timezone: UTC" + (0 > a ? "+" : "-") + c + ((d = b - 60 * c) ? ":" + d : "")) : this.utcOffset = "Timezone: UTC", this.weekdays = "Sun Mon Tue Wed Thu Fri Sat".split(" "));
       Main.tid && (this.trackedReplies = this.getTrackedReplies(Main.tid) || {})
     },
     getTrackedReplies: function(a) {
@@ -125,7 +126,8 @@ var Parser = {
       !this.customSpoiler[a] && (b = parseInt(b)) && (a == Main.board && (c = $.cls("imgspoiler")[0]) ? this.customSpoiler[a] = c.firstChild.src.match(/spoiler(-[a-z0-9]+)\.png$/)[1] : this.customSpoiler[a] = "-" + a + (Math.floor(Math.random() * b) + 1))
     },
     buildPost: function(a, b, c) {
-      var d, e, f = null;
+      var d,
+        e, f = null;
       for (d = 0; e = a[d]; ++d) e.no == c && (!Config.revealSpoilers && a[0].custom_spoiler && Parser.setCustomSpoiler(b, a[0].custom_spoiler), f = Parser.buildHTMLFromJSON(e, b, !1, !0).lastElementChild, Config.IDColor && (uid = $.cls("posteruid", f)[Main.hasMobileLayout ? 0 : 1]) && IDColor.applyRemote(uid.firstElementChild));
       return f
     },
@@ -133,7 +135,8 @@ var Parser = {
       return a.replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">")
     },
     encodeSpecialChars: function(a) {
-      return a.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/'/g, "&#039;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      return a.replace(/&/g,
+        "&amp;").replace(/"/g, "&quot;").replace(/'/g, "&#039;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
     },
     onDateMouseOver: function(a) {
       Parser.dateTimeout && (clearTimeout(Parser.dateTimeout), Parser.dateTimeout = null);
@@ -167,7 +170,8 @@ var Parser = {
         x = "",
         K = !1;
       n = "//i.4cdn.org/" + b;
-      0 == a.resto ? (f = !0, c && (0 < a.replies ? (c = a.replies + " Repl" + (1 < a.replies ? "ies" : "y"), 0 < a.images && (c += " / " + a.images + " Image" + (1 < a.images ? "s" : ""))) : c = "", I = '<div class="postLink mobile"><span class="info">' + c + '</span><a href="thread/' + a.no + '" class="button">View Thread</a></div>', D = "op", H = '&nbsp; <span>[<a href="thread/' + a.no + (a.semantic_url ? "/" + a.semantic_url : "") + '" class="replylink" rel="canonical">Reply</a>]</span>'), c = a.no) : c = a.resto;
+      0 == a.resto ? (f = !0, c && (0 < a.replies ? (c = a.replies + " Repl" + (1 < a.replies ? "ies" : "y"), 0 < a.images && (c += " / " + a.images + " Image" + (1 < a.images ? "s" : ""))) : c = "", I = '<div class="postLink mobile"><span class="info">' + c + '</span><a href="thread/' + a.no + '" class="button">View Thread</a></div>', D = "op", H = '&nbsp; <span>[<a href="thread/' + a.no + (a.semantic_url ? "/" + a.semantic_url : "") + '" class="replylink" rel="canonical">Reply</a>]</span>'),
+        c = a.no) : c = a.resto;
       Main.tid && b == Main.board ? (B = "#p" + a.no, C = "javascript:quote('" + a.no + "')") : (B = "thread/" + c + "#p" + a.no, C = "thread/" + c + "#q" + a.no);
       h = !a.capcode && a.id ? ' <span class="posteruid id_' + a.id + '">(ID: <span class="hand" title="Highlight posts by this ID">' + a.id + "</span>)</span> " : "";
       switch (a.capcode) {
@@ -176,7 +180,8 @@ var Parser = {
         case "admin":
           r = ' <strong class="capcode hand id_admin"title="Highlight posts by the Administrator">## Admin</strong>';
           u = " capcodeAdmin";
-          v = ' <img src="' + Parser.icons.admin + '" alt="This user is the 4chan Administrator." title="This user is the 4chan Administrator." class="identityIcon">';
+          v = ' <img src="' + Parser.icons.admin +
+            '" alt="This user is the 4chan Administrator." title="This user is the 4chan Administrator." class="identityIcon">';
           break;
         case "mod":
           r = ' <strong class="capcode hand id_mod" title="Highlight posts by Moderators">## Mod</strong>';
@@ -191,7 +196,8 @@ var Parser = {
         case "manager":
           r = ' <strong class="capcode hand id_manager" title="Highlight posts by Managers">## Manager</strong>', u = " capcodeManager", v = ' <img src="' + Parser.icons.manager + '" alt="This user is a 4chan Manager." title="This user is a 4chan Manager." class="identityIcon">'
       }
-      a.email && (F = '<a href="mailto:' + a.email.replace(/ /g, "%20") + '" class="useremail">', G = "</a>");
+      a.email && (F = '<a href="mailto:' + a.email.replace(/ /g, "%20") + '" class="useremail">',
+        G = "</a>");
       A = a.country ? window.trollFlags ? ' <img src="//s.4cdn.org/image/country/troll/' + a.country.toLowerCase() + '.gif" alt="' + a.country + '" title="' + a.country_name + '" class="countryFlag">' : ' <span title="' + a.country_name + '" class="flag flag-' + a.country.toLowerCase() + '"></span>' : "";
       a.filedeleted ? g = '<div id="f' + a.no + '" class="file"><span class="fileThumb"><img src="' + Parser.icons.del + '" class="fileDeletedRes" alt="File deleted."></span></div>' : a.ext && (g = Parser.decodeSpecialChars(a.filename), m = z = a.filename +
         a.ext, g.length > (f ? 40 : 30) && (m = Parser.encodeSpecialChars(g.slice(0, f ? 35 : 25)) + "(...)" + a.ext, K = !0), a.tn_w || a.tn_h || ".gif" != a.ext || (a.tn_w = a.w, a.tn_h = a.h), p = 1048576 <= a.fsize ? (0 | a.fsize / 1048576 * 100 + .5) / 100 + " M" : 1024 < a.fsize ? (0 | a.fsize / 1024 + .5) + " K" : a.fsize + " ", a.spoiler && !Config.revealSpoilers && (m = "Spoiler Image", q = '" title="' + z + '"', y = " imgspoiler", l = "//s.4cdn.org/image/spoiler" + (Parser.customSpoiler[b] || "") + ".png", a.tn_w = 100, a.tn_h = 100), l || (l = "//i.4cdn.org/" + b + "/" + a.tim + "s.jpg"), g = ".pdf" == a.ext ? "PDF" :
@@ -200,11 +206,14 @@ var Parser = {
       a.trip && (t = ' <span class="postertrip">' + a.trip + "</span>");
       k = a.name || "";
       l = 30 < k.length ? '<span class="name" data-tip data-tip-cb="mShowFull">' + Parser.truncate(k, 30) + "(...)</span> " : '<span class="name">' + k + "</span> ";
-      f ? (a.capcode_replies && (J = Parser.buildCapcodeReplies(a.capcode_replies, b, a.no)), d && a.replies && (w = a.replies + " repl" + (1 < a.replies ? "ies" : "y"), a.images && (w += " and " + a.images + " image" + (1 < a.images ? "s" : "")), w = '<span class="summary preview-summary">' + w + ".</span>"), a.sticky && (x += '<img class="stickyIcon retina" title="Sticky" alt="Sticky" src="' + Main.icons2.sticky + '"> '), a.closed && (x = a.archived ? x + ('<img class="archivedIcon retina" title="Archived" alt="Archived" src="' + Main.icons2.archived + '"> ') : x + ('<img class="closedIcon retina" title="Closed" alt="Closed" src="' + Main.icons2.closed + '"> ')), d = void 0 === a.sub ? '<span class="subject"></span> ' : 30 < a.sub.length ? '<span class="subject" data-tip data-tip-cb="mShowFull">' + Parser.truncate(a.sub, 30) + "(...)</span> " : '<span class="subject">' + a.sub + "</span> ") : d = "";
+      f ? (a.capcode_replies && (J = Parser.buildCapcodeReplies(a.capcode_replies, b, a.no)), d && a.replies && (w = a.replies + " repl" + (1 < a.replies ? "ies" : "y"), a.images &&
+          (w += " and " + a.images + " image" + (1 < a.images ? "s" : "")), w = '<span class="summary preview-summary">' + w + ".</span>"), a.sticky && (x += '<img class="stickyIcon retina" title="Sticky" alt="Sticky" src="' + Main.icons2.sticky + '"> '), a.closed && (x = a.archived ? x + ('<img class="archivedIcon retina" title="Archived" alt="Archived" src="' + Main.icons2.archived + '"> ') : x + ('<img class="closedIcon retina" title="Closed" alt="Closed" src="' + Main.icons2.closed + '"> ')), d = void 0 === a.sub ? '<span class="subject"></span> ' : 30 < a.sub.length ?
+        '<span class="subject" data-tip data-tip-cb="mShowFull">' + Parser.truncate(a.sub, 30) + "(...)</span> " : '<span class="subject">' + a.sub + "</span> ") : d = "";
       e.className = "postContainer " + D + "Container";
       e.id = "pc" + a.no;
       e.innerHTML = (f ? "" : '<div class="sideArrows" id="sa' + a.no + '">&gt;&gt;</div>') + '<div id="p' + a.no + '" class="post ' + D + E + '"><div class="postInfoM mobile" id="pim' + a.no + '"><span class="nameBlock' + u + '">' + l + t + r + v + h + A + "<br>" + d + '</span><span class="dateTime postNum" data-utc="' + a.time + '">' + a.now + ' <a href="' +
-        a.no + "#p" + a.no + '" title="Link to this post">No.</a><a href="javascript:quote(\'' + a.no + '\');" title="Reply to this post">' + a.no + "</a></span></div>" + (f ? g : "") + '<div class="postInfo desktop" id="pi' + a.no + '"' + (b != Main.board ? ' data-board="' + b + '"' : "") + '><input type="checkbox" name="' + a.no + '" value="delete"> ' + d + '<span class="nameBlock' + u + '">' + F + '<span class="name">' + k + "</span>" + t + r + G + v + h + A + ' </span> <span class="dateTime" data-utc="' + a.time + '">' + a.now + '</span> <span class="postNum desktop"><a href="' + B + '" title="Link to this post">No.</a><a href="' + C + '" title="Reply to this post">' + a.no + "</a> " + x + H + "</span></div>" + (f ? "" : g) + '<blockquote class="postMessage" id="m' + a.no + '">' + (a.com || "") + J + w + "</blockquote> </div>" + I;
+        a.no + "#p" + a.no + '" title="Link to this post">No.</a><a href="javascript:quote(\'' + a.no + '\');" title="Reply to this post">' + a.no + "</a></span></div>" + (f ? g : "") + '<div class="postInfo desktop" id="pi' + a.no + '"' + (b != Main.board ? ' data-board="' + b + '"' : "") + '><input type="checkbox" name="' + a.no + '" value="delete"> ' + d + '<span class="nameBlock' + u + '">' + F + '<span class="name">' + k + "</span>" + t + r + G + v + h + A + ' </span> <span class="dateTime" data-utc="' + a.time + '">' + a.now + '</span> <span class="postNum desktop"><a href="' + B +
+        '" title="Link to this post">No.</a><a href="' + C + '" title="Reply to this post">' + a.no + "</a> " + x + H + "</span></div>" + (f ? "" : g) + '<blockquote class="postMessage" id="m' + a.no + '">' + (a.com || "") + J + w + "</blockquote> </div>" + I;
       if (!Main.tid || b != Main.board)
         for (r = e.getElementsByClassName("quotelink"), a = 0; f = r[a]; ++a) t = f.getAttribute("href"), "/" != t.charAt(0) && (f.href = "/" + b + "/thread/" + c + t);
       return e
@@ -237,7 +246,10 @@ var Parser = {
       var d, e, f, h, g, k;
       f = $.id("t" + a);
       h = f.getElementsByClassName("post");
-      b || (g = document.getElementById("pi" + a), Main.tid || (Config.filter && (k = Filter.exec(f, g, document.getElementById("m" + a), a)), Config.threadHiding && !k && (Main.hasMobileLayout ? (g = document.createElement("a"), g.href = "javascript:;", g.setAttribute("data-cmd", "hide"), g.setAttribute("data-id", a), g.className = "mobileHideButton button", g.textContent = "Hide", h[0].nextElementSibling.appendChild(g)) : (g = document.createElement("span"), g.innerHTML = '<img alt="H" class="extButton threadHideButton"data-cmd="hide" data-id="' + a + '" src="' + Main.icons.minus + '" title="Hide thread">', h[0].insertBefore(g, h[0].firstChild)), g.id = "sa" + a, ThreadHiding.hidden[a] && (ThreadHiding.hidden[a] = Main.now, ThreadHiding.hide(a))), ThreadExpansion.enabled && (e = $.cls("summary", f)[0]) && (f = document.createDocumentFragment(), k = e.cloneNode(!0), k.className = "", e.textContent = "", g = document.createElement("img"), g.className = "extButton expbtn", g.title = "Expand thread", g.alt = "+", g.setAttribute("data-cmd", "expand"), g.setAttribute("data-id", a), g.src = Main.icons.plus, f.appendChild(g), f.appendChild(k), g = document.createElement("span"), g.style.display = "none", g.textContent = "Showing all replies.", f.appendChild(g), e.appendChild(f))), Main.tid && Config.threadWatcher && (d = $.cls("navLinksBot")[0]) && (g = document.createElement("img"), ThreadWatcher.watched[e = a + "-" + Main.board] ? (g.src = Main.icons.watched, g.setAttribute("data-active", "1")) : g.src = Main.icons.notwatched, g.className = "extButton wbtn wbtn-" + e, g.setAttribute("data-cmd", "watch"), g.setAttribute("data-id", a), g.alt = "W", g.title = "Add to watch list", f = document.createDocumentFragment(), f.appendChild(document.createTextNode("[")), f.appendChild(g.cloneNode(!0)), f.appendChild(document.createTextNode("] ")), d.insertBefore(f, d.firstChild)));
+      b || (g = document.getElementById("pi" + a), Main.tid || (Config.filter && (k = Filter.exec(f, g, document.getElementById("m" + a), a)), Config.threadHiding && !k && (Main.hasMobileLayout ? (g = document.createElement("a"), g.href = "javascript:;", g.setAttribute("data-cmd", "hide"), g.setAttribute("data-id", a), g.className = "mobileHideButton button", g.textContent = "Hide", h[0].nextElementSibling.appendChild(g)) :
+        (g = document.createElement("span"), g.innerHTML = '<img alt="H" class="extButton threadHideButton"data-cmd="hide" data-id="' + a + '" src="' + Main.icons.minus + '" title="Hide thread">', h[0].insertBefore(g, h[0].firstChild)), g.id = "sa" + a, ThreadHiding.hidden[a] && (ThreadHiding.hidden[a] = Main.now, ThreadHiding.hide(a))), ThreadExpansion.enabled && (e = $.cls("summary", f)[0]) && (f = document.createDocumentFragment(), k = e.cloneNode(!0), k.className = "", e.textContent = "", g = document.createElement("img"), g.className = "extButton expbtn",
+        g.title = "Expand thread", g.alt = "+", g.setAttribute("data-cmd", "expand"), g.setAttribute("data-id", a), g.src = Main.icons.plus, f.appendChild(g), f.appendChild(k), g = document.createElement("span"), g.style.display = "none", g.textContent = "Showing all replies.", f.appendChild(g), e.appendChild(f))), Main.tid && Config.threadWatcher && (d = $.cls("navLinksBot")[0]) && (g = document.createElement("img"), ThreadWatcher.watched[e = a + "-" + Main.board] ? (g.src = Main.icons.watched, g.setAttribute("data-active", "1")) : g.src = Main.icons.notwatched,
+        g.className = "extButton wbtn wbtn-" + e, g.setAttribute("data-cmd", "watch"), g.setAttribute("data-id", a), g.alt = "W", g.title = "Add to watch list", f = document.createDocumentFragment(), f.appendChild(document.createTextNode("[")), f.appendChild(g.cloneNode(!0)), f.appendChild(document.createTextNode("] ")), d.insertBefore(f, d.firstChild)));
       e = b ? 0 > b ? h.length + b : b : 0;
       c = c ? e + c : h.length;
       if (Main.isMobileDevice && Config.quotePreview)
@@ -263,7 +275,8 @@ var Parser = {
       $.cls("math", a)[0] && (window.jsMath.Autoload.Script.Push("ProcessBeforeShowing", [null]), window.jsMath.Autoload.LoadJsMath())
     },
     parseMathOne: function(a) {
-      window.jsMath.loaded ? window.jsMath.ProcessBeforeShowing(a) : Parser.loadJSMath(a)
+      window.jsMath.loaded ?
+        window.jsMath.ProcessBeforeShowing(a) : Parser.loadJSMath(a)
     },
     parseTrackedReplies: function(a) {
       var b, c;
@@ -274,7 +287,8 @@ var Parser = {
       var b, c, d;
       c = $.cls("quotelink", a);
       for (a = 0; b = c[a]; ++a)
-        if (d = b.getAttribute("href").match(/^(?:\/([^\/]+)\/)?(?:thread\/)?([0-9]+)?#p([0-9]+)$/)) d = document.createElement("a"), d.href = b.href, d.textContent = " #", d.className = "quoteLink", b.parentNode.insertBefore(d, b.nextSibling)
+        if (d = b.getAttribute("href").match(/^(?:\/([^\/]+)\/)?(?:thread\/)?([0-9]+)?#p([0-9]+)$/)) d = document.createElement("a"), d.href = b.href, d.textContent = " #", d.className = "quoteLink", b.parentNode.insertBefore(d,
+          b.nextSibling)
     },
     parseMarkup: function(a) {
       var b, c;
@@ -286,23 +300,28 @@ var Parser = {
       c = Main.hasMobileLayout;
       b ? e = document.getElementById("pi" + a) : (e = a.getElementsByClassName("postInfo")[0], a = e.id.slice(2));
       Parser.needMsg && (h = document.getElementById("m" + a));
-      c ? Config.reportButton && (d = document.createElement("span"), d.className = "mobile mobile-report", d.setAttribute("data-cmd", "report"), d.setAttribute("data-id", a), d.textContent = "Report", e.parentNode.appendChild(d)) : (d = document.createElement("a"), d.href = "#", d.className = "postMenuBtn", d.title = "Post menu", d.setAttribute("data-cmd", "post-menu"), d.textContent = "\u25b6", e.appendChild(d));
+      c ? Config.reportButton && (d = document.createElement("span"), d.className = "mobile mobile-report", d.setAttribute("data-cmd", "report"), d.setAttribute("data-id",
+        a), d.textContent = "Report", e.parentNode.appendChild(d)) : (d = document.createElement("a"), d.href = "#", d.className = "postMenuBtn", d.title = "Post menu", d.setAttribute("data-cmd", "post-menu"), d.textContent = "\u25b6", e.appendChild(d));
       b && (a != b && (Config.filter && (g = Filter.exec(e.parentNode, e, h)), !g && ReplyHiding.hidden[a] && (ReplyHiding.hidden[a] = Main.now, ReplyHiding.hide(a))), Config.backlinks && Parser.parseBacklinks(a, b));
       IDColor.enabled && (k = $.cls("posteruid", e.parentNode)[c ? 0 : 1]) && IDColor.apply(k.firstElementChild);
       Config.linkify && Linkify.exec(h);
       Config.embedSoundCloud && Media.parseSoundCloud(h);
       (Config.embedYouTube || Main.hasMobileLayout) && Media.parseYouTube(h);
-      Config.revealSpoilers && (f = document.getElementById("f" + a)) && (f = f.children[1]) && $.hasClass(f, "imgspoiler") && (d = f.firstChild, f.removeChild(d), d.removeAttribute("style"), k = $.hasClass(e.parentNode, "op"), d.style.maxWidth = d.style.maxHeight = k ? "250px" : "125px", d.src = "//i.4cdn.org" + f.pathname.replace(/([0-9]+).+$/, "/$1s.jpg"), h = f.previousElementSibling, g = h.title.split("."), g[0].length > (k ? 40 : 30) ? g = g[0].slice(0, k ? 35 : 25) + "(...)" + g[1] : (g = h.title, h.removeAttribute("title")), h.firstElementChild.innerHTML = g, f.insertBefore(d, f.firstElementChild));
+      Config.revealSpoilers && (f = document.getElementById("f" + a)) && (f = f.children[1]) && $.hasClass(f, "imgspoiler") && (d = f.firstChild, f.removeChild(d), d.removeAttribute("style"), k = $.hasClass(e.parentNode, "op"), d.style.maxWidth = d.style.maxHeight = k ? "250px" : "125px", d.src = "//i.4cdn.org" + f.pathname.replace(/([0-9]+).+$/, "/$1s.jpg"), h = f.previousElementSibling, g = h.title.split("."),
+        g[0].length > (k ? 40 : 30) ? g = g[0].slice(0, k ? 35 : 25) + "(...)" + g[1] : (g = h.title, h.removeAttribute("title")), h.firstElementChild.innerHTML = g, f.insertBefore(d, f.firstElementChild));
       Config.localTime && (c ? (d = e.parentNode.getElementsByClassName("dateTime")[0], d.firstChild.nodeValue = Parser.getLocaleDate(new Date(1E3 * d.getAttribute("data-utc"))) + " ") : (d = e.getElementsByClassName("dateTime")[0], d.textContent = Parser.getLocaleDate(new Date(1E3 * d.getAttribute("data-utc")))))
     },
     getLocaleDate: function(a) {
-      return ("0" + (1 + a.getMonth())).slice(-2) + "/" + ("0" + a.getDate()).slice(-2) + "/" + ("0" + a.getFullYear()).slice(-2) + "(" + this.weekdays[a.getDay()] + ")" + ("0" + a.getHours()).slice(-2) + ":" + ("0" + a.getMinutes()).slice(-2) + ":" + ("0" + a.getSeconds()).slice(-2)
+      return ("0" + (1 + a.getMonth())).slice(-2) +
+        "/" + ("0" + a.getDate()).slice(-2) + "/" + ("0" + a.getFullYear()).slice(-2) + "(" + this.weekdays[a.getDay()] + ")" + ("0" + a.getHours()).slice(-2) + ":" + ("0" + a.getMinutes()).slice(-2) + ":" + ("0" + a.getSeconds()).slice(-2)
     },
     parseBacklinks: function(a, b) {
       var c, d, e, f, h, g, k;
       if (e = document.getElementById("m" + a).getElementsByClassName("quotelink"))
         for (f = {}, c = 0; d = e[c]; ++c)
-          if (h = d.getAttribute("href").split("#p"), h[1])(h[1] == b && (d.textContent += " (OP)"), g = document.getElementById("pi" + h[1])) ? f[h[1]] || (f[h[1]] = !0, d = document.createElement("span"), k = Main.tid ? "#p" + a : "thread/" + b + "#p" + a, d.innerHTML = Main.hasMobileLayout ? '<a href="' + k + '" class="quotelink">&gt;&gt;' + a + '</a><a href="' + k + '" class="quoteLink"> #</a> ' : '<a href="' + k + '" class="quotelink">&gt;&gt;' + a + "</a> ", (k = document.getElementById("bl_" + h[1])) || (k = document.createElement("div"), k.id = "bl_" + h[1], k.className = "backlink", Main.hasMobileLayout && (k.className = "backlink mobile", g = document.getElementById("p" + h[1])), g.appendChild(k)), k.appendChild(d)) : Main.tid && ">" != d.textContent.charAt(2) && (d.textContent += " \u2192")
+          if (h = d.getAttribute("href").split("#p"), h[1])(h[1] == b && (d.textContent += " (OP)"), g = document.getElementById("pi" + h[1])) ? f[h[1]] || (f[h[1]] = !0, d = document.createElement("span"),
+            k = Main.tid ? "#p" + a : "thread/" + b + "#p" + a, d.innerHTML = Main.hasMobileLayout ? '<a href="' + k + '" class="quotelink">&gt;&gt;' + a + '</a><a href="' + k + '" class="quoteLink"> #</a> ' : '<a href="' + k + '" class="quotelink">&gt;&gt;' + a + "</a> ", (k = document.getElementById("bl_" + h[1])) || (k = document.createElement("div"), k.id = "bl_" + h[1], k.className = "backlink", Main.hasMobileLayout && (k.className = "backlink mobile", g = document.getElementById("p" + h[1])), g.appendChild(k)), k.appendChild(d)) : Main.tid && ">" != d.textContent.charAt(2) && (d.textContent +=
+            " \u2192")
     },
     buildSummary: function(a, b, c) {
       if (b) b = b + " repl" + (1 < b ? "ies" : "y");
@@ -327,7 +346,8 @@ var Parser = {
       if (e) Main.tid || (c += '<li data-cmd="hide" data-id="' + d + '">' + ($.hasClass($.id("t" + d), "post-hidden") ? "Unhide" : "Hide") + " thread</li>"), Config.threadWatcher && (c += '<li data-cmd="watch" data-id="' + d + '">' + (ThreadWatcher.watched[d + "-" + Main.board] ? "Remove from" : "Add to") + " watch list</li>");
       else if (b = $.id("pc" + d)) c += '<li data-cmd="hide-r" data-id="' + d + '">' + ($.hasClass(b, "post-hidden") ? "Unhide" : "Hide") + " post</li>";
       if (file = $.id("fT" + d))
-        if (b = $.cls("fileThumb", file.parentNode)[0]) b = /\.(png|jpg)$/.test(b.href) ? b.href : "http://i.4cdn.org/" + Main.board + "/" + b.href.match(/\/([0-9]+)\..+$/)[1] + "s.jpg", c += '<li><ul><li><a href="//www.google.com/searchbyimage?image_url=' + b + '" target="_blank">Google</a></li><li><a href="http://iqdb.org/?url=' + b + '" target="_blank">iqdb</a></li></ul>Image search &raquo</li>';
+        if (b = $.cls("fileThumb",
+          file.parentNode)[0]) b = /\.(png|jpg)$/.test(b.href) ? b.href : "http://i.4cdn.org/" + Main.board + "/" + b.href.match(/\/([0-9]+)\..+$/)[1] + "s.jpg", c += '<li><ul><li><a href="//www.google.com/searchbyimage?image_url=' + b + '" target="_blank">Google</a></li><li><a href="http://iqdb.org/?url=' + b + '" target="_blank">iqdb</a></li></ul>Image search &raquo</li>';
       Config.filter && (c += '<li><a href="#" data-cmd="filter-sel">Filter selected text</a></li>');
       b = document.createElement("div");
       b.id = "post-menu";
@@ -352,7 +372,8 @@ var Parser = {
     },
     close: function() {
       var a;
-      if (a = $.id("post-menu")) a.parentNode.removeChild(a), document.removeEventListener("click", PostMenu.close, !1), $.removeClass(PostMenu.activeBtn, "menuOpen"), PostMenu.activeBtn = null
+      if (a = $.id("post-menu")) a.parentNode.removeChild(a),
+        document.removeEventListener("click", PostMenu.close, !1), $.removeClass(PostMenu.activeBtn, "menuOpen"), PostMenu.activeBtn = null
     }
   },
   Depager = {
@@ -369,7 +390,8 @@ var Parser = {
         a = $.cls("next")[1];
         if (!a) return;
         a = a.firstElementChild;
-        a.textContent = "Load More";
+        a.textContent =
+          "Load More";
         a.className += " m-depagelink";
         a.setAttribute("data-cmd", "depage")
       } else {
@@ -378,7 +400,8 @@ var Parser = {
         a.innerHTML = '[<a title="Toggle infinite scroll" class="depagelink" href="" data-cmd="depage">All</a>]';
         a = a.firstElementChild
       }
-      Config.alwaysDepage ? (this.isEnabled = !0, a.parentNode.parentNode.className += " depagerEnabled", Depager.bindHandlers(), !Main.hasMobileLayout && (b = $.cls("board")[0]) && (a = document.createElement("span"), a.className = "depageNumber", a.textContent = "Page 1", b.insertBefore(a, b.firstElementChild))) : a.setAttribute("data-cmd", "depage")
+      Config.alwaysDepage ? (this.isEnabled = !0, a.parentNode.parentNode.className += " depagerEnabled", Depager.bindHandlers(), !Main.hasMobileLayout && (b = $.cls("board")[0]) && (a = document.createElement("span"), a.className = "depageNumber", a.textContent = "Page 1", b.insertBefore(a,
+        b.firstElementChild))) : a.setAttribute("data-cmd", "depage")
     },
     onScroll: function() {
       document.documentElement.scrollHeight <= window.innerHeight + window.pageYOffset + Depager.threshold && (Depager.threadsLoaded ? Depager.renderNext() : Depager.depage())
@@ -395,7 +418,8 @@ var Parser = {
     },
     insertAd: function(a, b, c, d) {
       var e;
-      Depager.boardHasAds && window.ados_add_placement && (d && (d = $.cls("bottomad"), d = d[d.length - 1], e = document.createElement("div"), e.id = "azkDepage" + (a + 1), d.appendChild(e), window.ados_add_placement(3536, 18130, e.id, 4).setZone(c)), d = document.createElement("div"), d.className = "bottomad center depaged-ad", 2 == a ? e = $.id(Depager.adId) : (e = document.createElement("div"), e.id = "azkDepage" + a), d.appendChild(e), b.appendChild(d), Depager.adPlea && b.appendChild(Depager.adPlea.cloneNode(!0)), b.appendChild(document.createElement("hr")), 2 != a && window.ados_add_placement(3536, 18130, e.id, 4).setZone(c))
+      Depager.boardHasAds && window.ados_add_placement && (d && (d = $.cls("bottomad"), d = d[d.length - 1], e = document.createElement("div"), e.id = "azkDepage" + (a + 1), d.appendChild(e), window.ados_add_placement(3536, 18130, e.id, 4).setZone(c)), d = document.createElement("div"), d.className = "bottomad center depaged-ad", 2 == a ? e = $.id(Depager.adId) : (e = document.createElement("div"), e.id = "azkDepage" + a), d.appendChild(e), b.appendChild(d), Depager.adPlea && b.appendChild(Depager.adPlea.cloneNode(!0)), b.appendChild(document.createElement("hr")),
+        2 != a && window.ados_add_placement(3536, 18130, e.id, 4).setZone(c))
     },
     loadAds: function() {
       Depager.boardHasAds && window.ados_load && window.ados_load()
@@ -429,7 +453,8 @@ var Parser = {
             k.push(a.no)
           }
         m && (Depager.unbindHandlers(), Depager.isComplete = !0, Depager.setStatus("disabled"));
-        boardDiv = $.cls("board")[0];
+        boardDiv =
+          $.cls("board")[0];
         boardDiv.insertBefore(b, boardDiv.lastElementChild);
         Depager.trackPageview(n);
         Depager.loadAds();
@@ -447,7 +472,8 @@ var Parser = {
     },
     setStatus: function(a) {
       var b, c, d;
-      Main.hasMobileLayout ? (c = $.cls("m-depagelink"), d = "Load More") : (c = $.cls("depagelink"), d = "All");
+      Main.hasMobileLayout ?
+        (c = $.cls("m-depagelink"), d = "Load More") : (c = $.cls("depagelink"), d = "All");
       if (c.length)
         if ("enabled" == a)
           for (a = 0; b = c[a]; ++a) b.textContent = d, b = b.parentNode.parentNode, $.hasClass(b, "depagerEnabled") || $.addClass(b, "depagerEnabled");
@@ -456,7 +482,8 @@ var Parser = {
       else if ("disabled" == a)
         for (a = 0; b = c[a]; ++a) Main.hasMobileLayout ? b.parentNode.parentNode.removeChild(b.parentNode) : (b.textContent = d, $.removeClass(b.parentNode.parentNode, "depagerEnabled"));
       else if ("error" == a)
-        for (a = 0; b = c[a]; ++a) b.textContent = "Error", b.removeAttribute("title"), b.removeAttribute("data-cmd"), $.removeClass(b.parentNode.parentNode, "depagerEnabled")
+        for (a =
+          0; b = c[a]; ++a) b.textContent = "Error", b.removeAttribute("title"), b.removeAttribute("data-cmd"), $.removeClass(b.parentNode.parentNode, "depagerEnabled")
     },
     toggle: function() {
       Depager.isLoading || Depager.isComplete || (Depager.isEnabled ? Depager.disable() : Depager.enable(), Depager.isEnabled = !Depager.isEnabled)
@@ -471,7 +498,8 @@ var Parser = {
       Depager.setStatus("disabled")
     },
     depage: function() {
-      Depager.isLoading || (Depager.isLoading = !0, $.get("//a.4cdn.org/" + Main.board + "/catalog.json", {
+      Depager.isLoading ||
+        (Depager.isLoading = !0, $.get("//a.4cdn.org/" + Main.board + "/catalog.json", {
         onload: Depager.onLoad,
         onerror: Depager.onError
       }), Depager.setStatus("loading"))
@@ -488,7 +516,8 @@ var Parser = {
         e = 0;
         for (b = 1; c = a[b]; ++b) c.adZone = Depager.adZones[e], d.push(c), e = e ? 0 : 1;
         Depager.renderNext()
-      } else 404 == this.status ? Depager.unbindHandlers() : (Depager.unbindHandlers(), console.log("Error: " + this.status)), Depager.setStatus("error")
+      } else 404 == this.status ?
+        Depager.unbindHandlers() : (Depager.unbindHandlers(), console.log("Error: " + this.status)), Depager.setStatus("error")
     },
     onError: function() {
       Depager.isLoading = !1;
@@ -505,7 +534,8 @@ var Parser = {
     },
     toggle: function(a, b) {
       var c, d, e, f, h;
-      if ((e = a.getAttribute("href").match(/^(?:\/([^\/]+)\/)?(?:thread\/)?([0-9]+)?#p([0-9]+)$/)) && "rs" != e[1] && !QuoteInline.isSelfQuote(a, e[3], e[1]))
+      if ((e = a.getAttribute("href").match(/^(?:\/([^\/]+)\/)?(?:thread\/)?([0-9]+)?#p([0-9]+)$/)) &&
+        "rs" != e[1] && !QuoteInline.isSelfQuote(a, e[3], e[1]))
         if (b && b.preventDefault(), f = a.getAttribute("data-pfx")) {
           a.removeAttribute("data-pfx");
           $.removeClass(a, "linkfade");
@@ -514,23 +544,25 @@ var Parser = {
           for (c = 0; d = h[c]; ++c) d.pause();
           f.parentNode.removeChild(f);
           "backlink" == a.parentNode.parentNode.className && (f = $.id("pc" + e[3]), e = +f.getAttribute("data-inline-count") - 1, 0 == e ? (f.style.display = "", f.removeAttribute("data-inline-count")) : f.setAttribute("data-inline-count", e))
-        } else(c = $.id("p" + e[3])) ? QuoteInline.inline(a, c, e[3]) : QuoteInline.inlineRemote(a, e[1] || Main.board, e[2], e[3])
+        } else(c = $.id("p" + e[3])) ? QuoteInline.inline(a,
+          c, e[3]) : QuoteInline.inlineRemote(a, e[1] || Main.board, e[2], e[3])
     },
     inlineRemote: function(a, b, c, d) {
       var e, f, h, g;
       a.hasAttribute("data-loading") || (h = b + "-" + c, (e = $.cache[h]) && (f = Parser.buildPost(e, b, d)) ? (Parser.parsePost(f), QuoteInline.inline(a, f)) : (g = a.nextElementSibling) && $.hasClass(g, "spinner") ? g.parentNode.removeChild(g) : (g = document.createElement("div"), g.className = "preview spinner inlined", g.textContent = "Loading...", a.parentNode.insertBefore(g, a.nextSibling), e = function() {
-        var c;
-        a.removeAttribute("data-loading");
-        if (200 == this.status || 304 == this.status || 0 == this.status) c = Parser.parseThreadJSON(this.responseText), $.cache[h] = c, (c = Parser.buildPost(c, b, d)) ? (g.parentNode && g.parentNode.removeChild(g), Parser.parsePost(c), QuoteInline.inline(a, c)) : ($.addClass(a, "deadlink"), g.textContent = "This post doesn't exist anymore");
-        else if (404 == this.status) $.addClass(a, "deadlink"), g.textContent = "This thread doesn't exist anymore";
-        else this.onerror()
-      }, f = function() {
-        g.textContent = "Error: " + this.statusText + " (" + this.status + ")";
-        a.removeAttribute("data-loading")
-      }, a.setAttribute("data-loading", "1"), $.get("//a.4cdn.org/" + b + "/thread/" + c + ".json", {
-        onload: e,
-        onerror: f
-      })))
+          var c;
+          a.removeAttribute("data-loading");
+          if (200 == this.status || 304 == this.status || 0 == this.status) c = Parser.parseThreadJSON(this.responseText), $.cache[h] = c, (c = Parser.buildPost(c, b, d)) ? (g.parentNode && g.parentNode.removeChild(g), Parser.parsePost(c), QuoteInline.inline(a, c)) : ($.addClass(a, "deadlink"), g.textContent = "This post doesn't exist anymore");
+          else if (404 == this.status) $.addClass(a, "deadlink"), g.textContent = "This thread doesn't exist anymore";
+          else this.onerror()
+        }, f = function() {
+          g.textContent = "Error: " + this.statusText + " (" + this.status + ")";
+          a.removeAttribute("data-loading")
+        },
+        a.setAttribute("data-loading", "1"), $.get("//a.4cdn.org/" + b + "/thread/" + c + ".json", {
+          onload: e,
+          onerror: f
+        })))
     },
     inline: function(a, b, c) {
       var d, e, f, h, g, k;
@@ -546,7 +578,8 @@ var Parser = {
       f.id = e + f.id;
       f.setAttribute("data-pfx", e);
       f.className += " preview inlined";
-      $.removeClass(f, "highlight");
+      $.removeClass(f,
+        "highlight");
       $.removeClass(f, "highlight-anti");
       if ((k = $.cls("inlined", f))[0]) {
         for (; d = k[0];) d.parentNode.removeChild(d);
@@ -557,7 +590,8 @@ var Parser = {
       for (c = 0; d = k[c]; ++c) d.autoplay = !1;
       for (c = 0; d = f.children[c]; ++c) d.id = e + d.id;
       if (c = $.cls("backlink", f)[0]) c.id = e + c.id;
-      g ? (a = h.parentNode.parentNode.getAttribute("data-pfx") || "", a = $.id(a + "m" + h.id.split("_")[1]), a.insertBefore(f, a.firstChild), (f = b.parentNode.getAttribute("data-inline-count")) ? f = +f + 1 : (f = 1, b.parentNode.style.display = "none"), b.parentNode.setAttribute("data-inline-count", f)) : ($.hasClass(a.parentNode, "quote") && (a = a.parentNode), b = a.parentNode, b.insertBefore(f, a.nextSibling))
+      g ? (a = h.parentNode.parentNode.getAttribute("data-pfx") || "", a = $.id(a + "m" + h.id.split("_")[1]), a.insertBefore(f, a.firstChild), (f = b.parentNode.getAttribute("data-inline-count")) ?
+        f = +f + 1 : (f = 1, b.parentNode.style.display = "none"), b.parentNode.setAttribute("data-inline-count", f)) : ($.hasClass(a.parentNode, "quote") && (a = a.parentNode), b = a.parentNode, b.insertBefore(f, a.nextSibling))
     }
   },
   QuotePreview = {
@@ -570,27 +604,31 @@ var Parser = {
       var b, c, d;
       b = QuotePreview;
       b.out = !1;
-      if (c = a.getAttribute("href").match(b.regex))(d = a.getAttribute("data-pfx") || "", d = document.getElementById(d + "p" + c[3])) ? (c = d.getBoundingClientRect(), 0 < c.top && c.bottom < document.documentElement.clientHeight && !$.hasClass(d.parentNode, "post-hidden")) ? $.hasClass(d, "highlight") || location.hash.slice(1) == d.id ? $.hasClass(d, "op") || (b.highlightAnti = d, $.addClass(d, "highlight-anti")) : (b.highlight = d, $.addClass(d, "highlight")) : b.show(a, d) : UA.hasCORS && b.showRemote(a, c[1] || Main.board, c[2], c[3])
+      if (c = a.getAttribute("href").match(b.regex))(d = a.getAttribute("data-pfx") || "", d = document.getElementById(d +
+        "p" + c[3])) ? (c = d.getBoundingClientRect(), 0 < c.top && c.bottom < document.documentElement.clientHeight && !$.hasClass(d.parentNode, "post-hidden")) ? $.hasClass(d, "highlight") || location.hash.slice(1) == d.id ? $.hasClass(d, "op") || (b.highlightAnti = d, $.addClass(d, "highlight-anti")) : (b.highlight = d, $.addClass(d, "highlight")) : b.show(a, d) : UA.hasCORS && b.showRemote(a, c[1] || Main.board, c[2], c[3])
     },
     showRemote: function(a, b, c, d) {
       var e, f, h;
       h = b + "-" + c;
-      (f = $.cache[h]) && (e = Parser.buildPost(f, b, d)) ? QuotePreview.show(a, e) : (a.style.cursor = "wait", $.get("//a.4cdn.org/" + b + "/thread/" + c + ".json", {
-        onload: function() {
-          var c;
-          a.style.cursor = "";
-          200 == this.status || 304 == this.status || 0 == this.status ? (c = Parser.parseThreadJSON(this.responseText), $.cache[h] = c, $.id("quote-preview") || QuotePreview.out || ((c = Parser.buildPost(c, b, d)) ? (c.className = "post preview", c.style.display = "none", c.id = "quote-preview", document.body.appendChild(c), QuotePreview.show(a, c, !0)) : $.addClass(a, "deadlink"))) : 404 == this.status && $.addClass(a, "deadlink")
-        },
-        onerror: function() {
-          a.style.cursor = ""
-        }
-      }))
+      (f = $.cache[h]) && (e = Parser.buildPost(f, b, d)) ? QuotePreview.show(a, e) : (a.style.cursor =
+        "wait", $.get("//a.4cdn.org/" + b + "/thread/" + c + ".json", {
+          onload: function() {
+            var c;
+            a.style.cursor = "";
+            200 == this.status || 304 == this.status || 0 == this.status ? (c = Parser.parseThreadJSON(this.responseText), $.cache[h] = c, $.id("quote-preview") || QuotePreview.out || ((c = Parser.buildPost(c, b, d)) ? (c.className = "post preview", c.style.display = "none", c.id = "quote-preview", document.body.appendChild(c), QuotePreview.show(a, c, !0)) : $.addClass(a, "deadlink"))) : 404 == this.status && $.addClass(a, "deadlink")
+          },
+          onerror: function() {
+            a.style.cursor =
+              ""
+          }
+        }))
     },
     show: function(a, b, c) {
       var d, e, f;
       c ? (Parser.parsePost(b), b.style.display = "") : (b = b.cloneNode(!0), location.hash && location.hash == "#" + b.id && (b.className += " highlight"), b.id = "quote-preview", b.className += " preview" + ($.hasClass(a.parentNode.parentNode, "backlink") ? "" : " reveal-spoilers"), Config.imageExpansion && (f = $.cls("expanded-thumb", b)[0]) && ImageExpansion.contract(f));
       if (c = $.cls("expandedWebm", b)[0]) c.controls = !1, c.autoplay = !1;
-      if (!a.parentNode.className && (c = b.querySelectorAll("#" + $.cls("postMessage", b)[0].id + " > .quotelink"), c[1]))
+      if (!a.parentNode.className && (c = b.querySelectorAll("#" + $.cls("postMessage",
+        b)[0].id + " > .quotelink"), c[1]))
         for (e = ">>" + a.parentNode.parentNode.id.split("_")[1], f = 0; d = c[f]; ++f)
           if (d.textContent == e) {
             $.addClass(d, "dotted");
@@ -629,7 +667,8 @@ var Parser = {
       b.style.display = "none";
       b.onerror = this.onError;
       a.parentNode.insertBefore(b, a.nextElementSibling);
-      if (UA.hasCORS) a.style.opacity = "0.75", this.timeout = this.checkLoadStart(b, a);
+      if (UA.hasCORS) a.style.opacity =
+        "0.75", this.timeout = this.checkLoadStart(b, a);
       else this.onLoadStart(b, a);
       return !0
     },
@@ -714,7 +753,8 @@ var Parser = {
       ImageExpansion.timeout = setTimeout(ImageExpansion.pauseVideos, 500)
     },
     pauseVideos: function() {
-      var a, b, c, d, e, f, h;
+      var a,
+        b, c, d, e, f, h;
       a = ImageExpansion;
       h = [];
       e = window.pageYOffset;
@@ -729,7 +769,8 @@ var Parser = {
       b = a.target;
       a = $.qs("img[data-expanding]", b.parentNode);
       b.parentNode.removeChild(b);
-      a.style.opacity = "";
+      a.style.opacity =
+        "";
       a.removeAttribute("data-expanding")
     },
     onLoadStart: function(a, b) {
@@ -768,7 +809,8 @@ var Parser = {
     show: function(a) {
       var b, c;
       c = "A" !== a.nodeName ? a.parentNode.getAttribute("href") : a.getAttribute("href");
-      (b = c.match(/\.(?:webm|pdf)$/)) ? ".webm" == b[0] && ImageHover.showWebm(a) : (b = document.createElement("img"), b.id = "image-hover", b.alt = "Image", b.onerror = ImageHover.onLoadError, b.src = c, document.body.appendChild(b), UA.hasCORS ? (b.style.display = "none", this.timeout = ImageHover.checkLoadStart(b, a)) : b.style.left = a.getBoundingClientRect().right + 10 + "px")
+      (b = c.match(/\.(?:webm|pdf)$/)) ? ".webm" == b[0] && ImageHover.showWebm(a) : (b = document.createElement("img"), b.id = "image-hover", b.alt =
+        "Image", b.onerror = ImageHover.onLoadError, b.src = c, document.body.appendChild(b), UA.hasCORS ? (b.style.display = "none", this.timeout = ImageHover.checkLoadStart(b, a)) : b.style.left = a.getBoundingClientRect().right + 10 + "px")
     },
     hide: function() {
       var a;
@@ -796,7 +838,8 @@ var Parser = {
     showWebMDuration: function(a, b) {
       if (a.parentNode) {
         var c, d = $.prettySeconds(a.duration);
-        c = !0 === a.mozHasAudio || 0 < a.webkitAudioDecodedByteCount || a.audioTracks && a.audioTracks.length ? " (audio)" : "";
+        c = !0 === a.mozHasAudio || 0 < a.webkitAudioDecodedByteCount || a.audioTracks && a.audioTracks.length ?
+          " (audio)" : "";
         Tip.show(b, d[0] + ":" + ("0" + d[1]).slice(-2) + c)
       }
     },
@@ -833,7 +876,8 @@ var Parser = {
         this.fileDisabled = !!window.imagelimit;
         this.tracked = {};
         this.lastTid = localStorage.getItem("4chan-cd-" + Main.board + "-tid");
-        !Main.tid || Main.hasMobileLayout || Main.threadClosed || QR.addReplyLink();
+        !Main.tid || Main.hasMobileLayout ||
+          Main.threadClosed || QR.addReplyLink();
         window.addEventListener("storage", this.syncStorage, !1)
       }
     },
@@ -853,7 +897,8 @@ var Parser = {
     },
     syncStorage: function(a) {
       var b;
-      a.key && (b = a.key.split("-"), "4chan" == b[0] && "cd" == b[1] && a.newValue && Main.board == b[2] && ("tid" == b[3] ? QR.lastTid = a.newValue : QR.startCooldown()))
+      a.key && (b = a.key.split("-"), "4chan" ==
+        b[0] && "cd" == b[1] && a.newValue && Main.board == b[2] && ("tid" == b[3] ? QR.lastTid = a.newValue : QR.startCooldown()))
     },
     openPainter: function() {
       var a, b;
@@ -874,7 +919,8 @@ var Parser = {
       if (a = $.tag("button", $.id("qr-painter-ctrl"))[1]) a.disabled = !1
     },
     onPainterCancel: function() {
-      QR.painterData = null;
+      QR.painterData =
+        null;
       if (el = $.id("qrFile")) el.disabled = !1;
       if (el = $.tag("button", $.id("qr-painter-ctrl"))[1]) el.disabled = !0
     },
@@ -888,7 +934,8 @@ var Parser = {
       c = UA.getSelection();
       a = a ? ">>" + a + "\n" : "";
       c && (a += ">" + c.trim().replace(/[\r\n]+/g, "\n>") + "\n");
-      d.value = d.value ? d.value.slice(0, b) + a + d.value.slice(d.selectionEnd) : a;
+      d.value = d.value ? d.value.slice(0, b) + a + d.value.slice(d.selectionEnd) :
+        a;
       UA.isOpera && (b += a.split("\n").length);
       d.selectionStart = d.selectionEnd = b + a.length;
       d.selectionStart == d.value.length && (d.scrollTop = d.scrollHeight);
@@ -907,7 +954,8 @@ var Parser = {
         Main.hasMobileLayout ? d.style.top = window.pageYOffset + 28 + "px" : Config["QR-position"] ? d.style.cssText = Config["QR-position"] : (d.style.right = "0px", d.style.top = "10%");
         d.innerHTML = '<div id="qrHeader" class="drag postblock">Reply to Thread No.<span id="qrTid">' + a + '</span><img alt="X" src="' + Main.icons.cross + '" id="qrClose" class="extButton" title="Close Window"></div>';
         f = e.parentNode.cloneNode(!1);
-        f.setAttribute("name", "qrPost");
+        f.setAttribute("name",
+          "qrPost");
         f.innerHTML = '<input type="hidden" value="' + $.byName("MAX_FILE_SIZE")[0].value + '" name="MAX_FILE_SIZE"><input type="hidden" value="regist" name="mode"><input id="qrResto" type="hidden" value="' + a + '" name="resto">';
         a = document.createElement("div");
         a.id = "qrForm";
@@ -920,23 +968,27 @@ var Parser = {
             if (QR.noCaptcha) continue;
             g.id = "qrCaptchaContainer";
             QR.captchaWidgetCnt = g
-          } else if (m = h[b].getAttribute("data-type"), "Password" == m || "Spoilers" == m) continue;
+          } else if (m = h[b].getAttribute("data-type"),
+            "Password" == m || "Spoilers" == m) continue;
           else if ("File" == m) k = h[b].children[1].firstChild.cloneNode(!1), k.tabIndex = "", k.id = "qrFile", k.size = "19", k.addEventListener("change", QR.onFileChange, !1), g.appendChild(k), k.title = "Shift + Click to remove the file";
           else if ("Painter" == m) g.innerHTML = h[b].children[1].innerHTML, g.id = "qr-painter-ctrl", g.className = "desktop", l = g.getElementsByTagName("button"), l[0].setAttribute("data-cmd", "qr-painter-draw"), l[1].setAttribute("data-cmd", "qr-painter-clear");
-          else if (g.innerHTML = h[b].children[1].innerHTML, l = "hidden" == g.firstChild.type ? g.lastChild.previousSibling : g.firstChild, l.tabIndex = "", "INPUT" == l.nodeName || "TEXTAREA" == l.nodeName) {
+          else if (g.innerHTML =
+            h[b].children[1].innerHTML, l = "hidden" == g.firstChild.type ? g.lastChild.previousSibling : g.firstChild, l.tabIndex = "", "INPUT" == l.nodeName || "TEXTAREA" == l.nodeName) {
             if ("name" == l.name) {
               if (q = Main.getCookie("4chan_name")) l.value = q
             } else if ("email" == l.name) {
               l.id = "qrEmail";
               if (q = Main.getCookie("options")) l.value = q;
               l.nextElementSibling && l.parentNode.removeChild(l.nextElementSibling)
-            } else if ("com" == l.name) QR.comField = l, l.addEventListener("keydown", QR.onKeyDown, !1), l.addEventListener("paste", QR.onKeyDown, !1), l.addEventListener("cut", QR.onKeyDown, !1), g.children[1] && g.removeChild(l.nextSibling);
+            } else if ("com" == l.name) QR.comField = l, l.addEventListener("keydown", QR.onKeyDown, !1), l.addEventListener("paste", QR.onKeyDown, !1), l.addEventListener("cut",
+              QR.onKeyDown, !1), g.children[1] && g.removeChild(l.nextSibling);
             else if ("sub" == l.name) continue;
             null !== m && l.setAttribute("placeholder", m)
           } else "flag" == l.name && ((n = l.querySelector("option[selected]")) && n.removeAttribute("selected"), (q = Main.getCookie("4chan_flag")) && (n = l.querySelector('option[value="' + q + '"]')) && n.setAttribute("selected", "selected"));
           a.appendChild(g)
         }
-        this.btn || (this.btn = e.querySelector('input[type="submit"]').cloneNode(!1), this.btn.tabIndex = "", k ? k.parentNode.appendChild(this.btn) : (a.appendChild(document.createElement("div")), a.lastElementChild.appendChild(this.btn)));
+        this.btn || (this.btn = e.querySelector('input[type="submit"]').cloneNode(!1), this.btn.tabIndex = "", k ? k.parentNode.appendChild(this.btn) : (a.appendChild(document.createElement("div")),
+          a.lastElementChild.appendChild(this.btn)));
         e.querySelector('.desktop > label > input[name="spoiler"]') && (e = document.createElement("span"), e.id = "qrSpoiler", e.innerHTML = '<label>[<input type="checkbox" value="on" name="spoiler">Spoiler?]</label>', k.parentNode.insertBefore(e, k.nextSibling));
         f.appendChild(a);
         d.appendChild(f);
@@ -962,11 +1014,13 @@ var Parser = {
     },
     onPassError: function() {
       var a, b;
-      QR.captchaWidgetCnt || (window.passEnabled = QR.noCaptcha = !1, a = document.createElement("div"), a.id = "qrCaptchaContainer", b = $.id("qrForm"), b.insertBefore(a, b.lastElementChild), QR.captchaWidgetCnt = a, QR.renderCaptcha())
+      QR.captchaWidgetCnt || (window.passEnabled = QR.noCaptcha = !1, a = document.createElement("div"),
+        a.id = "qrCaptchaContainer", b = $.id("qrForm"), b.insertBefore(a, b.lastElementChild), QR.captchaWidgetCnt = a, QR.renderCaptcha())
     },
     onFileChange: function(a) {
       var b;
-      this.value ? (b = window.maxFilesize, this.files ? (a = this.files[0].size, "video/webm" == this.files[0].type && window.maxWebmFilesize && (b = window.maxWebmFilesize)) : a = 0, QR.fileDisabled ? QR.showPostError("Image limit reached.", "imagelimit", !0) : a > b ? QR.showPostError("Error: Maximum file size allowed is " + Math.floor(b / 1048576) + " MB", "filesize", !0) : QR.hidePostError()) : QR.hidePostError();
+      this.value ? (b = window.maxFilesize, this.files ? (a = this.files[0].size, "video/webm" == this.files[0].type && window.maxWebmFilesize && (b = window.maxWebmFilesize)) : a = 0, QR.fileDisabled ? QR.showPostError("Image limit reached.", "imagelimit", !0) : a > b ? QR.showPostError("Error: Maximum file size allowed is " + Math.floor(b / 1048576) + " MB", "filesize", !0) : QR.hidePostError()) :
+        QR.hidePostError();
       QR.painterData = null;
       QR.startCooldown()
     },
@@ -1007,7 +1061,8 @@ var Parser = {
     },
     onClick: function(a) {
       var b = a.target;
-      if ("submit" == b.type) a.preventDefault(), QR.submit(a.shiftKey);
+      if ("submit" ==
+        b.type) a.preventDefault(), QR.submit(a.shiftKey);
       else switch (b.id) {
         case "qrFile":
           a.shiftKey && (a.preventDefault(), QR.resetFile());
@@ -1024,7 +1079,8 @@ var Parser = {
     },
     showPostError: function(a, b, c) {
       var d;
-      if (d = $.id("qrError")) d.innerHTML = a, d.style.display = "block", d.setAttribute("data-type", b || ""), !c && (document.hidden || document.mozHidden || document.webkitHidden || document.msHidden) && alert("Posting Error")
+      if (d = $.id("qrError")) d.innerHTML = a, d.style.display = "block", d.setAttribute("data-type", b || ""), !c && (document.hidden || document.mozHidden || document.webkitHidden || document.msHidden) &&
+        alert("Posting Error")
     },
     hidePostError: function(a) {
       var b = $.id("qrError");
@@ -1042,7 +1098,8 @@ var Parser = {
       b.addEventListener("change", QR.onFileChange, !1);
       a = $.id("qrFile");
       a.removeEventListener("change", QR.onFileChange, !1);
-      a.parentNode.replaceChild(b, a);
+      a.parentNode.replaceChild(b,
+        a);
       QR.hidePostError("imagelimit");
       QR.needPreuploadCaptcha = !1;
       QR.startCooldown()
@@ -1050,43 +1107,46 @@ var Parser = {
     submit: function(a) {
       QR.hidePostError();
       QR.presubmitChecks(a) && (QR.auto = !1, QR.xhr = new XMLHttpRequest, QR.xhr.open("POST", document.forms.qrPost.action, !0), QR.xhr.withCredentials = !0, QR.xhr.upload.onprogress = function(a) {
-        QR.btn.value = a.loaded >= a.total ? "100%" : (0 | a.loaded / a.total * 100) + "%"
-      }, QR.xhr.onerror = function() {
-        QR.xhr = null;
-        QR.showPostError("Connection error.")
-      }, QR.xhr.onload = function() {
-        var a, c, d, e;
-        QR.xhr = null;
-        QR.btn.value = "Post";
-        if (200 == this.status)
-          if (a = this.responseText.match(/"errmsg"[^>]*>(.*?)<\/span/)) {
-            if (/4chan Pass/.test(a)) QR.onPassError();
-            else QR.resetCaptcha();
-            QR.showPostError(a[1])
-          } else {
-            if (e = this.responseText.match(/\x3c!-- thread:([0-9]+),no:([0-9]+) --\x3e/)) {
-              a = e[1];
-              e = e[2];
-              QR.lastTid = a;
-              localStorage.setItem("4chan-cd-" + Main.board + "-tid", a);
-              d = (c = $.id("qrFile")) && c.value;
-              QR.setPostTime();
-              if (Config.persistentQR) {
-                $.byName("com")[1].value = "";
-                if (c = $.byName("spoiler")[2]) c.checked = !1;
-                QR.resetCaptcha();
-                (d || QR.painterData) && QR.resetFile();
-                QR.startCooldown()
-              } else QR.close();
-              Main.tid ? (Config.threadWatcher && ThreadWatcher.setLastRead(e, a), QR.lastReplyId = +e, Parser.trackedReplies[">>" + e] = 1, Parser.saveTrackedReplies(a, Parser.trackedReplies)) : (c = Parser.getTrackedReplies(a) || {}, c[">>" + e] = 1, Parser.saveTrackedReplies(a, c));
-              UA.dispatchEvent("4chanQRPostSuccess", {
-                threadId: a,
-                postId: e
-              })
-            }
-            ThreadUpdater.enabled && setTimeout(ThreadUpdater.forceUpdate, 500)
-          } else QR.showPostError("Error: " + this.status + " " + this.statusText)
-      }, a = new FormData(document.forms.qrPost), QR.painterData && QR.appendPainter(a), clearInterval(QR.pulse), QR.btn.value = "Sending", QR.xhr.send(a))
+          QR.btn.value = a.loaded >= a.total ? "100%" : (0 | a.loaded / a.total * 100) + "%"
+        }, QR.xhr.onerror = function() {
+          QR.xhr = null;
+          QR.showPostError("Connection error.")
+        }, QR.xhr.onload = function() {
+          var a, c, d, e;
+          QR.xhr = null;
+          QR.btn.value =
+            "Post";
+          if (200 == this.status)
+            if (a = this.responseText.match(/"errmsg"[^>]*>(.*?)<\/span/)) {
+              if (/4chan Pass/.test(a)) QR.onPassError();
+              else QR.resetCaptcha();
+              QR.showPostError(a[1])
+            } else {
+              if (e = this.responseText.match(/\x3c!-- thread:([0-9]+),no:([0-9]+) --\x3e/)) {
+                a = e[1];
+                e = e[2];
+                QR.lastTid = a;
+                localStorage.setItem("4chan-cd-" + Main.board + "-tid", a);
+                d = (c = $.id("qrFile")) && c.value;
+                QR.setPostTime();
+                if (Config.persistentQR) {
+                  $.byName("com")[1].value = "";
+                  if (c = $.byName("spoiler")[2]) c.checked = !1;
+                  QR.resetCaptcha();
+                  (d || QR.painterData) &&
+                    QR.resetFile();
+                  QR.startCooldown()
+                } else QR.close();
+                Main.tid ? (Config.threadWatcher && ThreadWatcher.setLastRead(e, a), QR.lastReplyId = +e, Parser.trackedReplies[">>" + e] = 1, Parser.saveTrackedReplies(a, Parser.trackedReplies)) : (c = Parser.getTrackedReplies(a) || {}, c[">>" + e] = 1, Parser.saveTrackedReplies(a, c));
+                UA.dispatchEvent("4chanQRPostSuccess", {
+                  threadId: a,
+                  postId: e
+                })
+              }
+              ThreadUpdater.enabled && setTimeout(ThreadUpdater.forceUpdate, 500)
+            } else QR.showPostError("Error: " + this.status + " " + this.statusText)
+        }, a = new FormData(document.forms.qrPost),
+        QR.painterData && QR.appendPainter(a), clearInterval(QR.pulse), QR.btn.value = "Sending", QR.xhr.send(a))
     },
     appendPainter: function(a) {
       var b;
@@ -1157,13 +1217,15 @@ var Parser = {
       c = $.id("t" + a);
       b = $.id("sa" + a);
       b.removeAttribute("data-hidden");
-      Main.hasMobileLayout ? (b.textContent = "Hide", $.removeClass(b, "mobile-tu-show"), $.cls("postLink", c)[0].appendChild(b), c.style.display = null, $.removeClass(c.nextElementSibling, "mobile-hr-hidden")) : (b.firstChild.src = Main.icons.minus, $.removeClass(c, "post-hidden"));
+      Main.hasMobileLayout ? (b.textContent =
+        "Hide", $.removeClass(b, "mobile-tu-show"), $.cls("postLink", c)[0].appendChild(b), c.style.display = null, $.removeClass(c.nextElementSibling, "mobile-hr-hidden")) : (b.firstChild.src = Main.icons.minus, $.removeClass(c, "post-hidden"));
       delete this.hidden[a]
     },
     hide: function(a) {
       var b, c;
       c = $.id("t" + a);
-      Main.hasMobileLayout ? (c.style.display = "none", $.addClass(c.nextElementSibling, "mobile-hr-hidden"), b = $.id("sa" + a), b.setAttribute("data-hidden", a), b.textContent = "Show Hidden Thread", $.addClass(b, "mobile-tu-show"), c.parentNode.insertBefore(b, c)) : Config.hideStubs && !$.cls("stickyIcon", c)[0] ? c.style.display = c.nextElementSibling.style.display = "none" : (b = $.id("sa" + a), b.setAttribute("data-hidden", a), b.firstChild.src = Main.icons.plus, c.className += " post-hidden");
+      Main.hasMobileLayout ? (c.style.display = "none", $.addClass(c.nextElementSibling, "mobile-hr-hidden"), b = $.id("sa" + a), b.setAttribute("data-hidden", a), b.textContent = "Show Hidden Thread", $.addClass(b, "mobile-tu-show"), c.parentNode.insertBefore(b,
+        c)) : Config.hideStubs && !$.cls("stickyIcon", c)[0] ? c.style.display = c.nextElementSibling.style.display = "none" : (b = $.id("sa" + a), b.setAttribute("data-hidden", a), b.firstChild.src = Main.icons.plus, c.className += " post-hidden");
       this.hidden[a] = Date.now()
     },
     load: function() {
@@ -1178,23 +1240,24 @@ var Parser = {
         b = !0;
         break
       }
-      b && (!c || c < Date.now() - this.threshold) && $.get("//a.4cdn.org/" + Main.board + "/threads.json", {
-        onload: function() {
-          var a, b, c, g, k, l;
-          if (200 == this.status) {
-            l = {};
-            g = JSON.parse(this.responseText);
-            for (a = 0; b = g[a]; ++a)
-              for (k = b.threads, b = 0; c = k[b]; ++b) ThreadHiding.hidden[c.no] && (l[c.no] = 1);
-            ThreadHiding.hidden = l;
-            ThreadHiding.save();
-            localStorage.setItem(d, Date.now())
-          } else console.log("Bad status code while purging threads")
-        },
-        onerror: function() {
-          console.log("Error while purging hidden threads")
-        }
-      })
+      b && (!c || c < Date.now() - this.threshold) &&
+        $.get("//a.4cdn.org/" + Main.board + "/threads.json", {
+          onload: function() {
+            var a, b, c, g, k, l;
+            if (200 == this.status) {
+              l = {};
+              g = JSON.parse(this.responseText);
+              for (a = 0; b = g[a]; ++a)
+                for (k = b.threads, b = 0; c = k[b]; ++b) ThreadHiding.hidden[c.no] && (l[c.no] = 1);
+              ThreadHiding.hidden = l;
+              ThreadHiding.save();
+              localStorage.setItem(d, Date.now())
+            } else console.log("Bad status code while purging threads")
+          },
+          onerror: function() {
+            console.log("Error while purging hidden threads")
+          }
+        })
     },
     save: function() {
       for (var a in this.hidden) {
@@ -1294,7 +1357,8 @@ var Parser = {
       a.id = "threadWatcher";
       a.className = "extPanel reply";
       a.setAttribute("data-trackpos", "TW-position");
-      Main.hasMobileLayout ? a.style.display = "none" : (Config["TW-position"] ? a.style.cssText = Config["TW-position"] : (a.style.left = "10px", a.style.top = "380px"), a.style.position = Config.fixedThreadWatcher ? "fixed" : "");
+      Main.hasMobileLayout ? a.style.display = "none" : (Config["TW-position"] ? a.style.cssText = Config["TW-position"] : (a.style.left =
+        "10px", a.style.top = "380px"), a.style.position = Config.fixedThreadWatcher ? "fixed" : "");
       a.innerHTML = '<div class="drag" id="twHeader">' + (Main.hasMobileLayout ? '<img id="twClose" class="pointer" src="' + Main.icons.cross + '" alt="X">' : "") + "Thread Watcher" + (UA.hasCORS ? '<img id="twPrune" class="pointer right" src="' + Main.icons.refresh + '" alt="R" title="Refresh"></div>' : "</div>");
       this.listNode = document.createElement("ul");
       this.listNode.id = "watchList";
@@ -1312,7 +1376,8 @@ var Parser = {
       var b = $.id("threadWatcher");
       a && a.preventDefault();
       !Main.tid && ThreadWatcher.canAutoRefresh() && ThreadWatcher.refresh();
-      "none" == b.style.display ? (b.style.top = window.pageYOffset + 30 + "px", b.style.display = "") : b.style.display = "none"
+      "none" == b.style.display ? (b.style.top = window.pageYOffset + 30 + "px", b.style.display = "") :
+        b.style.display = "none"
     },
     syncStorage: function(a) {
       var b;
@@ -1333,14 +1398,16 @@ var Parser = {
     rebuildButtons: function() {
       var a, b, c;
       b = $.cls("wbtn");
-      for (a = 0; btn = b[a]; ++a) c = btn.getAttribute("data-id") + "-" + Main.board, ThreadWatcher.watched[c] ? btn.hasAttribute("data-active") || (btn.src = Main.icons.watched, btn.setAttribute("data-active", "1")) : btn.hasAttribute("data-active") && (btn.src = Main.icons.notwatched, btn.removeAttribute("data-active"))
+      for (a =
+        0; btn = b[a]; ++a) c = btn.getAttribute("data-id") + "-" + Main.board, ThreadWatcher.watched[c] ? btn.hasAttribute("data-active") || (btn.src = Main.icons.watched, btn.setAttribute("data-active", "1")) : btn.hasAttribute("data-active") && (btn.src = Main.icons.notwatched, btn.removeAttribute("data-active"))
     },
     initMobileButtons: function() {
       var a, b;
       a = document.createElement("img");
       b = Main.tid + "-" + Main.board;
       ThreadWatcher.watched[b] ? (a.src = Main.icons.watched, a.setAttribute("data-active", "1")) : a.src = Main.icons.notwatched;
-      a.className = "extButton wbtn wbtn-" + b;
+      a.className =
+        "extButton wbtn wbtn-" + b;
       a.setAttribute("data-cmd", "watch");
       a.setAttribute("data-id", Main.tid);
       a.alt = "W";
@@ -1352,7 +1419,8 @@ var Parser = {
     },
     onClick: function(a) {
       a = a.target;
-      a.hasAttribute("data-id") ? ThreadWatcher.toggle(a.getAttribute("data-id"), a.getAttribute("data-board")) : "twPrune" != a.id || ThreadWatcher.isRefreshing ? "twClose" == a.id && ThreadWatcher.toggleList() : ThreadWatcher.refreshWithAutoWatch()
+      a.hasAttribute("data-id") ? ThreadWatcher.toggle(a.getAttribute("data-id"), a.getAttribute("data-board")) :
+        "twPrune" != a.id || ThreadWatcher.isRefreshing ? "twClose" == a.id && ThreadWatcher.toggleList() : ThreadWatcher.refreshWithAutoWatch()
     },
     generateLabel: function(a, b, c) {
       var d;
@@ -1361,7 +1429,8 @@ var Parser = {
     toggle: function(a, b) {
       var c, d, e;
       c = a + "-" + (b || Main.board);
-      this.watched[c] ? (this.blacklisted[c] = 1, delete this.watched[c]) : (d = $.cls("subject", $.id("pi" + a))[0].textContent, e = $.id("m" + a).innerHTML, d = ThreadWatcher.generateLabel(d, e, a), e = (thread = $.id("t" + a)).children[1] ? thread.lastElementChild.id.slice(2) : a, this.watched[c] = [d, e, 0]);
+      this.watched[c] ? (this.blacklisted[c] = 1, delete this.watched[c]) : (d = $.cls("subject", $.id("pi" + a))[0].textContent, e = $.id("m" + a).innerHTML, d = ThreadWatcher.generateLabel(d,
+        e, a), e = (thread = $.id("t" + a)).children[1] ? thread.lastElementChild.id.slice(2) : a, this.watched[c] = [d, e, 0]);
       this.save();
       this.load();
       this.build(!0)
@@ -1451,7 +1520,8 @@ var Parser = {
     refresh: function() {
       var a, b, c, d, e;
       if (d = $.id("watchList").children.length)
-        for (c in a = b = 0, e = $.id("twPrune"), e.src = Main.icons.rotate, ThreadWatcher.isRefreshing = !0, ThreadWatcher.setRefreshTimestamp(), ThreadWatcher.watched) setTimeout(ThreadWatcher.fetch, b, c, ++a == d ? e : null), b += 200
+        for (c in a =
+          b = 0, e = $.id("twPrune"), e.src = Main.icons.rotate, ThreadWatcher.isRefreshing = !0, ThreadWatcher.setRefreshTimestamp(), ThreadWatcher.watched) setTimeout(ThreadWatcher.fetch, b, c, ++a == d ? e : null), b += 200
     },
     refreshCurrent: function(a) {
       var b, c, d;
@@ -1460,7 +1530,8 @@ var Parser = {
     },
     setLastRead: function(a, b) {
       var c = b + "-" + Main.board;
-      this.watched[c] && (this.watched[c][1] = a, this.watched[c][2] = 0, this.save(), this.build())
+      this.watched[c] &&
+        (this.watched[c][1] = a, this.watched[c][2] = 0, this.save(), this.build())
     },
     onRefreshEnd: function(a) {
       a.src = Main.icons.refresh;
@@ -1493,72 +1564,79 @@ var Parser = {
     },
     expandComment: function(a) {
       var b, c, d, e;
-      if (b = a.getAttribute("href").match(/^(?:thread\/)([0-9]+)#p([0-9]+)$/)) c = b[1], d = b[2], e = a.parentNode, e.textContent = "Loading...", $.get("//a.4cdn.org/" + Main.board + "/thread/" + c + ".json", {
-        onload: function() {
-          var a, b, g, k;
-          if (200 == this.status) {
-            b = $.id("m" + d);
-            k = Parser.parseThreadJSON(this.responseText);
-            if (c == d) g = k[0];
-            else
-              for (a = k.length - 1; 0 < a; a--)
-                if (k[a].no == d) {
-                  g = k[a];
-                  break
-                }
-            g ? (g = Parser.buildHTMLFromJSON(g, Main.board), b.innerHTML = $.cls("postMessage", g)[0].innerHTML, Parser.prettify && Parser.parseMarkup(b), window.jsMath && Parser.parseMathOne(b)) : e.textContent = "This post doesn't exist anymore."
-          } else 404 == this.status ? e.textContent = "This thread doesn't exist anymore." : (e.textContent = "Connection Error", console.log("ThreadExpansion: " + this.status + " " + this.statusText))
-        },
-        onerror: function() {
-          e.textContent = "Connection Error";
-          console.log("ThreadExpansion: xhr failed")
-        }
-      })
+      if (b = a.getAttribute("href").match(/^(?:thread\/)([0-9]+)#p([0-9]+)$/)) c =
+        b[1], d = b[2], e = a.parentNode, e.textContent = "Loading...", $.get("//a.4cdn.org/" + Main.board + "/thread/" + c + ".json", {
+          onload: function() {
+            var a, b, g, k;
+            if (200 == this.status) {
+              b = $.id("m" + d);
+              k = Parser.parseThreadJSON(this.responseText);
+              if (c == d) g = k[0];
+              else
+                for (a = k.length - 1; 0 < a; a--)
+                  if (k[a].no == d) {
+                    g = k[a];
+                    break
+                  }
+              g ? (g = Parser.buildHTMLFromJSON(g, Main.board), b.innerHTML = $.cls("postMessage", g)[0].innerHTML, Parser.prettify && Parser.parseMarkup(b), window.jsMath && Parser.parseMathOne(b)) : e.textContent = "This post doesn't exist anymore."
+            } else 404 ==
+              this.status ? e.textContent = "This thread doesn't exist anymore." : (e.textContent = "Connection Error", console.log("ThreadExpansion: " + this.status + " " + this.statusText))
+          },
+          onerror: function() {
+            e.textContent = "Connection Error";
+            console.log("ThreadExpansion: xhr failed")
+          }
+        })
     },
     toggle: function(a) {
       var b, c, d, e;
       b = $.id("t" + a);
       e = b.children[1];
       b.hasAttribute("data-truncated") && (c = $.id("m" + a), d = c.nextSibling);
-      $.hasClass(b, "tExpanded") ? (b.className = b.className.replace(" tExpanded", " tCollapsed"), e.children[0].src = Main.icons.plus, e.children[1].style.display = "inline", e.children[2].style.display = "none", c && (a = c.innerHTML, c.innerHTML = d.textContent, d.textContent = a)) : $.hasClass(b, "tCollapsed") ? (b.className = b.className.replace(" tCollapsed", " tExpanded"), e.children[0].src = Main.icons.minus, e.children[1].style.display = "none", e.children[2].style.display = "inline", c && (a = c.innerHTML, c.innerHTML = d.textContent, d.textContent = a)) : (e.children[0].src = Main.icons.rotate, ThreadExpansion.fetch(a))
+      $.hasClass(b, "tExpanded") ? (b.className = b.className.replace(" tExpanded", " tCollapsed"), e.children[0].src = Main.icons.plus,
+        e.children[1].style.display = "inline", e.children[2].style.display = "none", c && (a = c.innerHTML, c.innerHTML = d.textContent, d.textContent = a)) : $.hasClass(b, "tCollapsed") ? (b.className = b.className.replace(" tCollapsed", " tExpanded"), e.children[0].src = Main.icons.minus, e.children[1].style.display = "none", e.children[2].style.display = "inline", c && (a = c.innerHTML, c.innerHTML = d.textContent, d.textContent = a)) : (e.children[0].src = Main.icons.rotate, ThreadExpansion.fetch(a))
     },
     fetch: function(a) {
-      $.get("//a.4cdn.org/" + Main.board + "/thread/" + a + ".json", {
-        onload: function() {
-          var b, c, d, e, f, h, g, k;
-          e = $.id("t" + a);
-          k = e.children[1];
-          if (200 == this.status) {
-            f = $.cls("reply", e);
-            h = Parser.parseThreadJSON(this.responseText);
-            !Config.revealSpoilers && h[0].custom_spoiler && Parser.setCustomSpoiler(Main.board, h[0].custom_spoiler);
-            d = document.createDocumentFragment();
-            if (f[0])
-              for (f = +f[0].id.slice(1), b = 1; c = h[b]; ++b)
-                if (c.no < f) c = Parser.buildHTMLFromJSON(c, Main.board), c.className += " rExpanded", d.appendChild(c);
-                else break;
-            else
-              for (b = 1; c = h[b]; ++b) c = Parser.buildHTMLFromJSON(c, Main.board), c.className += " rExpanded", d.appendChild(c);
-            f = $.id("m" + a);
-            (g = $.cls("abbr", f)[0]) && /^Comment/.test(g.textContent) && (e.setAttribute("data-truncated", "1"), g = document.createElement("div"), g.style.display = "none", g.textContent = f.innerHTML, f.parentNode.insertBefore(g, f.nextSibling), (g = $.cls("capcodeReplies", f)[0]) ? (f.innerHTML = h[0].com + "<br><br>", f.appendChild(g)) : f.innerHTML = h[0].com, Parser.prettify && Parser.parseMarkup(f), window.jsMath && Parser.parseMathOne(f));
-            e.insertBefore(d, k.nextSibling);
-            Parser.parseThread(a, 1, b - 1);
-            e.className += " tExpanded";
-            k.children[0].src = Main.icons.minus;
-            k.children[1].style.display = "none";
-            k.children[2].style.display = "inline"
-          } else 404 == this.status ? (k.children[0].src = Main.icons.plus, k.children[0].display = "none", k.children[1].textContent = "This thread doesn't exist anymore.") : (k.children[0].src = Main.icons.plus, console.log("ThreadExpansion: " + this.status + " " + this.statusText))
-        },
-        onerror: function() {
-          $.id("t" + a).children[1].children[0].src = Main.icons.plus;
-          console.log("ThreadExpansion: xhr failed")
-        }
-      })
+      $.get("//a.4cdn.org/" + Main.board +
+        "/thread/" + a + ".json", {
+          onload: function() {
+            var b, c, d, e, f, h, g, k;
+            e = $.id("t" + a);
+            k = e.children[1];
+            if (200 == this.status) {
+              f = $.cls("reply", e);
+              h = Parser.parseThreadJSON(this.responseText);
+              !Config.revealSpoilers && h[0].custom_spoiler && Parser.setCustomSpoiler(Main.board, h[0].custom_spoiler);
+              d = document.createDocumentFragment();
+              if (f[0])
+                for (f = +f[0].id.slice(1), b = 1; c = h[b]; ++b)
+                  if (c.no < f) c = Parser.buildHTMLFromJSON(c, Main.board), c.className += " rExpanded", d.appendChild(c);
+                  else break;
+              else
+                for (b = 1; c = h[b]; ++b) c = Parser.buildHTMLFromJSON(c,
+                  Main.board), c.className += " rExpanded", d.appendChild(c);
+              f = $.id("m" + a);
+              (g = $.cls("abbr", f)[0]) && /^Comment/.test(g.textContent) && (e.setAttribute("data-truncated", "1"), g = document.createElement("div"), g.style.display = "none", g.textContent = f.innerHTML, f.parentNode.insertBefore(g, f.nextSibling), (g = $.cls("capcodeReplies", f)[0]) ? (f.innerHTML = h[0].com + "<br><br>", f.appendChild(g)) : f.innerHTML = h[0].com, Parser.prettify && Parser.parseMarkup(f), window.jsMath && Parser.parseMathOne(f));
+              e.insertBefore(d, k.nextSibling);
+              Parser.parseThread(a, 1, b - 1);
+              e.className += " tExpanded";
+              k.children[0].src = Main.icons.minus;
+              k.children[1].style.display = "none";
+              k.children[2].style.display = "inline"
+            } else 404 == this.status ? (k.children[0].src = Main.icons.plus, k.children[0].display = "none", k.children[1].textContent = "This thread doesn't exist anymore.") : (k.children[0].src = Main.icons.plus, console.log("ThreadExpansion: " + this.status + " " + this.statusText))
+          },
+          onerror: function() {
+            $.id("t" + a).children[1].children[0].src = Main.icons.plus;
+            console.log("ThreadExpansion: xhr failed")
+          }
+        })
     }
   },
   ThreadUpdater = {
     init: function() {
-      UA.hasCORS && (this.enabled = !0, this.pageTitle = document.title, this.unreadCount = 0, this.auto = this.hadAuto = !1, this.delayId = 0, this.delayIdHidden = 4, this.delayRange = [10, 15, 20, 30, 60, 90, 120, 180, 240, 300], this.timeLeft = 0, this.interval = null, this.lastModified = "0", this.currentIcon = this.lastReply = null, this.iconPath = "//s.4cdn.org/image/", this.iconNode = document.head.querySelector('link[rel="shortcut icon"]'), this.iconNode.type = "image/x-icon", this.defaultIcon = this.iconNode.getAttribute("href").replace(this.iconPath, ""), this.deletionQueue = {}, Config.updaterSound && (this.audioEnabled = !1, this.audio = document.createElement("audio"), this.audio.src = "//s.4cdn.org/media/beep.ogg"), this.hidden = "hidden", this.visibilitychange = "visibilitychange", this.adRefreshDelay = 1E3, this.adDebounce = 0, this.ads = {}, "undefined" === typeof document.hidden && ("mozHidden" in document ? (this.hidden = "mozHidden", this.visibilitychange = "mozvisibilitychange") : "webkitHidden" in document ? (this.hidden = "webkitHidden", this.visibilitychange = "webkitvisibilitychange") : "msHidden" in document && (this.hidden = "msHidden", this.visibilitychange = "msvisibilitychange")), this.initAds(), this.initControls(), document.addEventListener("scroll", this.onScroll, !1), (Config.alwaysAutoUpdate || sessionStorage.getItem("4chan-auto-" + Main.tid)) && this.start())
+      UA.hasCORS && (this.enabled = !0, this.pageTitle = document.title, this.unreadCount = 0, this.auto = this.hadAuto = !1, this.delayId = 0, this.delayIdHidden = 4, this.delayRange = [10, 15, 20, 30, 60, 90, 120, 180, 240, 300], this.timeLeft = 0, this.interval = null, this.lastModified = "0", this.currentIcon = this.lastReply = null, this.iconPath = "//s.4cdn.org/image/", this.iconNode = document.head.querySelector('link[rel="shortcut icon"]'), this.iconNode.type = "image/x-icon", this.defaultIcon = this.iconNode.getAttribute("href").replace(this.iconPath,
+        ""), this.deletionQueue = {}, Config.updaterSound && (this.audioEnabled = !1, this.audio = document.createElement("audio"), this.audio.src = "//s.4cdn.org/media/beep.ogg"), this.hidden = "hidden", this.visibilitychange = "visibilitychange", this.adRefreshDelay = 1E3, this.adDebounce = 0, this.ads = {}, "undefined" === typeof document.hidden && ("mozHidden" in document ? (this.hidden = "mozHidden", this.visibilitychange = "mozvisibilitychange") : "webkitHidden" in document ? (this.hidden = "webkitHidden", this.visibilitychange = "webkitvisibilitychange") :
+        "msHidden" in document && (this.hidden = "msHidden", this.visibilitychange = "msvisibilitychange")), this.initAds(), this.initControls(), document.addEventListener("scroll", this.onScroll, !1), (Config.alwaysAutoUpdate || sessionStorage.getItem("4chan-auto-" + Main.tid)) && this.start())
     },
     buildMobileControl: function(a, b) {
       var c, d, e, f, h, g;
@@ -1588,7 +1666,8 @@ var Parser = {
       c.appendChild(this["statusNode" + b] = h);
       d.appendChild(c);
       g.parentNode.removeChild(g);
-      if (d = $.id("mpostform")) d.parentNode.style.marginTop = ""
+      if (d = $.id("mpostform")) d.parentNode.style.marginTop =
+        ""
     },
     buildDesktopControl: function(a) {
       var b, c, d;
@@ -1624,7 +1703,8 @@ var Parser = {
       this.autoNode.checked = this.autoNodeBot.checked = !0;
       this.force = this.updating = !1;
       this.lastUpdated = Date.now();
-      this.hidden && document.addEventListener(this.visibilitychange, this.onVisibilityChange, !1);
+      this.hidden && document.addEventListener(this.visibilitychange,
+        this.onVisibilityChange, !1);
       this.delayId = 0;
       this.timeLeft = this.delayRange[0];
       this.pulse();
@@ -1640,7 +1720,8 @@ var Parser = {
     },
     pulse: function() {
       var a = ThreadUpdater;
-      0 == a.timeLeft ? a.update() : (a.setStatus(a.timeLeft--), a.interval = setTimeout(a.pulse, 1E3))
+      0 == a.timeLeft ?
+        a.update() : (a.setStatus(a.timeLeft--), a.interval = setTimeout(a.pulse, 1E3))
     },
     adjustDelay: function(a) {
       0 == a ? this.force || this.delayId < this.delayRange.length - 1 && ++this.delayId : this.delayId = document[this.hidden] ? this.delayIdHidden : 0;
@@ -1668,7 +1749,8 @@ var Parser = {
       ThreadUpdater.update()
     },
     toggleAuto: function() {
-      this.updating || (this.auto ? this.stop(!0) : this.start())
+      this.updating ||
+        (this.auto ? this.stop(!0) : this.start())
     },
     toggleSound: function() {
       this.soundNode.checked = this.soundNodeBot.checked = this.audioEnabled = !this.audioEnabled
@@ -1703,7 +1785,8 @@ var Parser = {
       if (!(100 > b - a.adDebounce))
         for (d in a.adDebounce = b, h = document[a.hidden], g = document.documentElement.clientHeight, a.ads)
           if (f = a.ads[d], !h && (e = window[d]))
-            if (c = $.id(e.D)) c = c.getBoundingClientRect(), 0 > c.top || c.bottom > g || (f.seenOnce = !0, !f.isStale || b - f.time < a.adRefreshDelay || (f.time = b, f.isStale = !1, ados_refresh(e, 0, !1)))
+            if (c = $.id(e.D)) c = c.getBoundingClientRect(), 0 > c.top || c.bottom > g || (f.seenOnce = !0, !f.isStale || b - f.time < a.adRefreshDelay || (f.time = b, f.isStale = !1,
+              ados_refresh(e, 0, !1)))
     },
     markDeletedReplies: function(a) {
       var b, c, d, e;
@@ -1726,7 +1809,8 @@ var Parser = {
         b = !!f[0].archived;
         void 0 !== window.thread_archived && b != window.thread_archived && (QR.enabled && $.id("quickReply") && QR.lock(), Main.setThreadState("archived", b));
         b = !!f[0].closed;
-        b != Main.threadClosed && (f[0].archived ? b = !1 : QR.enabled && $.id("quickReply") && (b ? QR.lock() : QR.unlock()), Main.setThreadState("closed", b));
+        b != Main.threadClosed && (f[0].archived ? b = !1 : QR.enabled && $.id("quickReply") && (b ? QR.lock() : QR.unlock()), Main.setThreadState("closed",
+          b));
         b = !!f[0].sticky;
         b != Main.threadSticky && Main.setThreadState("sticky", b);
         b = !!f[0].imagelimit;
@@ -1748,7 +1832,8 @@ var Parser = {
           Parser.hasHighlightedPosts = !1;
           Parser.parseThread(e.id.slice(1), -d.length);
           a != g.offsetTop && window.scrollBy(0, g.offsetTop - a);
-          m || (!c.force && l.scrollHeight > window.innerHeight ? (c.lastReply || k == Main.tid || ((c.lastReply = g.lastChild).className += " newPostsMarker"), Parser.hasYouMarkers ? (c.setIcon("rep"), c.audioEnabled && document[c.hidden] && c.audio.play()) : Parser.hasHighlightedPosts && "rep" !== c.currentIcon ? c.setIcon("hl") : 0 == c.unreadCount && c.setIcon("new"), c.unreadCount += b, document.title = "(" + c.unreadCount + ") " + c.pageTitle) : c.setStatus(b + " new post" + (1 < b ? "s" : "")));
+          m || (!c.force && l.scrollHeight > window.innerHeight ? (c.lastReply || k == Main.tid || ((c.lastReply = g.lastChild).className += " newPostsMarker"), Parser.hasYouMarkers ? (c.setIcon("rep"), c.audioEnabled &&
+            document[c.hidden] && c.audio.play()) : Parser.hasHighlightedPosts && "rep" !== c.currentIcon ? c.setIcon("hl") : 0 == c.unreadCount && c.setIcon("new"), c.unreadCount += b, document.title = "(" + c.unreadCount + ") " + c.pageTitle) : c.setStatus(b + " new post" + (1 < b ? "s" : "")));
           n && window.scrollTo(0, document.documentElement.scrollHeight);
           Config.threadWatcher && ThreadWatcher.refreshCurrent(!0);
           Config.threadStats && (e = f[0], ThreadStats.update(e.replies, e.images, e.unique_ips, e.bumplimit, e.imagelimit));
@@ -1773,7 +1858,8 @@ var Parser = {
     },
     onerror: function() {
       var a = ThreadUpdater;
-      UA.isOpera && !this.statusText && 0 == this.status ? a.setStatus("No new posts") : a.setError("Connection Error");
+      UA.isOpera && !this.statusText &&
+        0 == this.status ? a.setStatus("No new posts") : a.setError("Connection Error");
       a.lastUpdated = Date.now();
       a.adjustDelay(0);
       a.updating = a.force = !1
@@ -1807,7 +1893,8 @@ var Parser = {
       var a;
       this.nodeTop = document.createElement("div");
       this.nodeTop.className = "thread-stats";
-      Main.hasMobileLayout ? (this.nodeBot = {}, a = $.cls("navLinks"), a[0] && (a = a[a.length - 1].nextElementSibling, a.parentNode.insertBefore(this.nodeTop, a))) : (this.nodeBot = this.nodeTop.cloneNode(!1), a = $.cls("navLinks"), a[1] && a[1].appendChild(this.nodeTop), a[2] && a[2].appendChild(this.nodeBot));
+      Main.hasMobileLayout ? (this.nodeBot = {}, a = $.cls("navLinks"), a[0] && (a = a[a.length - 1].nextElementSibling,
+        a.parentNode.insertBefore(this.nodeTop, a))) : (this.nodeBot = this.nodeTop.cloneNode(!1), a = $.cls("navLinks"), a[1] && a[1].appendChild(this.nodeTop), a[2] && a[2].appendChild(this.nodeBot));
       this.pageNumber = null;
       this.update(null, null, null, window.bumplimit, window.imagelimit);
       window.thread_archived || (this.updatePageNumber(), this.pageInterval = setInterval(this.updatePageNumber, 18E4))
@@ -1838,7 +1925,8 @@ var Parser = {
         h = JSON.parse(this.responseText);
         for (b = 0; d = h[b]; ++b)
           for (f = d.threads, c = 0; e = f[c]; ++c)
-            if (e.no == g) {
+            if (e.no ==
+              g) {
               e = $.cls("ts-page");
               for (b = 0; c = e[b]; ++b) c.textContent = d.page;
               a.pageNumber = d.page;
@@ -1926,7 +2014,8 @@ var Parser = {
           break
         }
       } else if (4 == e.type) {
-        if (e.pattern === a.id) {
+        if (e.pattern ===
+          a.id) {
           h = !0;
           break
         }
@@ -1955,7 +2044,8 @@ var Parser = {
               break
             }
           } else if (1 == m.type) {
-        if ((h || (h = b.getElementsByClassName("name")[0])) && m.pattern == h.textContent) {
+        if ((h || (h = b.getElementsByClassName("name")[0])) &&
+          m.pattern == h.textContent) {
           p = !0;
           break
         }
@@ -1974,14 +2064,16 @@ var Parser = {
           p = !0;
           break
         }
-      } else if (6 == m.type && (void 0 === n && (n = (n = b.parentNode.getElementsByClassName("fileText")[0]) ? n.firstElementChild.textContent : ""), m.pattern.test(n))) {
+      } else if (6 == m.type &&
+        (void 0 === n && (n = (n = b.parentNode.getElementsByClassName("fileText")[0]) ? n.firstElementChild.textContent : ""), m.pattern.test(n))) {
         p = !0;
         break
       }
       if (p) {
         if (m.hide) return a.className += " post-hidden", el = document.createElement("span"), d ? el.innerHTML = '[<a data-cmd="unfilter" data-filtered="1" href="thread/' + d + '">View</a>]' : (el.textContent = "[View]", el.setAttribute("data-filtered", "1"), el.setAttribute("data-cmd", "unfilter")), el.className = "filter-preview", b.appendChild(el), !0;
         a.className += " filter-hl";
-        a.style.boxShadow = "-3px 0 " + m.color;
+        a.style.boxShadow =
+          "-3px 0 " + m.color;
         Parser.hasHighlightedPosts = !0
       }
       return !1
@@ -2038,7 +2130,9 @@ var Parser = {
     },
     openHelp: function() {
       var a;
-      $.id("filtersHelp") || (a = document.createElement("div"), a.id = "filtersHelp", a.className = "UIPanel", a.setAttribute("data-cmd", "filters-help-close"), a.innerHTML = '<div class="extPanel reply"><div class="panelHeader">Filters &amp; Highlights Help<span><img alt="Close" title="Close" class="pointer" data-cmd="filters-help-close" src="' + Main.icons.cross + '"></span></div><h4>Tripcode, Name and ID filters:</h4><ul><li>Those use simple string comparison.</li><li>Type them exactly as they appear on 4chan, including the exclamation mark for tripcode filters.</li><li>Example: <code>!Ep8pui8Vw2</code></li></ul><h4>Comment, Subject and E-mail filters:</h4><ul><li><strong>Matching whole words:</strong></li><li><code>feel</code> &mdash; will match <em>"feel"</em> but not <em>"feeling"</em>. This search is case-insensitive.</li></ul><ul><li><strong>AND operator:</strong></li><li><code>feel girlfriend</code> &mdash; will match <em>"feel"</em> AND <em>"girlfriend"</em> in any order.</li></ul><ul><li><strong>Exact match:</strong></li><li><code>"that feel when"</code> &mdash; place double quotes around the pattern to search for an exact string</li></ul><ul><li><strong>Wildcards:</strong></li><li><code>feel*</code> &mdash; matches expressions such as <em>"feel"</em>, <em>"feels"</em>, <em>"feeling"</em>, <em>"feeler"</em>, etc\u2026</li><li><code>idolm*ster</code> &mdash; this can match <em>"idolmaster"</em> or <em>"idolm@ster"</em>, etc\u2026</li></ul><ul><li><strong>Regular expressions:</strong></li><li><code>/feel when no (girl|boy)friend/i</code></li><li><code>/^(?!.*touhou).*$/i</code> &mdash; NOT operator.</li><li><code>/^>/</code> &mdash; comments starting with a quote.</li><li><code>/^$/</code> &mdash; comments with no text.</li></ul><h4>Colors:</h4><ul><li>The color field can accept any valid CSS color:</li><li><code>red</code>, <code>#0f0</code>, <code>#00ff00</code>, <code>rgba( 34, 12, 64, 0.3)</code>, etc\u2026</li></ul><h4>Boards:</h4><ul><li>A space separated list of boards on which the filter will be active. Leave blank to apply to all boards.</li></ul><h4>Auto-watching:</h4><ul><li>Enabling the "Auto" option will automatically add matched threads to the Thread Watcher when it is manually refreshed. This only works when the "Boards" field is not empty, and searches catalog JSON for the selected boards(s).</li></ul><h4>Shortcut:</h4><ul><li>If you have <code>Keyboard shortcuts</code> enabled, pressing <kbd>F</kbd> will add the selected text to your filters.</li></ul>', document.body.appendChild(a), a.addEventListener("click", this.onClick, !1))
+      $.id("filtersHelp") || (a = document.createElement("div"),
+        a.id = "filtersHelp", a.className = "UIPanel", a.setAttribute("data-cmd", "filters-help-close"), a.innerHTML = '<div class="extPanel reply"><div class="panelHeader">Filters &amp; Highlights Help<span><img alt="Close" title="Close" class="pointer" data-cmd="filters-help-close" src="' + Main.icons.cross + '"></span></div><h4>Tripcode, Name and ID filters:</h4><ul><li>Those use simple string comparison.</li><li>Type them exactly as they appear on 4chan, including the exclamation mark for tripcode filters.</li><li>Example: <code>!Ep8pui8Vw2</code></li></ul><h4>Comment, Subject and E-mail filters:</h4><ul><li><strong>Matching whole words:</strong></li><li><code>feel</code> &mdash; will match <em>"feel"</em> but not <em>"feeling"</em>. This search is case-insensitive.</li></ul><ul><li><strong>AND operator:</strong></li><li><code>feel girlfriend</code> &mdash; will match <em>"feel"</em> AND <em>"girlfriend"</em> in any order.</li></ul><ul><li><strong>Exact match:</strong></li><li><code>"that feel when"</code> &mdash; place double quotes around the pattern to search for an exact string</li></ul><ul><li><strong>Wildcards:</strong></li><li><code>feel*</code> &mdash; matches expressions such as <em>"feel"</em>, <em>"feels"</em>, <em>"feeling"</em>, <em>"feeler"</em>, etc\u2026</li><li><code>idolm*ster</code> &mdash; this can match <em>"idolmaster"</em> or <em>"idolm@ster"</em>, etc\u2026</li></ul><ul><li><strong>Regular expressions:</strong></li><li><code>/feel when no (girl|boy)friend/i</code></li><li><code>/^(?!.*touhou).*$/i</code> &mdash; NOT operator.</li><li><code>/^>/</code> &mdash; comments starting with a quote.</li><li><code>/^$/</code> &mdash; comments with no text.</li></ul><h4>Colors:</h4><ul><li>The color field can accept any valid CSS color:</li><li><code>red</code>, <code>#0f0</code>, <code>#00ff00</code>, <code>rgba( 34, 12, 64, 0.3)</code>, etc\u2026</li></ul><h4>Boards:</h4><ul><li>A space separated list of boards on which the filter will be active. Leave blank to apply to all boards.</li></ul><h4>Auto-watching:</h4><ul><li>Enabling the "Auto" option will automatically add matched threads to the Thread Watcher when it is manually refreshed. This only works when the "Boards" field is not empty, and searches catalog JSON for the selected boards(s).</li></ul><h4>Shortcut:</h4><ul><li>If you have <code>Keyboard shortcuts</code> enabled, pressing <kbd>F</kbd> will add the selected text to your filters.</li></ul>',
+        document.body.appendChild(a), a.addEventListener("click", this.onClick, !1))
     },
     closeHelp: function() {
       var a;
@@ -2164,7 +2258,8 @@ var Parser = {
       document.body.appendChild(a);
       $.id("filter-palette").addEventListener("click", Filter.onPaletteClick, !1);
       $.id("palette-custom-input").addEventListener("keyup", Filter.setCustomColor, !1);
-      a = a.firstElementChild;
+      a =
+        a.firstElementChild;
       a.style.cssText = "top:" + b.top + "px;left:" + (b.left - a.clientWidth - 10) + "px;"
     },
     closePalette: function() {
@@ -2174,7 +2269,8 @@ var Parser = {
     pickColor: function(a, b) {
       var c;
       c = $.id("filter-palette").getAttribute("data-target");
-      if (c = $.id("filter-" + c)) c = $.cls("colorbox", c)[0], !0 === b ? (c.setAttribute("data-nocolor", "1"), c.innerHTML = "&#x2215;", c.style.background = "") : (c.removeAttribute("data-nocolor"), c.innerHTML = "", c.style.background = a.style.backgroundColor), Filter.closePalette()
+      if (c = $.id("filter-" + c)) c = $.cls("colorbox", c)[0], !0 === b ? (c.setAttribute("data-nocolor",
+        "1"), c.innerHTML = "&#x2215;", c.style.background = "") : (c.removeAttribute("data-nocolor"), c.innerHTML = "", c.style.background = a.style.backgroundColor), Filter.closePalette()
     },
     setCustomColor: function() {
       var a;
@@ -2187,7 +2283,8 @@ var Parser = {
     ids: {},
     init: function() {
       var a;
-      window.user_ids && (this.enabled = !0, a = document.createElement("style"), a.setAttribute("type", "text/css"), a.textContent = ".posteruid .hand {" + this.css + "}", document.head.appendChild(a))
+      window.user_ids && (this.enabled = !0, a = document.createElement("style"), a.setAttribute("type", "text/css"), a.textContent =
+        ".posteruid .hand {" + this.css + "}", document.head.appendChild(a))
     },
     compute: function(a) {
       var b, c;
@@ -2211,7 +2308,8 @@ var Parser = {
   },
   SWFEmbed = {
     init: function() {
-      Main.tid ? this.processThread() : this.processIndex()
+      Main.tid ?
+        this.processThread() : this.processIndex()
     },
     processThread: function() {
       var a, b;
@@ -2220,12 +2318,14 @@ var Parser = {
     processIndex: function() {
       var a, b, c, d, e;
       if (a = $.cls("postblock")[0])
-        if (b = a.parentNode, c = document.createElement("td"), c.className = "postblock", b.insertBefore(c, b.children[2].nextElementSibling), a = $.cls("flashListing")[0])
+        if (b = a.parentNode, c = document.createElement("td"), c.className = "postblock", b.insertBefore(c, b.children[2].nextElementSibling),
+          a = $.cls("flashListing")[0])
           for (d = $.tag("tr", a), a = 1; b = d[a]; ++a) e = b.children[2].firstElementChild, c = document.createElement("td"), c.innerHTML = '[<a href="' + e.href + '">Embed</a>]', c.firstElementChild.addEventListener("click", SWFEmbed.embedIndex, !1), b.insertBefore(c, b.children[2].nextElementSibling)
     },
     toggleThread: function(a) {
       var b, c, d, e, f;
-      (b = $.id("swf-embed")) ? (b.parentNode.removeChild(b), a.target.textContent = "Embed") : (c = $.tag("a", a.target.parentNode)[0], b = document.documentElement.clientWidth - 100, f = +c.getAttribute("data-width"), e = +c.getAttribute("data-height"), f > b && (e = f / e, f = b, e = Math.round(b / e)), b = document.createElement("div"), b.id = "swf-embed", d = document.createElement("embed"), d.setAttribute("allowScriptAccess", "never"), d.type = "application/x-shockwave-flash", d.width = f, d.height = e, d.src = c.href, b.appendChild(d), c = $.id("m" + Main.tid), c.insertBefore(b, c.firstChild), $.cls("thread")[0].scrollIntoView(!0), a.target.textContent = "Remove")
+      (b = $.id("swf-embed")) ? (b.parentNode.removeChild(b), a.target.textContent = "Embed") : (c = $.tag("a", a.target.parentNode)[0], b = document.documentElement.clientWidth - 100, f = +c.getAttribute("data-width"),
+        e = +c.getAttribute("data-height"), f > b && (e = f / e, f = b, e = Math.round(b / e)), b = document.createElement("div"), b.id = "swf-embed", d = document.createElement("embed"), d.setAttribute("allowScriptAccess", "never"), d.type = "application/x-shockwave-flash", d.width = f, d.height = e, d.src = c.href, b.appendChild(d), c = $.id("m" + Main.tid), c.insertBefore(b, c.firstChild), $.cls("thread")[0].scrollIntoView(!0), a.target.textContent = "Remove")
     },
     embedIndex: function(a) {
       var b, c, d, e, f, h, g;
@@ -2249,7 +2349,8 @@ var Parser = {
       a = document.createElement("div");
       a.style.position = "fixed";
       a.style.width = c + "px";
-      a.style.height = f + "px";
+      a.style.height =
+        f + "px";
       a.style.top = "50%";
       a.style.left = "50%";
       a.style.marginTop = -f / 2 - 10 + "px";
@@ -2283,7 +2384,8 @@ var Parser = {
       this.probeRe = /(?:^|[^\B"])https?:\/\/[-.a-z0-9]+\.[a-z]{2,4}/;
       this.linkRe = /(^|[^\B"])(https?:\/\/[-.a-z0-9\u200b]+\.[a-z\u200b]{2,15}(?:\/[^\s<>]*)?)/ig;
       this.punct = /[:!?,.'"]+$/g;
-      this.derefer = "//sys.4chan.org/derefer?url="
+      this.derefer =
+        "//sys.4chan.org/derefer?url="
     },
     exec: function(a) {
       this.probeRe.test(a.innerHTML) && (a.innerHTML = a.innerHTML.replace(/<wbr>/g, "\u200b").replace(this.linkRe, this.funk).replace(/\u200b/g, "<wbr>"))
@@ -2296,7 +2398,8 @@ var Parser = {
       if (d = c.match(Linkify.punct)) a -= d[0].length;
       if (d = c.match(/\)+$/g)) e = d[0].length, (d = c.match(/\(/g)) ? (e -= d.length, 0 < e && (a -= e)) : a -= e;
       a < f ? (d = c.slice(a), c = c.slice(0, a)) : d = "";
-      return b + '<a href="' + Linkify.derefer + encodeURIComponent(c.replace(/\u200b/g, "")) + '" target="_blank" class="linkified" rel="nofollow">' + c + "</a>" + d
+      return b + '<a href="' + Linkify.derefer + encodeURIComponent(c.replace(/\u200b/g,
+        "")) + '" target="_blank" class="linkified" rel="nofollow">' + c + "</a>" + d
     }
   },
   Media = {
@@ -2331,7 +2434,8 @@ var Parser = {
     parseYouTube: function(a) {
       a.innerHTML = a.innerHTML.replace(this.matchYT, this.replaceYouTube)
     },
-    replaceYouTube: function(a, b, c) {
+    replaceYouTube: function(a,
+      b, c) {
       if (Config.linkify) {
         if ('"' === c[b + a.length - 1]) return a;
         a += "</a>"
@@ -2364,11 +2468,13 @@ var Parser = {
     },
     toggleYouTube: function(a) {
       var b, c;
-      "Remove" == a.textContent ? (a.parentNode.removeChild(a.nextElementSibling), a.textContent = "Embed") : (c = a.previousElementSibling.textContent, b = c.match(this.toggleYT), c = c.match(this.timeYT), b && (b = b[1]) ? (b = encodeURIComponent(b), c && (c = c[1]) && (b += "#t=" + encodeURIComponent(c)), Main.hasMobileLayout ? window.open("//www.youtube.com/watch?v=" + b) : (c = document.createElement("div"), c.className = "media-embed", c.innerHTML = '<iframe src="//www.youtube.com/embed/' + b + '" width="640" height="360" frameborder="0"></iframe>', a.parentNode.insertBefore(c, a.nextElementSibling), a.textContent = "Remove")) : a.textContent = "Error")
+      "Remove" == a.textContent ? (a.parentNode.removeChild(a.nextElementSibling), a.textContent = "Embed") : (c = a.previousElementSibling.textContent, b = c.match(this.toggleYT),
+        c = c.match(this.timeYT), b && (b = b[1]) ? (b = encodeURIComponent(b), c && (c = c[1]) && (b += "#t=" + encodeURIComponent(c)), Main.hasMobileLayout ? window.open("//www.youtube.com/watch?v=" + b) : (c = document.createElement("div"), c.className = "media-embed", c.innerHTML = '<iframe src="//www.youtube.com/embed/' + b + '" width="640" height="360" frameborder="0"></iframe>', a.parentNode.insertBefore(c, a.nextElementSibling), a.textContent = "Remove")) : a.textContent = "Error")
     },
     toggleEmbed: function(a) {
       var b, c = a.getAttribute("data-type");
-      c && (b = Media.map[c]) && b.call(this, a)
+      c &&
+        (b = Media.map[c]) && b.call(this, a)
     }
   };
 StickyNav = {
@@ -2388,7 +2494,8 @@ StickyNav = {
   checkScroll: function() {
     var a;
     a = window.pageYOffset;
-    Math.abs(StickyNav.pos - a) <= StickyNav.thres || (StickyNav.el.style.top = a < StickyNav.pos ? "" : "-" + StickyNav.el.offsetHeight + "px", StickyNav.pos = a)
+    Math.abs(StickyNav.pos - a) <= StickyNav.thres || (StickyNav.el.style.top = a < StickyNav.pos ? "" : "-" + StickyNav.el.offsetHeight + "px",
+      StickyNav.pos = a)
   }
 };
 var CustomCSS = {
@@ -2403,7 +2510,8 @@ var CustomCSS = {
         a.id = "customCSSMenu";
         a.className = "UIPanel";
         a.setAttribute("data-cmd", "css-close");
-        a.innerHTML = '<div class="extPanel reply"><div class="panelHeader">Custom CSS<span><img alt="Close" title="Close" class="pointer" data-cmd="css-close" src="' + Main.icons.cross + '"></span></div><textarea id="customCSSBox"></textarea><div class="center"><button data-cmd="css-save">Save CSS</button></div></td></tr></tfoot></table></div>';
+        a.innerHTML = '<div class="extPanel reply"><div class="panelHeader">Custom CSS<span><img alt="Close" title="Close" class="pointer" data-cmd="css-close" src="' + Main.icons.cross +
+          '"></span></div><textarea id="customCSSBox"></textarea><div class="center"><button data-cmd="css-save">Save CSS</button></div></td></tr></tfoot></table></div>';
         document.body.appendChild(a);
         a.addEventListener("click", this.onClick, !1);
         a = $.id("customCSSBox");
@@ -2467,11 +2575,14 @@ var CustomCSS = {
     resolve: function(a) {
       var b;
       b = a.target;
-      "TEXTAREA" != b.nodeName && "INPUT" != b.nodeName && (!(b = Keybinds.map[a.keyCode]) || a.altKey || a.shiftKey || a.ctrlKey || a.metaKey || (a.preventDefault(), a.stopPropagation(), b()))
+      "TEXTAREA" !=
+        b.nodeName && "INPUT" != b.nodeName && (!(b = Keybinds.map[a.keyCode]) || a.altKey || a.shiftKey || a.ctrlKey || a.metaKey || (a.preventDefault(), a.stopPropagation(), b()))
     },
     open: function() {
       var a;
-      $.id("keybindsHelp") || (a = document.createElement("div"), a.id = "keybindsHelp", a.className = "UIPanel", a.setAttribute("data-cmd", "keybinds-close"), a.innerHTML = '<div class="extPanel reply"><div class="panelHeader">Keyboard Shortcuts<span><img data-cmd="keybinds-close" class="pointer" alt="Close" title="Close" src="' + Main.icons.cross + '"></span></div><ul><li><strong>Global</strong></li><li><kbd>A</kbd> &mdash; Toggle auto-updater</li><li><kbd>Q</kbd> &mdash; Open Quick Reply</li><li><kbd>R</kbd> &mdash; Update thread</li><li><kbd>W</kbd> &mdash; Watch/Unwatch thread</li><li><kbd>B</kbd> &mdash; Previous page</li><li><kbd>N</kbd> &mdash; Next page</li><li><kbd>I</kbd> &mdash; Return to index</li><li><kbd>C</kbd> &mdash; Open catalog</li><li><kbd>F</kbd> &mdash; Filter selected text</li></ul><ul><li><strong>Quick Reply (always enabled)</strong></li><li><kbd>Ctrl + Click</kbd> the post number &mdash; Quote without linking</li><li><kbd>Ctrl + S</kbd> &mdash; Spoiler tags</li><li><kbd>Esc</kbd> &mdash; Close the Quick Reply</li></ul>', document.body.appendChild(a), a.addEventListener("click", this.onClick, !1))
+      $.id("keybindsHelp") || (a = document.createElement("div"), a.id = "keybindsHelp", a.className = "UIPanel", a.setAttribute("data-cmd", "keybinds-close"), a.innerHTML = '<div class="extPanel reply"><div class="panelHeader">Keyboard Shortcuts<span><img data-cmd="keybinds-close" class="pointer" alt="Close" title="Close" src="' + Main.icons.cross +
+        '"></span></div><ul><li><strong>Global</strong></li><li><kbd>A</kbd> &mdash; Toggle auto-updater</li><li><kbd>Q</kbd> &mdash; Open Quick Reply</li><li><kbd>R</kbd> &mdash; Update thread</li><li><kbd>W</kbd> &mdash; Watch/Unwatch thread</li><li><kbd>B</kbd> &mdash; Previous page</li><li><kbd>N</kbd> &mdash; Next page</li><li><kbd>I</kbd> &mdash; Return to index</li><li><kbd>C</kbd> &mdash; Open catalog</li><li><kbd>F</kbd> &mdash; Filter selected text</li></ul><ul><li><strong>Quick Reply (always enabled)</strong></li><li><kbd>Ctrl + Click</kbd> the post number &mdash; Quote without linking</li><li><kbd>Ctrl + S</kbd> &mdash; Spoiler tags</li><li><kbd>Esc</kbd> &mdash; Close the Quick Reply</li></ul>',
+        document.body.appendChild(a), a.addEventListener("click", this.onClick, !1))
     },
     close: function() {
       var a;
@@ -2487,7 +2598,8 @@ var CustomCSS = {
       window.addEventListener("message", Report.onMessage, !1)
     },
     onMessage: function(a) {
-      "https://sys.4chan.org" === a.origin && /^done-report/.test(a.data) && (a = a.data.split("-")[2], Config.threadHiding && $.id("t" + a) ? ThreadHiding.isHidden(a) || (ThreadHiding.hide(a), ThreadHiding.save()) : $.id("p" + a) && !ReplyHiding.isHidden(a) && (ReplyHiding.hide(a), ReplyHiding.save()))
+      "https://sys.4chan.org" === a.origin && /^done-report/.test(a.data) && (a = a.data.split("-")[2], Config.threadHiding &&
+        $.id("t" + a) ? ThreadHiding.isHidden(a) || (ThreadHiding.hide(a), ThreadHiding.save()) : $.id("p" + a) && !ReplyHiding.isHidden(a) && (ReplyHiding.hide(a), ReplyHiding.save()))
     },
     open: function(a, b) {
       window.open("https://sys.4chan.org/" + (b || Main.board) + "/imgboard.php?mode=report&no=" + a, Date.now(), "toolbar=0,scrollbars=0,location=0,status=1,menubar=0,resizable=1,width=600,height=270")
@@ -2499,7 +2611,8 @@ var CustomCSS = {
       c = $.cls("boardList");
       d = $.cls("customBoardList");
       e = $.cls("show-all-boards");
-      for (a = 0; b = e[a]; ++a) b.removeEventListener("click", CustomMenu.reset, !1);
+      for (a = 0; b = e[a]; ++a) b.removeEventListener("click",
+        CustomMenu.reset, !1);
       for (a = d.length - 1; b = d[a]; a--) c[a].style.display = null, b.parentNode.removeChild(b)
     },
     apply: function(a) {
@@ -2526,7 +2639,8 @@ var CustomCSS = {
     },
     onClick: function(a) {
       var b;
-      (b = a.target) != document && (b.hasAttribute("data-close") ? CustomMenu.closeEditor() : b.hasAttribute("data-save") && CustomMenu.save())
+      (b = a.target) != document && (b.hasAttribute("data-close") ? CustomMenu.closeEditor() : b.hasAttribute("data-save") &&
+        CustomMenu.save())
     },
     showEditor: function() {
       var a;
@@ -2560,19 +2674,22 @@ var CustomCSS = {
     bottom: null,
     offsetTop: null,
     set: function(a) {
-      a.addEventListener("mousedown", Draggable.startDrag, !1)
+      a.addEventListener("mousedown",
+        Draggable.startDrag, !1)
     },
     unset: function(a) {
       a.removeEventListener("mousedown", Draggable.startDrag, !1)
     },
     startDrag: function(a) {
       var b, c, d;
-      if (!this.parentNode.hasAttribute("data-shiftkey") || a.shiftKey) a.preventDefault(), b = Draggable, c = document.documentElement, b.el = this.parentNode, b.key = b.el.getAttribute("data-trackpos"), d = b.el.getBoundingClientRect(), b.dx = a.clientX - d.left, b.dy = a.clientY - d.top, b.right = c.clientWidth - d.width, b.bottom = c.clientHeight - d.height, "fixed" != getComputedStyle(b.el, null).position ? (b.scrollX = window.pageXOffset, b.scrollY = window.pageYOffset) : b.scrollX = b.scrollY = 0, b.offsetTop = Config.dropDownNav && !Config.autoHideNav ? $.id(Config.classicNav ? "boardNavDesktop" : "boardNavMobile").offsetHeight : 0, document.addEventListener("mouseup", b.endDrag, !1), document.addEventListener("mousemove", b.onDrag, !1)
+      if (!this.parentNode.hasAttribute("data-shiftkey") || a.shiftKey) a.preventDefault(), b = Draggable, c = document.documentElement, b.el = this.parentNode, b.key = b.el.getAttribute("data-trackpos"), d = b.el.getBoundingClientRect(), b.dx = a.clientX - d.left, b.dy = a.clientY - d.top, b.right = c.clientWidth - d.width, b.bottom = c.clientHeight - d.height, "fixed" != getComputedStyle(b.el, null).position ? (b.scrollX =
+        window.pageXOffset, b.scrollY = window.pageYOffset) : b.scrollX = b.scrollY = 0, b.offsetTop = Config.dropDownNav && !Config.autoHideNav ? $.id(Config.classicNav ? "boardNavDesktop" : "boardNavMobile").offsetHeight : 0, document.addEventListener("mouseup", b.endDrag, !1), document.addEventListener("mousemove", b.onDrag, !1)
     },
     endDrag: function(a) {
       document.removeEventListener("mouseup", Draggable.endDrag, !1);
       document.removeEventListener("mousemove", Draggable.onDrag, !1);
-      Draggable.key && (Config[Draggable.key] = Draggable.el.style.cssText, Config.save());
+      Draggable.key && (Config[Draggable.key] = Draggable.el.style.cssText,
+        Config.save());
       delete Draggable.el
     },
     onDrag: function(a) {
@@ -2586,7 +2703,8 @@ var CustomCSS = {
   },
   UA = {
     init: function() {
-      document.head = document.head || $.tag("head")[0];
+      document.head =
+        document.head || $.tag("head")[0];
       this.isOpera = "[object Opera]" == Object.prototype.toString.call(window.opera);
       this.hasCORS = "withCredentials" in new XMLHttpRequest;
       this.hasFormData = "FormData" in window
@@ -2687,12 +2805,16 @@ var SettingsMenu = {
       persistentQR: ["Persistent Quick Reply", "Keep Quick Reply window open after posting"]
     },
     Monitoring: {
-      threadUpdater: ["Thread updater", "Append new posts to bottom of thread without refreshing the page", !0],
+      threadUpdater: ["Thread updater",
+        "Append new posts to bottom of thread without refreshing the page", !0
+      ],
       alwaysAutoUpdate: ["Auto-update by default", "Always auto-update threads", !0],
       threadWatcher: ["Thread Watcher", "Keep track of threads you're watching and see when they receive new posts", !0],
       autoScroll: ["Auto-scroll with auto-updated posts", "Automatically scroll the page as new posts are added"],
       updaterSound: ["Sound notification", "Play a sound when somebody replies to your post(s)"],
-      fixedThreadWatcher: ["Pin Thread Watcher to the page", "Thread Watcher will scroll with you"],
+      fixedThreadWatcher: ["Pin Thread Watcher to the page",
+        "Thread Watcher will scroll with you"
+      ],
       threadStats: ["Thread statistics", "Display post and image counts on the right of the page, <em>italics</em> signify bump/image limit has been met", !0]
     },
     "Filters &amp; Post Hiding": {
@@ -2706,13 +2828,17 @@ var SettingsMenu = {
       classicNav: ["Use traditional board list", "", !1, !0],
       autoHideNav: ["Auto-hide on scroll", "", !1, !0],
       customMenu: ['Custom board list [<a href="javascript:;" data-cmd="custom-menu-edit">Edit</a>]', "Only show selected boards in top and bottom board lists"],
-      alwaysDepage: ["Always use infinite scroll", "Enable infinite scroll by default, so reaching the bottom of the board index will load subsequent pages", !0],
+      alwaysDepage: ["Always use infinite scroll",
+        "Enable infinite scroll by default, so reaching the bottom of the board index will load subsequent pages", !0
+      ],
       topPageNav: ["Page navigation at top of page", "Show the page switcher at the top of the page, hold Shift and drag to move"],
       stickyNav: ["Navigation arrows", "Show top and bottom navigation arrows, hold Shift and drag to move"],
       keyBinds: ['Use keyboard shortcuts [<a href="javascript:;" data-cmd="keybinds-open">Show</a>]', "Enable handy keyboard shortcuts for common actions"]
     },
     "Images &amp; Media": {
-      imageExpansion: ["Image expansion", "Enable inline image expansion, limited to browser width", !0],
+      imageExpansion: ["Image expansion",
+        "Enable inline image expansion, limited to browser width", !0
+      ],
       fitToScreenExpansion: ["Fit expanded images to screen", "Limit expanded images to both browser width and height"],
       imageHover: ["Image hover", "Mouse over images to view full size, limited to browser size"],
       revealSpoilers: ["Don't spoiler images", "Show image thumbnail and original filename instead of spoiler placeholders", !0],
@@ -2749,7 +2875,8 @@ var SettingsMenu = {
   },
   open: function() {
     var a, b, c, d, e, f, h, g, k;
-    Main.firstRun && ((k = $.id("settingsTip")) && k.parentNode.removeChild(k), (k = $.id("settingsTipBottom")) && k.parentNode.removeChild(k), Config.save());
+    Main.firstRun && ((k = $.id("settingsTip")) && k.parentNode.removeChild(k), (k = $.id("settingsTipBottom")) && k.parentNode.removeChild(k),
+      Config.save());
     f = document.createElement("div");
     f.id = "settingsMenu";
     f.className = "UIPanel";
@@ -2759,7 +2886,8 @@ var SettingsMenu = {
       for (b in c = {}, SettingsMenu.options) {
         g = {};
         h = SettingsMenu.options[b];
-        for (d in h) h[d][2] && (g[d] = h[d]);
+        for (d in h) h[d][2] &&
+          (g[d] = h[d]);
         for (a in g) {
           c[b] = g;
           break
@@ -2769,7 +2897,8 @@ var SettingsMenu = {
       h = c[b];
       e += '<ul><li class="settings-cat-lbl"><img alt="" class="settings-expand" src="' + Main.icons.plus + '"><span class="settings-expand pointer">' + b + '</span></li><ul class="settings-cat">';
       for (d in h)
-        if (!h[d][4] || Main.hasMobileLayout) e += "<li" + (h[d][3] ? ' class="settings-sub">' : ">") + '<label><input type="checkbox" class="menuOption" data-option="' + d + '"' + (Config[d] ? ' checked="checked">' : ">") + h[d][0] + "</label>" + (!1 !== h[d][1] ? '</li><li class="settings-tip' + (h[d][3] ? ' settings-sub">' : '">') + h[d][1] : "") + "</li>";
+        if (!h[d][4] || Main.hasMobileLayout) e += "<li" + (h[d][3] ? ' class="settings-sub">' : ">") + '<label><input type="checkbox" class="menuOption" data-option="' + d + '"' + (Config[d] ? ' checked="checked">' : ">") + h[d][0] + "</label>" + (!1 !== h[d][1] ?
+          '</li><li class="settings-tip' + (h[d][3] ? ' settings-sub">' : '">') + h[d][1] : "") + "</li>";
       e += "</ul></ul>"
     }
     e += '</ul><ul><li class="settings-off"><label title="Completely disable the native extension (overrides any checked boxes)"><input type="checkbox" class="menuOption" data-option="disableAll"' + (Config.disableAll ? ' checked="checked">' : ">") + 'Disable the native extension</label></li></ul><div class="center"><button data-cmd="settings-export">Export Settings</button><button data-cmd="settings-save">Save Settings</button></div>';
@@ -2782,7 +2911,8 @@ var SettingsMenu = {
   showExport: function() {
     var a, b;
     $.id("exportSettings") || (b = location.href.replace(location.hash, "") + "#cfg=" + Config.toURL(), a = document.createElement("div"), a.id = "exportSettings", a.className = "UIPanel", a.setAttribute("data-cmd", "export-close"), a.innerHTML = '<div class="extPanel reply"><div class="panelHeader">Export Settings<span><img data-cmd="export-close" class="pointer" alt="Close" title="Close" src="' +
-      Main.icons.cross + '"></span></div><p class="center">Copy and save the URL below, and visit it from another browser or computer to restore your extension and catalog settings.</p><p class="center"><input class="export-field" type="text" readonly="readonly" value="' + b + '"></p><p style="margin-top:15px" class="center">Alternatively, you can drag the link below into your bookmarks bar and click it to restore.</p><p class="center">[<a target="_blank" href="' + b + '">Restore 4chan Settings</a>]</p>', document.body.appendChild(a), a.addEventListener("click", this.onExportClick, !1), a = $.cls("export-field", a)[0], a.focus(), a.select())
+      Main.icons.cross + '"></span></div><p class="center">Copy and save the URL below, and visit it from another browser or computer to restore your extension and catalog settings.</p><p class="center"><input class="export-field" type="text" readonly="readonly" value="' + b + '"></p><p style="margin-top:15px" class="center">Alternatively, you can drag the link below into your bookmarks bar and click it to restore.</p><p class="center">[<a target="_blank" href="' + b + '">Restore 4chan Settings</a>]</p>', document.body.appendChild(a),
+      a.addEventListener("click", this.onExportClick, !1), a = $.cls("export-field", a)[0], a.focus(), a.select())
   },
   closeExport: function() {
     var a;
@@ -2793,7 +2923,8 @@ var SettingsMenu = {
   },
   expandAll: function() {
     var a, b, c = $.cls("settings-expand");
-    for (a = 0; b = c[a]; ++a) b.src = Main.icons.minus, b.parentNode.nextElementSibling.style.display = "block"
+    for (a = 0; b = c[a]; ++a) b.src = Main.icons.minus, b.parentNode.nextElementSibling.style.display =
+      "block"
   },
   toggleCat: function(a) {
     var b, c, d = a.parentNode.nextElementSibling;
@@ -2807,7 +2938,8 @@ var SettingsMenu = {
     $.hasClass(c, "settings-expand") ? SettingsMenu.toggleCat(c) : "settings-exp-all" == c.getAttribute("data-cmd") ? (a.preventDefault(), SettingsMenu.expandAll()) : "settingsMenu" == c.id && (b = $.id("settingsMenu")) && (a.preventDefault(), SettingsMenu.close(b))
   },
   close: function(a) {
-    if (a = a || $.id("settingsMenu")) a.removeEventListener("click", SettingsMenu.onClick, !1), document.body.removeChild(a)
+    if (a = a ||
+      $.id("settingsMenu")) a.removeEventListener("click", SettingsMenu.onClick, !1), document.body.removeChild(a)
   }
 };
 Feedback = {
@@ -2825,7 +2957,8 @@ Feedback = {
   },
   hideMessage: function() {
     var a = $.id("feedback");
-    a && (Feedback.messageTimeout && (clearTimeout(Feedback.messageTimeout), Feedback.messageTimeout = null), $.off(a, "click", Feedback.hideMessage), document.body.removeChild(a))
+    a && (Feedback.messageTimeout && (clearTimeout(Feedback.messageTimeout), Feedback.messageTimeout = null), $.off(a, "click",
+      Feedback.hideMessage), document.body.removeChild(a))
   },
   error: function(a, b) {
     Feedback.showMessage(a || "Something went wrong", "error", b || 5E3)
@@ -2855,7 +2988,8 @@ var Main = {
       Config.loadFromURL() && (Main.firstRun = !1), (Main.stylesheet = Main.getCookie(style_group)) ? Main.stylesheet = Main.stylesheet.toLowerCase().replace(/ /g, "_") : Main.stylesheet = "nws_style" == style_group ? "yotsuba_new" : "yotsuba_b_new", Main.passEnabled = Main.getCookie("pass_enabled"), QR.noCaptcha = QR.noCaptcha || Main.passEnabled, Main.initIcons(), Main.addCSS(), Main.type = style_group.split("_")[0], a = location.pathname.split(/\//), Main.board = a[1], Main.page = a[2], Main.tid = a[3], UA.dispatchEvent("4chanMainInit"))
   },
   initPersistentNav: function() {
-    var a, b, c;
+    var a,
+      b, c;
     b = $.id("boardNavDesktop");
     c = $.id("boardNavDesktopFoot");
     Config.classicNav ? (a = document.createElement("div"), a.className = "pageJump", a.innerHTML = '<a href="#bottom">&#9660;</a><a href="javascript:void(0);" id="settingsWindowLinkClassic">Settings</a><a href="//www.4chan.org" target="_top">Home</a></div>', b.appendChild(a), $.id("settingsWindowLinkClassic").addEventListener("click", SettingsMenu.toggle, !1), $.addClass(b, "persistentNav")) : (b.style.display = "none", $.removeClass($.id("boardNavMobile"), "mobile"));
@@ -2901,7 +3035,8 @@ var Main = {
       Config.compactThreads ? $.addClass(document.body, "compact") : Config.centeredThreads && $.addClass(document.body, "centeredThreads");
       Config.noPictures && $.addClass(document.body, "noPictures");
       Config.customMenu && CustomMenu.apply(Config.customMenuList);
-      if (Config.quotePreview || Config.imageHover || Config.filter) a = $.id("delform") || $.id("arc-list"), a.addEventListener("mouseover", Main.onThreadMouseOver, !1), a.addEventListener("mouseout", Main.onThreadMouseOut, !1);
+      if (Config.quotePreview || Config.imageHover || Config.filter) a = $.id("delform") ||
+        $.id("arc-list"), a.addEventListener("mouseover", Main.onThreadMouseOver, !1), a.addEventListener("mouseout", Main.onThreadMouseOut, !1);
       Config.stickyNav && Main.setStickyNav();
       Main.hasMobileLayout ? StickyNav.init() : (Main.initGlobalMessage(), Config.autoHideNav && StickyNav.init());
       Config.threadExpansion && ThreadExpansion.init();
@@ -2909,13 +3044,15 @@ var Main = {
       Config.threadWatcher && ThreadWatcher.init();
       (Main.hasMobileLayout || Config.embedSoundCloud || Config.embedYouTube) && Media.init();
       ReplyHiding.init();
-      Config.quotePreview && QuotePreview.init();
+      Config.quotePreview &&
+        QuotePreview.init();
       Parser.init();
       Main.tid ? (Main.threadClosed = !document.forms.post, Main.threadSticky = !!$.cls("stickyIcon", $.id("pi" + Main.tid))[0], Config.threadStats && ThreadStats.init(), Parser.parseThread(Main.tid), Config.threadUpdater && ThreadUpdater.init()) : (Main.page || Depager.init(), Config.topPageNav && Main.setPageNav(), Config.threadHiding && ThreadHiding.init(), Parser.parseBoard());
       "f" === Main.board && SWFEmbed.init();
       Config.quickReply && QR.init();
       ReplyHiding.purge();
-      Config.alwaysDepage && !Main.hasMobileLayout && $.docEl.scrollHeight <= $.docEl.clientHeight && Depager.depage()
+      Config.alwaysDepage && !Main.hasMobileLayout &&
+        $.docEl.scrollHeight <= $.docEl.clientHeight && Depager.depage()
     }
   },
   isThreadClosed: function(a) {
@@ -2924,7 +3061,8 @@ var Main = {
   setThreadState: function(a, b) {
     var c, d, e, f;
     f = a.charAt(0).toUpperCase() + a.slice(1);
-    if (b) c = $.cls("postNum", $.id("pi" + Main.tid))[0], d = document.createElement("img"), d.className = a + "Icon retina", d.title = f, d.src = Main.icons2[a], "sticky" == a && (e = $.cls("closedIcon", c)[0]) ? (c.insertBefore(d, e), c.insertBefore(document.createTextNode(" "), e)) : (c.appendChild(document.createTextNode(" ")), c.appendChild(d));
+    if (b) c = $.cls("postNum", $.id("pi" + Main.tid))[0], d = document.createElement("img"), d.className = a + "Icon retina", d.title = f, d.src = Main.icons2[a], "sticky" == a && (e = $.cls("closedIcon", c)[0]) ? (c.insertBefore(d, e), c.insertBefore(document.createTextNode(" "), e)) : (c.appendChild(document.createTextNode(" ")),
+      c.appendChild(d));
     else if (d = $.cls(a + "Icon", $.id("pi" + Main.tid))[0]) d.parentNode.removeChild(d.previousSibling), d.parentNode.removeChild(d);
     Main["thread" + f] = b
   },
@@ -2980,7 +3118,8 @@ var Main = {
     if (a = $.cls("pagelist")[0]) a = a.cloneNode(!0), b.appendChild(a), Draggable.set(a), document.body.appendChild(b)
   },
   initGlobalMessage: function() {
-    var a, b, c, d;
+    var a, b,
+      c, d;
     (a = $.id("globalMessage")) && a.textContent && (a.nextElementSibling.style.clear = "both", b = document.createElement("img"), b.id = "toggleMsgBtn", b.className = "extButton", b.setAttribute("data-cmd", "toggleMsg"), b.alt = "Toggle", b.title = "Toggle announcement", d = localStorage.getItem("4chan-global-msg"), c = a.getAttribute("data-utc"), d && c <= d ? (a.style.display = "none", b.style.opacity = "0.5", b.src = Main.icons.plus) : b.src = Main.icons.minus, a.parentNode.insertBefore(b, a))
   },
   toggleGlobalMessage: function() {
@@ -2996,7 +3135,8 @@ var Main = {
     a.className = "extPanel reply";
     a.setAttribute("data-shiftkey", "1");
     a.setAttribute("data-trackpos", "SN-position");
-    Config["SN-position"] ? a.style.cssText = Config["SN-position"] : (a.style.right = "10px", a.style.top = "50px");
+    Config["SN-position"] ?
+      a.style.cssText = Config["SN-position"] : (a.style.right = "10px", a.style.top = "50px");
     b = document.createElement("div");
     b.innerHTML = '<img class="pointer" src="' + Main.icons.up + '" data-cmd="totop" alt="\u25b2" title="Top"><img class="pointer" src="' + Main.icons.down + '" data-cmd="tobottom" alt="\u25bc" title="Bottom">';
     Draggable.set(b);
@@ -3009,7 +3149,8 @@ var Main = {
     c = document.cookie.split(";");
     for (a = 0; b = c[a]; ++a) {
       for (;
-        " " == b.charAt(0);) b = b.substring(1, b.length);
+        " " == b.charAt(0);) b = b.substring(1,
+        b.length);
       if (0 == b.indexOf(d)) return decodeURIComponent(b.substring(d.length, b.length))
     }
     return null
@@ -3027,7 +3168,8 @@ var Main = {
   onclick: function(a) {
     var b, c;
     if ((b = a.target) != document)
-      if (c = b.getAttribute("data-cmd")) switch (id = b.getAttribute("data-id"), c) {
+      if (c = b.getAttribute("data-cmd")) switch (id =
+        b.getAttribute("data-id"), c) {
         case "update":
           a.preventDefault();
           ThreadUpdater.forceUpdate();
@@ -3115,21 +3257,26 @@ var Main = {
           break;
         case "custom-menu-edit":
           CustomMenu.showEditor()
-      } else Config.disableAll || (QR.enabled && "Reply to this post" == b.title ? (a.preventDefault(), c = Main.tid || b.previousElementSibling.getAttribute("href").split("#")[0].split("/")[1], QR.quotePost(c, !a.ctrlKey && b.textContent)) : Config.imageExpansion && 1 == a.which && b.parentNode && $.hasClass(b.parentNode, "fileThumb") && "A" == b.parentNode.nodeName && !$.hasClass(b.parentNode, "deleted") && !$.hasClass(b, "mFileInfo") ? ImageExpansion.toggle(b) && a.preventDefault() : Config.inlineQuotes && 1 == a.which && $.hasClass(b, "quotelink") ? a.shiftKey ? (a.preventDefault(), window.location = b.href) : QuoteInline.toggle(b, a) : Config.threadExpansion && b.parentNode && $.hasClass(b.parentNode, "abbr") ? (a.preventDefault(), ThreadExpansion.expandComment(b)) : Main.isMobileDevice && Config.quotePreview && $.hasClass(b, "quotelink") && b.getAttribute("href").match(QuotePreview.regex) ? a.preventDefault() : $.hasClass(b, "mFileInfo") && (a.preventDefault(), a.stopPropagation()))
+      } else Config.disableAll ||
+        (QR.enabled && "Reply to this post" == b.title ? (a.preventDefault(), c = Main.tid || b.previousElementSibling.getAttribute("href").split("#")[0].split("/")[1], QR.quotePost(c, !a.ctrlKey && b.textContent)) : Config.imageExpansion && 1 == a.which && b.parentNode && $.hasClass(b.parentNode, "fileThumb") && "A" == b.parentNode.nodeName && !$.hasClass(b.parentNode, "deleted") && !$.hasClass(b, "mFileInfo") ? ImageExpansion.toggle(b) && a.preventDefault() : Config.inlineQuotes && 1 == a.which && $.hasClass(b, "quotelink") ? a.shiftKey ? (a.preventDefault(),
+          window.location = b.href) : QuoteInline.toggle(b, a) : Config.threadExpansion && b.parentNode && $.hasClass(b.parentNode, "abbr") ? (a.preventDefault(), ThreadExpansion.expandComment(b)) : Main.isMobileDevice && Config.quotePreview && $.hasClass(b, "quotelink") && b.getAttribute("href").match(QuotePreview.regex) ? a.preventDefault() : $.hasClass(b, "mFileInfo") && (a.preventDefault(), a.stopPropagation()))
   },
   onThreadMouseOver: function(a) {
     var b = a.target;
-    if (Config.quotePreview && $.hasClass(b, "quotelink") && !$.hasClass(b, "deadlink") && !$.hasClass(b, "linkfade")) QuotePreview.resolve(a.target);
+    if (Config.quotePreview && $.hasClass(b, "quotelink") && !$.hasClass(b, "deadlink") &&
+      !$.hasClass(b, "linkfade")) QuotePreview.resolve(a.target);
     else if (Config.imageHover && (b.hasAttribute("data-md5") && !$.hasClass(b.parentNode, "deleted") || b.href && !$.hasClass(b.parentNode, "fileText") && /i\.4cdn\.org\/[a-z0-9]+\/[0-9]+\.(gif|jpg|png|webm)$/.test(b.href))) ImageHover.show(b);
     else if ($.hasClass(b, "dateTime")) Parser.onDateMouseOver(b);
-    else Config.embedYouTube && "yt" === b.getAttribute("data-type") && !Main.hasMobileLayout ? Media.showYTPreview(b) : Config.filter && b.hasAttribute("data-filtered") && QuotePreview.show(b, b.href ? b.parentNode.parentNode.parentNode : b.parentNode.parentNode)
+    else Config.embedYouTube && "yt" === b.getAttribute("data-type") && !Main.hasMobileLayout ? Media.showYTPreview(b) : Config.filter && b.hasAttribute("data-filtered") && QuotePreview.show(b,
+      b.href ? b.parentNode.parentNode.parentNode : b.parentNode.parentNode)
   },
   onThreadMouseOut: function(a) {
     a = a.target;
     if (Config.quotePreview && $.hasClass(a, "quotelink")) QuotePreview.remove(a);
     else if (Config.imageHover && (a.hasAttribute("data-md5") || a.href && !$.hasClass(a.parentNode, "fileText") && /i\.4cdn\.org\/[a-z0-9]+\/[0-9]+\.(gif|jpg|png|webm)$/.test(a.href))) ImageHover.hide();
     else if ($.hasClass(a, "dateTime")) Parser.onDateMouseOut(a);
-    else Config.embedYouTube && "yt" === a.getAttribute("data-type") && !Main.hasMobileLayout ? Media.removeYTPreview() : Config.filter && a.hasAttribute("data-filtered") && QuotePreview.remove(a)
+    else Config.embedYouTube && "yt" === a.getAttribute("data-type") && !Main.hasMobileLayout ?
+      Media.removeYTPreview() : Config.filter && a.hasAttribute("data-filtered") && QuotePreview.remove(a)
   },
   linkToThread: function(a, b, c) {
     return "//" + location.host + "/" + (b || Main.board) + "/thread/" + a + (0 < c ? "#p" + c : "")
