@@ -642,7 +642,7 @@ var UA = {
         r = k.custom_spoiler ? n.imgspoiler + "-" + k.slug + k.custom_spoiler + ".png" : n.imgspoiler + ".png";
         u.hasChildNodes() && ((a = document.getElementById("th-tip")) && document.body.removeChild(a), u.textContent = "");
         q = "//boards.4chan.org/" + k.slug + "/thread/";
-        C = ".t.4cdn.org/" + k.slug + "/";
+        C = "i.4cdn.org/" + k.slug + "/";
         D = 0;
         for (e in I) I[e].hits = 0;
         G = !n.large;
