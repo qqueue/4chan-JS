@@ -13,7 +13,8 @@ var Tip = {
     d.hasAttribute("data-tip") && (c = null, d.hasAttribute("data-tip-cb") && (b = d.getAttribute("data-tip-cb"), window[b] && (c = window[b](d))), Tip.timeout = setTimeout(Tip.show, Tip.delay, a.target, c))
   },
   onMouseOut: function(a) {
-    Tip.timeout && (clearTimeout(Tip.timeout), Tip.timeout = null);
+    Tip.timeout && (clearTimeout(Tip.timeout),
+      Tip.timeout = null);
     Tip.hide()
   },
   show: function(a, b, c) {
@@ -156,7 +157,8 @@ function initAds(a, b) {
     ados.run.push(function() {
       window._top_ad = ados_add_placement(3536, 18130, "azk91603", 4).setZone(16258);
       window._middle_ad = ados_add_placement(3536, 18130, "azk98887", 3).setZone(16259);
-      window._bottom_ad = ados_add_placement(3536, 18130, "azk53379", 4).setZone(16260);
+      window._bottom_ad = ados_add_placement(3536, 18130, "azk53379",
+        4).setZone(16260);
       ados_setDomain("engine.4chan-ads.org");
       ados_setKeywords(a + ", " + b);
       ados_setNoTrack();
@@ -307,7 +309,8 @@ function initStyleSheet() {
         setActiveStyleSheet(activeStyleSheet, !0)
     }
     if ("true" == localStorage.getItem("4chan_never_show_mobile"))
-      for (c = document.querySelectorAll("link"), d = c.length, a = 0; a < d; a++) c[a].getAttribute("href").match("mobile") && (b = c[a]).parentNode.removeChild(b)
+      for (c =
+        document.querySelectorAll("link"), d = c.length, a = 0; a < d; a++) c[a].getAttribute("href").match("mobile") && (b = c[a]).parentNode.removeChild(b)
   }
 }
 captchainterval = null;
@@ -320,11 +323,13 @@ function init() {
   if ("undefined" != typeof jsMath && "undefined" != typeof jsMath.Easy.onload && !jsMath.Easy.loaded) jsMath.Easy.onload();
   if (navigator.userAgent && navigator.userAgent.match(/iP(hone|ad|od)/i))
     for (links = document.querySelectorAll("s"), len = links.length, a = 0; a < len; a++) links[a].onclick = function() {
-      this.hasAttribute("style") ? this.removeAttribute("style") : this.setAttribute("style", "color: #fff!important;")
+      this.hasAttribute("style") ?
+        this.removeAttribute("style") : this.setAttribute("style", "color: #fff!important;")
     };
   if (document.getElementById("styleSelector"))
     for (styleSelect = document.getElementById("styleSelector"), len = styleSelect.options.length, a = 0; a < len; a++) styleSelect.options[a].value == activeStyleSheet && (styleSelect.selectedIndex = a);
-  !b && document.forms.post && ((a = document.getElementById("delPassword")) && (a.value = get_pass("4chan_pass")), "i" != c && "ic" != c && "f" != c && window.File && window.FileReader && window.FileList && window.Blob && document.getElementById("postFile").addEventListener("change", handleFileSelect, !1));
+  !b && document.forms.post && ((a = document.getElementById("delPassword")) && (a.value = get_pass("4chan_pass")), "i" != c && "ic" != c && "f" != c && window.File && window.FileReader && window.FileList && window.Blob && document.getElementById("postFile").addEventListener("change",
+    handleFileSelect, !1));
   "undefined" != typeof extra && extra && !b && extra.init();
   window.check_for_block && checkForBlock()
 }
@@ -353,7 +358,8 @@ function enableMobile() {
 function checkForBlock() {
   var a, b, c, d, e, f;
   if (!/Mobile|Android|Dolfin|Opera Mobi|PlayStation Vita|Nintendo DS/.test(navigator.userAgent) && 1 != readCookie("pass_enabled"))
-    for (d = document.getElementsByClassName("ad-cnt"), a = 0; b = d[a]; ++a) 0 == b.offsetHeight && (c = document.createElement("div"), c.className = "center", c.innerHTML = '<div style="display:table-cell;vertical-align:middle">' + blockPlea + "</div>", e = c.style, /middlead/.test(b.className) ? (e.width = "448px", e.height = "60px", e.padding = "0 10px") : (e.width = "728px", e.height = "90px"), e.display = "table", f = "1px solid ", f = "Yotsuba B New" == activeStyleSheet ? f + "#34345c" : "Yotsuba New" == activeStyleSheet ? f + "#800" : f + "#000", e.border = f, b.parentNode.insertBefore(c, b))
+    for (d = document.getElementsByClassName("ad-cnt"), a = 0; b = d[a]; ++a) 0 == b.offsetHeight && (c = document.createElement("div"), c.className = "center", c.innerHTML = '<div style="display:table-cell;vertical-align:middle">' + blockPlea + "</div>", e = c.style, /middlead/.test(b.className) ? (e.width = "448px", e.height = "60px", e.padding = "0 10px") : (e.width = "728px", e.height =
+      "90px"), e.display = "table", f = "1px solid ", f = "Yotsuba B New" == activeStyleSheet ? f + "#34345c" : "Yotsuba New" == activeStyleSheet ? f + "#800" : f + "#000", e.border = f, b.parentNode.insertBefore(c, b))
 }
 var currentHighlighted = null;
 
@@ -375,7 +381,8 @@ function idClick(a) {
   for (var d = document.getElementsByClassName("highlight"), c = d.length, b = 0; b < c; b++) d[0].className = d[0].className.toString().replace(/highlight /g, "");
   if (currentHighlighted == a) currentHighlighted = null;
   else
-    for (currentHighlighted = a, d = document.getElementsByClassName("id_" + a), c = d.length, b = 0; b < c; b++) a = d[b].parentNode.parentNode.parentNode, a.className.match(/highlight /) || (a.className = "highlight " + a.className)
+    for (currentHighlighted = a, d = document.getElementsByClassName("id_" + a), c = d.length, b = 0; b < c; b++) a = d[b].parentNode.parentNode.parentNode, a.className.match(/highlight /) ||
+      (a.className = "highlight " + a.className)
 }
 
 function showPostFormError(a) {
@@ -494,7 +501,8 @@ var PainterCore = {
     document.forms.post.addEventListener("submit", PainterCore.onSubmit, !1)
   },
   onCancel: function() {
-    PainterCore.data = null;
+    PainterCore.data =
+      null;
     PainterCore.btnFile.disabled = !1;
     PainterCore.btnClear.disabled = !0;
     document.forms.post.removeEventListener("submit", PainterCore.onSubmit, !1)
@@ -519,7 +527,8 @@ var PainterCore = {
   onSubmitDone: function() {
     var a, b, c;
     PainterCore.btnSubmit.disabled = !1;
-    (b = this.responseText.match(/\x3c!-- thread:([0-9]+),no:([0-9]+) --\x3e/)) ? (a = +b[1], b = +b[2], a || (a = b), c = location.pathname.split(/\//)[1], window.location.href = "/" + c + "/thread/" + a + "#p" + b, PainterCore.onCancel(), a != b && (PainterCore.btnClear.disabled = !0, window.location.reload())) : (a = this.responseText.match(/"errmsg"[^>]*>(.*?)<\/span/)) && showPostFormError(a[1])
+    (b = this.responseText.match(/\x3c!-- thread:([0-9]+),no:([0-9]+) --\x3e/)) ? (a = +b[1], b = +b[2], a || (a = b), c = location.pathname.split(/\//)[1], window.location.href = "/" + c + "/thread/" + a + "#p" + b, PainterCore.onCancel(), a != b && (PainterCore.btnClear.disabled = !0, window.location.reload())) : (a = this.responseText.match(/"errmsg"[^>]*>(.*?)<\/span/)) &&
+      showPostFormError(a[1])
   }
 };
 
@@ -534,12 +543,14 @@ function contentLoaded() {
   window.passEnabled && setPassMsg();
   window.Tegaki && PainterCore.init();
   (b = document.getElementById("bottomReportBtn")) && b.addEventListener("click", onReportClick, !1);
-  (b = document.getElementById("styleSelector")) && b.addEventListener("change", onStyleSheetChange, !1);
+  (b = document.getElementById("styleSelector")) && b.addEventListener("change",
+    onStyleSheetChange, !1);
   if (b = document.getElementById("togglePostFormLink"))(b = b.firstElementChild) && b.addEventListener("click", showPostForm, !1), "#reply" === location.hash && showPostForm();
   (b = document.forms.post) && b.flag && (c = readCookie("4chan_flag")) && (a = b.querySelector('option[value="' + c + '"]')) && a.setAttribute("selected", "selected");
   buildMobileNav(e);
   (b = document.getElementById("globalToggle")) && b.addEventListener("click", toggleGlobalMessage, !1);
-  "true" == localStorage.getItem("4chan_never_show_mobile") && (b = document.getElementById("disable-mobile")) && (b.style.display = "none", b = document.getElementById("enable-mobile"), b.parentNode.style.cssText = "display: inline !important;");
+  "true" == localStorage.getItem("4chan_never_show_mobile") &&
+    (b = document.getElementById("disable-mobile")) && (b.style.display = "none", b = document.getElementById("enable-mobile"), b.parentNode.style.cssText = "display: inline !important;");
   if (c = document.getElementById("boardSelectMobile")) {
     b = c.options.length;
     for (a = 0; a < b; a++) c.options[a].value == e && (c.selectedIndex = a);
@@ -549,7 +560,8 @@ function contentLoaded() {
   }
   if ("catalog" != d[2]) {
     c = document.getElementsByClassName("mobilePostFormToggle");
-    for (a = 0; b = c[a]; ++a) b.addEventListener("click", onMobileFormClick, !1);
+    for (a = 0; b = c[a]; ++a) b.addEventListener("click",
+      onMobileFormClick, !1);
     if (b = document.getElementsByName("com")[0]) b.addEventListener("keydown", onComKeyDown, !1), b.addEventListener("paste", onComKeyDown, !1), b.addEventListener("cut", onComKeyDown, !1);
     (b = document.getElementById("refresh_top")) && b.addEventListener("mouseup", onMobileRefreshClick, !1);
     (b = document.getElementById("refresh_bottom")) && b.addEventListener("mouseup", onMobileRefreshClick, !1);
