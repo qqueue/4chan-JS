@@ -824,8 +824,7 @@ var UA = {
         e + '"]')) && h.setAttribute("selected", "selected");
       L(n.orderby, !0);
       xa(n.large, !0);
-      wa(n.extended, !0);
-      UA.dispatchEvent("4chanMainInit")
+      wa(n.extended, !0)
     };
     V.loadCatalog = function(a) {
       var b;
@@ -844,7 +843,8 @@ var UA = {
     V.applyCSS = function(a, b, c) {
       var d, f;
       a || (a = C);
-      void 0 !== b && ((f = $.readCookie(b)) || (f = "nws_style" == b ? "Yotsuba New" : "Yotsuba B New"), ja = b, ia = f, d = document.createElement("link"), d.type = "text/css", d.id = "base-css", d.rel = "stylesheet", d.setAttribute("href", "//s.4cdn.org/css/catalog_" + f.toLowerCase().replace(/ /g, "_") + "." + c + ".css"), document.head.insertBefore(d, $.id("mobile-css")));
+      void 0 !== b && ((f = $.readCookie(b)) || (f = "nws_style" == b ? "Yotsuba New" : "Yotsuba B New"), ja = b, ia = f, d = document.createElement("link"), d.type = "text/css", d.id = "base-css", d.rel = "stylesheet", d.setAttribute("href", "//s.4cdn.org/css/catalog_" +
+        f.toLowerCase().replace(/ /g, "_") + "." + c + ".css"), document.head.insertBefore(d, $.id("mobile-css")));
       (d = $.id("custom-css")) && document.head.removeChild(d);
       a.css && (d = document.createElement("style"), d.type = "text/css", d.id = "custom-css", d.styleSheet ? d.styleSheet.cssText = a.css : d.innerHTML = a.css, document.head.appendChild(d))
     }
@@ -979,7 +979,8 @@ var UA = {
     build: function() {
       var a, b, c;
       a = "";
-      for (c in this.watched) b = c.split("-"), a += '<li id="watch-' + c + '"><span class="pointer" data-cmd="unwatch" data-id="' + b[0] + '" data-board="' + b[1] + '">&times;</span> <a href="' + this.linkToThread(b[0], b[1], this.watched[c][1]) + '"', a = -1 == this.watched[c][1] ? a + ' class="deadlink">' : this.watched[c][2] ? a + (' class="hasNewReplies">(' + this.watched[c][2] + ") ") : a + ">", a += "/" + b[1] + "/ - " + this.watched[c][0] + "</a></li>";
+      for (c in this.watched) b = c.split("-"), a += '<li id="watch-' + c + '"><span class="pointer" data-cmd="unwatch" data-id="' +
+        b[0] + '" data-board="' + b[1] + '">&times;</span> <a href="' + this.linkToThread(b[0], b[1], this.watched[c][1]) + '"', a = -1 == this.watched[c][1] ? a + ' class="deadlink">' : this.watched[c][2] ? a + (' class="hasNewReplies">(' + this.watched[c][2] + ") ") : a + ">", a += "/" + b[1] + "/ - " + this.watched[c][0] + "</a></li>";
       ThreadWatcher.listNode.innerHTML = a
     },
     onClick: function(a) {
@@ -1124,7 +1125,8 @@ var UA = {
           for (c = l.length - 1; 1 <= c && !(l[c].no <= q); c--)++d;
           d > ThreadWatcher.watched[a][2] && (ThreadWatcher.watched[a][2] = d)
         } else 404 == this.status && (ThreadWatcher.watched[a][1] = -1); if (b) ThreadWatcher.onRefreshEnd(b)
-      }, b && (d.onerror = d.onload), d.open("GET", "//a.4cdn.org/" + c[1] + "/thread/" + c[0] + ".json"), d.send(null)
+      }, b && (d.onerror = d.onload), d.open("GET", "//a.4cdn.org/" + c[1] + "/thread/" +
+        c[0] + ".json"), d.send(null)
     },
     linkToThread: function(a, b, c) {
       return "//" + location.host + "/" + b + "/res/" + a + (0 < c ? "#p" + c : "")
