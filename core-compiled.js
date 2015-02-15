@@ -154,6 +154,15 @@ function loadBannerImage() {
   cnt.innerHTML = '<img alt="4chan" src="//s.4cdn.org/image/title/' + cnt.getAttribute('data-src') + '">';
 }
 
+function onMobileSelectChange() {
+  var board, page;
+
+  board = this.options[this.selectedIndex].value;
+  page = /\/catalog$/.test(location.pathname) ? 'catalog' : '';
+
+  window.location = '//boards.4chan.org/' + board + '/' + page;
+}
+
 function buildMobileNav(currentBoard) {
   var el, cnt, boards, i, b, html, order;
 
@@ -1243,10 +1252,7 @@ function contentLoaded() {
       }
     }
 
-    mobileSelect.onchange = function() {
-      var boardNew = this.options[this.selectedIndex].value;
-      window.location = '//boards.4chan.org/' + boardNew + '/';
-    }
+    mobileSelect.addEventListener('change', onMobileSelectChange, false);
   }
 
   if (document.forms.oeform && (el = document.forms.oeform.oe_src)) {
