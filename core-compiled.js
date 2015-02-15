@@ -1005,6 +1005,7 @@ function oeCanvasPreview(e) {
     }
 
     el = t.cloneNode();
+    el.id = 'oe-canvas-preview';
     sel = e.target.parentNode;
     sel.parentNode.insertBefore(el, sel.nextSibling);
   }
