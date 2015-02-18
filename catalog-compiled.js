@@ -144,7 +144,8 @@ var FC = function() {
       admin: 'Administrator',
       mod: 'Moderator',
       developer: 'Developer',
-      manager: 'Manager'
+      manager: 'Manager',
+      admin_emeritus: 'Admin Emeritus'
     },
 
     keybinds = {
@@ -175,6 +176,7 @@ var FC = function() {
     hasThreadWatcher = false,
     hasDropDownNav = false,
     hasClassicNav = false,
+    hasAutoHideNav = false,
 
     quickFilterPattern = false,
 
@@ -258,6 +260,7 @@ var FC = function() {
           if (extConfig.dropDownNav !== false && !FC.hasMobileLayout) {
             hasDropDownNav = true;
             hasClassicNav = extConfig.classicNav;
+            hasAutoHideNav = extConfig.autoHideNav;
             showDropDownNav();
           }
         }
@@ -302,6 +305,10 @@ var FC = function() {
       $.removeClass($.id('boardNavMobile'), 'mobile');
     }
 
+    if (hasAutoHideNav) {
+      StickyNav.init(hasClassicNav);
+    }
+
     bottom.style.display = 'none';
 
     $.addClass(document.body, 'hasDropDownNav');
@@ -324,6 +331,10 @@ var FC = function() {
     } else {
       top.style.display = '';
       $.addClass($.id('boardNavMobile'), 'mobile');
+    }
+
+    if (hasAutoHideNav) {
+      StickyNav.destroy(hasClassicNav);
     }
 
     bottom.style.display = '';
@@ -1790,7 +1801,7 @@ var FC = function() {
     }
 
     if (thread.capcode) {
-      tip += ' ## ' + thread.capcode.charAt(0).toUpperCase() + thread.capcode.slice(1);
+      tip += ' ## ' + capcodeMap[thread.capcode];
     }
 
     tip += '</span> ';
@@ -2679,4 +2690,46 @@ function checkMobileLayout() {
   desktop = $.id('boardNavDesktop');
 
   return mobile && desktop && mobile.offsetWidth > 0 && desktop.offsetWidth == 0;
+};
+
+StickyNav = {
+  thres: 5,
+  pos: 0,
+  timeout: null,
+  el: null,
+
+  init: function(classicNav) {
+    this.el = classicNav ? $.id('boardNavDesktop') : $.id('boardNavMobile');
+    $.addClass(this.el, 'autohide-nav');
+    window.addEventListener('scroll', this.onScroll, false);
+  },
+
+  destroy: function(classicNav) {
+    this.el = classicNav ? $.id('boardNavDesktop') : $.id('boardNavMobile');
+    $.removeClass(this.el, 'autohide-nav');
+    window.removeEventListener('scroll', this.onScroll, false);
+  },
+
+  onScroll: function(e) {
+    clearTimeout(StickyNav.timeout);
+    StickyNav.timeout = setTimeout(StickyNav.checkScroll, 50);
+  },
+
+  checkScroll: function() {
+    var thisPos;
+
+    thisPos = window.pageYOffset;
+
+    if (Math.abs(StickyNav.pos - thisPos) <= StickyNav.thres) {
+      return;
+    }
+
+    if (thisPos < StickyNav.pos) {
+      StickyNav.el.style.top = '';
+    } else {
+      StickyNav.el.style.top = '-' + StickyNav.el.offsetHeight + 'px';
+    }
+
+    StickyNav.pos = thisPos;
+  }
 };
