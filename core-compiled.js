@@ -158,7 +158,7 @@ function onMobileSelectChange() {
   var board, page;
 
   board = this.options[this.selectedIndex].value;
-  page = /\/catalog$/.test(location.pathname) ? 'catalog' : '';
+  page = (board !== 'f' && /\/catalog$/.test(location.pathname)) ? 'catalog' : '';
 
   window.location = '//boards.4chan.org/' + board + '/' + page;
 }
