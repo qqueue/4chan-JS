@@ -2657,7 +2657,7 @@ CustomMenu.apply = function(str) {
 
   cnt.appendChild(document.createTextNode(' ['));
   el = document.createElement('a');
-  el.textContent = '…';
+  el.textContent = '&hellip;';
   el.title = 'Show all';
   el.className = 'show-all-boards pointer';
   cnt.appendChild(el);
