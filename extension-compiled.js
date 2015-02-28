@@ -1425,7 +1425,7 @@ Depager.setStatus = function(type) {
     }
   } else if (type == 'loading') {
     for (i = 0; el = links[i]; ++i) {
-      el.textContent = 'Loading…';
+      el.textContent = 'Loading&hellip;';
     }
   } else if (type == 'disabled') {
     for (i = 0; el = links[i]; ++i) {
@@ -5444,8 +5444,8 @@ Filter.openHelp = function() {
 <ul><li><strong>Exact match:</strong></li>\
 <li><code>"that feel when"</code> &mdash; place double quotes around the pattern to search for an exact string</li></ul>\
 <ul><li><strong>Wildcards:</strong></li>\
-<li><code>feel*</code> &mdash; matches expressions such as <em>"feel"</em>, <em>"feels"</em>, <em>"feeling"</em>, <em>"feeler"</em>, etc…</li>\
-<li><code>idolm*ster</code> &mdash; this can match <em>"idolmaster"</em> or <em>"idolm@ster"</em>, etc…</li></ul>\
+<li><code>feel*</code> &mdash; matches expressions such as <em>"feel"</em>, <em>"feels"</em>, <em>"feeling"</em>, <em>"feeler"</em>, etc&hellip;</li>\
+<li><code>idolm*ster</code> &mdash; this can match <em>"idolmaster"</em> or <em>"idolm@ster"</em>, etc&hellip;</li></ul>\
 <ul><li><strong>Regular expressions:</strong></li>\
 <li><code>/feel when no (girl|boy)friend/i</code></li>\
 <li><code>/^(?!.*touhou).*$/i</code> &mdash; NOT operator.</li>\
@@ -5453,7 +5453,7 @@ Filter.openHelp = function() {
 <li><code>/^$/</code> &mdash; comments with no text.</li></ul>\
 <h4>Colors:</h4>\
 <ul><li>The color field can accept any valid CSS color:</li>\
-<li><code>red</code>, <code>#0f0</code>, <code>#00ff00</code>, <code>rgba( 34, 12, 64, 0.3)</code>, etc…</li></ul>\
+<li><code>red</code>, <code>#0f0</code>, <code>#00ff00</code>, <code>rgba( 34, 12, 64, 0.3)</code>, etc&hellip;</li></ul>\
 <h4>Boards:</h4>\
 <ul><li>A space separated list of boards on which the filter will be active. Leave blank to apply to all boards.</li></ul>\
 <h4>Auto-watching:</h4>\
@@ -6579,7 +6579,7 @@ CustomMenu.apply = function(str) {
 
   cnt.appendChild(document.createTextNode(' ['));
   el = document.createElement('a');
-  el.textContent = '…';
+  el.textContent = '&hellip;';
   el.title = 'Show all';
   el.className = 'show-all-boards pointer';
   cnt.appendChild(el);
