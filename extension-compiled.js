@@ -7879,7 +7879,7 @@ Main.onclick = function(e) {
       if (ImageExpansion.toggle(t)) {
         e.preventDefault();
       }
-    } else if (Config.inlineQuotes && e.which == 1 && $.hasClass(t, 'quotelink')) {
+    } else if (Config.inlineQuotes && e.which == 1 && $.hasClass(t, 'quotelink') && Main.page !== 'archive') {
       if (!e.shiftKey) {
         QuoteInline.toggle(t, e);
       } else {
