@@ -324,11 +324,10 @@ function initAnalytics() {
 
 function initAds(category, board) {
   var p = "http",
-    d = "static";
+    d = "s";
 
   if (document.location.protocol == "https:") {
     p += "s";
-    d = "s";
   }
 
   var z = document.createElement("script");
