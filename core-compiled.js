@@ -328,13 +328,13 @@ function initAds(category, board) {
 
   if (document.location.protocol == "https:") {
     p += "s";
-    d = "engine";
+    d = "s";
   }
 
   var z = document.createElement("script");
   z.type = "text/javascript";
   z.async = true;
-  z.src = p + "://" + d + ".4chan-ads.org/ados.js";
+  z.src = p + "://" + d + ".zkcdn.net/ados.js";
   z.onload = function() {
     ados = ados || {};
     ados.run = ados.run || [];
