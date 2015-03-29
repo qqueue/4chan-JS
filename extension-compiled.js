@@ -3224,7 +3224,7 @@ QR.startCooldown = function() {
 
   if (QR.cooldown <= 0 || QR.cdElapsed < 0) {
     QR.cooldown = false;
-    QR.removePostTime(type);
+    QR.btn.value = 'Post';
     return;
   }
 
