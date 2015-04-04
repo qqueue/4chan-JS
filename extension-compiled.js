@@ -1108,11 +1108,7 @@ PostMenu.open = function(btn) {
     el = $.cls('fileThumb', file.parentNode)[0];
 
     if (el) {
-      if (/\.(png|jpg)$/.test(el.href)) {
-        href = el.href;
-      } else {
-        href = 'http://i.4cdn.org/' + Main.board + '/' + el.href.match(/\/([0-9]+)\..+$/)[1] + 's.jpg';
-      }
+      href = 'http://i.4cdn.org/' + Main.board + '/' + el.href.match(/\/([0-9]+)\..+$/)[1] + 's.jpg';
 
       html += '<li><ul>' + '<li><a href="//www.google.com/searchbyimage?image_url=' + href + '" target="_blank">Google</a></li>' + '<li><a href="http://iqdb.org/?url=' + href + '" target="_blank">iqdb</a></li></ul>Image search &raquo</li>';
     }
