@@ -4399,8 +4399,7 @@ ThreadUpdater.buildMobileControl = function(el, bottom) {
   oldBtn = el.parentNode;
 
   btn = oldBtn.cloneNode(true);
-  btn.textContent = 'Update';
-  btn.setAttribute('data-cmd', 'update');
+  btn.innerHTML = '<label data-cmd="update">Update</label>';
 
   wrap.appendChild(btn);
   cnt = el.parentNode.parentNode;
