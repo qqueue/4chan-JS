@@ -824,6 +824,32 @@ var FC = function() {
     }
   }
 
+  function onFiltersSearch(e) {
+    var i, el, nodes, cnt, str;
+
+    if (e && (e.keyCode == 27)) {
+      this.value = '';
+    }
+
+    str = this.value.toLowerCase();
+
+    nodes = document.getElementsByClassName('filter-pattern');
+
+    cnt = document.getElementById('filter-list');
+
+    cnt.style.display = 'none';
+
+    for (i = 0; el = nodes[i]; ++i) {
+      if (el.value.toLowerCase().indexOf(str) === -1) {
+        el.parentNode.parentNode.style.display = 'none';
+      } else {
+        el.parentNode.parentNode.style.display = '';
+      }
+    }
+
+    cnt.style.display = '';
+  }
+
   function showFilters() {
     var i, filtersPanel, rawFilters, filtersPanel, filterList, filterId, el;
 
@@ -841,7 +867,11 @@ var FC = function() {
       $.on($.id('filter-rgb'), 'keyup', filterSetCustomColor);
       $.on($.id('filter-rgb-ok'), 'click', selectFilterColor);
 
+      $.on($.id('filters-search'), 'keyup', onFiltersSearch);
+
       filtersPanel.setAttribute('data-built', '1');
+    } else {
+      $.id('filters-search').value = '';
     }
 
     rawFilters = localStorage.getItem('catalog-filters');
