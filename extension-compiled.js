@@ -6282,7 +6282,7 @@ Media.toggleYouTube = function(node) {
 
       el = document.createElement('div');
       el.className = 'media-embed';
-      el.innerHTML = '<iframe src="//www.youtube.com/embed/' + vid + '" width="640" height="360" frameborder="0"></iframe>'
+      el.innerHTML = '<iframe src="//www.youtube.com/embed/' + vid + '" width="640" height="360" frameborder="0" allowfullscreen></iframe>'
 
       node.parentNode.insertBefore(el, node.nextElementSibling);
 
