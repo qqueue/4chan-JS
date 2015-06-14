@@ -441,7 +441,7 @@ var FC = function() {
   }
 
   function getThreadPage(tid) {
-    return 0 | (catalog.order.alt.indexOf(tid) / catalog.pagesize);
+    return (0 | (catalog.order.alt.indexOf(+tid) / catalog.pagesize)) + 1;
   }
 
   function initStyleSwitcher() {
@@ -1809,14 +1809,21 @@ var FC = function() {
   }
 
   function showTooltip(t) {
-    var now, tip, pos, el, rect, docWidth, style;
+    var now, tip, pos, el, rect, docWidth, style, page, tid;
 
     now = Date.now() / 1000;
 
     rect = t.getBoundingClientRect();
     docWidth = document.documentElement.offsetWidth;
 
-    thread = catalog.threads[t.getAttribute('data-id')];
+    tid = t.getAttribute('data-id');
+    thread = catalog.threads[tid];
+
+    if (page = getThreadPage(tid)) {
+      page = '<span class="post-page">page ' + page + '</span>';
+    } else {
+      page = '';
+    }
 
     if (thread.sub) {
       tip = '<span class="post-subject">' + thread.sub + '</span>';
@@ -1840,7 +1847,7 @@ var FC = function() {
       tip += '<div class="flag flag-' + thread.country.toLowerCase() + '"></div> ';
     }
 
-    tip += '<span class="post-ago">' + getDuration(now - thread.date) + ' ago</span>';
+    tip += '<span class="post-ago">' + getDuration(now - thread.date) + ' ago</span>' + page;
 
     if (!options.extended && thread.teaser) {
       tip += '<p class="post-teaser">' + thread.teaser + '</p>';
@@ -2193,7 +2200,7 @@ ThreadWatcher.load = function() {
 };
 
 ThreadWatcher.build = function() {
-  var i, html, tuid, key, buttons, btn, nodes;
+  var i, html, tuid, key, buttons, btn, nodes, cls;
 
   html = '';
 
@@ -2203,10 +2210,23 @@ ThreadWatcher.build = function() {
 
     if (this.watched[key][1] == -1) {
       html += ' class="deadlink">';
-    } else if (this.watched[key][2]) {
-      html += ' class="hasNewReplies">(' + this.watched[key][2] + ') ';
     } else {
-      html += '>';
+      cls = [];
+
+      if (this.watched[key][3]) {
+        cls.push('archivelink');
+      }
+
+      if (this.watched[key][4]) {
+        cls.push('hasYouReplies');
+        html += ' title="This thread has replies to your posts"';
+      }
+
+      if (this.watched[key][2]) {
+        html += ' class="' + (cls[0] ? (cls.join(' ') + ' ') : '') + 'hasNewReplies">(' + this.watched[key][2] + ') ';
+      } else {
+        html += (cls[0] ? ('class="' + cls.join(' ') + '"') : '') + '>';
+      }
     }
 
     html += '/' + tuid[1] + '/ - ' + this.watched[key][0] + '</a></li>';
@@ -2496,6 +2516,16 @@ ThreadWatcher.parseThreadJSON = function(data) {
   return thread;
 };
 
+ThreadWatcher.getTrackedReplies = function(board, tid) {
+  var tracked = null;
+
+  if (tracked = localStorage.getItem('4chan-track-' + board + '-' + tid)) {
+    tracked = JSON.parse(tracked);
+  }
+
+  return tracked;
+};
+
 ThreadWatcher.fetch = function(key, img) {
   var tuid, xhr, li, method;
 
@@ -2514,19 +2544,50 @@ ThreadWatcher.fetch = function(key, img) {
 
   xhr = new XMLHttpRequest();
   xhr.onload = function() {
-    var i, newReplies, posts, lastReply;
+    var i, newReplies, posts, lastReply, trackedReplies, dummy, quotelinks, q, j;
     if (this.status == 200) {
       posts = ThreadWatcher.parseThreadJSON(this.responseText);
       lastReply = ThreadWatcher.watched[key][1];
       newReplies = 0;
+
+      if (!ThreadWatcher.watched[key][4]) {
+        trackedReplies = ThreadWatcher.getTrackedReplies(tuid[1], tuid[0]);
+
+        if (trackedReplies) {
+          dummy = document.createElement('div');
+        }
+      } else {
+        trackedReplies = null;
+      }
+
       for (i = posts.length - 1; i >= 1; i--) {
         if (posts[i].no <= lastReply) {
           break;
         }
         ++newReplies;
+
+        if (trackedReplies) {
+          dummy.innerHTML = posts[i].com;
+          quotelinks = $.cls('quotelink', dummy);
+
+          if (!quotelinks[0]) {
+            continue;
+          }
+
+          for (j = 0; q = quotelinks[j]; ++j) {
+            if (trackedReplies[q.textContent]) {
+              ThreadWatcher.watched[key][4] = 1;
+              trackedReplies = null;
+              break;
+            }
+          }
+        }
       }
       if (newReplies > ThreadWatcher.watched[key][2]) {
         ThreadWatcher.watched[key][2] = newReplies;
+      }
+      if (posts[0].archived) {
+        ThreadWatcher.watched[key][3] = 1;
       }
     } else if (this.status == 404) {
       ThreadWatcher.watched[key][1] = -1;
@@ -2543,7 +2604,7 @@ ThreadWatcher.fetch = function(key, img) {
 };
 
 ThreadWatcher.linkToThread = function(tid, board, post) {
-  return '//' + location.host + '/' + board + '/res/' + tid + (post > 0 ? ('#p' + post) : '');
+  return '//' + location.host + '/' + board + '/thread/' + tid + (post > 0 ? ('#p' + post) : '');
 };
 
 /**
