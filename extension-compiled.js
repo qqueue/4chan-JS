@@ -221,6 +221,8 @@ Parser.init = function() {
 
     this.pruneTrackedReplies();
   }
+
+  this.postMenuIcon = Main.hasMobileLayout ? '➞' : '▶';
 };
 
 Parser.getTrackedReplies = function(board, tid) {
@@ -942,7 +944,7 @@ Parser.parsePost = function(pid, tid) {
   el.className = 'postMenuBtn';
   el.title = 'Post menu';
   el.setAttribute('data-cmd', 'post-menu');
-  el.textContent = '▶';
+  el.textContent = Parser.postMenuIcon;
 
   if (hasMobileLayout) {
     cnt = document.getElementById('pim' + pid)
@@ -1134,6 +1136,11 @@ var PostMenu = {
 
 PostMenu.open = function(btn) {
   var div, html, pid, board, btnPos, txt, el, href, left, limit, isOP;
+
+  if (PostMenu.activeBtn == btn) {
+    PostMenu.close();
+    return;
+  }
 
   PostMenu.close();
 
@@ -3364,9 +3371,7 @@ ThreadHiding.clear = function(silent) {
 };
 
 ThreadHiding.isHidden = function(tid) {
-  var sa = $.id('sa' + tid);
-
-  return !sa || sa.hasAttribute('data-hidden');
+  return !!ThreadHiding.hidden[tid];
 };
 
 ThreadHiding.toggle = function(tid) {
@@ -3382,18 +3387,14 @@ ThreadHiding.show = function(tid) {
   var sa, th;
 
   th = $.id('t' + tid);
-
   sa = $.id('sa' + tid);
-  sa.removeAttribute('data-hidden');
 
   if (Main.hasMobileLayout) {
-    sa.textContent = 'Hide';
-    $.removeClass(sa, 'mobile-tu-show');
-    $.cls('postLink', th)[0].appendChild(sa);
-
+    sa.parentNode.removeChild(sa);
     th.style.display = null;
     $.removeClass(th.nextElementSibling, 'mobile-hr-hidden');
   } else {
+    sa.removeAttribute('data-hidden');
     sa.firstChild.src = Main.icons.minus;
     $.removeClass(th, 'post-hidden');
   }
@@ -3410,11 +3411,12 @@ ThreadHiding.hide = function(tid) {
     th.style.display = 'none';
     $.addClass(th.nextElementSibling, 'mobile-hr-hidden');
 
-    sa = $.id('sa' + tid);
-    sa.setAttribute('data-hidden', tid);
+    sa = document.createElement('span');
+    sa.id = 'sa' + tid;
+    sa.setAttribute('data-cmd', 'hide');
+    sa.setAttribute('data-id', tid);
     sa.textContent = 'Show Hidden Thread';
-    $.addClass(sa, 'mobile-tu-show');
-
+    sa.className = 'mobileHideButton button mobile-tu-show';
     th.parentNode.insertBefore(sa, th);
   } else {
     if (Config.hideStubs && !$.cls('stickyIcon', th)[0]) {
