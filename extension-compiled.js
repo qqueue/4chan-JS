@@ -211,7 +211,7 @@ Parser.init = function() {
   }
 
   if (Main.tid) {
-    this.trackedReplies = this.getTrackedReplies(Main.tid);
+    this.trackedReplies = this.getTrackedReplies(Main.board, Main.tid);
 
     if (this.trackedReplies) {
       this.touchTrackedReplies(Main.tid);
@@ -223,10 +223,10 @@ Parser.init = function() {
   }
 };
 
-Parser.getTrackedReplies = function(tid) {
+Parser.getTrackedReplies = function(board, tid) {
   var tracked = null;
 
-  if (tracked = localStorage.getItem('4chan-track-' + Main.board + '-' + tid)) {
+  if (tracked = localStorage.getItem('4chan-track-' + board + '-' + tid)) {
     tracked = JSON.parse(tracked);
   }
 
@@ -756,15 +756,7 @@ Parser.parseThread = function(tid, offset, limit) {
       }
 
       if (Config.threadHiding && !filtered) {
-        if (Main.hasMobileLayout) {
-          el = document.createElement('a');
-          el.href = 'javascript:;';
-          el.setAttribute('data-cmd', 'hide');
-          el.setAttribute('data-id', tid);
-          el.className = 'mobileHideButton button';
-          el.textContent = 'Hide';
-          posts[0].nextElementSibling.appendChild(el);
-        } else {
+        if (!Main.hasMobileLayout) {
           el = document.createElement('span');
           el.innerHTML = '<img alt="H" class="extButton threadHideButton"' + 'data-cmd="hide" data-id="' + tid + '" src="' + Main.icons.minus + '" title="Hide thread">';
           posts[0].insertBefore(el, posts[0].firstChild);
@@ -930,7 +922,7 @@ Parser.parseMarkup = function(post) {
 };
 
 Parser.parsePost = function(pid, tid) {
-  var hasMobileLayout, cnt, el, pi, href, img, file, msg, filtered, html, filename, txt, finfo, isOP, uid;
+  var hasMobileLayout, cnt, el, pi, href, img, file, msg, filtered, html, filename, txt, finfo, isOP, uid, ppid;
 
   hasMobileLayout = Main.hasMobileLayout;
 
@@ -945,22 +937,17 @@ Parser.parsePost = function(pid, tid) {
     msg = document.getElementById('m' + pid);
   }
 
+  el = document.createElement('a');
+  el.href = '#';
+  el.className = 'postMenuBtn';
+  el.title = 'Post menu';
+  el.setAttribute('data-cmd', 'post-menu');
+  el.textContent = '▶';
+
   if (hasMobileLayout) {
-    if (Config.reportButton) {
-      el = document.createElement('span');
-      el.className = 'mobile mobile-report';
-      el.setAttribute('data-cmd', 'report');
-      el.setAttribute('data-id', pid);
-      el.textContent = 'Report';
-      pi.parentNode.appendChild(el);
-    }
+    cnt = document.getElementById('pim' + pid)
+    cnt.insertBefore(el, cnt.firstElementChild);
   } else {
-    el = document.createElement('a');
-    el.href = '#';
-    el.className = 'postMenuBtn';
-    el.title = 'Post menu';
-    el.setAttribute('data-cmd', 'post-menu');
-    el.textContent = '▶';
     pi.appendChild(el);
   }
 
@@ -974,6 +961,16 @@ Parser.parsePost = function(pid, tid) {
         ReplyHiding.hidden[pid] = Main.now;
         ReplyHiding.hide(pid);
       }
+      /*
+      if (ReplyHiding.hiddenR[pid]) {
+        ReplyHiding.hideR(pid, pid);
+      }
+      else if (ReplyHiding.hasR) {
+        if (ppid = ReplyHiding.shouldToggleR(msg)) {
+          ReplyHiding.hideR(pid, ppid);
+        }
+      }
+      */
     }
 
     if (Config.backlinks) {
@@ -1140,7 +1137,7 @@ PostMenu.open = function(btn) {
 
   PostMenu.close();
 
-  pid = btn.parentNode.id.split('pi')[1];
+  pid = btn.parentNode.id.replace(/^[^0-9]+/, '');
 
   board = btn.parentNode.getAttribute('data-board');
 
@@ -1162,7 +1159,8 @@ PostMenu.open = function(btn) {
       html += '<li data-cmd="hide-r" data-recurse="1" data-id="' + pid + '">'
         + ($.hasClass(el, 'post-hidden') ? 'Unhide' : 'Hide')
         + ' recursively</li>';
-    }*/
+    }
+    */
   }
 
   if (file = $.id('fT' + pid)) {
@@ -1171,7 +1169,11 @@ PostMenu.open = function(btn) {
     if (el) {
       href = 'http://i.4cdn.org/' + Main.board + '/' + el.href.match(/\/([0-9]+)\..+$/)[1] + 's.jpg';
 
-      html += '<li><ul>' + '<li><a href="//www.google.com/searchbyimage?image_url=' + href + '" target="_blank">Google</a></li>' + '<li><a href="http://iqdb.org/?url=' + href + '" target="_blank">iqdb</a></li></ul>Image search &raquo</li>';
+      if (Main.hasMobileLayout) {
+        html += '<li><a href="//www.google.com/searchbyimage?image_url=' + href + '" target="_blank">Search image on Google</a></li>' + '<li><a href="http://iqdb.org/?url=' + href + '" target="_blank">Search image on iqdb</a></li>';
+      } else {
+        html += '<li><ul>' + '<li><a href="//www.google.com/searchbyimage?image_url=' + href + '" target="_blank">Google</a></li>' + '<li><a href="http://iqdb.org/?url=' + href + '" target="_blank">iqdb</a></li></ul>Image search &raquo</li>';
+      }
     }
   }
 
@@ -2370,6 +2372,10 @@ ImageHover.show = function(thumb) {
   el.onerror = ImageHover.onLoadError;
   el.src = href;
 
+  if (Config.imageHoverBg) {
+    el.style.backgroundColor = 'inherit';
+  }
+
   document.body.appendChild(el);
 
   if (UA.hasCORS) {
@@ -2399,6 +2405,10 @@ ImageHover.showWebm = function(thumb) {
 
   el = document.createElement('video');
   el.id = 'image-hover';
+
+  if (Config.imageHoverBg) {
+    el.style.backgroundColor = 'inherit';
+  }
 
   if (thumb.nodeName !== 'A') {
     el.src = thumb.parentNode.getAttribute('href');
@@ -3149,7 +3159,7 @@ QR.submit = function(force) {
           Parser.trackedReplies['>>' + pid] = 1;
           Parser.saveTrackedReplies(tid, Parser.trackedReplies);
         } else {
-          tracked = Parser.getTrackedReplies(tid) || {};
+          tracked = Parser.getTrackedReplies(Main.board, tid) || {};
           tracked['>>' + pid] = 1;
           Parser.saveTrackedReplies(tid, tracked);
         }
@@ -3492,6 +3502,9 @@ var ReplyHiding = {};
 ReplyHiding.init = function() {
   this.threshold = 7 * 86400000;
   this.hidden = {};
+  this.hiddenR = {};
+  this.hiddenRMap = {};
+  this.hasR = false;
   this.load();
 };
 
@@ -3502,6 +3515,8 @@ ReplyHiding.isHidden = function(pid) {
 };
 
 ReplyHiding.toggle = function(pid) {
+  this.load();
+
   if (this.isHidden(pid)) {
     this.show(pid);
   } else {
@@ -3510,92 +3525,122 @@ ReplyHiding.toggle = function(pid) {
   this.save();
 };
 
+ReplyHiding.toggleR = function(pid) {
+  var i, j, ql, el, post, nodes, quotes, rid, hit, func, parentPid;
+
+  this.load();
+
+  if (parentPid = this.hiddenRMap['>>' + pid]) {
+    this.showR(parentPid, parentPid);
+
+    for (i in this.hiddenRMap) {
+      if (this.hiddenRMap[i] == parentPid) {
+        this.showR(i.slice(2));
+      }
+    }
+  } else {
+    this.hideR(pid, pid);
+
+    post = $.id('m' + pid);
+    nodes = $.cls('postMessage');
+
+    for (i = 1; nodes[i] !== post; ++i) {}
+
+    for (; el = nodes[i]; ++i) {
+      if (ReplyHiding.shouldToggleR(el)) {
+        rid = el.id.slice(1);
+        this.hideR(rid, pid);
+      }
+    }
+  }
+
+  this.hasR = false;
+
+  for (i in this.hiddenRMap) {
+    this.hasR = true;
+    break
+  }
+
+  this.save();
+};
+
+ReplyHiding.shouldToggleR = function(el) {
+  var hit;
+
+  if (el.parentNode.hasAttribute('data-pfx')) {
+    return false;
+  }
+
+  quotes = el.querySelectorAll('#' + el.id + ' > .quotelink');
+
+  if (!quotes[0]) {
+    return false;
+  }
+
+  hit = this.hiddenRMap[quotes[0].textContent];
+
+  if (quotes.length === 1 && hit) {
+    return hit;
+  } else {
+    for (j = 0; ql = quotes[j]; ++j) {
+      if (!this.hiddenRMap[ql.textContent]) {
+        return false;
+      }
+    }
+  }
+
+  return hit;
+};
+
 ReplyHiding.show = function(pid) {
-  var post, sa;
-
-  post = $.id('pc' + pid);
-
-  $.removeClass(post, 'post-hidden');
-
-  sa = $.id('sa' + pid);
-  sa.removeAttribute('data-hidden');
+  $.removeClass($.id('pc' + pid), 'post-hidden');
+  $.id('sa' + pid).removeAttribute('data-hidden');
 
   delete ReplyHiding.hidden[pid];
 };
 
+ReplyHiding.showR = function(pid, parentPid) {
+  $.removeClass($.id('pc' + pid), 'post-hidden');
+  $.id('sa' + pid).removeAttribute('data-hidden');
+
+  delete ReplyHiding.hiddenRMap['>>' + pid];
+
+  if (parentPid) {
+    delete ReplyHiding.hiddenR[parentPid];
+  }
+};
+
 ReplyHiding.hide = function(pid) {
-  var post, sa;
-
-  post = $.id('pc' + pid);
-  $.addClass(post, 'post-hidden');
-
-  sa = $.id('sa' + pid);
-  sa.setAttribute('data-hidden', pid);
+  $.addClass($.id('pc' + pid), 'post-hidden');
+  $.id('sa' + pid).setAttribute('data-hidden', pid);
 
   ReplyHiding.hidden[pid] = Date.now();
 };
 
-ReplyHiding.toggleR = function(pid) {
-  var func;
+ReplyHiding.hideR = function(pid, parentPid) {
+  $.addClass($.id('pc' + pid), 'post-hidden');
+  $.id('sa' + pid).setAttribute('data-hidden', pid);
 
-  if (this.isHidden(pid)) {
-    func = this.show;
-  } else {
-    func = this.hide;
+  ReplyHiding.hiddenRMap['>>' + pid] = parentPid;
+
+  if (pid === parentPid) {
+    ReplyHiding.hiddenR[pid] = Date.now();
   }
 
-  this.toggleRFunc(pid, func);
-  this.save();
-};
-
-ReplyHiding.toggleRFunc = function(pid, func) {
-  var i, j, ql, el, post, nodes, quotes, rid, hit, pids = {};
-
-  post = $.id('m' + pid);
-  nodes = $.cls('postMessage');
-
-  pids['>>' + pid] = true;
-
-  func(pid);
-
-  for (i = 1; nodes[i] !== post; ++i) {}
-
-  for (; el = nodes[i]; ++i) {
-    if (el.parentNode.hasAttribute('data-pfx')) {
-      continue;
-    }
-
-    quotes = el.querySelectorAll('#' + el.id + ' > .quotelink');
-
-    if (!quotes[0]) {
-      continue;
-    }
-
-    if (quotes.length === 1 && pids[quotes[0].textContent]) {
-      hit = true;
-    } else {
-      hit = true;
-      for (j = 0; ql = quotes[j]; ++j) {
-        if (!pids[ql.textContent]) {
-          hit = false;
-          break;
-        }
-      }
-    }
-
-    if (hit) {
-      rid = el.id.slice(1);
-      func(rid);
-      pids['>>' + rid] = true;
-    }
-  }
+  ReplyHiding.hasR = true;
 };
 
 ReplyHiding.load = function() {
   var storage;
 
+  this.hasHiddenR = false;
+
   if (storage = localStorage.getItem('4chan-hide-r-' + Main.board)) {
     this.hidden = JSON.parse(storage);
+  }
+
+  if (storage = localStorage.getItem('4chan-hide-rr-' + Main.board)) {
+    this.hiddenR = JSON.parse(storage);
   }
 };
 
@@ -3609,17 +3654,42 @@ ReplyHiding.purge = function() {
       delete this.hidden[tid];
     }
   }
+
+  for (tid in this.hiddenR) {
+    if (now - this.hiddenR[tid] > this.threshold) {
+      delete this.hiddenR[tid];
+    }
+  }
+
   this.save();
 };
 
 ReplyHiding.save = function() {
+  var clr;
+
+  clr = true;
+
   for (var i in this.hidden) {
     localStorage.setItem('4chan-hide-r-' + Main.board,
       JSON.stringify(this.hidden)
     );
-    return;
+    clr = false;
+    break;
   }
-  localStorage.removeItem('4chan-hide-r-' + Main.board);
+
+  clr && localStorage.removeItem('4chan-hide-r-' + Main.board);
+
+  clr = true;
+
+  for (var i in this.hiddenR) {
+    localStorage.setItem('4chan-hide-rr-' + Main.board,
+      JSON.stringify(this.hiddenR)
+    );
+    clr = false;
+    break;
+  }
+
+  clr && localStorage.removeItem('4chan-hide-rr-' + Main.board);
 };
 
 /**
@@ -3770,15 +3840,21 @@ ThreadWatcher.build = function(rebuildButtons) {
     if (this.watched[key][1] == -1) {
       html += ' class="deadlink">';
     } else {
+      cls = [];
+
       if (this.watched[key][3]) {
-        cls = 'archivelink';
-      } else {
-        cls = false;
+        cls.push('archivelink');
       }
+
+      if (this.watched[key][4]) {
+        cls.push('hasYouReplies');
+        html += ' title="This thread has replies to your posts"';
+      }
+
       if (this.watched[key][2]) {
-        html += ' class="' + (cls ? (cls + ' ') : '') + 'hasNewReplies">(' + this.watched[key][2] + ') ';
+        html += ' class="' + (cls[0] ? (cls.join(' ') + ' ') : '') + 'hasNewReplies">(' + this.watched[key][2] + ') ';
       } else {
-        html += (cls ? ('class="' + cls + '"') : '') + '>';
+        html += (cls[0] ? ('class="' + cls.join(' ') + '"') : '') + '>';
       }
     }
 
@@ -4114,6 +4190,7 @@ ThreadWatcher.refreshCurrent = function(rebuild) {
     }
 
     this.watched[key][2] = 0;
+    this.watched[key][4] = 0;
     this.save();
 
     if (rebuild) {
@@ -4128,6 +4205,7 @@ ThreadWatcher.setLastRead = function(pid, tid) {
   if (this.watched[key]) {
     this.watched[key][1] = pid;
     this.watched[key][2] = 0;
+    this.watched[key][4] = 0;
     this.save();
     this.build();
   }
@@ -4159,16 +4237,44 @@ ThreadWatcher.fetch = function(key, img) {
 
   xhr = new XMLHttpRequest();
   xhr.onload = function() {
-    var i, newReplies, posts, lastReply;
+    var i, newReplies, posts, lastReply, trackedReplies, dummy, quotelinks, q, j;
     if (this.status == 200) {
       posts = Parser.parseThreadJSON(this.responseText);
       lastReply = ThreadWatcher.watched[key][1];
       newReplies = 0;
+
+      if (!ThreadWatcher.watched[key][4]) {
+        trackedReplies = Parser.getTrackedReplies(tuid[1], tuid[0]);
+
+        if (trackedReplies) {
+          dummy = document.createElement('div');
+        }
+      } else {
+        trackedReplies = null;
+      }
+
       for (i = posts.length - 1; i >= 1; i--) {
         if (posts[i].no <= lastReply) {
           break;
         }
         ++newReplies;
+
+        if (trackedReplies) {
+          dummy.innerHTML = posts[i].com;
+          quotelinks = $.cls('quotelink', dummy);
+
+          if (!quotelinks[0]) {
+            continue;
+          }
+
+          for (j = 0; q = quotelinks[j]; ++j) {
+            if (trackedReplies[q.textContent]) {
+              ThreadWatcher.watched[key][4] = 1;
+              trackedReplies = null;
+              break;
+            }
+          }
+        }
       }
       if (newReplies > ThreadWatcher.watched[key][2]) {
         ThreadWatcher.watched[key][2] = newReplies;
@@ -6135,9 +6241,9 @@ var Media = {};
 
 Media.init = function() {
   this.matchSC = /(?:soundcloud\.com|snd\.sc)\/[^\s<]+(?:<wbr>)?[^\s<]*/g;
-  this.matchYT = /(?:youtube\.com\/watch\?[^\s]*?v=|youtu\.be\/)[^\s<]+(?:<wbr>)?[^\s<]*(?:<wbr>)?[^\s<]*/g;
+  this.matchYT = /(?:youtube\.com\/watch\?[^\s]*?v=|youtu\.be\/)[^\s<]+(?:<wbr>)?[^\s<]*(?:<wbr>)?[^\s<]*(?:<wbr>)?[^\s<]*/g;
   this.toggleYT = /(?:v=|\.be\/)([a-zA-Z0-9_-]{11})/;
-  this.timeYT = /#t=([ms0-9]+)/;
+  this.timeYT = /[#&]t=([ms0-9]+)/;
 
   this.map = {
     yt: this.toggleYouTube,
@@ -6272,7 +6378,7 @@ Media.toggleYouTube = function(node) {
       vid = encodeURIComponent(vid);
 
       if (time && (time = time[1])) {
-        vid += '#t=' + encodeURIComponent(time);
+        vid += '?start=' + encodeURIComponent(time);
       }
 
       if (Main.hasMobileLayout) {
@@ -6896,7 +7002,6 @@ var Config = {
   fixedThreadWatcher: false,
   persistentQR: false,
   forceHTTPS: false,
-  reportButton: false,
   darkTheme: false,
   linkify: false,
   unmuteWebm: false,
@@ -7056,6 +7161,7 @@ SettingsMenu.options = {
     imageExpansion: ['Image expansion', 'Enable inline image expansion, limited to browser width', true],
     fitToScreenExpansion: ['Fit expanded images to screen', 'Limit expanded images to both browser width and height'],
     imageHover: ['Image hover', 'Mouse over images to view full size, limited to browser size'],
+    imageHoverBg: ['Set a background color for transparent images', '', false, true],
     revealSpoilers: ["Don't spoiler images", 'Show image thumbnail and original filename instead of spoiler placeholders', true],
     unmuteWebm: ['Un-mute WebM audio', 'Un-mute sound automatically for WebM playback', true],
     noPictures: ['Hide thumbnails', 'Don\'t display thumbnails while browsing', true],
@@ -7069,7 +7175,6 @@ SettingsMenu.options = {
     IDColor: ['Color user IDs', 'Assign unique colors to user IDs on boards that use them', true],
     compactThreads: ['Force long posts to wrap', 'Long posts will wrap at 75% browser width'],
     centeredThreads: ['Center threads', 'Align threads to the center of page', false],
-    reportButton: ['Report button', 'Add a report button next to posts for easy reporting', true, false, true],
     localTime: ['Convert dates to local time', 'Convert 4chan server time (US Eastern Time) to your local time', true],
     forceHTTPS: ['Always use HTTPS', 'Rewrite 4chan URLs to always use HTTPS', true]
   }
@@ -8306,9 +8411,8 @@ div.op div.file .image-expanded-anti {\
 #quote-preview .extControls {\
   display: none;\
 }\
-.hasNewReplies {\
-  font-weight: bold;\
-}\
+.hasNewReplies { font-weight: bold; }\
+.hasYouReplies { font-style: italic; }\
 .archivelink {\
   opacity: 0.5;\
 }\
@@ -8963,6 +9067,7 @@ kbd {\
 #watchList {\
   padding: 0 10px;\
 }\
+div.post div.postInfoM span.nameBlock { clear: none }\
 .btn-row {\
   margin-top: 5px;\
 }\
