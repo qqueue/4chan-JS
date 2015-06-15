@@ -760,8 +760,8 @@ Parser.parseThread = function(tid, offset, limit) {
           el = document.createElement('span');
           el.innerHTML = '<img alt="H" class="extButton threadHideButton"' + 'data-cmd="hide" data-id="' + tid + '" src="' + Main.icons.minus + '" title="Hide thread">';
           posts[0].insertBefore(el, posts[0].firstChild);
+          el.id = 'sa' + tid;
         }
-        el.id = 'sa' + tid;
         if (ThreadHiding.hidden[tid]) {
           ThreadHiding.hidden[tid] = Main.now;
           ThreadHiding.hide(tid);
