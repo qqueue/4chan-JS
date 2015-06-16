@@ -1820,7 +1820,7 @@ var FC = function() {
     thread = catalog.threads[tid];
 
     if (page = getThreadPage(tid)) {
-      page = '<span class="post-page">page ' + page + '</span>';
+      page = '<span class="post-page">Page ' + page + '</span>';
     } else {
       page = '';
     }
