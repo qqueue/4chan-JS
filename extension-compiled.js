@@ -222,7 +222,7 @@ Parser.init = function() {
     this.pruneTrackedReplies();
   }
 
-  this.postMenuIcon = Main.hasMobileLayout ? '➞' : '▶';
+  this.postMenuIcon = Main.hasMobileLayout ? '...' : '▶';
 };
 
 Parser.getTrackedReplies = function(board, tid) {
