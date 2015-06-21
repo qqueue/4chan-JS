@@ -3027,7 +3027,6 @@ QR.close = function() {
   QR.comField = null;
   QR.currentTid = null;
 
-  clearInterval(QR.captchaInterval);
   clearInterval(QR.pulse);
 
   if (QR.xhr) {
@@ -7540,8 +7539,7 @@ Main.init = function() {
       style_group == 'nws_style' ? 'yotsuba_new' : 'yotsuba_b_new';
   }
 
-  Main.passEnabled = Main.getCookie('pass_enabled');
-  QR.noCaptcha = QR.noCaptcha || Main.passEnabled;
+  QR.noCaptcha = QR.noCaptcha || window.passEnabled;
 
   Main.initIcons();
 
