@@ -2876,8 +2876,8 @@ QR.renderCaptchaAlt = function() {
 
   Recaptcha.create(window.recaptchaKey,
     'qrCaptchaContainerAlt', {
-      theme: "clean",
-      tabindex: 5
+      theme: 'clean',
+      tabindex: 0
     }
   );
 };
