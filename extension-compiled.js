@@ -7199,7 +7199,7 @@ SettingsMenu.options = {
     inlineQuotes: ['Inline quote links', 'Clicking quote links will inline expand the quoted post, Shift-click to bypass inlining'],
     quickReply: ['Quick Reply', 'Quickly respond to a post by clicking its post number', true],
     persistentQR: ['Persistent Quick Reply', 'Keep Quick Reply window open after posting'],
-    altCaptcha: ['Legacy CAPTCHA', 'Use reCAPTCHA v1 in the Quick Reply window']
+    altCaptcha: ['Legacy CAPTCHA', 'Use reCAPTCHA v1 in the Quick Reply window', true]
   },
   'Monitoring': {
     threadUpdater: ['Thread updater', 'Append new posts to bottom of thread without refreshing the page', true],
