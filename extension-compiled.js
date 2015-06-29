@@ -797,7 +797,7 @@ Parser.parseThread = function(tid, offset, limit) {
       }
     }
 
-    if (Main.tid && Config.threadWatcher && (cnt = $.cls('navLinksBot')[0])) {
+    if (Main.tid && Config.threadWatcher) {
       el = document.createElement('img');
 
       if (ThreadWatcher.watched[key = tid + '-' + Main.board]) {
@@ -813,11 +813,15 @@ Parser.parseThread = function(tid, offset, limit) {
       el.alt = 'W';
       el.title = 'Add to watch list';
 
-      frag = document.createDocumentFragment();
-      frag.appendChild(document.createTextNode('['));
-      frag.appendChild(el.cloneNode(true));
-      frag.appendChild(document.createTextNode('] '));
-      cnt.insertBefore(frag, cnt.firstChild);
+      cnt = $.cls('navLinks');
+
+      for (i = 1; i < 3 && (j = cnt[i]); ++i) {
+        frag = document.createDocumentFragment();
+        frag.appendChild(document.createTextNode('['));
+        frag.appendChild(el.cloneNode(true));
+        frag.appendChild(document.createTextNode('] '));
+        j.insertBefore(frag, j.firstChild);
+      }
     }
   }
 
