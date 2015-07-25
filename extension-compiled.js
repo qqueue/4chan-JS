@@ -1165,13 +1165,11 @@ PostMenu.open = function(btn) {
     }
   } else if (el = $.id('pc' + pid)) {
     html += '<li data-cmd="hide-r" data-id="' + pid + '">' + ($.hasClass(el, 'post-hidden') ? 'Unhide' : 'Hide') + ' post</li>';
-    /*
+
     if (Main.tid) {
-      html += '<li data-cmd="hide-r" data-recurse="1" data-id="' + pid + '">'
-        + ($.hasClass(el, 'post-hidden') ? 'Unhide' : 'Hide')
-        + ' recursively</li>';
+      html += '<li data-cmd="hide-r" data-recurse="1" data-id="' + pid + '">' + ($.hasClass(el, 'post-hidden') ? 'Unhide' : 'Hide') + ' recursively</li>';
     }
-    */
+
   }
 
   if (file = $.id('fT' + pid)) {
@@ -3185,10 +3183,10 @@ QR.submit = function(force) {
 
     if (this.status == 200) {
       if (resp = this.responseText.match(/"errmsg"[^>]*>(.*?)<\/span/)) {
-        if (Config.altCaptcha && /mistyped/.test(resp)) {
-          QR.resetCaptcha(true);
-        } else if (/4chan Pass/.test(resp)) {
+        if (/4chan Pass/.test(resp)) {
           QR.onPassError();
+        } else {
+          QR.resetCaptcha(true);
         }
         QR.showPostError(resp[1]);
         return;
