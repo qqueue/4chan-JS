@@ -1165,11 +1165,13 @@ PostMenu.open = function(btn) {
     }
   } else if (el = $.id('pc' + pid)) {
     html += '<li data-cmd="hide-r" data-id="' + pid + '">' + ($.hasClass(el, 'post-hidden') ? 'Unhide' : 'Hide') + ' post</li>';
-
+    /*
     if (Main.tid) {
-      html += '<li data-cmd="hide-r" data-recurse="1" data-id="' + pid + '">' + ($.hasClass(el, 'post-hidden') ? 'Unhide' : 'Hide') + ' recursively</li>';
+      html += '<li data-cmd="hide-r" data-recurse="1" data-id="' + pid + '">'
+        + ($.hasClass(el, 'post-hidden') ? 'Unhide' : 'Hide')
+        + ' recursively</li>';
     }
-
+    */
   }
 
   if (file = $.id('fT' + pid)) {
