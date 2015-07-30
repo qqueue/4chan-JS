@@ -3185,7 +3185,7 @@ QR.submit = function(force) {
 
     if (this.status == 200) {
       if (resp = this.responseText.match(/"errmsg"[^>]*>(.*?)<\/span/)) {
-        if (/4chan Pass/.test(resp)) {
+        if (window.passEnabled && /4chan Pass/.test(resp)) {
           QR.onPassError();
         } else {
           QR.resetCaptcha(true);
