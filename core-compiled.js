@@ -317,7 +317,9 @@ function initAnalytics() {
     m.parentNode.insertBefore(a, m)
   })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-  ga('create', 'UA-166538-1', 'auto');
+  ga('create', 'UA-166538-1', {
+    'sampleRate': 1
+  });
   ga('set', 'anonymizeIp', true);
   ga('send', 'pageview');
 }
