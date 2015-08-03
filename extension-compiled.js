@@ -1148,7 +1148,7 @@ PostMenu.open = function(btn) {
 
   PostMenu.close();
 
-  pid = btn.parentNode.id.replace(/^[^0-9]+/, '');
+  pid = btn.parentNode.id.replace(/^[0-9]*[^0-9]+/, '');
 
   board = btn.parentNode.getAttribute('data-board');
 
