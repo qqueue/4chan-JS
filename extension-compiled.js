@@ -187,6 +187,7 @@ Parser.init = function() {
 
   this.icons = {
     admin: staticPath + 'adminicon' + tail,
+    founder: staticPath + 'foundericon' + tail,
     mod: staticPath + 'modicon' + tail,
     dev: staticPath + 'developericon' + tail,
     manager: staticPath + 'managericon' + tail,
@@ -498,11 +499,11 @@ Parser.buildHTMLFromJSON = function(data, board, standalone, fromQuote) {
 
       capcode = ' <img src="' + Parser.icons.manager + '" ' + 'alt="This user is a 4chan Manager." ' + 'title="This user is a 4chan Manager." class="identityIcon">';
       break;
-    case 'admin_emeritus':
-      capcodeStart = ' <strong class="capcode hand id_admin" ' + 'title="Highlight posts by the Administrator Emeritus">## Admin Emeritus</strong>';
+    case 'founder':
+      capcodeStart = ' <strong class="capcode hand id_admin" ' + 'title="Highlight posts by the Founder">## Founder</strong>';
       capcodeClass = ' capcodeAdmin';
 
-      capcode = ' <img src="' + Parser.icons.admin + '" ' + 'alt="This user is 4chan\'s founding Administrator." ' + 'title="This user is 4chan\'s founding Administrator." class="identityIcon">';
+      capcode = ' <img src="' + Parser.icons.founder + '" ' + 'alt="This user is 4chan\'s Founder." ' + 'title="This user is 4chan\'s Founder." class="identityIcon">';
       break;
   }
 
