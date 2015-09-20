@@ -145,7 +145,7 @@ var FC = function() {
       mod: 'Moderator',
       developer: 'Developer',
       manager: 'Manager',
-      admin_emeritus: 'Admin Emeritus'
+      founder: 'Founder'
     },
 
     keybinds = {
