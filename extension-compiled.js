@@ -7730,7 +7730,7 @@ Main.run = function() {
   Parser.init();
 
   if (Main.tid) {
-    Main.threadClosed = !document.forms.post;
+    Main.threadClosed = !document.forms.post || !!$.cls('closedIcon')[0];
     Main.threadSticky = !!$.cls('stickyIcon', $.id('pi' + Main.tid))[0];
 
     if (Config.threadStats) {
