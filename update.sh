@@ -9,17 +9,15 @@ git pull origin master
 # download file and commit if changed
 function poll {
   file=$1
-  filename="$file-compiled.js"
+  filename="$file.js"
 
   echo "polling $file ..."
 
-  CODE=$(curl \
+  curl \
     --fail \
     --dump-header /tmp/headers \
     --user-agent "4chan-JS-auto-updater/1.0.0" \
-    "http://s.4cdn.org/js/$file.$(date +%s).js")
-
-  js-beautify --indent-size=2 - <<< "$CODE" > $filename
+    "http://s.4cdn.org/js/$file.$(date +%s).js" > $filename
 
   if [[ -n $(git status --porcelain $filename) ]]; then
     modified=$(grep 'Last-Modified' /tmp/headers |\

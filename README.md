@@ -10,25 +10,6 @@ changes that other 4chan extension/userscript developers will care about.
 
 `core.js` and `catalog.js` are also tracked in addition to extension itself.
 
-Unfortunately, 4chan's production JS is stripped of comments and
-whitespace-minified. Thus, the code is run through [jsbeautifier][1] before
-commiting to restore at least a semblance of human readability.
-
-Even more unfortunately, the minified versions of the scripts and the
-"compiled" (variable-mangled) versions are not perfectly in sync, so despite
-their near-unreadability, the compiled versions of the scripts are tracked as
-well. 
-
-As of the 27th of April, 2014, Anonymous ## Developer and co. have removed
-the whitespace-minified version of the scripts, so only the variable-mangled
-scripts are accessible now. They are tracked as `$name-compiled.js` in this
-repository to keep git history clean.
-
-If anybody knows where the whitespace minified versions went, or better ways to
-decompile variable-mangled JS, please open an issue/PR.
-[beautify-with-words][2] looks promising, but its generated names aren't
-consistent due to RNG seeding.
-
 The cron job for `update.sh` is run every 15 minutes. The automatic commits it
 makes are dated with the value of the `Last-Modified` HTTP header, as returned
 from 4chan/cloudflare. I get an alert if the cron job doesn't run, so this

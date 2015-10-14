@@ -28,10 +28,10 @@ $.off = function(n, e, h) {
 
 $.readCookie = function(name) {
   var i, c, ca, key;
-
+  
   key = name + '=';
   ca = document.cookie.split(';');
-
+  
   for (i = 0; c = ca[i]; ++i) {
     while (c.charAt(0) == ' ') {
       c = c.substring(1, c.length);
@@ -47,23 +47,24 @@ if (!document.documentElement.classList) {
   $.hasClass = function(el, klass) {
     return (' ' + el.className + ' ').indexOf(' ' + klass + ' ') != -1;
   };
-
+  
   $.addClass = function(el, klass) {
     el.className = (el.className == '') ? klass : el.className + ' ' + klass;
   };
-
+  
   $.removeClass = function(el, klass) {
     el.className = (' ' + el.className + ' ').replace(' ' + klass + ' ', '');
   };
-} else {
+}
+else {
   $.hasClass = function(el, klass) {
     return el.classList.contains(klass);
   };
-
+  
   $.addClass = function(el, klass) {
     el.classList.add(klass);
   };
-
+  
   $.removeClass = function(el, klass) {
     el.classList.remove(klass);
   };
@@ -72,7 +73,8 @@ if (!document.documentElement.classList) {
 $.toggleClass = function(el, klass) {
   if ($.hasClass(el, klass)) {
     $.removeClass(el, klass);
-  } else {
+  }
+  else {
     $.addClass(el, klass);
   }
 };
@@ -81,9 +83,9 @@ var UA = {};
 
 UA.init = function() {
   document.head = document.head || $.tag('head')[0];
-
+  
   this.hasContextMenu = 'HTMLMenuItemElement' in window;
-
+  
   this.hasWebStorage = (function() {
     var kv = 'catalog';
     try {
@@ -94,7 +96,7 @@ UA.init = function() {
       return false;
     }
   })();
-
+  
   this.hasSessionStorage = (function() {
     var kv = 'catalog';
     try {
@@ -105,9 +107,9 @@ UA.init = function() {
       return false;
     }
   })();
-
+  
   this.hasCORS = 'withCredentials' in new XMLHttpRequest;
-
+  
   this.isMobileDevice = /Mobile|Android|Dolfin|Opera Mobi|PlayStation Vita|Nintendo DS/.test(navigator.userAgent);
 };
 
@@ -121,93 +123,93 @@ UA.dispatchEvent = function(name, detail) {
 };
 
 var FC = function() {
-
+  
   var self = this,
-
-    options = {
-      orderby: 'alt',
-      large: false,
-      extended: true,
-      imgdel: '//s.4cdn.org/image/filedeleted-res.gif',
-      imgspoiler: '//s.4cdn.org/image/spoiler',
-      nofile: '//s.4cdn.org/image/nofile.png',
-      smallsize: 150,
-      tipdelay: 250,
-      filterColors: [
-        ['#E0B0FF', '#F2F3F4', '#7DF9FF', '#FFFF00'],
-        ['#FBCEB1', '#FFBF00', '#ADFF2F', '#0047AB'],
-        ['#00A550', '#007FFF', '#AF0A0F', '#B5BD68']
-      ]
-    },
-
-    capcodeMap = {
-      admin: 'Administrator',
-      mod: 'Moderator',
-      developer: 'Developer',
-      manager: 'Manager',
-      founder: 'Founder'
-    },
-
-    keybinds = {
-      83: focusQuickfilter, // S
-      82: refreshWindow, // R
-      88: cycleOrder // X
-    },
-
-    catalog = {},
-
-    basicSettings = ['orderby', 'large', 'extended'],
-
-    activeTheme = {},
-
-    activeStyleGroup,
-    activeStyleSheet,
-
-    activeFilters = {},
-
-    hasTooltip = false,
-    tooltipTimeout = null,
-
-    pinnedThreads = {},
-
-    hiddenThreads = {},
-    hiddenThreadsCount = 0,
-
-    hasThreadWatcher = false,
-    hasDropDownNav = false,
-    hasClassicNav = false,
-    hasAutoHideNav = false,
-
-    quickFilterPattern = false,
-
-    hiddenMode = false,
-
-    pulseInterval = null,
-
-    $threads,
-    $qfCtrl,
-    $sizeCtrl,
-    $orderCtrl,
-    $filterPalette,
-
-    ctxCmds;
-
+  
+  options = {
+    orderby: 'alt',
+    large: false,
+    extended: true,
+    imgdel: '//s.4cdn.org/image/filedeleted-res.gif',
+    imgspoiler: '//s.4cdn.org/image/spoiler',
+    nofile: '//s.4cdn.org/image/nofile.png',
+    smallsize: 150,
+    tipdelay: 250,
+    filterColors: [
+      ['#E0B0FF', '#F2F3F4', '#7DF9FF', '#FFFF00'],
+      ['#FBCEB1', '#FFBF00', '#ADFF2F', '#0047AB'],
+      ['#00A550', '#007FFF', '#AF0A0F', '#B5BD68']
+    ]
+  },
+  
+  capcodeMap = {
+    admin: 'Administrator',
+    mod: 'Moderator',
+    developer: 'Developer',
+    manager: 'Manager',
+    founder: 'Founder'
+  },
+  
+  keybinds = {
+    83: focusQuickfilter, // S
+    82: refreshWindow, // R
+    88: cycleOrder // X
+  },
+  
+  catalog = {},
+  
+  basicSettings = [ 'orderby', 'large', 'extended' ],
+  
+  activeTheme = {},
+  
+  activeStyleGroup,
+  activeStyleSheet,
+  
+  activeFilters = {},
+  
+  hasTooltip = false,
+  tooltipTimeout = null,
+  
+  pinnedThreads = {},
+  
+  hiddenThreads = {},
+  hiddenThreadsCount = 0,
+  
+  hasThreadWatcher = false,
+  hasDropDownNav = false,
+  hasClassicNav = false,
+  hasAutoHideNav = false,
+  
+  quickFilterPattern = false,
+  
+  hiddenMode = false,
+  
+  pulseInterval = null,
+  
+  $threads,
+  $qfCtrl,
+  $sizeCtrl,
+  $orderCtrl,
+  $filterPalette,
+  
+  ctxCmds;
+  
   if (window.devicePixelRatio >= 2) {
     options.imgdel.replace('.', '@2x.');
     options.nofile.replace('.', '@2x.');
   }
-
+  
   UA.init();
-
+  
   loadTheme();
-
+  
   self.init = function() {
     var extConfig, el, val;
-
+    
     FC.hasMobileLayout = checkMobileLayout();
-
+    
     applyTheme(activeTheme, true);
-
+    
     $threads = $.id('threads');
     $qfCtrl = $.id('qf-ctrl');
     $teaserCtrl = $.id('teaser-ctrl');
@@ -215,7 +217,7 @@ var FC = function() {
     $orderCtrl = $.id('order-ctrl');
     $filtersPanel = $.id('filters');
     $themePanel = $.id('theme');
-
+    
     $.on($qfCtrl, 'click', toggleQuickfilter);
     $.on($.id('filters-clear-hidden'), 'click', toggleHiddenThreads);
     $.on($.id('filters-clear-hidden-bottom'), 'click', toggleHiddenThreads);
@@ -232,17 +234,17 @@ var FC = function() {
     $.on($.id('togglePostFormLink').firstElementChild, 'click', showPostForm);
     $.on($.id('togglePostFormLinkMobile'), 'click', togglePostFormMobile);
     $.on(document, 'click', onClick);
-
+    
     loadSettings();
-
+    
     bindGlobalShortcuts();
-
+    
     initGlobalMessage();
-
+    
     if (UA.hasContextMenu) {
       buildContextMenu();
     }
-
+    
     if (UA.hasWebStorage) {
       if ((extConfig = localStorage.getItem('4chan-settings'))) {
         extConfig = JSON.parse(extConfig);
@@ -264,148 +266,156 @@ var FC = function() {
             showDropDownNav();
           }
         }
-      } else if (UA.isMobileDevice && !FC.hasMobileLayout) {
+      }
+      else if (UA.isMobileDevice && !FC.hasMobileLayout) {
         hasDropDownNav = true;
         showDropDownNav();
       }
     }
-
+    
     if (el = document.forms.post.flag) {
       if ((val = $.readCookie('4chan_flag')) && (el = el.querySelector('option[value="' + val + '"]'))) {
         el.setAttribute('selected', 'selected');
       }
     }
-
+    
     setOrder(options.orderby, true);
     setLarge(options.large, true);
     setExtended(options.extended, true);
-
+    
     UA.dispatchEvent('4chanMainInit');
   }
-
+  
   function showDropDownNav() {
     var el, top, bottom;
-
+    
     top = $.id('boardNavDesktop');
     bottom = $.id('boardNavDesktopFoot');
-
+    
     if (hasClassicNav) {
       el = document.createElement('div');
       el.className = 'pageJump';
-      el.innerHTML = '<a href="#bottom">&#9660;</a>' + '<a href="javascript:void(0);" id="settingsWindowLinkClassic">Settings</a>' + '<a href="//www.4chan.org" target="_top">Home</a></div>';
-
+      el.innerHTML = '<a href="#bottom">&#9660;</a>'
+        + '<a href="javascript:void(0);" id="settingsWindowLinkClassic">Settings</a>'
+        + '<a href="//www.4chan.org" target="_top">Home</a></div>';
+      
       top.appendChild(el);
-
+      
       $.id('settingsWindowLinkClassic')
         .addEventListener('click', showThemeEditor, false);
-
+      
       $.addClass(top, 'persistentNav');
-    } else {
+    }
+    else {
       top.style.display = 'none';
       $.removeClass($.id('boardNavMobile'), 'mobile');
     }
-
+    
     if (hasAutoHideNav) {
       StickyNav.init(hasClassicNav);
     }
-
+    
     bottom.style.display = 'none';
-
+    
     $.addClass(document.body, 'hasDropDownNav');
   }
-
+  
   function hideDropDownNav() {
     var el, top, bottom;
-
+    
     top = $.id('boardNavDesktop');
     bottom = $.id('boardNavDesktopFoot');
-
+    
     if (hasClassicNav) {
       if (el = $.cls('pageJump', top)[0]) {
         $.id('settingsWindowLinkClassic')
           .removeEventListener('click', showThemeEditor, false);
         top.removeChild(el);
       }
-
+      
       $.removeClass(top, 'persistentNav');
-    } else {
+    }
+    else {
       top.style.display = '';
       $.addClass($.id('boardNavMobile'), 'mobile');
     }
-
+    
     if (hasAutoHideNav) {
       StickyNav.destroy(hasClassicNav);
     }
-
+    
     bottom.style.display = '';
-
+    
     $.removeClass(document.body, 'hasDropDownNav');
   }
-
+  
   self.loadCatalog = function(c) {
     var query;
-
+    
     catalog = c;
-
+    
     $.addClass(document.body, activeStyleSheet.toLowerCase().replace(/ /g, '_'));
-
+    
     initStyleSwitcher();
     loadFilters();
     loadStorage();
-
+    
     if (UA.hasSessionStorage && !location.hash && (query = sessionStorage.getItem('4chan-catalog-search'))) {
       if (catalog.slug != sessionStorage.getItem('4chan-catalog-search-board')) {
         sessionStorage.removeItem('4chan-catalog-search');
         sessionStorage.removeItem('4chan-catalog-search-board');
         query = null;
       }
-    } else if (location.hash && (query = location.hash.match(/#s=(.+)/))) {
+    }
+    else if (location.hash && (query = location.hash.match(/#s=(.+)/))) {
       query = decodeURIComponent(query[1].replace(/\+/g, ' '))
     }
-
+    
     if (query) {
       toggleQuickfilter();
       $.id('qf-box').value = query;
       applyQuickfilter();
-    } else {
+    }
+    else {
       buildThreads();
     }
   }
-
+  
   function initGlobalMessage() {
     var msg, btn, thisTs, oldTs;
-
+    
     if (!UA.hasWebStorage || FC.hasMobileLayout) {
       return;
     }
-
+    
     if ((msg = $.id('globalMessage')) && msg.textContent) {
       msg.nextElementSibling.style.clear = 'both';
-
+      
       btn = document.createElement('span');
       btn.id = 'toggleMsgBtn';
       btn.setAttribute('data-cmd', 'toggleMsg');
       btn.title = 'Toggle announcement';
-
+      
       oldTs = localStorage.getItem('4chan-global-msg');
       thisTs = msg.getAttribute('data-utc');
-
+      
       if (oldTs && thisTs <= oldTs) {
         msg.style.display = 'none';
         btn.style.opacity = '0.5';
         btn.className = 'expandIcon';
-      } else {
+      }
+      else {
         btn.className = 'collapseIcon';
       }
-
+      
       $.on(btn, 'click', toggleGlobalCatalogMessage);
       msg.parentNode.insertBefore(btn, msg);
     }
   }
-
+  
   function toggleGlobalCatalogMessage() {
     var msg, btn;
-
+    
     msg = $.id('globalMessage');
     btn = $.id('toggleMsgBtn');
     if (msg.style.display == 'none') {
@@ -413,7 +423,8 @@ var FC = function() {
       btn.className = 'collapseIcon';
       btn.style.opacity = '1';
       localStorage.removeItem('4chan-global-msg');
-    } else {
+    }
+    else {
       msg.style.display = 'none';
       btn.className = 'expandIcon';
       btn.innerHTML = '<span class="mobile">View Important Announcement</span>';
@@ -421,89 +432,92 @@ var FC = function() {
       localStorage.setItem('4chan-global-msg', msg.getAttribute('data-utc'));
     }
   }
-
+  
   function togglePostFormMobile() {
     var el = document.getElementById('postForm');
-
+    
     if (el.style.display == 'table') {
       el.style.display = '';
       this.textContent = 'Start a New Thread';
-    } else {
+    }
+    else {
       el.style.display = 'table';
       this.textContent = 'Close Post Form';
       initRecaptcha();
     }
   }
-
+  
   function getRegexSpecials() {
-    var specials = ['/', '.', '*', '+', '?', '(', ')', '[', ']', '{', '}', '\\'];
+    var specials = ['/', '.', '*', '+', '?', '(', ')', '[', ']', '{', '}', '\\' ];
     return new RegExp('(\\' + specials.join('|\\') + ')', 'g');
   }
-
+  
   function getThreadPage(tid) {
     return (0 | (catalog.order.alt.indexOf(+tid) / catalog.pagesize)) + 1;
   }
-
+  
   function initStyleSwitcher() {
     var i, selector, nodes, ss;
-
+    
     selector = $.id('styleSelector');
     nodes = selector.children;
-
+    
     for (i = 0; ss = nodes[i]; ++i) {
       if (ss.value == activeStyleSheet) {
         selector.selectedIndex = i;
       }
     }
-
+    
     $.on(selector, 'change', onStyleSheetChange);
   }
-
+  
   function onStyleSheetChange() {
     var expires = new Date();
-
+    
     expires.setTime(expires.getTime() + 31536000000);
-
-    document.cookie = activeStyleGroup + '=' + this.value + ';' + expires.toGMTString() + '; path=/; domain=4chan.org';
-
+    
+    document.cookie = activeStyleGroup + '=' + this.value + ';'
+      + expires.toGMTString() + '; path=/; domain=4chan.org';
+    
     refreshWindow();
   }
-
+  
   function refreshWindow() {
     location.href = location.href;
   }
-
+  
   function debounce(delay, fn) {
     var timeout;
-
+    
     return function() {
-      var args = arguments,
-        context = this;
-
+      var args = arguments, context = this;
+      
       clearTimeout(timeout);
-      timeout = setTimeout(function() {
+      timeout = setTimeout(function () {
         fn.apply(context, args);
       }, delay);
     };
   }
-
+  
   function focusQuickfilter() {
     var qf;
-
+    
     if ($.hasClass($qfCtrl, 'active')) {
       clearQuickfilter(true);
-    } else {
+    }
+    else {
       toggleQuickfilter();
     }
   }
-
+  
   function toggleQuickfilter() {
     var qfBox, qfcnt = $.id('qf-cnt');
     if ($.hasClass($qfCtrl, 'active')) {
       clearQuickfilter();
       qfcnt.style.display = 'none';
       $.removeClass($qfCtrl, 'active');
-    } else {
+    }
+    else {
       qfcnt.style.display = 'inline';
       qfBox = $.id('qf-box');
       if (!qfcnt.hasAttribute('data-built')) {
@@ -520,10 +534,10 @@ var FC = function() {
       $.addClass($qfCtrl, 'active');
     }
   }
-
+  
   function applyQuickfilter() {
     var regexEscape, qfstr;
-
+    
     if ((qfstr = $.id('qf-box').value) != '') {
       if (UA.hasSessionStorage) {
         sessionStorage.setItem('4chan-catalog-search', qfstr);
@@ -539,14 +553,15 @@ var FC = function() {
       clearQuickfilter();
     }
   }
-
+  
   function clearQuickfilter(focus) {
     var qf = $.id('qf-box');
     $.id('search-label').style.display = $.id('search-label-bottom').style.display = 'none';
     if (focus) {
       qf.value = '';
       qf.focus();
-    } else {
+    }
+    else {
       if (UA.hasSessionStorage) {
         sessionStorage.removeItem('4chan-catalog-search');
       }
@@ -554,26 +569,26 @@ var FC = function() {
       buildThreads();
     }
   }
-
+  
   function buildContextMenu() {
     ctxCmds = {
       pin: toggleThreadPin,
       hide: toggleThreadHide,
       report: reportThread
     }
-
-    $.id('ctxmenu-main').innerHTML =
+    
+    $.id('ctxmenu-main').innerHTML = 
       '<menuitem label="Unpin all threads"></menuitem>';
-
-    $.id('ctxmenu-thread').innerHTML =
+    
+    $.id('ctxmenu-thread').innerHTML = 
       '<menuitem label="Pin/Unpin" data-cmd="pin"></menuitem>' +
       '<menuitem label="Hide/Unhide" data-cmd="hide"></menuitem>' +
       '<menuitem label="Report" data-cmd="report"></menuitem>';
-
+    
     $.on($.id('ctxmenu-main'), 'click', clearPinnedThreads);
     $.on($.id('ctxmenu-thread'), 'click', onThreadContextClick);
   }
-
+  
   function bindGlobalShortcuts() {
     var el, tid;
     if (UA.hasWebStorage) {
@@ -584,14 +599,17 @@ var FC = function() {
           if (e.which == 3) {
             $threads.setAttribute('contextmenu', 'ctxmenu-thread');
             $.id('ctxmenu-thread').target = tid;
-          } else if (e.which == 1 && e.altKey) {
+          }
+          else if (e.which == 1 && e.altKey) {
             toggleThreadPin(tid);
             return false;
-          } else if (e.which == 1 && e.shiftKey) {
+          }
+          else if (e.which == 1 && e.shiftKey) {
             toggleThreadHide(tid);
             return false;
           }
-        } else if (e.which == 3) {
+        }
+        else if (e.which == 3) {
           $threads.setAttribute('contextmenu', 'ctxmenu-main');
         }
       });
@@ -600,81 +618,83 @@ var FC = function() {
       $.on(document, 'keyup', processKeybind);
     }
   }
-
+  
   function toggleThreadPin(tid) {
     if (pinnedThreads[tid] >= 0) {
       delete pinnedThreads[tid];
-    } else {
+    }
+    else {
       pinnedThreads[tid] = catalog.threads[tid].r || 0;
     }
     localStorage.setItem('4chan-pin-' + catalog.slug, JSON.stringify(pinnedThreads));
     buildThreads();
   }
-
+  
   function toggleThreadHide(tid) {
     if (hiddenMode) {
       delete hiddenThreads[tid];
       --hiddenThreadsCount;
-    } else {
+    }
+    else {
       hiddenThreads[tid] = true;
       ++hiddenThreadsCount;
     }
-
+    
     localStorage.setItem('4chan-hide-t-' + catalog.slug, JSON.stringify(hiddenThreads));
-
+    
     $.id('thread-' + tid).style.display = 'none';
-
+    
     setHiddenCount(hiddenThreadsCount);
-
+    
     if (hiddenThreadsCount == 0) {
       setHiddenMode(false);
     }
   }
-
+  
   function setHiddenMode(state) {
     hiddenMode = state;
-
+    
     $.id('filters-clear-hidden').textContent =
       $.id('filters-clear-hidden-bottom').textContent = state ? 'Back' : 'Show';
-
+    
     buildThreads();
   }
-
+  
   function setProcessedCount(type, num) {
-    var label = type + '-label',
-      count = type + '-count';
-
+    var label = type + '-label', count = type + '-count';
+    
     if (num > 0) {
       $.id(count).textContent = $.id(count + '-bottom').textContent = num;
       $.id(label).style.display = $.id(label + '-bottom').style.display = 'inline';
-    } else {
+    }
+    else {
       $.id(label).style.display = $.id(label + '-bottom').style.display = 'none';
     }
   }
-
+  
   function setHiddenCount(num) {
     setProcessedCount('hidden', num);
   }
-
+  
   function setFilteredCount(num) {
     setProcessedCount('filtered', num);
   }
-
+  
   function reportThread(tid) {
     window.open(
       'http://sys.4chan.org/' + catalog.slug +
       '/imgboard.php?mode=report&no=' + tid,
-      Date.now(),
+      Date.now(), 
       'toolbar=0,scrollbars=0,location=0,status=1,menubar=0,resizable=1,' +
       'width=600,height=270'
     );
   }
-
+  
   function onThreadContextClick(e) {
     var cmd = e.target.getAttribute('data-cmd');
     ctxCmds[cmd]($.id('ctxmenu-thread').target);
   }
-
+  
   function processKeybind(e) {
     var el = e.target;
     if (el.nodeName == 'TEXTAREA' || el.nodeName == 'INPUT') {
@@ -684,36 +704,36 @@ var FC = function() {
       keybinds[e.keyCode]();
     }
   }
-
+  
   function toggleHiddenThreads(e) {
     var el;
-
+    
     e.preventDefault();
-
+    
     if (hiddenThreadsCount > 0) {
       if ((el = $.id('filters-clear-hidden')).textContent == 'Show') {
         setHiddenMode(true);
-      } else {
+      }
+      else {
         setHiddenMode(false);
       }
     }
   }
-
+  
   function clearPinnedThreads() {
     pinnedThreads = {};
     localStorage.removeItem('4chan-pin-' + catalog.slug);
     buildThreads();
     return false;
   }
-
+  
   function onClick(e) {
-    var t = e.target,
-      tid;
-
+    var t = e.target, tid;
+    
     if ((t = e.target) == document) {
       return;
     }
-
+    
     if (tid = t.getAttribute('data-watch')) {
       ThreadWatcher.toggle(
         tid,
@@ -722,30 +742,34 @@ var FC = function() {
         catalog.threads[tid].teaser,
         catalog.threads[tid].lr.id
       );
-    } else if (t.id == 'backdrop') {
+    }
+    else if (t.id == 'backdrop') {
       if (!panelHidden($.id('filters'))) {
         if (!panelHidden($.id('filters-protip'))) {
           closeFiltersHelp();
-        } else {
+        }
+        else {
           closeFilters();
         }
-      } else if (!panelHidden($.id('theme'))) {
+      }
+      else if (!panelHidden($.id('theme'))) {
         closeThemeEditor();
       }
-    } else if (e.target.id == 'filter-palette') {
+    }
+    else if (e.target.id == 'filter-palette') {
       closeFilterPalette();
     }
   }
-
+  
   function buildFilterPalette() {
     var i, j, table, palette, rows, cols, tr, td, foot;
-
+    
     $filterPalette = $.id('filter-palette');
-
+    
     table = $.id('filter-color-table');
     palette = $.tag('tbody', table)[0];
     rows = options.filterColors.length;
-
+    
     if (rows > 0) {
       cols = options.filterColors[0].length;
       foot = $.tag('tfoot', table)[0];
@@ -757,41 +781,43 @@ var FC = function() {
       tr = document.createElement('tr');
       for (j = 0; j < cols; ++j) {
         td = document.createElement('td');
-        td.innerHTML = '<span class="button clickbox" style="background:' + options.filterColors[i][j] + '"></span>';
+        td.innerHTML = '<span class="button clickbox" style="background:'
+          + options.filterColors[i][j] + '"></span>';
         $.on(td.firstElementChild, 'click', selectFilterColor);
         tr.appendChild(td);
       }
       palette.appendChild(tr);
     }
   }
-
+  
   function showFilterPalette(el) {
     var picker, pos = el.getBoundingClientRect();
-
+    
     if (!$filterPalette) {
       buildFilterPalette();
     }
-
+    
     $.removeClass($filterPalette, 'hidden');
     $filterPalette.setAttribute('data-target', el.id.split('-')[2]);
-
+    
     picker = $filterPalette.firstElementChild;
-    picker.style.cssText = 'top:' + pos.top + 'px;left:' + (pos.left - picker.clientWidth - 10) + 'px;';
+    picker.style.cssText = 'top:' + pos.top + 'px;left:'
+      + (pos.left - picker.clientWidth - 10) + 'px;';
   }
-
+  
   function showFiltersHelp() {
     var el = $.id('filters-protip');
     el.style.top = window.pageYOffset + 50 + 'px';
     $.removeClass(el, 'hidden');
   }
-
+  
   function closeFiltersHelp() {
     $.addClass($.id('filters-protip'), 'hidden');
   }
-
+  
   function onFiltersClick(e) {
     var map, t = e.target;
-
+    
     if (t.id == 'filters-close')
       closeFilters();
     else if (t.id == 'filters-add')
@@ -799,7 +825,8 @@ var FC = function() {
     else if (t.id == 'filters-save') {
       saveFilters();
       closeFilters();
-    } else if (t.hasAttribute('data-active'))
+    }
+    else if (t.hasAttribute('data-active'))
       toggleFilter(t, 'active');
     else if (t.hasAttribute('data-hide'))
       toggleFilter(t, 'hide', 'top');
@@ -812,71 +839,73 @@ var FC = function() {
     else if (t.hasAttribute('data-up'))
       moveFilterUp(t);
   }
-
+  
   function moveFilterUp(el) {
     var tr, prev;
-
+    
     tr = el.parentNode.parentNode;
     prev = tr.previousElementSibling;
-
+    
     if (prev) {
       tr.parentNode.insertBefore(tr, prev);
     }
   }
-
+  
   function onFiltersSearch(e) {
     var i, el, nodes, cnt, str;
-
+    
     if (e && (e.keyCode == 27)) {
       this.value = '';
     }
-
+    
     str = this.value.toLowerCase();
-
+    
     nodes = document.getElementsByClassName('filter-pattern');
-
+    
     cnt = document.getElementById('filter-list');
-
+    
     cnt.style.display = 'none';
-
+    
     for (i = 0; el = nodes[i]; ++i) {
       if (el.value.toLowerCase().indexOf(str) === -1) {
         el.parentNode.parentNode.style.display = 'none';
-      } else {
+      }
+      else {
         el.parentNode.parentNode.style.display = '';
       }
     }
-
+    
     cnt.style.display = '';
   }
-
+  
   function showFilters() {
     var i, filtersPanel, rawFilters, filtersPanel, filterList, filterId, el;
-
+    
     filtersPanel = $.id('filters');
-
+    
     if (!filtersPanel.hasAttribute('data-built')) {
       $.on(filtersPanel, 'click', onFiltersClick);
-
+      
       $.on($.id('filter-palette-close'), 'click', closeFilterPalette);
       $.on($.id('filter-palette-clear'), 'click', clearFilterColor);
-
+      
       $.on($.id('filters-help-open'), 'click', showFiltersHelp);
       $.on($.id('filters-help-close'), 'click', closeFiltersHelp);
-
+      
       $.on($.id('filter-rgb'), 'keyup', filterSetCustomColor);
       $.on($.id('filter-rgb-ok'), 'click', selectFilterColor);
-
+      
       $.on($.id('filters-search'), 'keyup', onFiltersSearch);
-
+      
       filtersPanel.setAttribute('data-built', '1');
-    } else {
+    }
+    else {
       $.id('filters-search').value = '';
     }
-
+    
     rawFilters = localStorage.getItem('catalog-filters');
     filterId = 0;
-
+    
     if (rawFilters) {
       filterList = $.id('filter-list');
       rawFilters = JSON.parse(rawFilters);
@@ -886,64 +915,63 @@ var FC = function() {
       }
       updateFilterHitCount();
     }
-
+    
     filtersPanel.style.top = window.pageYOffset + 60 + 'px';
-
+    
     $.removeClass(filtersPanel, 'hidden');
-
+    
     if (el = $.cls('filter-active', filtersPanel)[0]) {
       el.focus();
     }
-
+    
     toggleBackdrop();
   }
-
+  
   function closeFilters() {
     var i, filterList, nodes;
-
+    
     $.id('filters-msg').style.display = 'none';
     $.addClass($.id('filters'), 'hidden');
-
+    
     filterList = $.id('filter-list');
     nodes = $.tag('tr', filterList);
     for (i = nodes.length - 1; i >= 0; i--) {
       filterList.removeChild(nodes[i]);
     }
-
+    
     closeFilterPalette();
     toggleBackdrop();
   }
-
+  
   function closeFilterPalette() {
     if ($filterPalette && !$.hasClass($filterPalette, 'hidden')) {
       $.addClass($filterPalette, 'hidden');
     }
   }
-
+  
   // Loads patterns from the localStorage and builds regexps
   function loadFilters() {
     if (!UA.hasWebStorage) return;
-
+    
     activeFilters = {};
-
+    
     var rawFilters = localStorage.getItem('catalog-filters');
     if (!rawFilters) return;
-
+    
     rawFilters = JSON.parse(rawFilters);
-
+    
     var
       rf, fid, v, w, wordcount,
       wordSepS, wordSepE, orJoin,
       regexType = /^\/(.*)\/(i?)$/,
       regexOrNorm = /\s*\|+\s*/g,
-      regexWc = /\\\*/g,
-      replWc = '[^\\s]*',
+      regexWc = /\\\*/g, replWc = '[^\\s]*',
       regexEscape = getRegexSpecials(),
       match, inner, words, rawPattern, pattern, orOp, orCluster, type;
-
+      
     wordSepS = '(?=.*\\b';
     wordSepE = '\\b)';
-
+    
     try {
       for (fid in rawFilters) {
         rf = rawFilters[fid];
@@ -955,13 +983,16 @@ var FC = function() {
           if (rawPattern.charAt(0) == '#') {
             type = (rawPattern.charAt(1) == '#') ? 2 : 1
             pattern = new RegExp(rawPattern.slice(type).replace(regexEscape, '\\$1'));
-          } else {
+          }
+          else {
             type = 0;
             if (match = rawPattern.match(regexType)) {
               pattern = new RegExp(match[1], match[2]);
-            } else if (rawPattern.charAt(0) == '"' && rawPattern.charAt(rawPattern.length - 1) == '"') {
+            }
+            else if (rawPattern.charAt(0) == '"' && rawPattern.charAt(rawPattern.length - 1) == '"') {
               pattern = new RegExp(rawPattern.slice(1, -1).replace(regexEscape, '\\$1'));
-            } else {
+            }
+            else {
               words = rawPattern.replace(regexOrNorm, '|').split(' ');
               pattern = '';
               wordcount = words.length;
@@ -976,7 +1007,8 @@ var FC = function() {
                   }
                   inner = orCluster.join('|').replace(regexWc, replWc);
                   pattern += wordSepS + '(' + inner + ')' + wordSepE;
-                } else {
+                }
+                else {
                   inner = words[w].replace(regexEscape, '\\$1').replace(regexWc, replWc);
                   pattern += wordSepS + inner + wordSepE;
                 }
@@ -997,18 +1029,20 @@ var FC = function() {
           };
         }
       }
-    } catch (err) {
-      alert('There was an error processing one of the filters: ' + err + ' in: ' + rf.pattern);
+    }
+    catch (err) {
+      alert('There was an error processing one of the filters: '
+        + err + ' in: ' + rf.pattern);
     }
   }
-
+  
   function saveFilters() {
     var i, j, f, rawFilters, filterList, msg, rows, color;
-
+    
     rawFilters = {};
     filterList = $.id('filter-list');
     rows = filterList.children;
-
+    
     for (i = 0; j = rows[i]; ++i) {
       f = {
         active: $.cls('filter-active', j)[0].checked ? 1 : 0,
@@ -1023,40 +1057,39 @@ var FC = function() {
       }
       rawFilters[i] = f;
     }
-
+    
     if (rawFilters[0]) {
       localStorage.setItem('catalog-filters', JSON.stringify(rawFilters));
-    } else {
+    }
+    else {
       localStorage.removeItem('catalog-filters');
     }
-
+    
     msg = $.id('filters-msg');
     msg.innerHTML = 'Done';
     msg.className = 'msg-ok';
     msg.style.display = 'inline';
-    setTimeout(function() {
-      msg.style.display = 'none';
-    }, 2000);
-
+    setTimeout(function() { msg.style.display = 'none'; }, 2000);
+    
     loadFilters();
     buildThreads();
     updateFilterHitCount();
   }
-
+  
   function filterSetCustomColor() {
     var filterRgbOk;
-
+    
     filterRgbOk = $.id('filter-rgb-ok');
-
+    
     filterRgbOk.style.backgroundColor = this.value;
   }
-
+  
   function buildFilter(filter, id) {
     var td, tr, span, input, cls;
-
+    
     tr = document.createElement('tr');
     tr.id = 'filter-' + id;
-
+    
     // Move up
     td = document.createElement('td');
     span = document.createElement('span');
@@ -1065,7 +1098,7 @@ var FC = function() {
     span.innerHTML = '&uarr;';
     td.appendChild(span);
     tr.appendChild(td);
-
+    
     // On
     td = document.createElement('td');
     input = document.createElement('input');
@@ -1074,7 +1107,7 @@ var FC = function() {
     input.className = 'filter-active';
     td.appendChild(input);
     tr.appendChild(td);
-
+    
     // Pattern
     td = document.createElement('td');
     input = document.createElement('input');
@@ -1083,7 +1116,7 @@ var FC = function() {
     input.className = 'filter-pattern';
     td.appendChild(input);
     tr.appendChild(td);
-
+    
     // Boards
     td = document.createElement('td');
     input = document.createElement('input');
@@ -1092,7 +1125,7 @@ var FC = function() {
     input.className = 'filter-boards';
     td.appendChild(input);
     tr.appendChild(td);
-
+    
     // Color
     td = document.createElement('td');
     span = document.createElement('span');
@@ -1102,12 +1135,13 @@ var FC = function() {
     if (!filter.color) {
       span.setAttribute('data-nocolor', '1');
       span.innerHTML = '&#x2215;';
-    } else {
+    }
+    else {
       span.style.background = filter.color;
     }
     td.appendChild(span);
     tr.appendChild(td);
-
+    
     // Hide
     td = document.createElement('td');
     input = document.createElement('input');
@@ -1116,7 +1150,7 @@ var FC = function() {
     input.className = 'filter-hide';
     td.appendChild(input);
     tr.appendChild(td);
-
+    
     // Top
     td = document.createElement('td');
     input = document.createElement('input');
@@ -1125,7 +1159,7 @@ var FC = function() {
     input.className = 'filter-top';
     td.appendChild(input);
     tr.appendChild(td);
-
+    
     // Del
     td = document.createElement('td');
     span = document.createElement('span');
@@ -1134,34 +1168,35 @@ var FC = function() {
     span.innerHTML = '&times;';
     td.appendChild(span);
     tr.appendChild(td);
-
+    
     // Match count
     td = document.createElement('td');
     td.id = 'fhc-' + id;
     td.className = 'filter-hits';
     tr.appendChild(td);
-
+    
     return tr;
   }
-
+  
   function selectFilterColor(clear) {
     var target = $.id('filter-color-' + $filterPalette.getAttribute('data-target'));
     if (clear === true) {
       target.setAttribute('data-nocolor', '1');
       target.innerHTML = '&#x2215;';
       target.style.background = '';
-    } else {
+    }
+    else {
       target.removeAttribute('data-nocolor');
       target.innerHTML = '';
       target.style.background = this.style.backgroundColor;
     }
     closeFilterPalette();
   }
-
+  
   function clearFilterColor() {
     selectFilterColor(true);
   }
-
+  
   function addEmptyFilter() {
     var filter = {
       active: 1,
@@ -1174,13 +1209,14 @@ var FC = function() {
     };
     $.id('filter-list').appendChild(buildFilter(filter, getNextFilterId()));
   }
-
+  
   function getNextFilterId() {
     var i, j, max, rows = $.id('filter-list').children;
-
+    
     if (!rows.length) {
       return 0;
-    } else {
+    }
+    else {
       max = 0;
       for (i = 0; j = rows[i]; ++i) {
         j = +j.id.slice(7);
@@ -1191,16 +1227,15 @@ var FC = function() {
       return max + 1;
     }
   }
-
+  
   function deleteFilter(t) {
     var el = $.id('filter-' + t.getAttribute('data-target'));
     el.parentNode.removeChild(el);
   }
-
+  
   function toggleFilter(el, type, xor) {
-    var attr = 'data-' + type,
-      xorEle;
-
+    var attr = 'data-' + type, xorEle;
+    
     if (el.getAttribute(attr) == '0') {
       el.setAttribute(attr, '1');
       $.addClass(el, 'active');
@@ -1211,13 +1246,14 @@ var FC = function() {
         $.removeClass(xorEle, 'active');
         xorEle.innerHTML = '';
       }
-    } else {
+    }
+    else {
       el.setAttribute(attr, '0');
       $.removeClass(el, 'active');
       el.innerHTML = '';
     }
   }
-
+  
   function updateFilterHitCount() {
     var i, j, rows = $.id('filter-list').children;
     for (i = 0; j = rows[i]; ++i) {
@@ -1225,203 +1261,208 @@ var FC = function() {
         .innerHTML = activeFilters[i] ? 'x' + activeFilters[i].hits : '';
     }
   }
-
+  
   function panelHidden(el) {
     return $.hasClass(el, 'hidden');
   }
-
+  
   function showThemeEditor() {
     var extConfig, themePanel, buttons, i, ss, field, el;
-
+    
     if (!UA.hasWebStorage) {
       alert("Your browser doesn't support Local Storage");
       return;
     }
-
+    
     themePanel = $.id('theme');
-
+    
     theme = localStorage.getItem('catalog-theme');
     theme = theme ? JSON.parse(theme) : {};
-
+    
     $.id('theme-nobinds').checked = !!theme.nobinds;
     $.id('theme-nospoiler').checked = !!theme.nospoiler;
     $.id('theme-newtab').checked = !!theme.newtab;
     $.id('theme-tw').checked = hasThreadWatcher;
     $.id('theme-ddn').checked = hasDropDownNav;
-
+    
     if (theme.css) {
       $.id('theme-css').value = theme.css;
     }
-
+    
     $.on($.id('theme-save'), 'click', saveTheme);
     $.on($.id('theme-close'), 'click', closeThemeEditor);
-
+      
     $.id('theme-msg').style.display = 'none';
-
+    
     themePanel.style.top = window.pageYOffset + 60 + 'px';
     $.removeClass(themePanel, 'hidden');
-
+    
     if (el = $.tag('input', themePanel)[0]) {
       el.focus();
     }
-
+    
     toggleBackdrop();
   }
-
+  
   function closeThemeEditor() {
     $.off($.id('theme-save'), 'click', saveTheme);
     $.off($.id('theme-close'), 'click', closeThemeEditor);
-
+    
     $.addClass($.id('theme'), 'hidden');
     toggleBackdrop();
   }
-
+  
   function toggleBackdrop() {
     $.toggleClass($.id('backdrop'), 'hidden');
   }
-
+  
   function loadTheme() {
     var customTheme;
-
+    
     if (UA.hasWebStorage && (customTheme = localStorage.getItem('catalog-theme'))) {
       activeTheme = JSON.parse(customTheme);
     }
   }
-
+  
   function applyTheme(customTheme, nocss) {
     var i, j, head, header, style, link;
-
+    
     if (customTheme.nobinds) {
       if (activeTheme.nobinds != customTheme.nobinds) {
         $.off(document, 'keyup', processKeybind);
       }
-    } else {
+    }
+    else {
       if (activeTheme.nobinds != customTheme.nobinds) {
         $.on(document, 'keyup', processKeybind);
       }
     }
-
+    
     if (!nocss) {
       self.applyCSS(customTheme);
     }
   }
-
+  
   self.applyCSS = function(customTheme, style_group, css_version) {
     var link, style, ss;
-
+    
     if (!customTheme) {
       customTheme = activeTheme;
     }
-
+    
     // Preferred stylesheet
     if (style_group !== undefined) {
       if (!(ss = $.readCookie(style_group))) {
         ss = style_group == 'nws_style' ? 'Yotsuba New' : 'Yotsuba B New';
       }
-
+      
       activeStyleGroup = style_group;
       activeStyleSheet = ss;
-
+      
       style = document.createElement('link');
       style.type = 'text/css';
       style.id = 'base-css';
       style.rel = 'stylesheet';
-      style.setAttribute('href', '//s.4cdn.org/css/catalog_' + ss.toLowerCase().replace(/ /g, '_') + '.' + css_version + '.css');
+      style.setAttribute('href', '//s.4cdn.org/css/catalog_'
+        + ss.toLowerCase().replace(/ /g, '_') + '.' + css_version + '.css');
       document.head.insertBefore(style, $.id('mobile-css'));
     }
-
+    
     // Custom CSS
     if (style = $.id('custom-css')) {
       document.head.removeChild(style);
     }
-
+    
     if (customTheme.css) {
       style = document.createElement('style');
       style.type = 'text/css';
       style.id = 'custom-css';
-
+      
       if (style.styleSheet) {
         style.styleSheet.cssText = customTheme.css;
-      } else {
+      }
+      else {
         style.innerHTML = customTheme.css;
       }
       document.head.appendChild(style);
     }
   }
-
+  
   // Applies and saves the theme to localStorage
   function saveTheme() {
     var i, field, css, style, tw, ddn, extConfig, customTheme = {};
-
+    
     if ($.id('theme-nobinds').checked) {
       customTheme.nobinds = true;
     }
-
+    
     if ($.id('theme-nospoiler').checked) {
       customTheme.nospoiler = true;
     }
-
+    
     if ($.id('theme-newtab').checked) {
       customTheme.newtab = true;
     }
-
+    
     tw = $.id('theme-tw').checked;
-
+    
     ddn = $.id('theme-ddn').checked;
-
+    
     if (extConfig = localStorage.getItem('4chan-settings')) {
       extConfig = JSON.parse(extConfig);
-    } else {
+    }
+    else {
       extConfig = {};
     }
-
+    
     if (tw != hasThreadWatcher) {
       if (tw) {
         ThreadWatcher.init();
         extConfig.disableAll = false;
-      } else {
+      }
+      else {
         ThreadWatcher.unInit();
       }
     }
-
+    
     if (ddn != hasDropDownNav) {
       if (ddn) {
         showDropDownNav();
         extConfig.disableAll = false;
-      } else {
+      }
+      else {
         hideDropDownNav();
       }
     }
-
+    
     extConfig.threadWatcher = tw;
     extConfig.dropDownNav = ddn;
     localStorage.setItem('4chan-settings', JSON.stringify(extConfig));
-
+    
     hasThreadWatcher = tw;
     hasDropDownNav = ddn;
-
+    
     if ((css = $.id('theme-css').value) != '') {
       customTheme.css = css;
     }
-
+    
     applyTheme(customTheme);
-
+    
     localStorage.removeItem('catalog-theme');
-
+    
     for (i in customTheme) {
       localStorage.setItem('catalog-theme', JSON.stringify(customTheme));
       break;
     }
-
+    
     activeTheme = customTheme;
-
+    
     buildThreads();
     closeThemeEditor();
   }
-
+  
   function loadThreadList(key) {
-    var i, threads, mod = false,
-      ft = catalog.order.date[0];
+    var i, threads, mod = false, ft = catalog.order.date[0];
     if (threads = localStorage.getItem(key)) {
       threads = JSON.parse(threads);
       for (i in threads) {
@@ -1431,30 +1472,28 @@ var FC = function() {
         }
       }
       for (i in threads) {
-        if (mod) {
-          localStorage.setItem(key, JSON.stringify(threads));
-        }
+        if (mod) { localStorage.setItem(key, JSON.stringify(threads)); }
         return threads;
       }
       localStorage.removeItem(key);
     }
     return {};
   }
-
+  
   function loadStorage() {
     if (UA.hasWebStorage) {
       hiddenThreads = loadThreadList('4chan-hide-t-' + catalog.slug);
       pinnedThreads = loadThreadList('4chan-pin-' + catalog.slug);
     }
   }
-
+  
   function loadSettings() {
     var settings;
     if (UA.hasWebStorage && (settings = localStorage.getItem('catalog-settings'))) {
       $.extend(options, JSON.parse(settings));
     }
-  }
-
+  }    
+  
   function saveSettings() {
     var i, key, settings;
     if (!UA.hasWebStorage) {
@@ -1467,20 +1506,22 @@ var FC = function() {
     }
     localStorage.setItem('catalog-settings', JSON.stringify(settings));
   }
-
+  
   function setExtended(mode, init) {
     var cls = '';
     if (mode) {
       $teaserCtrl.selectedIndex = 1;
       cls = 'extended-';
       options.extended = true;
-    } else {
+    }
+    else {
       $teaserCtrl.selectedIndex = 0;
       options.extended = false;
     }
     if (options.large) {
       cls += 'large';
-    } else {
+    }
+    else {
       cls += 'small';
     }
     $threads.className = cls;
@@ -1488,14 +1529,15 @@ var FC = function() {
       saveSettings();
     }
   }
-
+  
   function setLarge(mode, init) {
     var cls = options.extended ? 'extended-' : '';
     if (mode) {
       $sizeCtrl.selectedIndex = 1;
       cls += 'large';
       options.large = true;
-    } else {
+    }
+    else {
       $sizeCtrl.selectedIndex = 0;
       cls += 'small';
       options.large = false;
@@ -1506,18 +1548,14 @@ var FC = function() {
       buildThreads();
     }
   }
-
+  
   function setOrder(order, init) {
-    var o = {
-      alt: 0,
-      absdate: 1,
-      date: 2,
-      r: 3
-    };
+    var o = { alt: 0, absdate: 1, date: 2, r: 3 };
     if (o[order] !== undefined) {
       $orderCtrl.selectedIndex = o[order];
       options.orderby = order;
-    } else {
+    }
+    else {
       $orderCtrl.selectedIndex = 0;
       options.orderby = 'date';
     }
@@ -1526,48 +1564,50 @@ var FC = function() {
       buildThreads();
     }
   }
-
+  
   function onTeaserChange() {
     setExtended($teaserCtrl.options[$teaserCtrl.selectedIndex].value == 'on');
   }
-
+  
   function onOrderChange() {
     setOrder($orderCtrl.options[$orderCtrl.selectedIndex].value);
   }
-
+  
   function onSizeChange() {
     setLarge($sizeCtrl.options[$sizeCtrl.selectedIndex].value == 'large');
   }
-
+  
   function cycleOrder() {
     if (options.orderby == 'date') {
       setOrder('alt');
-    } else if (options.orderby == 'alt') {
+    }
+    else if (options.orderby == 'alt') {
       setOrder('r');
-    } else if (options.orderby == 'r') {
+    }
+    else if (options.orderby == 'r') {
       setOrder('absdate');
-    } else {
+    }
+    else {
       setOrder('date');
     }
   }
-
+  
   function buildThreads() {
     var
       tip, i, j, k, fid, id, entry, thread, af, hl, onTop, pinned, provider, spoiler,
-      rDiff, onPage, filtered = 0,
-      html = '',
-      contentUrl, tripcode,
+      rDiff, onPage, filtered = 0, html = '', contentUrl, tripcode,
       pinhl, newtab, watchKey, teaser, topHtml = '',
       ratio, maxSize, imgWidth, imgHeight, calcSize,
       capcodeReplies, capcodeReply, capcodeTitle;
-
+    
     if (catalog.count == 0) {
       return;
     }
-
+    
     if (catalog.custom_spoiler) {
       spoiler = options.imgspoiler + '-' + catalog.slug + catalog.custom_spoiler + '.png';
-    } else {
+    }
+    else {
       spoiler = options.imgspoiler + '.png';
     }
 
@@ -1577,54 +1617,60 @@ var FC = function() {
       }
       $threads.textContent = '';
     }
-
+    
     provider = '//boards.4chan.org/' + catalog.slug + '/thread/';
     contentUrl = 'i.4cdn.org/' + catalog.slug + '/';
-
+    
     hiddenThreadsCount = 0;
-
+    
     for (fid in activeFilters) {
       activeFilters[fid].hits = 0;
     }
-
+    
     calcSize = !options.large;
     newtab = activeTheme.newtab ? 'target="_blank" ' : '';
-
+    
     threadloop: for (i = 0; i < catalog.count; ++i) {
       id = catalog.order[options.orderby][i];
       entry = catalog.threads[id];
       hl = onTop = pinned = false;
-
+      
       if (entry.sub) {
         teaser = '<b>' + entry.sub + '</b>';
         if (entry.teaser) {
           teaser += ': ' + entry.teaser;
         }
-      } else {
+      }
+      else {
         teaser = entry.teaser;
       }
-
+      
       if (hiddenMode) {
         if (!hiddenThreads[id]) {
           continue;
         }
         ++hiddenThreadsCount;
-      } else if (!quickFilterPattern) {
+      }
+      else if(!quickFilterPattern) {
         if (hiddenThreads[id]) {
           ++hiddenThreadsCount;
           continue;
         }
         if (pinnedThreads[id] >= 0) {
           pinned = onTop = true;
-        } else {
+        }
+        else {
           if (entry.capcode) {
             tripcode = (entry.trip || '') + '!#' + entry.capcode;
-          } else {
+          }
+          else {
             tripcode = entry.trip;
           }
           for (fid in activeFilters) {
             af = activeFilters[fid];
-            if ((af.type == 0 && (af.pattern.test(teaser) || af.pattern.test(entry.file))) || (af.type == 1 && af.pattern.test(tripcode)) || (af.type == 2 && af.pattern.test(entry.author))) {
+            if ((af.type == 0 && (af.pattern.test(teaser) || af.pattern.test(entry.file)))
+              || (af.type == 1 && af.pattern.test(tripcode))
+              || (af.type == 2 && af.pattern.test(entry.author))) {
               if (af.hidden) {
                 ++filtered;
                 af.hits += 1;
@@ -1637,40 +1683,47 @@ var FC = function() {
             }
           }
         }
-      } else if (!quickFilterPattern.test(teaser) && !quickFilterPattern.test(entry.file)) {
+      }
+      else if (!quickFilterPattern.test(teaser) && !quickFilterPattern.test(entry.file)) {
         continue;
       }
-
+      
       if (pinnedThreads[id] >= 0) {
         pinned = onTop = true;
       }
-
+      
       thread = '<div id="thread-' + id + '" class="thread">';
-
+      
       if (hasThreadWatcher) {
         watchKey = id + '-' + catalog.slug;
-        thread += '<span id="leaf-' + id + '" data-watch="' + id + '" ' + (ThreadWatcher.watched[watchKey] ?
-          'title="Unwatch" class="unwatchIcon"></span>' :
-          'title="Watch" class="watchIcon"></span>');
+        thread += '<span id="leaf-' + id + '" data-watch="' + id + '" '
+          + (ThreadWatcher.watched[watchKey] ?
+            'title="Unwatch" class="unwatchIcon"></span>' :
+            'title="Watch" class="watchIcon"></span>');
       }
-
-      thread += '<a ' + newtab + 'href="' + provider + id + (entry.semantic_url ? ('/' + entry.semantic_url) : '') + '"><img alt="" id="thumb-' + id + '" class="thumb';
-
+      
+      thread += '<a ' + newtab + 'href="' + provider + id
+        + (entry.semantic_url ? ('/' + entry.semantic_url) : '')
+        +'"><img alt="" id="thumb-' + id + '" class="thumb';
+      
       if (hl.color) {
         pinhl = ' hl" style="border-color: ' + hl.color;
-      } else if (pinned) {
+      }
+      else if (pinned) {
         pinhl = ' pinned';
-      } else {
+      }
+      else {
         pinhl = '';
       }
-
+      
       if (entry.imgurl) {
         if (entry.imgspoiler && !activeTheme.nospoiler) {
           thread += pinhl + '" src="' + spoiler;
-        } else {
+        }
+        else {
           imgWidth = entry.tn_w;
           imgHeight = entry.tn_h;
-
+          
           if (calcSize) {
             maxSize = options.smallsize;
             if (imgWidth > maxSize) {
@@ -1684,16 +1737,20 @@ var FC = function() {
               imgWidth = imgWidth * ratio;
             }
           }
-          thread += pinhl + '" width="' + imgWidth + '" height="' + imgHeight + '" src="//' + contentUrl + entry.imgurl + 's.jpg';
+          thread += pinhl + '" width="' + imgWidth
+            + '" height="' + imgHeight + '" src="//'
+            + contentUrl + entry.imgurl + 's.jpg';
         }
-      } else if (entry.imgdel) {
+      }
+      else if (entry.imgdel) {
         thread += ' imgdel' + pinhl + '" src="' + options.imgdel;
-      } else {
+      }
+      else {
         thread += ' nofile' + pinhl + '" src="' + options.nofile;
       }
-
+      
       thread += '" data-id="' + id + '" /></a>';
-
+      
       if (entry.sticky || entry.closed || entry.capcodereps) {
         thread += '<div class="threadIcons">';
         if (entry.sticky) {
@@ -1706,19 +1763,23 @@ var FC = function() {
           capcodeReplies = entry.capcodereps.split(',');
           for (k = 0; capcodeReply = capcodeReplies[k]; ++k) {
             if (capcodeTitle = capcodeMap[capcodeReply]) {
-              thread += '<span title="' + capcodeTitle + ' Replies" class="threadIcon ' + capcodeReply + 'Icon"></span>';
+              thread += '<span title="'
+                + capcodeTitle + ' Replies" class="threadIcon '
+                + capcodeReply + 'Icon"></span>';
             }
           }
         }
         thread += '</div>';
       }
-
-      thread += '<div title="(R)eplies / (I)mages' + (onTop ? ' / (P)age' : '') + '" id="meta-' + id + '" class="meta">';
-
+      
+      thread += '<div title="(R)eplies / (I)mages'
+        + (onTop ? ' / (P)age' : '') + '" id="meta-' + id + '" class="meta">';
+      
       if (entry.r) {
         if (entry.bumplimit) {
           thread += '<i>R: <b>' + entry.r + '</b></i>';
-        } else {
+        }
+        else {
           thread += 'R: <b>' + entry.r + '</b>';
         }
         if (pinned) {
@@ -1726,28 +1787,30 @@ var FC = function() {
           if (rDiff > 0) {
             thread += ' (+' + rDiff + ')';
             pinnedThreads[id] = entry.r;
-          } else {
+          }
+          else {
             thread += '(+0)';
           }
         }
         if (entry.i) {
           if (entry.imagelimit) {
             thread += ' / <i>I: <b>' + entry.i + '</b></i>';
-          } else {
+          }
+          else {
             thread += ' / I: <b>' + entry.i + '</b>';
           }
         }
       }
-
+      
       if (onTop && (page = getThreadPage(id)) >= 0) {
         if (entry.r) {
           thread += ' / ';
         }
         thread += 'P: <b>' + page + '</b>';
       }
-
+      
       thread += '</div>';
-
+      
       if (teaser) {
         thread += '<div class="teaser';
         if (hl.color) {
@@ -1755,43 +1818,49 @@ var FC = function() {
         }
         thread += '">' + teaser + '</div>';
       }
-
+      
       if (window.partyHats) {
-        thread = '<div class="party-cnt">' + thread + '</div><img class="party-hat" src="//s.4cdn.org/image/' + window.partyHats + '"></div>';
-      } else {
+        thread = '<div class="party-cnt">' + thread
+          + '</div><img class="party-hat" src="//s.4cdn.org/image/'
+          + window.partyHats + '"></div>';
+      }
+      else {
         thread += '</div>';
       }
-
+      
       if (onTop) {
         topHtml += thread;
-      } else {
+      }
+      else {
         html += thread;
       }
     }
-
+    
     if (quickFilterPattern && (html == '' && topHtml == '')) {
       html = '<div class="error">Nothing Found</div>';
-    } else if (topHtml) {
+    }
+    else if (topHtml) {
       html = topHtml + html + '<div class="clear"></div>';
-    } else {
+    }
+    else {
       html += '<div class="clear"></div>';
     }
-
+    
     for (j in pinnedThreads) {
       localStorage.setItem('4chan-pin-' + catalog.slug, JSON.stringify(pinnedThreads));
       break;
     }
-
+    
     $threads.innerHTML = html;
-
+    
     setFilteredCount(filtered);
-
+    
     setHiddenCount(hiddenThreadsCount);
   }
-
+  
   function onThreadMouseOver(e) {
     var t = e.target;
-
+    
     if ($.hasClass(t, 'thumb')) {
       clearTimeout(tooltipTimeout);
       if (hasTooltip) {
@@ -1800,99 +1869,113 @@ var FC = function() {
       tooltipTimeout = setTimeout(showTooltip, options.tipdelay, t);
     }
   }
-
+  
   function onThreadMouseOut(e) {
     clearTimeout(tooltipTimeout);
     if (hasTooltip) {
       hideTooltip();
     }
   }
-
+  
   function showTooltip(t) {
     var now, tip, pos, el, rect, docWidth, style, page, tid;
-
+    
     now = Date.now() / 1000;
-
+    
     rect = t.getBoundingClientRect();
     docWidth = document.documentElement.offsetWidth;
-
+    
     tid = t.getAttribute('data-id');
     thread = catalog.threads[tid];
-
+    
     if (page = getThreadPage(tid)) {
       page = '<span class="post-page">Page ' + page + '</span>';
-    } else {
+    }
+    else {
       page = '';
     }
-
+    
     if (thread.sub) {
       tip = '<span class="post-subject">' + thread.sub + '</span>';
-    } else {
+    }
+    else {
       tip = 'Posted';
     }
-
-    tip += ' by <span class="' + (thread.capcode ? (thread.capcode + '-capcode ') : '') + 'post-author">' + (thread.author || catalog.anon);
-
+    
+    tip += ' by <span class="'
+      + (thread.capcode ? (thread.capcode + '-capcode ') : '')
+      + 'post-author">' + (thread.author || catalog.anon);
+    
     if (thread.trip) {
       tip += ' <span class="post-tripcode">' + thread.trip + '</span>';
     }
-
+    
     if (thread.capcode) {
-      tip += ' ## ' + capcodeMap[thread.capcode];
+      tip += ' ## '
+        + capcodeMap[thread.capcode];
     }
-
+    
     tip += '</span> ';
-
+    
     if (catalog.flags && thread.country) {
       tip += '<div class="flag flag-' + thread.country.toLowerCase() + '"></div> ';
     }
-
-    tip += '<span class="post-ago">' + getDuration(now - thread.date) + ' ago</span>' + page;
-
+    
+    tip += '<span class="post-ago">'
+      + getDuration(now - thread.date)
+      + ' ago</span>' + page;
+    
     if (!options.extended && thread.teaser) {
       tip += '<p class="post-teaser">' + thread.teaser + '</p>';
     }
-
+    
     if (thread.r > 0) {
-      tip += '<div class="post-last">Last reply by <span class="' + (thread.lr.capcode ? (thread.lr.capcode + '-capcode ') : '') + 'post-author">' + thread.lr.author;
-
+      tip += '<div class="post-last">Last reply by <span class="'
+      + (thread.lr.capcode ? (thread.lr.capcode + '-capcode ') : '')
+      + 'post-author">' + thread.lr.author;
+      
       if (thread.lr.trip) {
         tip += ' <span class="post-tripcode">' + thread.lr.trip + '</span>';
       }
-
+      
       if (thread.lr.capcode) {
-        tip += ' ## ' + thread.lr.capcode.charAt(0).toUpperCase() + thread.lr.capcode.slice(1);
+        tip += ' ## '
+          + thread.lr.capcode.charAt(0).toUpperCase()
+          + thread.lr.capcode.slice(1);
       }
-
-      tip += '</span> <span class="post-ago">' + getDuration(now - thread.lr.date) + ' ago</span>';
+      
+      tip += '</span> <span class="post-ago">'
+        + getDuration(now - thread.lr.date)
+        + ' ago</span>';
     }
-
+    
     el = document.createElement('div');
     el.id = 'post-preview';
     el.innerHTML = tip;
     document.body.appendChild(el);
     style = el.style;
-
+    
     if ((docWidth - rect.right) < (0 | (docWidth * 0.3))) {
       pos = docWidth - rect.left;
       style.right = pos + 5 + 'px'
-    } else {
+    }
+    else {
       pos = rect.left + rect.width;
       style.left = pos + 5 + 'px';
     }
-
+    
     style.top =
       rect.top + t.offsetHeight + window.pageYOffset -
       el.offsetHeight / 2 - rect.height / 2 + 'px';
-
+    
     hasTooltip = true;
   }
-
+  
   function hideTooltip() {
     document.body.removeChild($.id('post-preview'));
     hasTooltip = false;
   }
-
+  
   function getDuration(delta, precise) {
     var count, head, tail;
     if (delta < 2) {
@@ -1908,7 +1991,8 @@ var FC = function() {
       count = 0 | (delta / 60);
       if (count > 1) {
         return count + ' minutes';
-      } else {
+      }
+      else {
         return 'one minute';
       }
     }
@@ -1916,7 +2000,8 @@ var FC = function() {
       count = 0 | (delta / 3600);
       if (count > 1) {
         head = count + ' hours';
-      } else {
+      }
+      else {
         head = 'one hour';
       }
       tail = 0 | (delta / 60 - count * 60);
@@ -1928,7 +2013,8 @@ var FC = function() {
     count = 0 | (delta / 86400);
     if (count > 1) {
       head = count + ' days';
-    } else {
+    }
+    else {
       head = 'one day';
     }
     tail = 0 | (delta / 3600 - count * 24);
@@ -1948,10 +2034,10 @@ Filter.init = function() {
 
 Filter.match = function(post, board) {
   var i, trip, name, com, uid, sub, fname, f, filters, hit;
-
+  
   hit = false;
   filters = Filter.activeFilters;
-
+  
   for (i = 0; f = filters[i]; ++i) {
     // boards
     if (!f.boards[board]) {
@@ -1974,7 +2060,8 @@ Filter.match = function(post, board) {
     // comment
     else if (f.type == 2 && post.com) {
       if (com === undefined) {
-        this.entities.innerHTML = post.com.replace(/<br>/g, '\n').replace(/[<[^>]+>/g, '');
+        this.entities.innerHTML
+          = post.com.replace(/<br>/g, '\n').replace(/[<[^>]+>/g, '');
         com = this.entities.textContent;
       }
       if (f.pattern.test(com)) {
@@ -2004,29 +2091,31 @@ Filter.match = function(post, board) {
       }
     }
   }
-
+  
   return hit;
 };
 
 Filter.load = function() {
   var i, j, w, f, rawFilters, rawPattern, fid, regexEscape, regexType,
     wordSepS, wordSepE, words, inner, regexWildcard, replaceWildcard;
-
+  
   this.activeFilters = [];
-
+  
   if (!(rawFilters = localStorage.getItem('4chan-filters'))) {
     return;
   }
-
+  
   rawFilters = JSON.parse(rawFilters);
-
-  regexEscape = new RegExp('(\\' + ['/', '.', '*', '+', '?', '(', ')', '[', ']', '{', '}', '\\', '^', '$'].join('|\\') + ')', 'g');
+  
+  regexEscape = new RegExp('(\\'
+    + ['/', '.', '*', '+', '?', '(', ')', '[', ']', '{', '}', '\\', '^', '$' ].join('|\\')
+    + ')', 'g');
   regexType = /^\/(.*)\/(i?)$/;
   wordSepS = '(?=.*\\b';
   wordSepE = '\\b)';
   regexWildcard = /\\\*/g;
   replaceWildcard = '[^\\s]*';
-
+  
   try {
     for (fid = 0; f = rawFilters[fid]; ++fid) {
       if (f.active && f.pattern != '') {
@@ -2037,10 +2126,11 @@ Filter.load = function() {
           for (i = 0; j = tmp[i]; ++i) {
             boards[j] = true;
           }
-        } else {
+        }
+        else {
           boards = false;
         }
-
+        
         rawPattern = f.pattern;
         // Name, Tripcode or ID, string comparison
         if (!f.type || f.type == 1 || f.type == 4) {
@@ -2077,8 +2167,10 @@ Filter.load = function() {
         });
       }
     }
-  } catch (e) {
-    alert('There was an error processing one of the filters: ' + e + ' in: ' + rawPattern);
+  }
+  catch (e) {
+    alert('There was an error processing one of the filters: '
+      + e + ' in: ' + rawPattern);
   }
 };
 
@@ -2091,17 +2183,17 @@ var ThreadWatcher = {
 
 ThreadWatcher.init = function() {
   var cnt, html, pos;
-
+  
   if (this.hasFilters) {
     Filter.init();
   }
-
+  
   this.listNode = null;
   this.charLimit = 45;
   this.watched = {};
   this.blacklisted = {};
   this.isRefreshing = false;
-
+  
   if (FC.hasMobileLayout) {
     el = document.createElement('a');
     el.href = '#';
@@ -2111,37 +2203,42 @@ ThreadWatcher.init = function() {
     cnt.parentNode.insertBefore(el, cnt);
     cnt.parentNode.insertBefore(document.createTextNode(' '), cnt);
   }
-
+  
   cnt = document.createElement('div');
   cnt.id = 'threadWatcher';
   cnt.setAttribute('data-trackpos', 'TW-position');
-
+  
   if (FC.hasMobileLayout) {
     cnt.style.display = 'none';
-  } else {
+  }
+  else {
     if (pos = localStorage.getItem('catalog-tw-pos')) {
       cnt.style.cssText = pos;
-    } else {
+    }
+    else {
       cnt.style.left = '10px';
       cnt.style.top = '75px';
     }
   }
-
-  cnt.innerHTML = '<div class="drag" id="twHeader">' + (FC.hasMobileLayout ? ('<div id="twClose" class="icon closeIcon"></div>') : '') + 'Thread Watcher' + (UA.hasCORS ? ('<div id="twPrune" class="icon refreshIcon" title="Refresh"></div></div>') : '</div>');
-
+  
+  cnt.innerHTML = '<div class="drag" id="twHeader">'
+    + (FC.hasMobileLayout ? ('<div id="twClose" class="icon closeIcon"></div>') : '')
+    + 'Thread Watcher'
+    + (UA.hasCORS ? ('<div id="twPrune" class="icon refreshIcon" title="Refresh"></div></div>') : '</div>');
+  
   this.listNode = document.createElement('ul');
   this.listNode.id = 'watchList';
-
+  
   this.load();
-
+  
   this.build();
-
+  
   cnt.appendChild(this.listNode);
   document.body.appendChild(cnt);
   cnt.addEventListener('mouseup', this.onClick, false);
   Draggable.set($.id('twHeader'));
   window.addEventListener('storage', this.syncStorage, false);
-
+  
   if (!FC.hasMobileLayout && this.canAutoRefresh()) {
     this.refresh();
   }
@@ -2149,7 +2246,7 @@ ThreadWatcher.init = function() {
 
 ThreadWatcher.unInit = function() {
   var cnt;
-
+  
   if (cnt = $.id('threadWatcher')) {
     cnt.removeEventListener('mouseup', this.onClick, false);
     Draggable.unset($.id('twHeader'));
@@ -2160,30 +2257,31 @@ ThreadWatcher.unInit = function() {
 
 ThreadWatcher.toggleList = function(e) {
   var el = $.id('threadWatcher');
-
+  
   e && e.preventDefault();
-
+  
   if (ThreadWatcher.canAutoRefresh()) {
     ThreadWatcher.refresh();
   }
-
+  
   if (el.style.display == 'none') {
     el.style.top = (window.pageYOffset + 30) + 'px';
     el.style.display = '';
-  } else {
+  }
+  else {
     el.style.display = 'none';
   }
 };
 
 ThreadWatcher.syncStorage = function(e) {
   var key;
-
+  
   if (!e.key) {
     return;
   }
-
+  
   key = e.key.split('-');
-
+  
   if (key[0] == '4chan' && key[1] == 'watch' && e.newValue != e.oldValue) {
     ThreadWatcher.load();
     ThreadWatcher.build();
@@ -2201,89 +2299,100 @@ ThreadWatcher.load = function() {
 
 ThreadWatcher.build = function() {
   var i, html, tuid, key, buttons, btn, nodes, cls;
-
+  
   html = '';
-
+  
   for (key in this.watched) {
     tuid = key.split('-');
-    html += '<li id="watch-' + key + '"><span class="pointer" data-cmd="unwatch" data-id="' + tuid[0] + '" data-board="' + tuid[1] + '">&times;</span> <a href="' + this.linkToThread(tuid[0], tuid[1], this.watched[key][1]) + '"';
-
+    html += '<li id="watch-' + key
+      + '"><span class="pointer" data-cmd="unwatch" data-id="'
+      + tuid[0] + '" data-board="' + tuid[1] + '">&times;</span> <a href="'
+      + this.linkToThread(tuid[0], tuid[1], this.watched[key][1]) + '"';
+    
     if (this.watched[key][1] == -1) {
       html += ' class="deadlink">';
-    } else {
+    }
+    else {
       cls = [];
-
+      
       if (this.watched[key][3]) {
         cls.push('archivelink');
       }
-
+      
       if (this.watched[key][4]) {
         cls.push('hasYouReplies');
         html += ' title="This thread has replies to your posts"';
       }
-
+      
       if (this.watched[key][2]) {
-        html += ' class="' + (cls[0] ? (cls.join(' ') + ' ') : '') + 'hasNewReplies">(' + this.watched[key][2] + ') ';
-      } else {
+        html += ' class="' + (cls[0] ? (cls.join(' ') + ' ') : '')
+          + 'hasNewReplies">(' + this.watched[key][2] + ') ';
+      }
+      else {
         html += (cls[0] ? ('class="' + cls.join(' ') + '"') : '') + '>';
       }
     }
-
+    
     html += '/' + tuid[1] + '/ - ' + this.watched[key][0] + '</a></li>';
   }
-
+  
   ThreadWatcher.listNode.innerHTML = html;
 };
 
 ThreadWatcher.onClick = function(e) {
   var t = e.target;
-
+  
   if (t.hasAttribute('data-id')) {
     ThreadWatcher.toggle(
       t.getAttribute('data-id'),
       t.getAttribute('data-board')
     );
-  } else if (t.id == 'twPrune' && !ThreadWatcher.isRefreshing) {
+  }
+  else if (t.id == 'twPrune' && !ThreadWatcher.isRefreshing) {
     ThreadWatcher.refreshWithAutoWatch();
-  } else if (t.id == 'twClose') {
+  }
+  else if (t.id == 'twClose') {
     ThreadWatcher.toggleList();
   }
 };
 
 ThreadWatcher.generateLabel = function(sub, com, tid) {
   var label;
-
+  
   if (label = sub) {
     label = label.slice(0, this.charLimit);
-  } else if (label = com) {
+  }
+  else if (label = com) {
     label = label.replace(/(?:<br>)+/g, ' ')
       .replace(/<[^>]*?>/g, '').slice(0, this.charLimit);
-  } else {
+  }
+  else {
     label = 'No.' + tid;
   }
-
+  
   return label;
 };
 
 ThreadWatcher.toggle = function(tid, board, sub, com, lr) {
   var key, label, btn, lastReply, thread, icon;
-
+  
   key = tid + '-' + board;
   icon = $.id('leaf-' + tid);
-
+  
   if (this.watched[key]) {
     delete this.watched[key];
     if (icon) {
       icon.className = 'watchIcon';
       icon.title = 'Watch';
     }
-  } else {
+  }
+  else {
     label = ThreadWatcher.generateLabel(sub, com, tid);
-
+    
     lastReply = lr || tid;
-
-    this.watched[key] = [label, lastReply, 0];
-
+    
+    this.watched[key] = [ label, lastReply, 0 ];
+    
     icon.className = 'unwatchIcon';
     icon.title = 'Unwatch';
   }
@@ -2294,23 +2403,23 @@ ThreadWatcher.toggle = function(tid, board, sub, com, lr) {
 
 ThreadWatcher.addRaw = function(post, board) {
   var key, label;
-
+  
   key = post.no + '-' + board;
-
+  
   if (this.watched[key]) {
     return;
   }
-
+  
   label = ThreadWatcher.generateLabel(post.sub, post.com, post.no);
-
-  this.watched[key] = [label, 0, 0];
+  
+  this.watched[key] = [ label, 0, 0 ];
 };
 
 ThreadWatcher.save = function() {
   ThreadWatcher.sortByBoard();
-
+  
   localStorage.setItem('4chan-watch', JSON.stringify(ThreadWatcher.watched));
-
+  
   for (i in ThreadWatcher.blacklisted) {
     localStorage.setItem('4chan-watch-bl', JSON.stringify(ThreadWatcher.blacklisted));
     break;
@@ -2319,20 +2428,20 @@ ThreadWatcher.save = function() {
 
 ThreadWatcher.sortByBoard = function() {
   var i, self, key, sorted, keys;
-
+  
   self = ThreadWatcher;
-
+  
   sorted = {};
   keys = [];
-
+  
   for (key in self.watched) {
     keys.push(key);
   }
-
+  
   keys.sort(function(a, b) {
     a = a.split('-')[1];
     b = b.split('-')[1];
-
+    
     if (a < b) {
       return -1;
     }
@@ -2341,17 +2450,17 @@ ThreadWatcher.sortByBoard = function() {
     }
     return 0;
   });
-
+  
   for (i = 0; key = keys[i]; ++i) {
     sorted[key] = self.watched[key];
   }
-
+  
   self.watched = sorted;
 };
 
 ThreadWatcher.canAutoRefresh = function() {
   var time;
-
+  
   if (time = localStorage.getItem('4chan-tw-timestamp')) {
     return Date.now() - (+time) >= 60000;
   }
@@ -2364,17 +2473,17 @@ ThreadWatcher.setRefreshTimestamp = function() {
 
 ThreadWatcher.refreshWithAutoWatch = function() {
   var i, f, count, board, boards, img;
-
+  
   if (!this.hasFilters) {
     this.refresh();
     return;
   }
-
+  
   Filter.load();
-
+  
   boards = {};
   count = 0;
-
+  
   for (i = 0; f = Filter.activeFilters[i]; ++i) {
     if (!f.auto || !f.boards) {
       continue;
@@ -2387,28 +2496,26 @@ ThreadWatcher.refreshWithAutoWatch = function() {
       ++count;
     }
   }
-
+  
   if (!count) {
     this.refresh();
     return;
   }
-
+  
   img = $.id('twPrune');
   img.className = 'icon rotateIcon';
   this.isRefreshing = true;
-
+  
   this.fetchCatalogs(boards, count);
 };
 
 ThreadWatcher.fetchCatalogs = function(boards, count) {
   var to, board, catalogs, meta;
-
+  
   catalogs = {};
-  meta = {
-    count: count
-  };
+  meta = { count: count };
   to = 0;
-
+  
   for (board in boards) {
     setTimeout(ThreadWatcher.fetchCatalog, to, board, catalogs, meta);
     to += 200;
@@ -2417,20 +2524,21 @@ ThreadWatcher.fetchCatalogs = function(boards, count) {
 
 ThreadWatcher.parseCatalogJSON = function(data) {
   var catalog;
-
+  
   try {
     catalog = JSON.parse(data);
-  } catch (e) {
+  }
+  catch (e) {
     console.log(e);
     catalog = [];
   }
-
+  
   return catalog;
 };
 
 ThreadWatcher.fetchCatalog = function(board, catalogs, meta) {
   var xhr;
-
+  
   xhr = new XMLHttpRequest();
   xhr.open('GET', '//a.4cdn.org/' + board + '/catalog.json');
   xhr.onload = function() {
@@ -2451,12 +2559,12 @@ ThreadWatcher.fetchCatalog = function(board, catalogs, meta) {
 
 ThreadWatcher.onCatalogsLoaded = function(catalogs) {
   var i, j, board, page, pages, threads, thread, key, blacklisted, img;
-
+  
   $.id('twPrune').className = 'icon rotateIcon';
   this.isRefreshing = false;
-
+  
   blacklisted = {};
-
+  
   for (board in catalogs) {
     pages = catalogs[board];
     for (i = 0; page = pages[i]; ++i) {
@@ -2473,7 +2581,7 @@ ThreadWatcher.onCatalogsLoaded = function(catalogs) {
       }
     }
   }
-
+  
   this.blacklisted = blacklisted;
   this.build(true);
   this.refresh();
@@ -2481,7 +2589,7 @@ ThreadWatcher.onCatalogsLoaded = function(catalogs) {
 
 ThreadWatcher.refresh = function() {
   var i, to, key, total, img;
-
+  
   if (total = $.id('watchList').children.length) {
     i = to = 0;
     img = $.id('twPrune');
@@ -2505,32 +2613,33 @@ ThreadWatcher.onRefreshEnd = function(img) {
 
 ThreadWatcher.parseThreadJSON = function(data) {
   var thread;
-
+  
   try {
     thread = JSON.parse(data).posts;
-  } catch (e) {
+  }
+  catch (e) {
     console.log(e);
     thread = [];
   }
-
+  
   return thread;
 };
 
 ThreadWatcher.getTrackedReplies = function(board, tid) {
   var tracked = null;
-
+  
   if (tracked = localStorage.getItem('4chan-track-' + board + '-' + tid)) {
     tracked = JSON.parse(tracked);
   }
-
+  
   return tracked;
 };
 
 ThreadWatcher.fetch = function(key, img) {
   var tuid, xhr, li, method;
-
+  
   li = $.id('watch-' + key);
-
+  
   if (ThreadWatcher.watched[key][1] == -1) {
     delete ThreadWatcher.watched[key];
     li.parentNode.removeChild(li);
@@ -2539,9 +2648,9 @@ ThreadWatcher.fetch = function(key, img) {
     }
     return;
   }
-
+  
   tuid = key.split('-'); // tid, board
-
+  
   xhr = new XMLHttpRequest();
   xhr.onload = function() {
     var i, newReplies, posts, lastReply, trackedReplies, dummy, quotelinks, q, j;
@@ -2549,31 +2658,32 @@ ThreadWatcher.fetch = function(key, img) {
       posts = ThreadWatcher.parseThreadJSON(this.responseText);
       lastReply = ThreadWatcher.watched[key][1];
       newReplies = 0;
-
+      
       if (!ThreadWatcher.watched[key][4]) {
         trackedReplies = ThreadWatcher.getTrackedReplies(tuid[1], tuid[0]);
-
+        
         if (trackedReplies) {
           dummy = document.createElement('div');
         }
-      } else {
+      }
+      else {
         trackedReplies = null;
       }
-
+      
       for (i = posts.length - 1; i >= 1; i--) {
         if (posts[i].no <= lastReply) {
           break;
         }
         ++newReplies;
-
+        
         if (trackedReplies) {
           dummy.innerHTML = posts[i].com;
           quotelinks = $.cls('quotelink', dummy);
-
+          
           if (!quotelinks[0]) {
             continue;
           }
-
+          
           for (j = 0; q = quotelinks[j]; ++j) {
             if (trackedReplies[q.textContent]) {
               ThreadWatcher.watched[key][4] = 1;
@@ -2589,7 +2699,8 @@ ThreadWatcher.fetch = function(key, img) {
       if (posts[0].archived) {
         ThreadWatcher.watched[key][3] = 1;
       }
-    } else if (this.status == 404) {
+    }
+    else if (this.status == 404) {
       ThreadWatcher.watched[key][1] = -1;
     }
     if (img) {
@@ -2604,7 +2715,9 @@ ThreadWatcher.fetch = function(key, img) {
 };
 
 ThreadWatcher.linkToThread = function(tid, board, post) {
-  return '//' + location.host + '/' + board + '/thread/' + tid + (post > 0 ? ('#p' + post) : '');
+  return '//' + location.host + '/'
+    + board + '/thread/'
+    + tid + (post > 0 ? ('#p' + post) : '');
 };
 
 /**
@@ -2615,51 +2728,49 @@ var Draggable = {
   key: null,
   scrollX: null,
   scrollY: null,
-  dx: null,
-  dy: null,
-  right: null,
-  bottom: null,
-
+  dx: null, dy: null, right: null, bottom: null,
+  
   set: function(handle) {
     handle.addEventListener('mousedown', Draggable.startDrag, false);
   },
-
+  
   unset: function(handle) {
     handle.removeEventListener('mousedown', Draggable.startDrag, false);
   },
-
+  
   startDrag: function(e) {
     var self, doc, offs;
-
+    
     if (this.parentNode.hasAttribute('data-shiftkey') && !e.shiftKey) {
       return;
     }
-
+    
     e.preventDefault();
-
+    
     self = Draggable;
     doc = document.documentElement;
-
+    
     self.el = this.parentNode;
-
+    
     self.key = self.el.getAttribute('data-trackpos');
     offs = self.el.getBoundingClientRect();
     self.dx = e.clientX - offs.left;
     self.dy = e.clientY - offs.top;
     self.right = doc.clientWidth - offs.width;
     self.bottom = doc.clientHeight - offs.height;
-
+    
     if (getComputedStyle(self.el, null).position != 'fixed') {
       self.scrollX = window.scrollX || window.pageXOffset;
       self.scrollY = window.scrollY || window.pageYOffset;
-    } else {
+    }
+    else {
       self.scrollX = self.scrollY = 0;
     }
-
+    
     document.addEventListener('mouseup', self.endDrag, false);
     document.addEventListener('mousemove', self.onDrag, false);
   },
-
+  
   endDrag: function(e) {
     document.removeEventListener('mouseup', Draggable.endDrag, false);
     document.removeEventListener('mousemove', Draggable.onDrag, false);
@@ -2668,30 +2779,34 @@ var Draggable = {
     }
     delete Draggable.el;
   },
-
+  
   onDrag: function(e) {
     var left, top, style;
-
+    
     left = e.clientX - Draggable.dx + Draggable.scrollX;
     top = e.clientY - Draggable.dy + Draggable.scrollY;
     style = Draggable.el.style;
     if (left < 1) {
       style.left = '0';
       style.right = '';
-    } else if (Draggable.right < left) {
+    }
+    else if (Draggable.right < left) {
       style.left = '';
       style.right = '0';
-    } else {
+    }
+    else {
       style.left = (left / document.documentElement.clientWidth * 100) + '%';
       style.right = '';
     }
     if (top < 1) {
       style.top = '0';
       style.bottom = '';
-    } else if (Draggable.bottom < top) {
+    }
+    else if (Draggable.bottom < top) {
       style.bottom = '0';
       style.top = '';
-    } else {
+    }
+    else {
       style.top = (top / document.documentElement.clientHeight * 100) + '%';
       style.bottom = '';
     }
@@ -2705,15 +2820,15 @@ var CustomMenu = {};
 
 CustomMenu.reset = function() {
   var i, el, full, custom, navs;
-
+  
   full = $.cls('boardList');
   custom = $.cls('customBoardList');
   navs = $.cls('show-all-boards');
-
+  
   for (i = 0; el = navs[i]; ++i) {
     el.removeEventListener('click', CustomMenu.reset, false);
   }
-
+  
   for (i = custom.length - 1; el = custom[i]; i--) {
     full[i].style.display = null;
     el.parentNode.removeChild(el);
@@ -2722,20 +2837,21 @@ CustomMenu.reset = function() {
 
 CustomMenu.apply = function(str) {
   var i, j, el, cntBottom, board, navs, boardList, more;
-
+  
   if (!str) {
     return;
   }
-
+  
   boardList = str.split(/[^0-9a-z]/i);
-
+  
   cnt = document.createElement('span');
   cnt.className = 'customBoardList';
-
+  
   for (i = 0; board = boardList[i]; ++i) {
     if (i) {
       cnt.appendChild(document.createTextNode(' / '));
-    } else {
+    }
+    else {
       cnt.appendChild(document.createTextNode('['));
     }
     el = document.createElement('a');
@@ -2743,9 +2859,9 @@ CustomMenu.apply = function(str) {
     el.href = '//boards.4chan.org/' + board + (board !== 'f' ? '/catalog' : '');
     cnt.appendChild(el);
   }
-
+  
   cnt.appendChild(document.createTextNode(']'));
-
+  
   cnt.appendChild(document.createTextNode(' ['));
   el = document.createElement('a');
   el.textContent = '…';
@@ -2753,18 +2869,18 @@ CustomMenu.apply = function(str) {
   el.className = 'show-all-boards pointer';
   cnt.appendChild(el);
   cnt.appendChild(document.createTextNode('] '));
-
+  
   cntBottom = cnt.cloneNode(true);
-
+  
   navs = $.cls('boardList');
-
+  
   for (i = 0; el = navs[i]; ++i) {
     el.style.display = 'none';
     el.parentNode.insertBefore(i ? cntBottom : cnt, el);
   }
-
+  
   navs = $.cls('show-all-boards');
-
+  
   for (i = 0; el = navs[i]; ++i) {
     el.addEventListener('click', CustomMenu.reset, false);
   }
@@ -2772,14 +2888,15 @@ CustomMenu.apply = function(str) {
 
 function checkMobileLayout() {
   var mobile, desktop;
-
+  
   if (window.matchMedia) {
-    return window.matchMedia('(max-width: 480px)').matches && localStorage.getItem('4chan_never_show_mobile') != 'true';
+    return window.matchMedia('(max-width: 480px)').matches
+      && localStorage.getItem('4chan_never_show_mobile') != 'true';
   }
-
+  
   mobile = $.id('boardNavMobile');
   desktop = $.id('boardNavDesktop');
-
+  
   return mobile && desktop && mobile.offsetWidth > 0 && desktop.offsetWidth == 0;
 };
 
@@ -2788,39 +2905,40 @@ StickyNav = {
   pos: 0,
   timeout: null,
   el: null,
-
+  
   init: function(classicNav) {
     this.el = classicNav ? $.id('boardNavDesktop') : $.id('boardNavMobile');
     $.addClass(this.el, 'autohide-nav');
     window.addEventListener('scroll', this.onScroll, false);
   },
-
+  
   destroy: function(classicNav) {
     this.el = classicNav ? $.id('boardNavDesktop') : $.id('boardNavMobile');
     $.removeClass(this.el, 'autohide-nav');
     window.removeEventListener('scroll', this.onScroll, false);
   },
-
+  
   onScroll: function(e) {
     clearTimeout(StickyNav.timeout);
     StickyNav.timeout = setTimeout(StickyNav.checkScroll, 50);
   },
-
+  
   checkScroll: function() {
     var thisPos;
-
+    
     thisPos = window.pageYOffset;
-
+    
     if (Math.abs(StickyNav.pos - thisPos) <= StickyNav.thres) {
       return;
     }
-
+    
     if (thisPos < StickyNav.pos) {
       StickyNav.el.style.top = '';
-    } else {
+    }
+    else {
       StickyNav.el.style.top = '-' + StickyNav.el.offsetHeight + 'px';
     }
-
+    
     StickyNav.pos = thisPos;
   }
 };
