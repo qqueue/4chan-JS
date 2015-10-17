@@ -933,14 +933,18 @@ Parser.parseThread = function(tid, offset, limit) {
         Parser.parseMarkup(posts[i]);
       }
     }
-    if (window.jsMath) {
-      if (window.jsMath.loaded) {
+    if (window.math_tags) {
+      if (window.MathJax) {
         for (i = j; i < limit; ++i) {
-          window.jsMath.ProcessBeforeShowing(posts[i]);
+          MathJax.Hub.Queue(['Typeset', MathJax.Hub, posts[i]]);
         }
       }
       else {
-        Parser.loadJSMath();
+        for (i = j; i < limit; ++i) {
+          if (Parser.postHasMath(posts[i])) {
+            window.loadMathJax();
+          }
+        }
       }
     }
   }
@@ -948,19 +952,16 @@ Parser.parseThread = function(tid, offset, limit) {
   UA.dispatchEvent('4chanParsingDone', { threadId: tid, offset: j, limit: limit });
 };
 
-Parser.loadJSMath = function(root) {
-  if ($.cls('math', root)[0]) {
-    window.jsMath.Autoload.Script.Push('ProcessBeforeShowing', [ null ]);
-    window.jsMath.Autoload.LoadJsMath();
-  }
+Parser.postHasMath = function(el) {
+  return /\[(?:eqn|math)\]/.test(el.innerHTML);
 };
 
 Parser.parseMathOne = function(node) {
-  if (window.jsMath.loaded) {
-    window.jsMath.ProcessBeforeShowing(node);
+  if (window.MathJax) {
+    MathJax.Hub.Queue(['Typeset', MathJax.Hub, node]);
   }
-  else {
-    Parser.loadJSMath(node);
+  else if (Parser.postHasMath(node)) {
+    window.loadMathJax();
   }
 };
 
@@ -4669,7 +4670,7 @@ ThreadExpansion.expandComment = function(link) {
             if (Parser.prettify) {
               Parser.parseMarkup(msg);
             }
-            if (window.jsMath) {
+            if (window.math_tags) {
               Parser.parseMathOne(msg);
             }
           }
@@ -4792,7 +4793,7 @@ ThreadExpansion.fetch = function(tid) {
             if (Parser.prettify) {
               Parser.parseMarkup(msg);
             }
-            if (window.jsMath) {
+            if (window.math_tags) {
               Parser.parseMathOne(msg);
             }
           }
