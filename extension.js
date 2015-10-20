@@ -2684,7 +2684,7 @@ QR.init = function() {
   this.btn = null;
   this.comField = null;
   this.comLength = window.comlen;
-  this.lenCheckTimeout = null;
+  this.comCheckTimeout = null;
   
   this.cdElapsed = 0;
   this.activeDelay = 0;
@@ -3197,7 +3197,7 @@ QR.onKeyDown = function(e) {
     ta = e.target;
     start = ta.selectionStart;
     end = ta.selectionEnd;
-  
+    
     if (ta.value) {
       spoiler = '[spoiler]' + ta.value.slice(start, end) + '[/spoiler]';
       ta.value = ta.value.slice(0, start) + spoiler + ta.value.slice(end);
@@ -3213,11 +3213,11 @@ QR.onKeyDown = function(e) {
     return;
   }
   
-  clearTimeout(QR.lenCheckTimeout);
-  QR.lenCheckTimeout = setTimeout(QR.checkComLength, 500);
+  clearTimeout(QR.comCheckTimeout);
+  QR.comCheckTimeout = setTimeout(QR.checkCommentField, 500);
 };
 
-QR.checkComLength = function() {
+QR.checkCommentField = function() {
   var byteLength, qrError;
   
   if (QR.comLength) {
@@ -3229,6 +3229,19 @@ QR.checkComLength = function() {
     }
     else {
       QR.hidePostError('length');
+    }
+  }
+  
+  if (window.sjis_tags) {
+    if (/\[sjis\]/.test(QR.comField.value)) {
+      if (!$.hasClass(QR.comField, 'sjis')) {
+        $.addClass(QR.comField, 'sjis');
+      }
+    }
+    else {
+      if ($.hasClass(QR.comField, 'sjis')) {
+        $.removeClass(QR.comField, 'sjis');
+      }
     }
   }
 };
