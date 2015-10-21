@@ -2716,6 +2716,67 @@ QR.init = function() {
   window.addEventListener('storage', this.syncStorage, false);
 };
 
+QR.openTeXPreview = function() {
+  var el;
+  
+  QR.closeTeXPreview();
+  
+  if (!window.MathJax) {
+    window.loadMathJax();
+  }
+  
+  el = document.createElement('div');
+  el.id = 'tex-preview-cnt';
+  el.className = 'UIPanel';
+  el.setAttribute('data-cmd', 'close-tex-preview');
+  el.innerHTML = '\
+<div class="extPanel reply"><div class="panelHeader"><span class="tex-logo">T<sub>e</sub>X</span> Preview\
+<span class="panelCtrl"><img alt="Close" title="Close" class="pointer" data-cmd="close-tex-preview" src="'
++ Main.icons.cross + '"></span></div><div id="tex-protip">Use [math][/math] tags for inline, and [eqn][/eqn] tags for block equations.</div><textarea id="input-tex-preview"></textarea>\
+<div id="output-tex-preview"></div></div>';
+  
+  document.body.appendChild(el);
+  
+  el = $.id('input-tex-preview');
+  $.on(el, 'keyup', QR.onTeXChanged);
+};
+
+QR.closeTeXPreview = function() {
+  var el;
+  
+  if (el = $.id('input-tex-preview')) {
+    $.off(el, 'keyup', QR.onTeXChanged);
+    
+    el = $.id('tex-preview-cnt');
+    el.parentNode.removeChild(el);
+  }
+};
+
+QR.onTeXChanged = function(e) {
+  clearTimeout(QR.timeoutTeX);
+  QR.timeoutTeX = setTimeout(QR.processTeX, 50);
+};
+
+QR.processTeX = function() {
+  var src, dest, el;
+
+  if (QR.processingTeX || !window.MathJax || !(src = $.id('input-tex-preview'))) {
+    return;
+  }
+  
+  dest = $.id('output-tex-preview');
+  
+  dest.textContent = src.value;
+  
+  QR.processingTeX = true;
+  
+  MathJax.Hub.Queue(['Typeset', MathJax.Hub, dest], ['onTeXReady', QR]);
+};
+
+QR.onTeXReady = function() {
+  QR.processingTeX = false;
+};
+
 QR.addReplyLink = function() {
   var cnt, el;
   
@@ -2894,7 +2955,10 @@ QR.show = function(tid) {
   }
   
   cnt.innerHTML =
-    '<div id="qrHeader" class="drag postblock">Reply to Thread No.<span id="qrTid">'
+    '<div id="qrHeader" class="drag postblock">'
+    + (window.math_tags ? '<a data-cmd="open-tex-preview" class="desktop pointer left tex-logo" '
+      + 'data-tip="Preview TeX equations">T<sub>e</sub>X</a>' : '')
+    + 'Reply to Thread No.<span id="qrTid">'
     + tid + '</span><img alt="X" src="' + Main.icons.cross + '" id="qrClose" '
     + 'class="extButton" title="Close Window"></div>';
   
@@ -6002,7 +6066,7 @@ Filter.openHelp = function() {
   cnt.setAttribute('data-cmd', 'filters-help-close');
   cnt.innerHTML = '\
 <div class="extPanel reply"><div class="panelHeader">Filters &amp; Highlights Help\
-<span><img alt="Close" title="Close" class="pointer" data-cmd="filters-help-close" src="'
+<span class="panelCtrl"><img alt="Close" title="Close" class="pointer" data-cmd="filters-help-close" src="'
 + Main.icons.cross + '"></span></div>\
 <h4>Tripcode, Name and ID filters:</h4>\
 <ul><li>Those use simple string comparison.</li>\
@@ -6060,7 +6124,7 @@ Filter.open = function() {
   cnt.setAttribute('data-cmd', 'filters-close');
   cnt.innerHTML = '\
 <div class="extPanel reply"><div class="panelHeader">Filters &amp; Highlights\
-<span><img alt="Help" class="pointer" title="Help" data-cmd="filters-help-open" src="'
+<span class="panelCtrl"><img alt="Help" class="pointer" title="Help" data-cmd="filters-help-open" src="'
 + Main.icons.help
 + '"><img alt="Close" title="Close" class="pointer" data-cmd="filters-close" src="'
 + Main.icons.cross + '"></span></div>\
@@ -6925,7 +6989,7 @@ CustomCSS.open = function() {
   cnt.setAttribute('data-cmd', 'css-close');
   cnt.innerHTML = '\
 <div class="extPanel reply"><div class="panelHeader">Custom CSS\
-<span><img alt="Close" title="Close" class="pointer" data-cmd="css-close" src="'
+<span class="panelCtrl"><img alt="Close" title="Close" class="pointer" data-cmd="css-close" src="'
 + Main.icons.cross + '"></span></div>\
 <textarea id="customCSSBox"></textarea>\
 <div class="center"><button data-cmd="css-save">Save CSS</button></div>\
@@ -7064,7 +7128,7 @@ Keybinds.open = function() {
   cnt.setAttribute('data-cmd', 'keybinds-close');
   cnt.innerHTML = '\
 <div class="extPanel reply"><div class="panelHeader">Keyboard Shortcuts\
-<span><img data-cmd="keybinds-close" class="pointer" alt="Close" title="Close" src="'
+<span class="panelCtrl"><img data-cmd="keybinds-close" class="pointer" alt="Close" title="Close" src="'
 + Main.icons.cross + '"></span></div>\
 <ul>\
 <li><strong>Global</strong></li>\
@@ -7244,7 +7308,7 @@ CustomMenu.showEditor = function() {
   cnt.setAttribute('data-close', '1');
   cnt.innerHTML = '\
 <div class="extPanel reply"><div class="panelHeader">Custom Board List\
-<span><img alt="Close" title="Close" class="pointer" data-close="1" src="'
+<span class="panelCtrl"><img alt="Close" title="Close" class="pointer" data-close="1" src="'
 + Main.icons.cross + '"></a></span></div>\
 <input placeholder="Example: jp tg mu" id="customMenuBox" type="text" value="">\
 <div class="center"><button data-save="1">Save</button></div></div>';
@@ -7695,7 +7759,7 @@ SettingsMenu.open = function() {
   cnt.className = 'UIPanel';
   
   html = '<div class="extPanel reply"><div class="panelHeader">Settings'
-    + '<span><img alt="Close" title="Close" class="pointer" data-cmd="settings-toggle" src="'
+    + '<span class="panelCtrl"><img alt="Close" title="Close" class="pointer" data-cmd="settings-toggle" src="'
     + Main.icons.cross + '"></a>'
     + '</span></div><ul>';
   
@@ -7777,7 +7841,7 @@ SettingsMenu.showExport = function() {
   cnt.setAttribute('data-cmd', 'export-close');
   cnt.innerHTML = '\
 <div class="extPanel reply"><div class="panelHeader">Export Settings\
-<span><img data-cmd="export-close" class="pointer" alt="Close" title="Close" src="'
+<span class="panelCtrl"><img data-cmd="export-close" class="pointer" alt="Close" title="Close" src="'
 + Main.icons.cross + '"></span></div>\
 <p class="center">Copy and save the URL below, and visit it from another \
 browser or computer to restore your extension and catalog settings.</p>\
@@ -8547,6 +8611,12 @@ Main.onclick = function(e) {
       case 'custom-menu-edit':
         CustomMenu.showEditor();
         break;
+      case 'open-tex-preview':
+        QR.openTeXPreview();
+        break;
+      case 'close-tex-preview':
+        QR.closeTeXPreview();
+        break;
     }
   }
   else if (!Config.disableAll) {
@@ -8746,6 +8816,7 @@ div.post div.postInfo {\
   height: 18px;\
   line-height: 18px;\
 }\
+#qrHeader .left { float: left; margin-left: 3px; }\
 #qrepClose,\
 #qrClose {\
   float: right;\
@@ -9044,7 +9115,7 @@ div.backlink {\
 .tomorrow .panelHeader {\
   border-bottom: 1px solid #111;\
 }\
-.panelHeader span {\
+.panelHeader .panelCtrl {\
   position: absolute;\
   right: 5px;\
   top: 5px;\
@@ -9054,7 +9125,6 @@ div.backlink {\
   position: fixed;\
   width: 100%;\
   height: 100%;\
-  z-index: 9002;\
   top: 0;\
   left: 0;\
 }\
@@ -9148,6 +9218,8 @@ div.backlink {\
   display: none;\
   margin-left: 3px;\
 }\
+#tex-preview-cnt .extPanel { width: 600px; margin-left: -300px; }\
+#tex-preview-cnt textarea,\
 #customCSSMenu textarea {\
   display: block;\
   max-width: 100%;\
@@ -9158,6 +9230,15 @@ div.backlink {\
   margin: 0 0 5px;\
   font-family: monospace;\
 }\
+#tex-preview-cnt textarea { height: 75px; }\
+#output-tex-preview {\
+  min-height: 75px;\
+  white-space: pre;\
+  padding: 0 3px;\
+  -moz-box-sizing: border-box; box-sizing: border-box;\
+}\
+#tex-protip { font-size: 11px; margin: 5px 0; text-align: center; }\
+a.tex-logo sub { pointer-events: none; }\
 #customCSSMenu .right,\
 #settingsMenu .right {\
   margin-top: 2px;\
