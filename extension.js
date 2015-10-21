@@ -1009,8 +1009,34 @@ Parser.parseMarkup = function(post) {
   }
 };
 
+Parser.revealImageSpoiler = function(fileThumb) {
+  var img, isOP, filename, finfo, txt;
+  
+  img = fileThumb.firstElementChild;
+  fileThumb.removeChild(img);
+  img.removeAttribute('style');
+  isOP = $.hasClass(fileThumb.parentNode.parentNode, 'op');
+  img.style.maxWidth = img.style.maxHeight = isOP ? '250px' : '125px';
+  img.src = '//i.4cdn.org'
+    + (fileThumb.pathname.replace(/\/([0-9]+).+$/, '/$1s.jpg'));
+  
+  filename = fileThumb.previousElementSibling;
+  finfo = filename.title.split('.');
+  
+  if (finfo[0].length > (isOP ? 40 : 30)) {
+    txt = finfo[0].slice(0, isOP ? 35 : 25) + '(...)' + finfo[1];
+  }
+  else {
+    txt = filename.title;
+    filename.removeAttribute('title');
+  }
+  
+  filename.firstElementChild.innerHTML = txt;
+  fileThumb.insertBefore(img, fileThumb.firstElementChild);
+};
+
 Parser.parsePost = function(pid, tid) {
-  var hasMobileLayout, cnt, el, pi, href, img, file, msg, filtered, html, filename, txt, finfo, isOP, uid, ppid;
+  var hasMobileLayout, cnt, el, pi, href, file, msg, filtered, html, uid, ppid;
   
   hasMobileLayout = Main.hasMobileLayout;
   
@@ -1089,27 +1115,7 @@ Parser.parsePost = function(pid, tid) {
       && (file = file.children[1])
     ) {
     if ($.hasClass(file, 'imgspoiler')) {
-      img = file.firstChild;
-      file.removeChild(img);
-      img.removeAttribute('style');
-      isOP = $.hasClass(pi.parentNode, 'op');
-      img.style.maxWidth = img.style.maxHeight = isOP ? '250px' : '125px';
-      img.src = '//i.4cdn.org'
-        + (file.pathname.replace(/([0-9]+).+$/, '/$1s.jpg'));
-      
-      filename = file.previousElementSibling;
-      finfo = filename.title.split('.');
-      
-      if (finfo[0].length > (isOP ? 40 : 30)) {
-        txt = finfo[0].slice(0, isOP ? 35 : 25) + '(...)' + finfo[1];
-      }
-      else {
-        txt = filename.title;
-        filename.removeAttribute('title');
-      }
-      
-      filename.firstElementChild.innerHTML = txt;
-      file.insertBefore(img, file.firstElementChild);
+      Parser.revealImageSpoiler(file);
     }
   }
   
@@ -7969,11 +7975,19 @@ Feedback = {
   },
   
   error: function(msg, timeout) {
-    Feedback.showMessage(msg || 'Something went wrong', 'error', timeout || 5000);
+    if (timeout === undefined) {
+      timeout = 5000;
+    }
+    
+    Feedback.showMessage(msg || 'Something went wrong', 'error', timeout);
   },
   
   notify: function(msg, timeout) {
-    Feedback.showMessage(msg, 'notify', timeout || 3000);
+    if (timeout === undefined) {
+      timeout = 3000;
+    }
+    
+    Feedback.showMessage(msg, 'notify', timeout);
   }
 };
 
