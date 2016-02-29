@@ -2383,6 +2383,9 @@ ImageExpansion.expandWebm = function(thumb) {
   }
   
   if (Main.hasMobileLayout) {
+    if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+      return false;
+    }
     el = document.createElement('div');
     el.className = 'collapseWebm';
     el.innerHTML = '<span class="button">Close</span>';
