@@ -2352,6 +2352,10 @@ ImageExpansion.toggle = function(t) {
 ImageExpansion.expandWebm = function(thumb) {
   var el, link, fileText, left, href, maxWidth, self;
   
+  if (Main.hasMobileLayout && /iPhone|iPad|iPod/.test(navigator.userAgent)) {
+    return false;
+  }
+  
   self = ImageExpansion;
   
   if (el = document.getElementById('image-hover')) {
@@ -2383,9 +2387,6 @@ ImageExpansion.expandWebm = function(thumb) {
   }
   
   if (Main.hasMobileLayout) {
-    if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
-      return false;
-    }
     el = document.createElement('div');
     el.className = 'collapseWebm';
     el.innerHTML = '<span class="button">Close</span>';
