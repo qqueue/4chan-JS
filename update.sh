@@ -13,7 +13,9 @@ function poll {
 
   echo "polling $file ..."
 
+  # XXX ipv6 cloudflare is 522ing, thanks not-moot
   curl \
+    --ipv4 \
     --fail \
     --dump-header /tmp/headers \
     --user-agent "4chan-JS-auto-updater/1.0.0" \
