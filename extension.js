@@ -3765,7 +3765,7 @@ QR.startCooldown = function() {
   
   QR.cdElapsed = Date.now() - QR.timestamp;
   
-  QR.cooldown = Math.floor((QR.activeDelay - QR.cdElapsed) / 1000);
+  QR.cooldown = Math.ceil((QR.activeDelay - QR.cdElapsed) / 1000);
   
   if (QR.cooldown <= 0 || QR.cdElapsed < 0) {
     QR.cooldown = false;
@@ -3780,7 +3780,7 @@ QR.startCooldown = function() {
 
 QR.onPulse = function() {
   QR.cdElapsed = Date.now() - QR.timestamp;
-  QR.cooldown = Math.floor((QR.activeDelay - QR.cdElapsed) / 1000);
+  QR.cooldown = Math.ceil((QR.activeDelay - QR.cdElapsed) / 1000);
   if (QR.cooldown <= 0) {
     clearInterval(QR.pulse);
     QR.btn.value = 'Post';
