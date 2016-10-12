@@ -8446,12 +8446,12 @@ Main.run = function() {
   $.id('settingsWindowLinkBot').addEventListener('click', SettingsMenu.toggle, false);
   $.id('settingsWindowLinkMobile').addEventListener('click', SettingsMenu.toggle, false);
   
+  Main.hasMobileLayout = Main.checkMobileLayout();
+  Main.isMobileDevice = /Mobile|Android|Dolfin|Opera Mobi|PlayStation Vita|Nintendo DS/.test(navigator.userAgent);
+  
   if (Config.disableAll) {
     return;
   }
-  
-  Main.hasMobileLayout = Main.checkMobileLayout();
-  Main.isMobileDevice = /Mobile|Android|Dolfin|Opera Mobi|PlayStation Vita|Nintendo DS/.test(navigator.userAgent);
   
   Report.init();
   
