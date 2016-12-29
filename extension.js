@@ -9038,7 +9038,7 @@ Main.onThreadMouseOver = function(e) {
   else if (Config.imageHover && (
     (t.hasAttribute('data-md5') && !$.hasClass(t.parentNode, 'deleted'))
     ||
-    (t.href && !$.hasClass(t.parentNode, 'fileText') && /i\.4cdn\.org\/[a-z0-9]+\/[0-9]+\.(gif|jpg|png|webm)$/.test(t.href))
+    (t.href && !$.hasClass(t.parentNode, 'fileText') && /(i\.4cdn|is\.4chan)\.org\/[a-z0-9]+\/[0-9]+\.(gif|jpg|png|webm)$/.test(t.href))
     )
   ) {
     ImageHover.show(t);
@@ -9066,7 +9066,7 @@ Main.onThreadMouseOut = function(e) {
   }
   else if (Config.imageHover &&
     (t.hasAttribute('data-md5')
-    || (t.href && !$.hasClass(t.parentNode, 'fileText') && /i\.4cdn\.org\/[a-z0-9]+\/[0-9]+\.(gif|jpg|png|webm)$/.test(t.href))
+    || (t.href && !$.hasClass(t.parentNode, 'fileText') && /(i\.4cdn|is\.4chan)\.org\/[a-z0-9]+\/[0-9]+\.(gif|jpg|png|webm)$/.test(t.href))
     )
   ) {
     ImageHover.hide();
